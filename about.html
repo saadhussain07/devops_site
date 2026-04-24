@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About DevOps — history, evolution, benefits, and importance of DevOps culture.">
+  <title>About DevOps — DevOps Hub</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ─── Navigation ─────────────────────────────────────────── -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">DevOpsHub</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle sr-only">
+    <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </label>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html" class="active">About</a></li>
+      <li><a href="tools.html">Tools</a></li>
+      <li><a href="concepts.html">Concepts</a></li>
+      <li><a href="workflow.html">Workflow</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ─── Page Header ─────────────────────────────────────────── -->
+<header class="page-header" aria-labelledby="page-title">
+  <div class="container">
+    <span class="tag">// about</span>
+    <h1 id="page-title">What is <span class="text-green">DevOps?</span></h1>
+    <p>
+      A cultural and professional movement that stresses communication,
+      collaboration, and integration between software developers and IT operations.
+    </p>
+  </div>
+</header>
+
+<!-- ─── Definition ──────────────────────────────────────────── -->
+<section class="section" aria-labelledby="def-heading">
+  <div class="container">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center;">
+      <div>
+        <span class="tag">// definition</span>
+        <h2 id="def-heading" style="margin-bottom:1rem;">
+          Breaking Down<br>the <span class="text-green">Dev + Ops</span> Divide
+        </h2>
+        <p style="margin-bottom:1.25rem;">
+          DevOps is not a tool, a job title, or a methodology — it is a <strong style="color:var(--text-primary);">mindset shift</strong>.
+          It combines cultural philosophies, practices, and tools that increase an organisation's
+          ability to deliver applications and services at high velocity.
+        </p>
+        <p style="margin-bottom:1.25rem;">
+          At its core, DevOps removes the wall between the teams who write code and the
+          teams who run it — fostering shared responsibility across the entire software
+          delivery lifecycle.
+        </p>
+        <p>
+          The result: faster innovation, fewer outages, and more reliable systems that
+          serve customers better every day.
+        </p>
+      </div>
+
+      <!-- Illustrated definition panel -->
+      <div class="card" style="font-family:var(--font-mono); font-size:0.8rem; line-height:2;">
+        <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem; padding-bottom:0.75rem; border-bottom:1px solid var(--border);">
+          <span style="color:var(--accent-orange);">●</span>
+          <span style="color:var(--accent-green);">devops_explained.sh</span>
+        </div>
+        <div>
+          <span style="color:var(--text-muted)"># The classic wall (before DevOps)</span><br>
+          <span style="color:var(--accent-orange);">Dev</span><span style="color:var(--text-muted);">:</span> <span style="color:var(--text-secondary);">"Works on my machine 🤷"</span><br>
+          <span style="color:var(--accent-cyan);">Ops</span><span style="color:var(--text-muted);">:</span> <span style="color:var(--text-secondary);">"Not my problem 🔥"</span><br>
+          <span style="color:var(--text-muted)">&nbsp;</span><br>
+          <span style="color:var(--text-muted)"># With DevOps</span><br>
+          <span style="color:var(--accent-green);">Team</span><span style="color:var(--text-muted);">:</span> <span style="color:var(--accent-green);">"We own this together ✓"</span><br>
+          <span style="color:var(--accent-green);">CI/CD</span><span style="color:var(--text-muted);">:</span> <span style="color:var(--text-secondary);">automated &amp; tested</span><br>
+          <span style="color:var(--accent-green);">Deploy</span><span style="color:var(--text-muted);">:</span> <span style="color:var(--text-secondary);">on demand, any time</span><br>
+          <span style="color:var(--accent-green);">Monitor</span><span style="color:var(--text-muted);">:</span> <span style="color:var(--text-secondary);">24/7 observability</span><br>
+          <span style="color:var(--text-muted)">&nbsp;</span><br>
+          <span style="color:var(--text-muted)"># Outcome</span><br>
+          <span style="color:var(--accent-green);">$</span> <span style="color:var(--text-primary);">echo "Faster. Safer. Better."</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Three Pillars ────────────────────────────────────────── -->
+<section class="section section--alt" aria-labelledby="pillars-heading">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">// pillars</span>
+      <h2 id="pillars-heading">The Three Pillars of DevOps</h2>
+      <p>Culture, processes, and tools working in harmony to transform how software is built.</p>
+    </div>
+
+    <div class="cards-grid stagger">
+      <div class="card">
+        <div class="feature-icon green">🧠</div>
+        <h3>Culture &amp; People</h3>
+        <p>
+          DevOps succeeds or fails based on people. It requires psychological safety,
+          blameless post-mortems, shared ownership, and a relentless focus on
+          learning from failure rather than hiding it.
+        </p>
+        <ul class="concept-steps" style="margin-top:1rem;">
+          <li>Shared accountability across Dev and Ops</li>
+          <li>Blameless retrospectives and post-mortems</li>
+          <li>Transparency and open communication</li>
+          <li>Continuous learning culture</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="feature-icon cyan">⚙️</div>
+        <h3>Process &amp; Practice</h3>
+        <p>
+          Structured workflows like CI/CD pipelines, agile sprints, and infrastructure
+          automation replace manual handoffs with repeatable, auditable processes
+          that scale with the team.
+        </p>
+        <ul class="concept-steps" style="margin-top:1rem;">
+          <li>Continuous integration and delivery</li>
+          <li>Automated testing at every stage</li>
+          <li>Infrastructure as Code practices</li>
+          <li>Agile and lean methodologies</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="feature-icon orange">🛠️</div>
+        <h3>Tools &amp; Technology</h3>
+        <p>
+          The right toolchain amplifies culture and process — but tools alone
+          cannot make an organisation "do DevOps." They are the enablers of
+          speed, reliability, and visibility.
+        </p>
+        <ul class="concept-steps" style="margin-top:1rem;">
+          <li>Source control and branching strategies</li>
+          <li>Container and orchestration platforms</li>
+          <li>Monitoring and observability stacks</li>
+          <li>Cloud-native infrastructure tooling</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── History Timeline ─────────────────────────────────────── -->
+<section class="section" aria-labelledby="history-heading">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">// history</span>
+      <h2 id="history-heading">Evolution of DevOps</h2>
+      <p>From Agile manifesto to cloud-native transformation — a decade of disruption.</p>
+    </div>
+
+    <div class="timeline" role="list">
+      <div class="tl-item" role="listitem">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2001</div>
+        <h3>The Agile Manifesto</h3>
+        <p>Twelve software practitioners publish the Agile Manifesto in Snowbird, Utah — prioritising individuals, collaboration, working software, and responding to change. DevOps would later build on these foundations.</p>
+      </div>
+
+      <div class="tl-item" role="listitem">
+        <div class="tl-dot" style="background:var(--accent-cyan);box-shadow:var(--glow-cyan);"></div>
+        <div class="tl-year">2007 – 2008</div>
+        <h3>The Conflict Surfaces</h3>
+        <p>Patrick Debois, frustrated by the disconnect between development and operations while working on a data centre migration project in Belgium, begins speaking publicly about the growing tension between the two worlds.</p>
+      </div>
+
+      <div class="tl-item" role="listitem">
+        <div class="tl-dot" style="background:var(--accent-orange);box-shadow:var(--glow-orange);"></div>
+        <div class="tl-year">2009</div>
+        <h3>The Term "DevOps" is Born</h3>
+        <p>Patrick Debois organises the first "DevOpsDays" conference in Ghent, Belgium. He coins the term <span class="code-badge">DevOps</span> by combining "Development" and "Operations." The Twitter hashtag <span class="code-badge">#devops</span> is born, spreading the ideas globally.</p>
+      </div>
+
+      <div class="tl-item" role="listitem">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2010 – 2012</div>
+        <h3>Velocity &amp; The Phoenix Project</h3>
+        <p>John Allspaw and Paul Hammond deliver their influential O'Reilly Velocity talk "10+ Deploys Per Day: Dev and Ops Cooperation at Flickr." In 2013, Gene Kim publishes <em style="color:var(--text-primary);">The Phoenix Project</em>, a business novel that popularises DevOps beyond technical circles.</p>
+      </div>
+
+      <div class="tl-item" role="listitem">
+        <div class="tl-dot" style="background:var(--accent-cyan);box-shadow:var(--glow-cyan);"></div>
+        <div class="tl-year">2013 – 2015</div>
+        <h3>Containers &amp; Microservices</h3>
+        <p>Docker (2013) and the rise of microservices architecture transform how teams package and deliver software. Kubernetes emerges from Google (2014), providing the orchestration layer that makes container deployments production-ready at scale.</p>
+      </div>
+
+      <div class="tl-item" role="listitem">
+        <div class="tl-dot" style="background:var(--accent-orange);box-shadow:var(--glow-orange);"></div>
+        <div class="tl-year">2016 – 2019</div>
+        <h3>DORA Metrics &amp; SRE</h3>
+        <p>The DevOps Research and Assessment (DORA) team, led by Dr. Nicole Forsgren, publishes the "State of DevOps" reports with four key metrics. Google's Site Reliability Engineering (SRE) book formalises practices for running reliable production systems.</p>
+      </div>
+
+      <div class="tl-item" role="listitem">
+        <div class="tl-dot"></div>
+        <div class="tl-year">2020 – Present</div>
+        <h3>Platform Engineering &amp; DevSecOps</h3>
+        <p>Security shifts left with DevSecOps integration. Platform engineering teams emerge to build internal developer platforms (IDPs) that abstract complexity. GitOps, FinOps, and AIOps extend the DevOps model into new domains, with AI-assisted code review and incident response becoming mainstream.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Benefits ─────────────────────────────────────────────── -->
+<section class="section section--alt" aria-labelledby="benefits-heading">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">// metrics</span>
+      <h2 id="benefits-heading">Measurable Benefits of DevOps</h2>
+      <p>Organisations that adopt DevOps consistently outperform their peers on every delivery metric.</p>
+    </div>
+
+    <div class="benefits-grid stagger">
+      <div class="benefit-card">
+        <span class="benefit-pct">46×</span>
+        <h4>More Deployments</h4>
+        <p>Elite performers deploy on demand, up to 46× more than low performers.</p>
+      </div>
+      <div class="benefit-card">
+        <span class="benefit-pct">440×</span>
+        <h4>Faster Recovery</h4>
+        <p>Mean time to restore (MTTR) drops dramatically with automated rollbacks and runbooks.</p>
+      </div>
+      <div class="benefit-card">
+        <span class="benefit-pct">5×</span>
+        <h4>Lower Change Failure</h4>
+        <p>Change failure rate is 5× lower in high-performing DevOps organisations.</p>
+      </div>
+      <div class="benefit-card">
+        <span class="benefit-pct">50%</span>
+        <h4>Less Rework</h4>
+        <p>Engineers spend 50% less time on unplanned work and rework, freeing time for innovation.</p>
+      </div>
+      <div class="benefit-card">
+        <span class="benefit-pct">2,555×</span>
+        <h4>Lead Time Reduction</h4>
+        <p>From commit to production in minutes — not months — for elite DevOps teams.</p>
+      </div>
+      <div class="benefit-card">
+        <span class="benefit-pct">22%</span>
+        <h4>Higher Profitability</h4>
+        <p>Companies with strong DevOps practices report significantly higher commercial performance.</p>
+      </div>
+      <div class="benefit-card">
+        <span class="benefit-pct">↑ NPS</span>
+        <h4>Better Employee Sat.</h4>
+        <p>DevOps teams report higher job satisfaction, lower burnout, and better work-life balance.</p>
+      </div>
+      <div class="benefit-card">
+        <span class="benefit-pct">99.9%</span>
+        <h4>Availability SLA</h4>
+        <p>Robust observability and automated remediation drives elite system reliability.</p>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:3rem;">
+      <a href="concepts.html" class="btn btn-primary">Explore Core Concepts →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Footer ────────────────────────────────────────────────── -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">DevOpsHub</div>
+        <p>A comprehensive resource for DevOps engineers, platform teams, and anyone building modern software delivery pipelines.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About DevOps</a></li>
+          <li><a href="tools.html">Tools</a></li>
+          <li><a href="concepts.html">Concepts</a></li>
+          <li><a href="workflow.html">Workflow</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Concepts</h4>
+        <ul class="footer-links">
+          <li><a href="concepts.html">CI/CD Pipelines</a></li>
+          <li><a href="concepts.html">Infrastructure as Code</a></li>
+          <li><a href="concepts.html">Microservices</a></li>
+          <li><a href="concepts.html">Monitoring</a></li>
+          <li><a href="concepts.html">Automation</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Tools</h4>
+        <ul class="footer-links">
+          <li><a href="tools.html">Docker</a></li>
+          <li><a href="tools.html">Kubernetes</a></li>
+          <li><a href="tools.html">Jenkins</a></li>
+          <li><a href="tools.html">Terraform</a></li>
+          <li><a href="tools.html">Ansible</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 DevOpsHub. Built with HTML5 &amp; CSS3 only — no JavaScript.</p>
+      <div class="footer-status"><span class="status-dot"></span>All systems operational</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

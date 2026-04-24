@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DevOps Concepts — CI/CD, Infrastructure as Code, Monitoring, Automation, Microservices explained.">
+  <title>DevOps Concepts — DevOps Hub</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── Concepts page extras ─────────────────────────────── */
+    .concept-hero-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+
+    .concept-chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.1rem 1rem;
+      text-align: center;
+      transition: all var(--transition);
+    }
+
+    .concept-chip:hover {
+      border-color: var(--border-strong);
+      background: var(--bg-card-hover);
+      transform: translateY(-3px);
+    }
+
+    .concept-chip-icon {
+      font-size: 1.6rem;
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+
+    .concept-chip-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.06em;
+    }
+
+    /* Full-width concept deep-dive sections */
+    .concept-deep {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 3rem;
+      align-items: start;
+      padding: 4rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .concept-deep:last-of-type {
+      border-bottom: none;
+    }
+
+    .concept-deep.reverse {
+      direction: rtl;
+    }
+
+    .concept-deep.reverse > * {
+      direction: ltr;
+    }
+
+    .concept-deep-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .concept-deep-label::before {
+      content: '';
+      width: 20px;
+      height: 1px;
+      background: var(--accent-green);
+    }
+
+    .concept-deep h2 {
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      margin-bottom: 1rem;
+    }
+
+    .concept-deep p {
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    /* Pipeline visual */
+    .pipeline-visual {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .pipeline-header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .pipeline-header span {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .pipeline-stages {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .pipeline-stage {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .stage-icon {
+      width: 32px; height: 32px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+    }
+
+    .stage-info { flex: 1; }
+
+    .stage-name {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-primary);
+    }
+
+    .stage-bar-wrap {
+      height: 4px;
+      background: var(--bg-surface);
+      border-radius: 2px;
+      margin-top: 4px;
+      overflow: hidden;
+    }
+
+    .stage-bar {
+      height: 100%;
+      border-radius: 2px;
+      animation: bar-fill 2s ease both;
+    }
+
+    @keyframes bar-fill {
+      from { width: 0; }
+    }
+
+    .stage-time {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .stage-status {
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 2px;
+      font-family: var(--font-mono);
+    }
+
+    .status-pass { background: rgba(45,255,122,0.12); color: var(--accent-green); }
+    .status-run  { background: rgba(0,229,255,0.12);  color: var(--accent-cyan); }
+
+    /* IaC code panel */
+    .code-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+    }
+
+    .code-panel-header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .code-panel-header .lang-badge {
+      margin-left: auto;
+      font-size: 0.65rem;
+      color: var(--accent-orange);
+      border: 1px solid rgba(255,92,26,0.3);
+      padding: 0.1rem 0.5rem;
+      border-radius: 2px;
+    }
+
+    .code-body {
+      padding: 1.25rem 1.5rem;
+      line-height: 2;
+      counter-reset: line;
+    }
+
+    .cl { display: flex; gap: 1rem; }
+    .cl::before {
+      counter-increment: line;
+      content: counter(line);
+      color: var(--text-muted);
+      min-width: 1.5rem;
+      text-align: right;
+      flex-shrink: 0;
+      font-size: 0.72rem;
+    }
+
+    .kw  { color: #c792ea; }
+    .str { color: var(--accent-green); }
+    .num { color: #f78c6c; }
+    .cmt { color: var(--text-muted); font-style: italic; }
+    .key { color: var(--accent-cyan); }
+    .brace { color: #ffd81e; }
+
+    /* Monitoring dashboard mini */
+    .monitor-dash {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .dash-header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.65rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .dash-title {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+    }
+
+    .dash-live {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--accent-green);
+    }
+
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .dash-metric {
+      background: var(--bg-card);
+      padding: 1rem;
+    }
+
+    .dash-metric-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.3rem;
+    }
+
+    .dash-metric-value {
+      font-family: var(--font-mono);
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .dash-metric-delta {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      margin-top: 0.25rem;
+    }
+
+    .delta-up   { color: var(--accent-green); }
+    .delta-warn { color: #ffd81e; }
+    .delta-down { color: var(--accent-orange); }
+
+    /* Sparkline bars (CSS only) */
+    .sparkline {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 28px;
+      margin-top: 0.5rem;
+    }
+
+    .spark-bar {
+      flex: 1;
+      background: var(--accent-green);
+      border-radius: 1px;
+      opacity: 0.5;
+      transition: opacity var(--transition);
+    }
+
+    .spark-bar:hover { opacity: 1; }
+
+    /* Microservices topology */
+    .ms-topology {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+    }
+
+    .ms-row {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .ms-service {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.55rem 0.9rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      text-align: center;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+
+    .ms-service:hover {
+      border-color: var(--border-strong);
+      color: var(--text-primary);
+    }
+
+    .ms-service.gateway { border-color: rgba(45,255,122,0.4); color: var(--accent-green); }
+    .ms-service.auth    { border-color: rgba(139,92,246,0.4); color: var(--accent-purple); }
+    .ms-service.order   { border-color: rgba(0,229,255,0.4);  color: var(--accent-cyan); }
+    .ms-service.pay     { border-color: rgba(255,205,30,0.4); color: #ffd81e; }
+    .ms-service.notify  { border-color: rgba(255,92,26,0.4);  color: var(--accent-orange); }
+
+    .ms-connector {
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .ms-bus {
+      background: var(--bg-surface);
+      border: 1px solid rgba(0,229,255,0.25);
+      border-radius: var(--radius);
+      padding: 0.4rem 1rem;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--accent-cyan);
+      margin: 0 auto;
+      width: fit-content;
+    }
+
+    /* Automation table */
+    .auto-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    .auto-table th {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 0.6rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .auto-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid rgba(45,255,122,0.05);
+      color: var(--text-secondary);
+      vertical-align: middle;
+    }
+
+    .auto-table tr:last-child td { border-bottom: none; }
+
+    .auto-table tr:hover td {
+      background: rgba(45,255,122,0.03);
+      color: var(--text-primary);
+    }
+
+    .auto-benefit {
+      color: var(--accent-green);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+      .concept-deep {
+        grid-template-columns: 1fr;
+        direction: ltr !important;
+      }
+      .concept-deep.reverse > * { direction: ltr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── Navigation ─────────────────────────────────────────── -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">DevOpsHub</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle sr-only">
+    <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </label>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="tools.html">Tools</a></li>
+      <li><a href="concepts.html" class="active">Concepts</a></li>
+      <li><a href="workflow.html">Workflow</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ─── Page Header ─────────────────────────────────────────── -->
+<header class="page-header">
+  <div class="container">
+    <span class="tag">// core concepts</span>
+    <h1>DevOps <span class="text-green">Concepts</span></h1>
+    <p>
+      The five foundational pillars every DevOps engineer must understand —
+      from pipeline automation to microservice architecture.
+    </p>
+    <div class="concept-hero-grid" aria-label="Concept overview">
+      <div class="concept-chip"><span class="concept-chip-icon">🔁</span><span class="concept-chip-label">CI/CD</span></div>
+      <div class="concept-chip"><span class="concept-chip-icon">🏗️</span><span class="concept-chip-label">IaC</span></div>
+      <div class="concept-chip"><span class="concept-chip-icon">📊</span><span class="concept-chip-label">Monitoring</span></div>
+      <div class="concept-chip"><span class="concept-chip-icon">🤖</span><span class="concept-chip-label">Automation</span></div>
+      <div class="concept-chip"><span class="concept-chip-icon">🧩</span><span class="concept-chip-label">Microservices</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ─── Deep Dive Sections ──────────────────────────────────── -->
+<section class="section" aria-label="DevOps concepts deep dives">
+  <div class="container">
+
+    <!-- 1 · CI/CD ─────────────────────────────────────────── -->
+    <div class="concept-deep" id="cicd">
+      <div>
+        <div class="concept-deep-label">Concept 01</div>
+        <h2>CI/CD Pipelines</h2>
+        <p>
+          <strong style="color:var(--text-primary);">Continuous Integration (CI)</strong> is the
+          practice of frequently merging developer code changes into a shared repository, where
+          automated builds and tests run immediately. CI eliminates the "integration hell"
+          of merging large batches of code at infrequent intervals.
+        </p>
+        <p>
+          <strong style="color:var(--text-primary);">Continuous Delivery (CD)</strong> extends CI
+          by automatically preparing every validated change for release to production.
+          <strong style="color:var(--text-primary);">Continuous Deployment</strong> goes one step
+          further — deploying every passing change to production automatically, with no manual gates.
+        </p>
+        <ul class="concept-steps">
+          <li>Developers push code to a shared branch multiple times per day</li>
+          <li>Automated tests (unit, integration, e2e) run on every commit</li>
+          <li>Failing tests block the merge — preventing broken code upstream</li>
+          <li>Passing builds are packaged and pushed to an artifact registry</li>
+          <li>CD pipeline deploys to staging, runs smoke tests, then promotes to prod</li>
+          <li>Metrics and alerts confirm the deployment is healthy</li>
+        </ul>
+        <div style="display:flex; gap:0.75rem; margin-top:1.5rem; flex-wrap:wrap;">
+          <span class="code-badge">Jenkins</span>
+          <span class="code-badge">GitHub Actions</span>
+          <span class="code-badge">GitLab CI</span>
+          <span class="code-badge">CircleCI</span>
+          <span class="code-badge">Argo CD</span>
+        </div>
+      </div>
+
+      <!-- Pipeline visual -->
+      <div class="pipeline-visual" aria-label="Example CI/CD pipeline">
+        <div class="pipeline-header">
+          <span class="terminal-dot" style="width:8px;height:8px;border-radius:50%;background:#28c840;"></span>
+          <span>Pipeline #247 · main · 2m 14s</span>
+        </div>
+        <div class="pipeline-stages">
+          <div class="pipeline-stage">
+            <div class="stage-icon" style="background:rgba(45,255,122,0.1);border-color:rgba(45,255,122,0.3);">📦</div>
+            <div class="stage-info">
+              <div class="stage-name">checkout &amp; install</div>
+              <div class="stage-bar-wrap"><div class="stage-bar" style="width:100%;background:var(--accent-green);"></div></div>
+            </div>
+            <div class="stage-time">18s</div>
+            <span class="stage-status status-pass">✓ pass</span>
+          </div>
+          <div class="pipeline-stage">
+            <div class="stage-icon" style="background:rgba(45,255,122,0.1);border-color:rgba(45,255,122,0.3);">🧪</div>
+            <div class="stage-info">
+              <div class="stage-name">unit tests (248 specs)</div>
+              <div class="stage-bar-wrap"><div class="stage-bar" style="width:100%;background:var(--accent-green);"></div></div>
+            </div>
+            <div class="stage-time">41s</div>
+            <span class="stage-status status-pass">✓ pass</span>
+          </div>
+          <div class="pipeline-stage">
+            <div class="stage-icon" style="background:rgba(0,229,255,0.1);border-color:rgba(0,229,255,0.3);">🔒</div>
+            <div class="stage-info">
+              <div class="stage-name">SAST / dependency scan</div>
+              <div class="stage-bar-wrap"><div class="stage-bar" style="width:100%;background:var(--accent-cyan);"></div></div>
+            </div>
+            <div class="stage-time">22s</div>
+            <span class="stage-status status-pass">✓ pass</span>
+          </div>
+          <div class="pipeline-stage">
+            <div class="stage-icon" style="background:rgba(255,92,26,0.1);border-color:rgba(255,92,26,0.3);">🐳</div>
+            <div class="stage-info">
+              <div class="stage-name">docker build &amp; push</div>
+              <div class="stage-bar-wrap"><div class="stage-bar" style="width:100%;background:var(--accent-orange);"></div></div>
+            </div>
+            <div class="stage-time">34s</div>
+            <span class="stage-status status-pass">✓ pass</span>
+          </div>
+          <div class="pipeline-stage">
+            <div class="stage-icon" style="background:rgba(139,92,246,0.1);border-color:rgba(139,92,246,0.3);">🚀</div>
+            <div class="stage-info">
+              <div class="stage-name">deploy to production</div>
+              <div class="stage-bar-wrap"><div class="stage-bar" style="width:78%;background:var(--accent-purple);animation:bar-fill 2s 0.5s ease both;"></div></div>
+            </div>
+            <div class="stage-time">39s</div>
+            <span class="stage-status status-run">⟳ running</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 · IaC ───────────────────────────────────────────── -->
+    <div class="concept-deep reverse" id="iac">
+      <div>
+        <div class="concept-deep-label">Concept 02</div>
+        <h2>Infrastructure<br>as Code (IaC)</h2>
+        <p>
+          Infrastructure as Code is the practice of managing and provisioning computing
+          infrastructure through machine-readable configuration files, rather than through
+          manual processes or interactive configuration tools.
+        </p>
+        <p>
+          IaC brings the same software engineering practices — version control, code review,
+          testing, and CI/CD — to infrastructure management. Every server, network, and database
+          is defined in code, making environments reproducible and auditable.
+        </p>
+        <ul class="concept-steps">
+          <li><strong style="color:var(--text-primary);">Declarative</strong> — describe desired state, let the tool figure out how</li>
+          <li><strong style="color:var(--text-primary);">Idempotent</strong> — running the same config produces the same result</li>
+          <li><strong style="color:var(--text-primary);">Version-controlled</strong> — every change tracked in Git with full history</li>
+          <li><strong style="color:var(--text-primary);">Testable</strong> — validate configs with tools like Terratest, InSpec</li>
+          <li><strong style="color:var(--text-primary);">Reviewable</strong> — PRs allow peer-review before infra changes</li>
+        </ul>
+        <div style="display:flex; gap:0.75rem; margin-top:1.5rem; flex-wrap:wrap;">
+          <span class="code-badge">Terraform</span>
+          <span class="code-badge">Pulumi</span>
+          <span class="code-badge">Ansible</span>
+          <span class="code-badge">CloudFormation</span>
+        </div>
+      </div>
+
+      <!-- Terraform code panel -->
+      <div class="code-panel" aria-label="Example Terraform configuration">
+        <div class="code-panel-header">
+          <span class="terminal-dot" style="width:8px;height:8px;border-radius:50%;background:#ffbd2e;"></span>
+          <span style="font-size:0.72rem;color:var(--text-muted);">main.tf — AWS ECS Cluster</span>
+          <span class="lang-badge">HCL</span>
+        </div>
+        <div class="code-body">
+          <div class="cl"><span><span class="cmt"># Provider configuration</span></span></div>
+          <div class="cl"><span><span class="kw">terraform</span> <span class="brace">{</span></span></div>
+          <div class="cl"><span>&nbsp;&nbsp;<span class="key">required_providers</span> <span class="brace">{</span></span></div>
+          <div class="cl"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">aws</span> = <span class="brace">{</span></span></div>
+          <div class="cl"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">source</span>  = <span class="str">"hashicorp/aws"</span></span></div>
+          <div class="cl"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">version</span> = <span class="str">"~> 5.0"</span></span></div>
+          <div class="cl"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="brace">}</span></span></div>
+          <div class="cl"><span>&nbsp;&nbsp;<span class="brace">}</span></span></div>
+          <div class="cl"><span><span class="brace">}</span></span></div>
+          <div class="cl"><span>&nbsp;</span></div>
+          <div class="cl"><span><span class="cmt"># ECS Cluster definition</span></span></div>
+          <div class="cl"><span><span class="kw">resource</span> <span class="str">"aws_ecs_cluster"</span> <span class="str">"main"</span> <span class="brace">{</span></span></div>
+          <div class="cl"><span>&nbsp;&nbsp;<span class="key">name</span> = <span class="str">"prod-cluster"</span></span></div>
+          <div class="cl"><span>&nbsp;&nbsp;<span class="key">setting</span> <span class="brace">{</span></span></div>
+          <div class="cl"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">name</span>  = <span class="str">"containerInsights"</span></span></div>
+          <div class="cl"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">value</span> = <span class="str">"enabled"</span></span></div>
+          <div class="cl"><span>&nbsp;&nbsp;<span class="brace">}</span></span></div>
+          <div class="cl"><span><span class="brace">}</span></span></div>
+          <div class="cl"><span>&nbsp;</span></div>
+          <div class="cl"><span><span class="cmt"># Auto-scaling group</span></span></div>
+          <div class="cl"><span><span class="kw">resource</span> <span class="str">"aws_appautoscaling_target"</span> <span class="str">"ecs"</span> <span class="brace">{</span></span></div>
+          <div class="cl"><span>&nbsp;&nbsp;<span class="key">max_capacity</span>       = <span class="num">10</span></span></div>
+          <div class="cl"><span>&nbsp;&nbsp;<span class="key">min_capacity</span>       = <span class="num">2</span></span></div>
+          <div class="cl"><span>&nbsp;&nbsp;<span class="key">resource_id</span>        = <span class="str">"service/prod-cluster/api"</span></span></div>
+          <div class="cl"><span><span class="brace">}</span></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 · Monitoring ────────────────────────────────────── -->
+    <div class="concept-deep" id="monitoring">
+      <div>
+        <div class="concept-deep-label">Concept 03</div>
+        <h2>Monitoring &amp;<br>Observability</h2>
+        <p>
+          <strong style="color:var(--text-primary);">Monitoring</strong> is the collection and
+          analysis of predefined metrics to track system health.
+          <strong style="color:var(--text-primary);">Observability</strong> is the ability to
+          understand a system's internal state by examining its outputs — logs, metrics, and traces.
+        </p>
+        <p>
+          The three pillars of observability are: <em style="color:var(--text-primary);">Metrics</em>
+          (numerical measurements over time), <em style="color:var(--text-primary);">Logs</em>
+          (structured event records), and <em style="color:var(--text-primary);">Traces</em>
+          (end-to-end request journeys across distributed services).
+        </p>
+        <ul class="concept-steps">
+          <li><strong style="color:var(--text-primary);">RED Method</strong> — Rate, Errors, Duration for services</li>
+          <li><strong style="color:var(--text-primary);">USE Method</strong> — Utilisation, Saturation, Errors for resources</li>
+          <li>DORA metrics: deployment frequency, lead time, MTTR, change failure rate</li>
+          <li>SLOs and SLAs define reliability targets and burn rates</li>
+          <li>On-call runbooks and automated remediation reduce MTTR</li>
+        </ul>
+        <div style="display:flex; gap:0.75rem; margin-top:1.5rem; flex-wrap:wrap;">
+          <span class="code-badge">Prometheus</span>
+          <span class="code-badge">Grafana</span>
+          <span class="code-badge">Datadog</span>
+          <span class="code-badge">OpenTelemetry</span>
+        </div>
+      </div>
+
+      <!-- Dashboard mini -->
+      <div class="monitor-dash" aria-label="Example monitoring dashboard">
+        <div class="dash-header">
+          <span class="dash-title">📊 Production · Service Health Dashboard</span>
+          <span class="dash-live"><span class="status-dot"></span> LIVE</span>
+        </div>
+        <div class="dash-grid">
+          <div class="dash-metric">
+            <div class="dash-metric-label">Request Rate</div>
+            <div class="dash-metric-value text-green">4,821</div>
+            <div class="dash-metric-delta delta-up">↑ +12% vs 1h ago</div>
+            <div class="sparkline">
+              <div class="spark-bar" style="height:40%"></div>
+              <div class="spark-bar" style="height:55%"></div>
+              <div class="spark-bar" style="height:45%"></div>
+              <div class="spark-bar" style="height:70%"></div>
+              <div class="spark-bar" style="height:60%"></div>
+              <div class="spark-bar" style="height:80%"></div>
+              <div class="spark-bar" style="height:75%"></div>
+              <div class="spark-bar" style="height:90%"></div>
+              <div class="spark-bar" style="height:85%"></div>
+              <div class="spark-bar" style="height:100%"></div>
+            </div>
+          </div>
+          <div class="dash-metric">
+            <div class="dash-metric-label">Error Rate</div>
+            <div class="dash-metric-value" style="color:#ffd81e;">0.08%</div>
+            <div class="dash-metric-delta delta-warn">⚠ SLO: &lt; 0.1%</div>
+            <div class="sparkline">
+              <div class="spark-bar" style="height:20%;background:#ffd81e;"></div>
+              <div class="spark-bar" style="height:15%;background:#ffd81e;"></div>
+              <div class="spark-bar" style="height:25%;background:#ffd81e;"></div>
+              <div class="spark-bar" style="height:10%;background:#ffd81e;"></div>
+              <div class="spark-bar" style="height:18%;background:#ffd81e;"></div>
+              <div class="spark-bar" style="height:12%;background:#ffd81e;"></div>
+              <div class="spark-bar" style="height:20%;background:#ffd81e;"></div>
+              <div class="spark-bar" style="height:16%;background:#ffd81e;"></div>
+              <div class="spark-bar" style="height:22%;background:#ffd81e;"></div>
+              <div class="spark-bar" style="height:14%;background:#ffd81e;"></div>
+            </div>
+          </div>
+          <div class="dash-metric">
+            <div class="dash-metric-label">P99 Latency</div>
+            <div class="dash-metric-value text-cyan">142ms</div>
+            <div class="dash-metric-delta delta-up">↓ -8ms vs 1h ago</div>
+            <div class="sparkline">
+              <div class="spark-bar" style="height:80%;background:var(--accent-cyan);"></div>
+              <div class="spark-bar" style="height:70%;background:var(--accent-cyan);"></div>
+              <div class="spark-bar" style="height:75%;background:var(--accent-cyan);"></div>
+              <div class="spark-bar" style="height:65%;background:var(--accent-cyan);"></div>
+              <div class="spark-bar" style="height:60%;background:var(--accent-cyan);"></div>
+              <div class="spark-bar" style="height:55%;background:var(--accent-cyan);"></div>
+              <div class="spark-bar" style="height:50%;background:var(--accent-cyan);"></div>
+              <div class="spark-bar" style="height:55%;background:var(--accent-cyan);"></div>
+              <div class="spark-bar" style="height:48%;background:var(--accent-cyan);"></div>
+              <div class="spark-bar" style="height:45%;background:var(--accent-cyan);"></div>
+            </div>
+          </div>
+          <div class="dash-metric">
+            <div class="dash-metric-label">Availability</div>
+            <div class="dash-metric-value text-green">99.97%</div>
+            <div class="dash-metric-delta delta-up">✓ SLO met (30d)</div>
+            <div class="sparkline">
+              <div class="spark-bar" style="height:99%"></div>
+              <div class="spark-bar" style="height:99%"></div>
+              <div class="spark-bar" style="height:99%"></div>
+              <div class="spark-bar" style="height:98%"></div>
+              <div class="spark-bar" style="height:99%"></div>
+              <div class="spark-bar" style="height:99%"></div>
+              <div class="spark-bar" style="height:100%"></div>
+              <div class="spark-bar" style="height:99%"></div>
+              <div class="spark-bar" style="height:99%"></div>
+              <div class="spark-bar" style="height:100%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 · Automation ───────────────────────────────────── -->
+    <div class="concept-deep reverse" id="automation">
+      <div>
+        <div class="concept-deep-label">Concept 04</div>
+        <h2>Automation &amp;<br>Toil Elimination</h2>
+        <p>
+          In DevOps and SRE culture, <strong style="color:var(--text-primary);">toil</strong>
+          is defined as repetitive, manual, automatable work that does not provide enduring value.
+          Automation is the systematic elimination of toil — freeing engineers to focus on
+          work that actually moves the product forward.
+        </p>
+        <p>
+          The goal is not to automate everything blindly, but to identify high-toil,
+          high-frequency tasks and invest engineering time in building durable automation
+          that pays compound dividends over time.
+        </p>
+        <ul class="concept-steps">
+          <li>Automate build, test, and deployment pipelines end-to-end</li>
+          <li>Infrastructure provisioning via IaC — no manual console clicks</li>
+          <li>Auto-remediation of known failure modes via runbooks</li>
+          <li>ChatOps — trigger deployments and alerts from Slack/Teams</li>
+          <li>Self-service developer platforms reduce ops bottlenecks</li>
+        </ul>
+        <div style="display:flex; gap:0.75rem; margin-top:1.5rem; flex-wrap:wrap;">
+          <span class="code-badge">Ansible</span>
+          <span class="code-badge">Make / Taskfile</span>
+          <span class="code-badge">ArgoCD</span>
+          <span class="code-badge">Rundeck</span>
+        </div>
+      </div>
+
+      <!-- Automation comparison table -->
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;" aria-label="Manual vs automated comparison">
+        <div style="padding:0.8rem 1rem; background:var(--bg-surface); border-bottom:1px solid var(--border);">
+          <span style="font-family:var(--font-mono);font-size:0.72rem;color:var(--text-muted);">🤖 Manual vs Automated Comparison</span>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="auto-table">
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Manual</th>
+                <th>Automated</th>
+                <th>Saving</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Server provisioning</td>
+                <td>2–4 days</td>
+                <td>8 min</td>
+                <td class="auto-benefit">99%↓</td>
+              </tr>
+              <tr>
+                <td>App deployment</td>
+                <td>45 min</td>
+                <td>2 min</td>
+                <td class="auto-benefit">96%↓</td>
+              </tr>
+              <tr>
+                <td>Rollback on failure</td>
+                <td>30–60 min</td>
+                <td>90 sec</td>
+                <td class="auto-benefit">97%↓</td>
+              </tr>
+              <tr>
+                <td>Certificate renewal</td>
+                <td>1 day</td>
+                <td>0 (auto)</td>
+                <td class="auto-benefit">100%↓</td>
+              </tr>
+              <tr>
+                <td>Scaling on load spike</td>
+                <td>20 min</td>
+                <td>30 sec</td>
+                <td class="auto-benefit">97%↓</td>
+              </tr>
+              <tr>
+                <td>Security scanning</td>
+                <td>Weekly</td>
+                <td>Every commit</td>
+                <td class="auto-benefit">Continuous</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 · Microservices ─────────────────────────────────── -->
+    <div class="concept-deep" id="microservices">
+      <div>
+        <div class="concept-deep-label">Concept 05</div>
+        <h2>Microservices<br>Architecture</h2>
+        <p>
+          Microservices is an architectural style that structures an application as a
+          collection of small, independently deployable services, each running in its
+          own process and communicating via well-defined APIs (REST, gRPC, or messaging queues).
+        </p>
+        <p>
+          Unlike monolithic applications, microservices can be deployed, scaled, and updated
+          independently — enabling teams to ship features without coordinating big-bang releases.
+          Each service owns its own data store, enforcing loose coupling.
+        </p>
+        <ul class="concept-steps">
+          <li><strong style="color:var(--text-primary);">Single Responsibility</strong> — each service does one thing well</li>
+          <li><strong style="color:var(--text-primary);">Independent deployability</strong> — no lock-step releases</li>
+          <li><strong style="color:var(--text-primary);">Decentralised data</strong> — each service owns its database</li>
+          <li><strong style="color:var(--text-primary);">Fault isolation</strong> — one service failure doesn't cascade</li>
+          <li><strong style="color:var(--text-primary);">Technology heterogeneity</strong> — pick the best language per service</li>
+          <li>Service mesh (Istio, Linkerd) for inter-service security and observability</li>
+        </ul>
+        <div style="display:flex; gap:0.75rem; margin-top:1.5rem; flex-wrap:wrap;">
+          <span class="code-badge">Kubernetes</span>
+          <span class="code-badge">Istio</span>
+          <span class="code-badge">Kafka</span>
+          <span class="code-badge">gRPC</span>
+          <span class="code-badge">API Gateway</span>
+        </div>
+      </div>
+
+      <!-- Microservices topology -->
+      <div class="ms-topology" aria-label="Example microservices architecture topology">
+        <div style="text-align:center; font-family:var(--font-mono); font-size:0.68rem; color:var(--text-muted); margin-bottom:1rem; letter-spacing:0.1em;">
+          MICROSERVICES TOPOLOGY · E-COMMERCE PLATFORM
+        </div>
+
+        <!-- Client -->
+        <div class="ms-row">
+          <div class="ms-service" style="border-color:rgba(255,255,255,0.2);color:var(--text-primary);">🌐 Client (Browser / Mobile)</div>
+        </div>
+        <div class="ms-connector">↓ HTTPS</div>
+
+        <!-- Gateway -->
+        <div class="ms-row">
+          <div class="ms-service gateway">🔀 API Gateway / Load Balancer</div>
+        </div>
+        <div class="ms-connector">↓ Internal gRPC / REST</div>
+
+        <!-- Services row -->
+        <div class="ms-row">
+          <div class="ms-service auth">🔑 Auth Service</div>
+          <div class="ms-service order">📦 Order Service</div>
+          <div class="ms-service pay">💳 Payment Service</div>
+          <div class="ms-service notify">📧 Notify Service</div>
+        </div>
+        <div class="ms-connector">↓ Async Events</div>
+
+        <!-- Message bus -->
+        <div class="ms-bus">📨 Message Bus (Kafka / RabbitMQ)</div>
+        <div class="ms-connector">↓ Each service owns its DB</div>
+
+        <!-- Datastores -->
+        <div class="ms-row">
+          <div class="ms-service" style="font-size:0.65rem;">🗄 PostgreSQL<br><span style="color:var(--text-muted);">orders</span></div>
+          <div class="ms-service" style="font-size:0.65rem;">🗄 Redis<br><span style="color:var(--text-muted);">sessions</span></div>
+          <div class="ms-service" style="font-size:0.65rem;">🗄 MongoDB<br><span style="color:var(--text-muted);">products</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── Summary cards ────────────────────────────────────────── -->
+<section class="section section--alt" aria-labelledby="summary-heading">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">// summary</span>
+      <h2 id="summary-heading">Concepts at a Glance</h2>
+    </div>
+    <div class="cards-grid stagger">
+      <div class="card concept-card">
+        <div class="concept-num">01</div>
+        <h3>CI/CD</h3>
+        <p>Automate build, test, and deploy so every commit can ship safely and quickly.</p>
+        <ul class="concept-steps"><li>Jenkins, GitHub Actions, GitLab CI</li><li>Artifact registries &amp; promotion gates</li></ul>
+      </div>
+      <div class="card concept-card cyan">
+        <div class="concept-num">02</div>
+        <h3>Infrastructure as Code</h3>
+        <p>Manage cloud infra through version-controlled, declarative configuration files.</p>
+        <ul class="concept-steps"><li>Terraform, Pulumi, Ansible</li><li>Idempotent, reproducible environments</li></ul>
+      </div>
+      <div class="card concept-card orange">
+        <div class="concept-num">03</div>
+        <h3>Monitoring &amp; Observability</h3>
+        <p>Gain visibility into your systems via metrics, logs, and distributed traces.</p>
+        <ul class="concept-steps"><li>Prometheus, Grafana, OpenTelemetry</li><li>SLOs, error budgets, alerting</li></ul>
+      </div>
+      <div class="card concept-card purple">
+        <div class="concept-num">04</div>
+        <h3>Automation</h3>
+        <p>Eliminate toil by automating repetitive tasks across the entire delivery pipeline.</p>
+        <ul class="concept-steps"><li>Ansible playbooks, Taskfiles, ArgoCD</li><li>ChatOps &amp; self-service platforms</li></ul>
+      </div>
+      <div class="card concept-card">
+        <div class="concept-num">05</div>
+        <h3>Microservices</h3>
+        <p>Decompose applications into independently deployable, loosely-coupled services.</p>
+        <ul class="concept-steps"><li>Kubernetes, Istio, Kafka, gRPC</li><li>API gateway &amp; service mesh</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Footer ────────────────────────────────────────────────── -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">DevOpsHub</div>
+        <p>A comprehensive resource for DevOps engineers, platform teams, and anyone building modern software delivery pipelines.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About DevOps</a></li>
+          <li><a href="tools.html">Tools</a></li>
+          <li><a href="concepts.html">Concepts</a></li>
+          <li><a href="workflow.html">Workflow</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Concepts</h4>
+        <ul class="footer-links">
+          <li><a href="#cicd">CI/CD Pipelines</a></li>
+          <li><a href="#iac">Infrastructure as Code</a></li>
+          <li><a href="#monitoring">Monitoring</a></li>
+          <li><a href="#automation">Automation</a></li>
+          <li><a href="#microservices">Microservices</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Tools</h4>
+        <ul class="footer-links">
+          <li><a href="tools.html">Docker &amp; K8s</a></li>
+          <li><a href="tools.html">Jenkins</a></li>
+          <li><a href="tools.html">Terraform</a></li>
+          <li><a href="tools.html">Prometheus</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 DevOpsHub. Built with HTML5 &amp; CSS3 only — no JavaScript.</p>
+      <div class="footer-status"><span class="status-dot"></span>All systems operational</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

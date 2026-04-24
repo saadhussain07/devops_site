@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DevOps Workflow — Plan, Code, Build, Test, Release, Deploy, Monitor lifecycle visualised.">
+  <title>DevOps Workflow — DevOps Hub</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── Workflow page extras ─────────────────────────────── */
+
+    /* Infinite loop banner */
+    .loop-banner {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 0.9rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .loop-track {
+      display: inline-flex;
+      gap: 2rem;
+      animation: marquee 18s linear infinite;
+    }
+
+    .loop-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+    }
+
+    .loop-item .dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      opacity: 0.6;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── Main lifecycle diagram ───────────────────────────── */
+    .lifecycle-diagram {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    /* vertical spine */
+    .lifecycle-diagram::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(
+        180deg,
+        var(--accent-purple),
+        var(--accent-green),
+        var(--accent-cyan),
+        #ffd81e,
+        var(--accent-orange),
+        var(--accent-orange),
+        var(--accent-green)
+      );
+      transform: translateX(-50%);
+      z-index: 0;
+    }
+
+    .lc-row {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr;
+      align-items: start;
+      gap: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* alternating: even rows swap content side */
+    .lc-row .lc-left  { padding: 0 2rem 2.5rem 0; text-align: right; }
+    .lc-row .lc-right { padding: 0 0 2.5rem 2rem; text-align: left; }
+    .lc-row .lc-empty { padding: 0 0 2.5rem; }
+
+    .lc-node {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 4px;
+      padding-top: 0.5rem;
+    }
+
+    .lc-orb {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: 2px solid;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      background: var(--bg-base);
+      transition: all var(--transition);
+      position: relative;
+      z-index: 2;
+      cursor: default;
+    }
+
+    .lc-orb:hover {
+      transform: scale(1.15);
+    }
+
+    .lc-orb.plan    { border-color: var(--accent-purple); box-shadow: 0 0 16px rgba(139,92,246,0.5); }
+    .lc-orb.code    { border-color: var(--accent-green);  box-shadow: 0 0 16px rgba(45,255,122,0.5); }
+    .lc-orb.build   { border-color: var(--accent-cyan);   box-shadow: 0 0 16px rgba(0,229,255,0.5); }
+    .lc-orb.test    { border-color: #ffd81e;               box-shadow: 0 0 16px rgba(255,216,30,0.5); }
+    .lc-orb.release { border-color: var(--accent-orange);  box-shadow: 0 0 16px rgba(255,92,26,0.5); }
+    .lc-orb.deploy  { border-color: var(--accent-orange);  box-shadow: 0 0 20px rgba(255,92,26,0.7); }
+    .lc-orb.monitor { border-color: var(--accent-green);   box-shadow: 0 0 20px rgba(45,255,122,0.7); }
+
+    .lc-step-num-badge {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* Content cards */
+    .lc-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      transition: all var(--transition);
+      position: relative;
+    }
+
+    .lc-content::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      background: var(--step-color, var(--accent-green));
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .lc-content:hover {
+      border-color: var(--border-strong);
+      background: var(--bg-card-hover);
+      transform: translateX(var(--lift, 0));
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+
+    .lc-content:hover::before { opacity: 1; }
+
+    /* left-side cards lift left, right-side lift right */
+    .lc-left  .lc-content { --lift: -4px; }
+    .lc-right .lc-content { --lift: 4px; }
+
+    .lc-content h3 {
+      font-size: 1.05rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .lc-content p {
+      font-size: 0.83rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .lc-tool-chips {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      justify-content: inherit;
+    }
+
+    .lc-chip {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 2px;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      transition: all var(--transition);
+    }
+
+    .lc-chip:hover {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+    }
+
+    .lc-outputs {
+      margin-top: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .lc-out-item { display: flex; align-items: center; gap: 0.4rem; }
+    .lc-out-item::before { content: '→'; color: var(--accent-green); }
+
+    /* ── DORA metrics panel ───────────────────────────────── */
+    .dora-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .dora-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: all var(--transition);
+    }
+
+    .dora-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--dora-color, var(--accent-green));
+    }
+
+    .dora-card:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    }
+
+    .dora-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+
+    .dora-card h4 {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.3rem;
+    }
+
+    .dora-value {
+      font-family: var(--font-mono);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-bright);
+      margin-bottom: 0.3rem;
+    }
+
+    .dora-elite {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .dora-elite strong { color: var(--accent-green); }
+
+    /* ── Loop visual ──────────────────────────────────────── */
+    .infinity-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .inf-phase {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .inf-circle {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      transition: all var(--transition);
+    }
+
+    .inf-circle:hover {
+      transform: scale(1.1);
+      border-color: var(--border-strong);
+      box-shadow: var(--glow-green);
+    }
+
+    .inf-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .inf-arrow {
+      font-size: 1.2rem;
+      color: var(--accent-green);
+      animation: glow-pulse 2s ease-in-out infinite;
+      margin-top: -1rem;
+    }
+
+    .inf-loop-arrow {
+      font-size: 1.5rem;
+      color: var(--accent-orange);
+      animation: glow-pulse 2s ease-in-out infinite;
+      margin-top: -1rem;
+    }
+
+    /* ── Responsive ───────────────────────────────────────── */
+    @media (max-width: 768px) {
+      /* collapse to single-column timeline */
+      .lifecycle-diagram::before { left: 24px; transform: none; }
+
+      .lc-row {
+        grid-template-columns: 48px 1fr;
+        grid-template-rows: auto;
+      }
+
+      /* hide empty side, rearrange */
+      .lc-row .lc-left,
+      .lc-row .lc-right,
+      .lc-row .lc-empty { padding: 0; }
+
+      .lc-left  .lc-content { --lift: 0; text-align: left; }
+      .lc-right .lc-content { --lift: 0; }
+
+      .lc-left  .lc-tool-chips { justify-content: flex-start; }
+      .lc-left  .lc-outputs    { align-items: flex-start; }
+
+      .lc-node { padding-top: 0.75rem; }
+      .lc-orb  { width: 36px; height: 36px; font-size: 0.9rem; }
+
+      .lc-row { display: flex; gap: 1rem; margin-bottom: 2rem; }
+      .lc-row .lc-empty { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── Navigation ─────────────────────────────────────────── -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">DevOpsHub</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle sr-only">
+    <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </label>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="tools.html">Tools</a></li>
+      <li><a href="concepts.html">Concepts</a></li>
+      <li><a href="workflow.html" class="active">Workflow</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ─── Page Header ─────────────────────────────────────────── -->
+<header class="page-header">
+  <div class="container">
+    <span class="tag">// lifecycle</span>
+    <h1>The DevOps <span class="text-green">Workflow</span></h1>
+    <p>
+      Seven stages. One infinite loop. Every commit begins the journey from
+      idea to production — continuously, reliably, automatically.
+    </p>
+  </div>
+</header>
+
+<!-- ─── Marquee loop ────────────────────────────────────────── -->
+<div class="loop-banner" aria-hidden="true">
+  <div class="loop-track">
+    <!-- duplicated for seamless loop -->
+    <span class="loop-item"><span class="dot"></span>PLAN</span>
+    <span class="loop-item"><span class="dot"></span>CODE</span>
+    <span class="loop-item"><span class="dot"></span>BUILD</span>
+    <span class="loop-item"><span class="dot"></span>TEST</span>
+    <span class="loop-item"><span class="dot"></span>RELEASE</span>
+    <span class="loop-item"><span class="dot"></span>DEPLOY</span>
+    <span class="loop-item"><span class="dot"></span>MONITOR</span>
+    <span class="loop-item" style="color:var(--accent-green);">↺ REPEAT</span>
+    <span class="loop-item"><span class="dot"></span>PLAN</span>
+    <span class="loop-item"><span class="dot"></span>CODE</span>
+    <span class="loop-item"><span class="dot"></span>BUILD</span>
+    <span class="loop-item"><span class="dot"></span>TEST</span>
+    <span class="loop-item"><span class="dot"></span>RELEASE</span>
+    <span class="loop-item"><span class="dot"></span>DEPLOY</span>
+    <span class="loop-item"><span class="dot"></span>MONITOR</span>
+    <span class="loop-item" style="color:var(--accent-green);">↺ REPEAT</span>
+  </div>
+</div>
+
+<!-- ─── Full Lifecycle Diagram ──────────────────────────────── -->
+<section class="section" aria-labelledby="lifecycle-heading">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">// diagram</span>
+      <h2 id="lifecycle-heading">The Seven-Stage Loop</h2>
+      <p>Hover over each stage to explore its purpose, tools, and outputs.</p>
+    </div>
+
+    <div class="lifecycle-diagram" role="list" aria-label="DevOps lifecycle stages">
+
+      <!-- 1 PLAN ──────────────────────────────────────────── -->
+      <div class="lc-row" role="listitem">
+        <div class="lc-left">
+          <div class="lc-content" style="--step-color:#8b5cf6;">
+            <span class="tag" style="margin-bottom:0.5rem;background:rgba(139,92,246,0.1);border-color:rgba(139,92,246,0.25);color:#8b5cf6;">Stage 01 · Plan</span>
+            <h3>Plan &amp; Define</h3>
+            <p>Define requirements, prioritise the backlog, and create sprint goals. Product, engineering, and operations align on what gets built, why, and when.</p>
+            <div class="lc-tool-chips">
+              <span class="lc-chip">Jira</span>
+              <span class="lc-chip">Linear</span>
+              <span class="lc-chip">Confluence</span>
+              <span class="lc-chip">Notion</span>
+            </div>
+            <div class="lc-outputs">
+              <div class="lc-out-item">Sprint backlog &amp; user stories</div>
+              <div class="lc-out-item">Architecture Decision Records</div>
+              <div class="lc-out-item">Definition of Done</div>
+            </div>
+          </div>
+        </div>
+        <div class="lc-node">
+          <div class="lc-orb plan" title="Plan">📋</div>
+          <span class="lc-step-num-badge">01</span>
+        </div>
+        <div class="lc-empty"></div>
+      </div>
+
+      <!-- 2 CODE ──────────────────────────────────────────── -->
+      <div class="lc-row" role="listitem">
+        <div class="lc-empty"></div>
+        <div class="lc-node">
+          <div class="lc-orb code" title="Code">👨‍💻</div>
+          <span class="lc-step-num-badge">02</span>
+        </div>
+        <div class="lc-right">
+          <div class="lc-content" style="--step-color:var(--accent-green);">
+            <span class="tag" style="margin-bottom:0.5rem;">Stage 02 · Code</span>
+            <h3>Write &amp; Review</h3>
+            <p>Developers write code on feature branches. Pull requests trigger peer review, automated linting, and SAST scanning before merging into the main branch.</p>
+            <div class="lc-tool-chips">
+              <span class="lc-chip">Git</span>
+              <span class="lc-chip">GitHub</span>
+              <span class="lc-chip">GitLab</span>
+              <span class="lc-chip">VS Code</span>
+            </div>
+            <div class="lc-outputs">
+              <div class="lc-out-item">Merged pull request to main</div>
+              <div class="lc-out-item">Pre-commit hooks pass</div>
+              <div class="lc-out-item">Code review approved</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 BUILD ─────────────────────────────────────────── -->
+      <div class="lc-row" role="listitem">
+        <div class="lc-left">
+          <div class="lc-content" style="--step-color:var(--accent-cyan);">
+            <span class="tag" style="margin-bottom:0.5rem;background:rgba(0,229,255,0.1);border-color:rgba(0,229,255,0.25);color:var(--accent-cyan);">Stage 03 · Build</span>
+            <h3>Build &amp; Package</h3>
+            <p>The CI server compiles the code, runs unit tests, and packages the application into a deployable artefact — a Docker image, JAR, or binary pushed to a registry.</p>
+            <div class="lc-tool-chips">
+              <span class="lc-chip">Docker</span>
+              <span class="lc-chip">Jenkins</span>
+              <span class="lc-chip">Gradle</span>
+              <span class="lc-chip">Maven</span>
+            </div>
+            <div class="lc-outputs">
+              <div class="lc-out-item">Docker image tagged &amp; pushed</div>
+              <div class="lc-out-item">Build artefacts in registry</div>
+              <div class="lc-out-item">Unit test report generated</div>
+            </div>
+          </div>
+        </div>
+        <div class="lc-node">
+          <div class="lc-orb build" title="Build">⚙️</div>
+          <span class="lc-step-num-badge">03</span>
+        </div>
+        <div class="lc-empty"></div>
+      </div>
+
+      <!-- 4 TEST ──────────────────────────────────────────── -->
+      <div class="lc-row" role="listitem">
+        <div class="lc-empty"></div>
+        <div class="lc-node">
+          <div class="lc-orb test" title="Test">🧪</div>
+          <span class="lc-step-num-badge">04</span>
+        </div>
+        <div class="lc-right">
+          <div class="lc-content" style="--step-color:#ffd81e;">
+            <span class="tag" style="margin-bottom:0.5rem;background:rgba(255,216,30,0.08);border-color:rgba(255,216,30,0.25);color:#ffd81e;">Stage 04 · Test</span>
+            <h3>Test &amp; Validate</h3>
+            <p>Automated integration, end-to-end, performance, and security tests run against the packaged artefact in a staging environment. Failures block promotion to release.</p>
+            <div class="lc-tool-chips">
+              <span class="lc-chip">Jest</span>
+              <span class="lc-chip">Cypress</span>
+              <span class="lc-chip">Selenium</span>
+              <span class="lc-chip">k6</span>
+              <span class="lc-chip">Snyk</span>
+            </div>
+            <div class="lc-outputs">
+              <div class="lc-out-item">Test report: all green</div>
+              <div class="lc-out-item">Coverage threshold met</div>
+              <div class="lc-out-item">Perf baseline validated</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 RELEASE ───────────────────────────────────────── -->
+      <div class="lc-row" role="listitem">
+        <div class="lc-left">
+          <div class="lc-content" style="--step-color:var(--accent-orange);">
+            <span class="tag" style="margin-bottom:0.5rem;background:rgba(255,92,26,0.1);border-color:rgba(255,92,26,0.25);color:var(--accent-orange);">Stage 05 · Release</span>
+            <h3>Release &amp; Approve</h3>
+            <p>A versioned release candidate is tagged in the registry. Change approval — automated or with a lightweight human gate — marks the build ready for production deployment.</p>
+            <div class="lc-tool-chips">
+              <span class="lc-chip">GitHub Releases</span>
+              <span class="lc-chip">Semantic-Release</span>
+              <span class="lc-chip">Spinnaker</span>
+            </div>
+            <div class="lc-outputs">
+              <div class="lc-out-item">Semantic version tag created</div>
+              <div class="lc-out-item">CHANGELOG auto-generated</div>
+              <div class="lc-out-item">Change request approved</div>
+            </div>
+          </div>
+        </div>
+        <div class="lc-node">
+          <div class="lc-orb release" title="Release">🏷️</div>
+          <span class="lc-step-num-badge">05</span>
+        </div>
+        <div class="lc-empty"></div>
+      </div>
+
+      <!-- 6 DEPLOY ────────────────────────────────────────── -->
+      <div class="lc-row" role="listitem">
+        <div class="lc-empty"></div>
+        <div class="lc-node">
+          <div class="lc-orb deploy" title="Deploy">🚀</div>
+          <span class="lc-step-num-badge">06</span>
+        </div>
+        <div class="lc-right">
+          <div class="lc-content" style="--step-color:var(--accent-orange);">
+            <span class="tag" style="margin-bottom:0.5rem;background:rgba(255,92,26,0.1);border-color:rgba(255,92,26,0.4);color:var(--accent-orange);">Stage 06 · Deploy</span>
+            <h3>Deploy &amp; Deliver</h3>
+            <p>The release is deployed to production using rolling updates, blue-green, or canary strategies — gradually shifting traffic to the new version while monitoring error rates. Auto-rollback on failure.</p>
+            <div class="lc-tool-chips">
+              <span class="lc-chip">Kubernetes</span>
+              <span class="lc-chip">Argo CD</span>
+              <span class="lc-chip">Flux CD</span>
+              <span class="lc-chip">Helm</span>
+            </div>
+            <div class="lc-outputs">
+              <div class="lc-out-item">Zero-downtime rollout complete</div>
+              <div class="lc-out-item">Canary at 100% traffic</div>
+              <div class="lc-out-item">Deployment event recorded</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 MONITOR ───────────────────────────────────────── -->
+      <div class="lc-row" role="listitem">
+        <div class="lc-left">
+          <div class="lc-content" style="--step-color:var(--accent-green);">
+            <span class="tag" style="margin-bottom:0.5rem;">Stage 07 · Monitor</span>
+            <h3>Monitor &amp; Learn</h3>
+            <p>Real-time metrics, logs, and traces confirm the deployment is healthy. SLO burn-rate alerts trigger on-call if anything degrades. Feedback flows back to Plan — completing the loop.</p>
+            <div class="lc-tool-chips">
+              <span class="lc-chip">Prometheus</span>
+              <span class="lc-chip">Grafana</span>
+              <span class="lc-chip">PagerDuty</span>
+              <span class="lc-chip">Datadog</span>
+            </div>
+            <div class="lc-outputs">
+              <div class="lc-out-item">SLOs green across all services</div>
+              <div class="lc-out-item">No P1/P2 alerts firing</div>
+              <div class="lc-out-item">Feedback logged → Plan ↺</div>
+            </div>
+          </div>
+        </div>
+        <div class="lc-node">
+          <div class="lc-orb monitor" title="Monitor">📊</div>
+          <span class="lc-step-num-badge">07</span>
+        </div>
+        <div class="lc-empty"></div>
+      </div>
+
+    </div><!-- /lifecycle-diagram -->
+
+    <!-- Loop back indicator -->
+    <div style="text-align:center; margin-top:1rem; font-family:var(--font-mono); font-size:0.8rem; color:var(--accent-green);" aria-label="The lifecycle loops back to the planning stage">
+      ↺ &nbsp; Insights from Monitor feed back into Plan — the loop never ends
+    </div>
+  </div>
+</section>
+
+<!-- ─── Deployment Strategies ───────────────────────────────── -->
+<section class="section section--alt" aria-labelledby="strategies-heading">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">// deploy strategies</span>
+      <h2 id="strategies-heading">Deployment Strategies Compared</h2>
+      <p>Choosing the right deployment strategy balances risk, speed, and rollback complexity.</p>
+    </div>
+
+    <div class="cards-grid stagger">
+      <!-- Rolling -->
+      <div class="card">
+        <div class="feature-icon green">🔄</div>
+        <h3>Rolling Update</h3>
+        <p>Gradually replace old instances with new ones, a few at a time. Zero downtime but harder to rollback. Kubernetes default strategy.</p>
+        <ul class="concept-steps">
+          <li>Pods replaced batch-by-batch</li>
+          <li>Load balancer routes to healthy pods only</li>
+          <li>Max surge &amp; max unavailable configurable</li>
+        </ul>
+        <div style="display:flex;gap:0.5rem;margin-top:1rem;font-family:var(--font-mono);font-size:0.65rem;">
+          <span style="color:var(--accent-green);">Risk: Low</span>
+          <span style="color:var(--text-muted);">·</span>
+          <span style="color:var(--accent-cyan);">Speed: Medium</span>
+        </div>
+      </div>
+
+      <!-- Blue-Green -->
+      <div class="card">
+        <div class="feature-icon cyan">🔵🟢</div>
+        <h3>Blue-Green Deployment</h3>
+        <p>Maintain two identical environments. Switch traffic from Blue (live) to Green (new) instantly. Instant rollback by switching back.</p>
+        <ul class="concept-steps">
+          <li>Two identical production environments</li>
+          <li>DNS/load-balancer flip to switch</li>
+          <li>Instant rollback — flip back</li>
+        </ul>
+        <div style="display:flex;gap:0.5rem;margin-top:1rem;font-family:var(--font-mono);font-size:0.65rem;">
+          <span style="color:var(--accent-green);">Risk: Very Low</span>
+          <span style="color:var(--text-muted);">·</span>
+          <span style="color:#ffd81e;">Cost: 2× infra</span>
+        </div>
+      </div>
+
+      <!-- Canary -->
+      <div class="card">
+        <div class="feature-icon orange">🐤</div>
+        <h3>Canary Release</h3>
+        <p>Route a small percentage of traffic (e.g. 5%) to the new version. Monitor metrics. Gradually increase or rollback based on health signals.</p>
+        <ul class="concept-steps">
+          <li>5% → 25% → 50% → 100% traffic shift</li>
+          <li>Real user testing with minimal blast radius</li>
+          <li>Automated promotion/rollback via Argo Rollouts</li>
+        </ul>
+        <div style="display:flex;gap:0.5rem;margin-top:1rem;font-family:var(--font-mono);font-size:0.65rem;">
+          <span style="color:var(--accent-green);">Risk: Lowest</span>
+          <span style="color:var(--text-muted);">·</span>
+          <span style="color:var(--accent-cyan);">Best for: high-traffic</span>
+        </div>
+      </div>
+
+      <!-- Feature Flags -->
+      <div class="card">
+        <div class="feature-icon purple">🚩</div>
+        <h3>Feature Flags</h3>
+        <p>Deploy code to production but control who sees features via runtime configuration. Decouple deployment from release — ship continuously without exposing unfinished work.</p>
+        <ul class="concept-steps">
+          <li>Toggle features per user, cohort, or region</li>
+          <li>A/B testing and staged rollouts</li>
+          <li>Kill-switch for instant disable</li>
+        </ul>
+        <div style="display:flex;gap:0.5rem;margin-top:1rem;font-family:var(--font-mono);font-size:0.65rem;">
+          <span style="color:var(--accent-green);">Flexibility: Max</span>
+          <span style="color:var(--text-muted);">·</span>
+          <span style="color:#ffd81e;">LaunchDarkly, Flagsmith</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── DORA Metrics ─────────────────────────────────────────── -->
+<section class="section" aria-labelledby="dora-heading">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">// dora metrics</span>
+      <h2 id="dora-heading">Measuring Your Pipeline Performance</h2>
+      <p>The four DORA metrics are the industry-standard way to measure DevOps effectiveness.</p>
+    </div>
+
+    <div class="dora-grid stagger">
+      <div class="dora-card" style="--dora-color:var(--accent-green);">
+        <div class="dora-icon">⚡</div>
+        <h4>Deployment Frequency</h4>
+        <div class="dora-value">On-Demand</div>
+        <p class="dora-elite">Elite: <strong>Multiple per day</strong>. How often your team deploys to production.</p>
+      </div>
+
+      <div class="dora-card" style="--dora-color:var(--accent-cyan);">
+        <div class="dora-icon">⏱️</div>
+        <h4>Lead Time for Changes</h4>
+        <div class="dora-value">&lt; 1 Hour</div>
+        <p class="dora-elite">Elite: <strong>&lt; 1 hour</strong>. Commit to production deployment time.</p>
+      </div>
+
+      <div class="dora-card" style="--dora-color:#ffd81e;">
+        <div class="dora-icon">🔧</div>
+        <h4>Time to Restore</h4>
+        <div class="dora-value">&lt; 1 Hour</div>
+        <p class="dora-elite">Elite: <strong>&lt; 1 hour</strong>. How fast you recover from a production incident.</p>
+      </div>
+
+      <div class="dora-card" style="--dora-color:var(--accent-orange);">
+        <div class="dora-icon">🛡️</div>
+        <h4>Change Failure Rate</h4>
+        <div class="dora-value">0–5%</div>
+        <p class="dora-elite">Elite: <strong>0–5%</strong>. Percentage of deployments causing production failures.</p>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:3rem;">
+      <a href="contact.html" class="btn btn-primary">Get In Touch →</a>
+      <a href="tools.html" class="btn btn-ghost" style="margin-left:1rem;">Explore Tools</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Footer ────────────────────────────────────────────────── -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">DevOpsHub</div>
+        <p>A comprehensive resource for DevOps engineers, platform teams, and anyone building modern software delivery pipelines.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About DevOps</a></li>
+          <li><a href="tools.html">Tools</a></li>
+          <li><a href="concepts.html">Concepts</a></li>
+          <li><a href="workflow.html">Workflow</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Lifecycle</h4>
+        <ul class="footer-links">
+          <li><a href="workflow.html">Plan</a></li>
+          <li><a href="workflow.html">Code</a></li>
+          <li><a href="workflow.html">Build</a></li>
+          <li><a href="workflow.html">Test</a></li>
+          <li><a href="workflow.html">Release</a></li>
+          <li><a href="workflow.html">Deploy</a></li>
+          <li><a href="workflow.html">Monitor</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Strategies</h4>
+        <ul class="footer-links">
+          <li><a href="workflow.html">Rolling Update</a></li>
+          <li><a href="workflow.html">Blue-Green</a></li>
+          <li><a href="workflow.html">Canary Release</a></li>
+          <li><a href="workflow.html">Feature Flags</a></li>
+          <li><a href="workflow.html">DORA Metrics</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 DevOpsHub. Built with HTML5 &amp; CSS3 only — no JavaScript.</p>
+      <div class="footer-status"><span class="status-dot"></span>All systems operational</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

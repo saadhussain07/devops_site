@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DevOps Tools — Docker, Kubernetes, Jenkins, Terraform, Ansible, Prometheus and more.">
+  <title>DevOps Tools — DevOps Hub</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── Tools page extras ────────────────────────────────── */
+    .tools-filter {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+
+    .filter-chip {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border-radius: 2rem;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      background: transparent;
+      cursor: default;
+      transition: all var(--transition);
+    }
+
+    .filter-chip:hover {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+      background: rgba(45,255,122,0.06);
+    }
+
+    .filter-chip.all {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+      background: rgba(45,255,122,0.08);
+    }
+
+    .tools-section-label {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 3rem 0 1.5rem;
+    }
+
+    .tools-section-label h3 {
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .tools-section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .tool-card-full {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .tool-stat-row {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .tool-stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tool-stat-val {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .tool-stat-key {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .tool-features {
+      list-style: none;
+      margin-top: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .tool-features li {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .tool-features li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent-green);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .tool-logo-lg {
+      width: 68px;
+      height: 68px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-align: center;
+      line-height: 1.3;
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+      transition: all var(--transition);
+      color: var(--text-bright);
+    }
+
+    .card:hover .tool-logo-lg {
+      transform: scale(1.06);
+    }
+
+    @media (max-width: 600px) {
+      .tool-card-full { grid-template-columns: 1fr; }
+      .tool-logo-lg   { width: 48px; height: 48px; font-size: 0.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── Navigation ─────────────────────────────────────────── -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">DevOpsHub</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle sr-only">
+    <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </label>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="tools.html" class="active">Tools</a></li>
+      <li><a href="concepts.html">Concepts</a></li>
+      <li><a href="workflow.html">Workflow</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ─── Page Header ─────────────────────────────────────────── -->
+<header class="page-header">
+  <div class="container">
+    <span class="tag">// toolchain</span>
+    <h1>The DevOps <span class="text-green">Toolbox</span></h1>
+    <p>
+      12 essential tools across containerisation, CI/CD, IaC, version control,
+      monitoring, and cloud — used by the world's top engineering teams.
+    </p>
+  </div>
+</header>
+
+<!-- ─── Category Filter (visual only) ──────────────────────── -->
+<section style="padding:2.5rem 0; border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div class="tools-filter" role="list" aria-label="Tool categories">
+      <span class="filter-chip all" role="listitem">All Tools</span>
+      <span class="filter-chip" role="listitem">Container</span>
+      <span class="filter-chip" role="listitem">CI/CD</span>
+      <span class="filter-chip" role="listitem">IaC</span>
+      <span class="filter-chip" role="listitem">VCS</span>
+      <span class="filter-chip" role="listitem">Monitoring</span>
+      <span class="filter-chip" role="listitem">Cloud</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Container & Orchestration ──────────────────────────── -->
+<section class="section" aria-labelledby="container-heading">
+  <div class="container">
+    <div class="tools-section-label">
+      <h3 id="container-heading">Container &amp; Orchestration</h3>
+    </div>
+
+    <div class="grid-2 stagger">
+      <!-- Docker -->
+      <div class="card tool-card">
+        <div class="tool-card-full">
+          <div class="tool-logo-lg tl-docker">Docker</div>
+          <div>
+            <span class="tool-tag cat-container">Container</span>
+            <h3 style="margin-top:0.5rem;">Docker</h3>
+            <p style="font-size:0.88rem; margin-top:0.4rem;">
+              Docker introduced the concept of packaging applications and their
+              dependencies into lightweight, portable <span class="code-badge">containers</span>.
+              A container includes everything needed to run: code, runtime, libraries,
+              and configuration — running identically across development, staging, and production.
+            </p>
+            <ul class="tool-features">
+              <li>Dockerfile declarative image builds</li>
+              <li>Docker Compose for multi-container apps</li>
+              <li>Docker Hub registry with millions of images</li>
+              <li>Layer caching for fast, incremental builds</li>
+            </ul>
+            <div class="tool-stat-row">
+              <div class="tool-stat">
+                <span class="tool-stat-val">13M+</span>
+                <span class="tool-stat-key">Developers</span>
+              </div>
+              <div class="tool-stat">
+                <span class="tool-stat-val">7M+</span>
+                <span class="tool-stat-key">Images on Hub</span>
+              </div>
+              <div class="tool-stat">
+                <span class="tool-stat-val">2013</span>
+                <span class="tool-stat-key">Released</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kubernetes -->
+      <div class="card tool-card">
+        <div class="tool-card-full">
+          <div class="tool-logo-lg tl-k8s">K8s</div>
+          <div>
+            <span class="tool-tag cat-container">Orchestration</span>
+            <h3 style="margin-top:0.5rem;">Kubernetes</h3>
+            <p style="font-size:0.88rem; margin-top:0.4rem;">
+              Originally developed at Google and open-sourced in 2014, Kubernetes
+              has become the de facto standard for container orchestration. It automates
+              deployment, scaling, self-healing, and load balancing across clusters of machines.
+            </p>
+            <ul class="tool-features">
+              <li>Declarative configuration via YAML manifests</li>
+              <li>Horizontal pod autoscaling (HPA)</li>
+              <li>Rolling updates and rollbacks with zero downtime</li>
+              <li>Helm charts for templated application packaging</li>
+            </ul>
+            <div class="tool-stat-row">
+              <div class="tool-stat">
+                <span class="tool-stat-val">96%</span>
+                <span class="tool-stat-key">Market adoption</span>
+              </div>
+              <div class="tool-stat">
+                <span class="tool-stat-val">5.8K+</span>
+                <span class="tool-stat-key">Contributors</span>
+              </div>
+              <div class="tool-stat">
+                <span class="tool-stat-val">CNCF</span>
+                <span class="tool-stat-key">Graduated</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Helm -->
+      <div class="card tool-card">
+        <div class="tool-card-full">
+          <div class="tool-logo-lg tl-helm">Helm</div>
+          <div>
+            <span class="tool-tag cat-container">Package Mgr</span>
+            <h3 style="margin-top:0.5rem;">Helm</h3>
+            <p style="font-size:0.88rem; margin-top:0.4rem;">
+              The package manager for Kubernetes. Helm uses <span class="code-badge">Charts</span>
+              to define, install, and upgrade complex Kubernetes applications.
+              Think of it as <span class="code-badge">apt</span> or <span class="code-badge">brew</span> but for Kubernetes manifests.
+            </p>
+            <ul class="tool-features">
+              <li>Reusable chart templates with values injection</li>
+              <li>Release management and rollback support</li>
+              <li>Artifact Hub with thousands of community charts</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── CI/CD ───────────────────────────────────────────── -->
+    <div class="tools-section-label" style="margin-top:3.5rem;">
+      <h3 id="cicd-heading">CI/CD Pipelines</h3>
+    </div>
+
+    <div class="grid-2 stagger">
+      <!-- Jenkins -->
+      <div class="card tool-card">
+        <div class="tool-card-full">
+          <div class="tool-logo-lg tl-jenkins">Jenkins</div>
+          <div>
+            <span class="tool-tag cat-cicd">CI/CD</span>
+            <h3 style="margin-top:0.5rem;">Jenkins</h3>
+            <p style="font-size:0.88rem; margin-top:0.4rem;">
+              The most widely deployed open-source automation server. Jenkins
+              orchestrates the build, test, and deploy pipeline using a
+              <span class="code-badge">Jenkinsfile</span> (declarative or scripted pipeline),
+              with 1,800+ community plugins.
+            </p>
+            <ul class="tool-features">
+              <li>Pipeline-as-Code via Jenkinsfile (Groovy DSL)</li>
+              <li>Distributed builds across agent nodes</li>
+              <li>Massive plugin ecosystem for any integration</li>
+              <li>Blue Ocean modern UI for pipeline visualisation</li>
+            </ul>
+            <div class="tool-stat-row">
+              <div class="tool-stat">
+                <span class="tool-stat-val">1,800+</span>
+                <span class="tool-stat-key">Plugins</span>
+              </div>
+              <div class="tool-stat">
+                <span class="tool-stat-val">300K+</span>
+                <span class="tool-stat-key">Installations</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GitHub Actions -->
+      <div class="card tool-card">
+        <div class="tool-card-full">
+          <div class="tool-logo-lg tl-gh">GH Act</div>
+          <div>
+            <span class="tool-tag cat-cicd">CI/CD</span>
+            <h3 style="margin-top:0.5rem;">GitHub Actions</h3>
+            <p style="font-size:0.88rem; margin-top:0.4rem;">
+              Native CI/CD built into GitHub. Workflows are defined in
+              <span class="code-badge">.github/workflows/*.yml</span> and triggered
+              by push, pull request, schedule, or any GitHub event — with
+              thousands of community actions in the Marketplace.
+            </p>
+            <ul class="tool-features">
+              <li>Matrix builds for cross-platform testing</li>
+              <li>Reusable workflows and composite actions</li>
+              <li>GitHub-hosted and self-hosted runners</li>
+              <li>OIDC-based cloud authentication</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- GitLab CI -->
+      <div class="card tool-card">
+        <div class="tool-card-full">
+          <div class="tool-logo-lg tl-gitlab">GitLab</div>
+          <div>
+            <span class="tool-tag cat-cicd">CI/CD</span>
+            <h3 style="margin-top:0.5rem;">GitLab CI/CD</h3>
+            <p style="font-size:0.88rem; margin-top:0.4rem;">
+              GitLab offers a complete DevOps platform — from source control to
+              monitoring — with built-in CI/CD defined in a
+              <span class="code-badge">.gitlab-ci.yml</span> file.
+              Particularly strong for self-hosted enterprise pipelines.
+            </p>
+            <ul class="tool-features">
+              <li>Multi-stage pipeline with DAG support</li>
+              <li>Auto DevOps for zero-config pipelines</li>
+              <li>Built-in container registry and package registry</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── IaC ─────────────────────────────────────────────── -->
+    <div class="tools-section-label" style="margin-top:3.5rem;">
+      <h3>Infrastructure as Code</h3>
+    </div>
+
+    <div class="grid-2 stagger">
+      <!-- Terraform -->
+      <div class="card tool-card">
+        <div class="tool-card-full">
+          <div class="tool-logo-lg tl-tf">Terraform</div>
+          <div>
+            <span class="tool-tag cat-iac">IaC</span>
+            <h3 style="margin-top:0.5rem;">Terraform</h3>
+            <p style="font-size:0.88rem; margin-top:0.4rem;">
+              HashiCorp's Terraform lets you define cloud infrastructure using
+              the <span class="code-badge">HCL</span> declarative language.
+              A single configuration can provision resources across AWS, Azure, GCP,
+              and hundreds of other providers via the Terraform Registry.
+            </p>
+            <ul class="tool-features">
+              <li>Plan → Apply workflow with change previews</li>
+              <li>State management with remote backends (S3, Terraform Cloud)</li>
+              <li>Modular, reusable infrastructure components</li>
+              <li>1,000+ providers in the Terraform Registry</li>
+            </ul>
+            <div class="tool-stat-row">
+              <div class="tool-stat">
+                <span class="tool-stat-val">1,000+</span>
+                <span class="tool-stat-key">Providers</span>
+              </div>
+              <div class="tool-stat">
+                <span class="tool-stat-val">OpenTF</span>
+                <span class="tool-stat-key">Fork: OpenTofu</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ansible -->
+      <div class="card tool-card">
+        <div class="tool-card-full">
+          <div class="tool-logo-lg tl-ansible">Ansible</div>
+          <div>
+            <span class="tool-tag cat-iac">Config Mgmt</span>
+            <h3 style="margin-top:0.5rem;">Ansible</h3>
+            <p style="font-size:0.88rem; margin-top:0.4rem;">
+              Red Hat's Ansible is an agentless configuration management tool.
+              Using <span class="code-badge">Playbooks</span> written in YAML,
+              Ansible can configure systems, deploy software, and orchestrate
+              complex multi-tier deployments — no agent installation required.
+            </p>
+            <ul class="tool-features">
+              <li>Agentless — uses SSH or WinRM</li>
+              <li>Idempotent playbooks ensure desired state</li>
+              <li>Ansible Galaxy — community role library</li>
+              <li>AWX / AAP for enterprise automation at scale</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── VCS ─────────────────────────────────────────────── -->
+    <div class="tools-section-label" style="margin-top:3.5rem;">
+      <h3>Version Control</h3>
+    </div>
+
+    <div class="grid-3 stagger">
+      <div class="card tool-card">
+        <div class="tool-logo tl-git">Git</div>
+        <span class="tool-tag cat-vcs">VCS</span>
+        <h3 style="margin-top:0.5rem;">Git</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          The distributed version control system created by Linus Torvalds in 2005.
+          Git enables branching strategies like Git Flow, trunk-based development,
+          and GitHub Flow — the foundation of every modern DevOps pipeline.
+        </p>
+        <ul class="tool-features">
+          <li>Branching and merging workflows</li>
+          <li>Signed commits and tags</li>
+          <li>Hooks for pre-commit automation</li>
+        </ul>
+      </div>
+
+      <div class="card tool-card">
+        <div class="tool-logo tl-gh">GH</div>
+        <span class="tool-tag cat-vcs">Platform</span>
+        <h3 style="margin-top:0.5rem;">GitHub</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          The world's largest code hosting platform with 100M+ developers.
+          GitHub extends Git with pull requests, code review, issue tracking,
+          project boards, Actions CI/CD, and GitHub Copilot AI assistance.
+        </p>
+        <ul class="tool-features">
+          <li>Pull request review workflows</li>
+          <li>Branch protection rules</li>
+          <li>GHAS security scanning</li>
+        </ul>
+      </div>
+
+      <div class="card tool-card">
+        <div class="tool-logo tl-gitlab">GL</div>
+        <span class="tool-tag cat-vcs">Platform</span>
+        <h3 style="margin-top:0.5rem;">GitLab</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          A complete DevOps platform in a single application. GitLab offers source
+          control, CI/CD, security scanning, package registry, and monitoring
+          in one self-hostable or SaaS solution — ideal for regulated environments.
+        </p>
+        <ul class="tool-features">
+          <li>Single-application DevOps</li>
+          <li>Self-hosted EE option</li>
+          <li>Compliance pipelines</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ─── Monitoring ──────────────────────────────────────── -->
+    <div class="tools-section-label" style="margin-top:3.5rem;">
+      <h3>Monitoring &amp; Observability</h3>
+    </div>
+
+    <div class="grid-3 stagger">
+      <div class="card tool-card">
+        <div class="tool-logo tl-prom">Prom</div>
+        <span class="tool-tag cat-monitor">Metrics</span>
+        <h3 style="margin-top:0.5rem;">Prometheus</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          The leading open-source monitoring system and time-series database.
+          Prometheus scrapes metrics via HTTP, stores them with a powerful query
+          language (PromQL), and fires alerts via Alertmanager.
+        </p>
+        <ul class="tool-features">
+          <li>Pull-based metric scraping</li>
+          <li>PromQL query language</li>
+          <li>Kubernetes-native service discovery</li>
+        </ul>
+      </div>
+
+      <div class="card tool-card">
+        <div class="tool-logo tl-grafana">Grafana</div>
+        <span class="tool-tag cat-monitor">Dashboards</span>
+        <h3 style="margin-top:0.5rem;">Grafana</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          The open-source observability and data visualisation platform.
+          Grafana connects to dozens of data sources — Prometheus, Loki, Tempo,
+          Elasticsearch — and renders beautiful, actionable dashboards.
+        </p>
+        <ul class="tool-features">
+          <li>Multi-data-source dashboards</li>
+          <li>Alerting and on-call routing</li>
+          <li>Grafana LGTM observability stack</li>
+        </ul>
+      </div>
+
+      <div class="card tool-card">
+        <div class="tool-logo tl-vault" style="font-size:0.6rem;">HashiCorp Vault</div>
+        <span class="tool-tag cat-monitor">Security</span>
+        <h3 style="margin-top:0.5rem;">HashiCorp Vault</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          Centralised secrets management and data protection. Vault stores
+          API keys, passwords, certificates, and tokens — with dynamic secret
+          generation, lease renewal, and revocation for zero long-lived credentials.
+        </p>
+        <ul class="tool-features">
+          <li>Dynamic secrets with automatic rotation</li>
+          <li>PKI and certificate authority</li>
+          <li>Fine-grained policies via HCL</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA ─────────────────────────────────────────────────── -->
+<section class="section section--alt">
+  <div class="container">
+    <div class="cta-banner">
+      <div class="cta-banner-text">
+        <h2>Understand How These Tools <span class="text-green">Fit Together</span></h2>
+        <p style="margin-top:0.5rem;">See the full DevOps lifecycle and where each tool plays its role.</p>
+      </div>
+      <div style="display:flex; gap:1rem; flex-wrap:wrap; position:relative; z-index:1;">
+        <a href="workflow.html" class="btn btn-primary">View Workflow →</a>
+        <a href="concepts.html" class="btn btn-secondary">Core Concepts</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Footer ────────────────────────────────────────────────── -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">DevOpsHub</div>
+        <p>A comprehensive resource for DevOps engineers, platform teams, and anyone building modern software delivery pipelines.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About DevOps</a></li>
+          <li><a href="tools.html">Tools</a></li>
+          <li><a href="concepts.html">Concepts</a></li>
+          <li><a href="workflow.html">Workflow</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <ul class="footer-links">
+          <li><a href="tools.html">Containers</a></li>
+          <li><a href="tools.html">CI/CD Tools</a></li>
+          <li><a href="tools.html">IaC Tools</a></li>
+          <li><a href="tools.html">Monitoring</a></li>
+          <li><a href="tools.html">VCS Platforms</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Learn More</h4>
+        <ul class="footer-links">
+          <li><a href="about.html">What is DevOps?</a></li>
+          <li><a href="concepts.html">Core Concepts</a></li>
+          <li><a href="workflow.html">DevOps Lifecycle</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 DevOpsHub. Built with HTML5 &amp; CSS3 only — no JavaScript.</p>
+      <div class="footer-status"><span class="status-dot"></span>All systems operational</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
