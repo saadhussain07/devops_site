@@ -1,353 +1,363 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="DevOps Hub — Learn DevOps culture, tools, CI/CD pipelines, Kubernetes, Docker and workflows for modern software delivery.">
+  <meta name="description"
+    content="DevOps Hub — Learn DevOps culture, tools, CI/CD pipelines, Kubernetes, Docker and workflows for modern software delivery.">
   <meta name="keywords" content="DevOps, CI/CD, Kubernetes, Docker, Jenkins, Terraform, DevOps roadmap, DevOps tools">
   <meta name="author" content="DevOps Hub">
   <meta name="robots" content="index, follow">
   <meta name="google-site-verification" content="Vc_5jdnaAR-yCuym4s8d4lipkDIZFon1HusFoo8mctg" />
-  
+
   <!-- Open Graph (WhatsApp, LinkedIn previews) -->
   <meta property="og:title" content="DevOps Hub — Ship Faster, Break Nothing">
-  <meta property="og:description" content="Learn DevOps tools, concepts, workflows and follow an interactive roadmap to become a DevOps engineer.">
+  <meta property="og:description"
+    content="Learn DevOps tools, concepts, workflows and follow an interactive roadmap to become a DevOps engineer.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://rocketdevops.vercel.app/">
   <meta property="og:image" content="https://rocketdevops.vercel.app/favicon.svg">
-  
+
   <!-- Twitter/X card -->
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="DevOps Hub — Ship Faster, Break Nothing">
   <meta name="twitter:description" content="Learn DevOps tools, concepts, workflows and follow an interactive roadmap.">
-  
+
   <title>DevOps Hub — Learn DevOps Tools, CI/CD & Kubernetes</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
+
 <body>
 
-<!-- ─── Navigation ─────────────────────────────────────────── -->
-<nav class="nav" role="navigation" aria-label="Main navigation">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo" aria-label="DevOps Hub home">DevOpsHub</a>
+  <!-- ─── Navigation ─────────────────────────────────────────── -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="DevOps Hub home">DevOpsHub</a>
 
-    <!-- Mobile toggle (CSS-only checkbox hack) -->
-    <input type="checkbox" id="nav-toggle" class="nav-toggle sr-only">
-    <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </label>
+      <!-- Mobile toggle (CSS-only checkbox hack) -->
+      <input type="checkbox" id="nav-toggle" class="nav-toggle sr-only">
+      <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </label>
 
-    <ul class="nav-links" id="nav-links">
-      <li><a href="index.html" class="active">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="tools.html">Tools</a></li>
-      <li><a href="concepts.html">Concepts</a></li>
-      <li><a href="workflow.html">Workflow</a></li>
-      <li><a href="roadmap.html">Roadmap</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </div>
-</nav>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="tools.html">Tools</a></li>
+        <li><a href="concepts.html">Concepts</a></li>
+        <li><a href="workflow.html">Workflow</a></li>
+        <li><a href="roadmap.html">Roadmap</a></li>
+        <li><a href="quiz.html">Quiz</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
 
-<!-- ─── Hero ────────────────────────────────────────────────── -->
-<section class="hero" aria-label="Hero section">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
+  <!-- ─── Hero ────────────────────────────────────────────────── -->
+  <section class="hero" aria-label="Hero section">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
 
-  <div class="container" style="width:100%;">
-    <div class="hero-content">
-      <div class="hero-eyebrow">
-        <span class="tag">v3.0 // 2025</span>
-        <div class="hero-eyebrow-line"></div>
-      </div>
-
-      <h1>
-        Ship Faster.<br>
-        <span>Break Nothing.</span><br>
-        Scale Everything.
-      </h1>
-
-      <p>
-        DevOps bridges development and operations to deliver software at
-        the speed of business — with the reliability of infrastructure.
-      </p>
-
-      <div class="hero-cta">
-        <a href="about.html" class="btn btn-primary">Explore DevOps</a>
-        <a href="workflow.html" class="btn btn-secondary">View Lifecycle</a>
-      </div>
-
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <div class="hero-stat-num" data-counter="46" data-suffix="×">46×</div>
-          <div class="hero-stat-label">More frequent deployments</div>
+    <div class="container" style="width:100%;">
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <span class="tag">v3.0 // 2025</span>
+          <div class="hero-eyebrow-line"></div>
         </div>
-        <div class="hero-stat">
-          <div class="hero-stat-num" data-counter="99.9" data-suffix="%" data-decimals="1">99.9%</div>
-          <div class="hero-stat-label">Target availability SLA</div>
+
+        <h1>
+          Ship Faster.<br>
+          <span>Break Nothing.</span><br>
+          Scale Everything.
+        </h1>
+
+        <p>
+          DevOps bridges development and operations to deliver software at
+          the speed of business — with the reliability of infrastructure.
+        </p>
+
+        <div class="hero-cta">
+          <a href="about.html" class="btn btn-primary">Explore DevOps</a>
+          <a href="workflow.html" class="btn btn-secondary">View Lifecycle</a>
         </div>
-        <div class="hero-stat">
-          <div class="hero-stat-num" data-counter="440" data-suffix="×">440×</div>
-          <div class="hero-stat-label">Faster failure recovery</div>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-num" data-counter="46" data-suffix="×">46×</div>
+            <div class="hero-stat-label">More frequent deployments</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num" data-counter="99.9" data-suffix="%" data-decimals="1">99.9%</div>
+            <div class="hero-stat-label">Target availability SLA</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num" data-counter="440" data-suffix="×">440×</div>
+            <div class="hero-stat-label">Faster failure recovery</div>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Terminal decoration -->
+    <div class="hero-terminal" aria-hidden="true">
+      <div class="terminal-bar">
+        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span>
+        <span class="terminal-title">pipeline.yml — CI/CD Runner</span>
+      </div>
+      <div class="terminal-body" id="terminal-body">
+        <span class="t-line"><span class="t-prompt">$</span> <span class="t-cmd">git push origin main</span></span>
+        <span class="t-line t-out"><span class="t-green">✔</span> Branch <span class="t-cyan">main</span> pushed</span>
+        <span class="t-line">&nbsp;</span>
+        <span class="t-line"><span class="t-prompt">$</span> <span class="t-cmd">jenkins build start</span></span>
+        <span class="t-line t-out">[1/5] <span class="t-green">CLONE</span> ████████ 100%</span>
+        <span class="t-line t-out">[2/5] <span class="t-cyan">TEST</span> ████████ 100%</span>
+        <span class="t-line t-out">[3/5] <span class="t-cyan">BUILD</span> ████████ 100%</span>
+        <span class="t-line t-out">[4/5] <span class="t-orange">PUSH</span> ████████ 100%</span>
+        <span class="t-line t-out">[5/5] <span class="t-green">DEPLOY</span> ████████ 100%</span>
+        <span class="t-line">&nbsp;</span>
+        <span class="t-line t-out"><span class="t-green">✔ Pipeline succeeded</span> in 2m 14s</span>
+        <span class="t-line t-out"><span class="t-cyan">→</span> Deployed to <span
+            class="t-green">production</span></span>
+        <span class="t-line">&nbsp;</span>
+        <span class="t-line"><span class="t-prompt">$</span> <span class="t-cursor"></span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Lifecycle Strip ──────────────────────────────────────── -->
+  <div class="lifecycle-strip" aria-label="DevOps lifecycle overview">
+    <div class="lifecycle-strip-inner">
+      <div class="lc-step">
+        <div class="lc-bubble plan">
+          <span class="lc-icon">P</span> Plan
+        </div>
+      </div>
+      <div class="lc-arrow">→</div>
+      <div class="lc-step">
+        <div class="lc-bubble code">
+          <span class="lc-icon">&lt;/&gt;</span> Code
+        </div>
+      </div>
+      <div class="lc-arrow">→</div>
+      <div class="lc-step">
+        <div class="lc-bubble build">
+          <span class="lc-icon">B</span> Build
+        </div>
+      </div>
+      <div class="lc-arrow">→</div>
+      <div class="lc-step">
+        <div class="lc-bubble test">
+          <span class="lc-icon">T</span> Test
+        </div>
+      </div>
+      <div class="lc-arrow">→</div>
+      <div class="lc-step">
+        <div class="lc-bubble release">
+          <span class="lc-icon">R</span> Release
+        </div>
+      </div>
+      <div class="lc-arrow">→</div>
+      <div class="lc-step">
+        <div class="lc-bubble deploy">
+          <span class="lc-icon">D</span> Deploy
+        </div>
+      </div>
+      <div class="lc-arrow">→</div>
+      <div class="lc-step">
+        <div class="lc-bubble monitor">
+          <span class="lc-icon">M</span> Monitor
+        </div>
+      </div>
+      <div class="lc-arrow" style="color: var(--accent-green);">↺</div>
+    </div>
   </div>
 
-  <!-- Terminal decoration -->
-  <div class="hero-terminal" aria-hidden="true">
-    <div class="terminal-bar">
-      <span class="terminal-dot"></span>
-      <span class="terminal-dot"></span>
-      <span class="terminal-dot"></span>
-      <span class="terminal-title">pipeline.yml — CI/CD Runner</span>
-    </div>
-    <div class="terminal-body" id="terminal-body">
-      <span class="t-line"><span class="t-prompt">$</span> <span class="t-cmd">git push origin main</span></span>
-      <span class="t-line t-out"><span class="t-green">✔</span> Branch <span class="t-cyan">main</span> pushed</span>
-      <span class="t-line">&nbsp;</span>
-      <span class="t-line"><span class="t-prompt">$</span> <span class="t-cmd">jenkins build start</span></span>
-      <span class="t-line t-out">[1/5] <span class="t-green">CLONE</span>      ████████ 100%</span>
-      <span class="t-line t-out">[2/5] <span class="t-cyan">TEST</span>       ████████ 100%</span>
-      <span class="t-line t-out">[3/5] <span class="t-cyan">BUILD</span>      ████████ 100%</span>
-      <span class="t-line t-out">[4/5] <span class="t-orange">PUSH</span>       ████████ 100%</span>
-      <span class="t-line t-out">[5/5] <span class="t-green">DEPLOY</span>     ████████ 100%</span>
-      <span class="t-line">&nbsp;</span>
-      <span class="t-line t-out"><span class="t-green">✔ Pipeline succeeded</span> in 2m 14s</span>
-      <span class="t-line t-out"><span class="t-cyan">→</span> Deployed to <span class="t-green">production</span></span>
-      <span class="t-line">&nbsp;</span>
-      <span class="t-line"><span class="t-prompt">$</span> <span class="t-cursor"></span></span>
-    </div>
-  </div>
-</section>
-
-<!-- ─── Lifecycle Strip ──────────────────────────────────────── -->
-<div class="lifecycle-strip" aria-label="DevOps lifecycle overview">
-  <div class="lifecycle-strip-inner">
-    <div class="lc-step">
-      <div class="lc-bubble plan">
-        <span class="lc-icon">P</span> Plan
-      </div>
-    </div>
-    <div class="lc-arrow">→</div>
-    <div class="lc-step">
-      <div class="lc-bubble code">
-        <span class="lc-icon">&lt;/&gt;</span> Code
-      </div>
-    </div>
-    <div class="lc-arrow">→</div>
-    <div class="lc-step">
-      <div class="lc-bubble build">
-        <span class="lc-icon">B</span> Build
-      </div>
-    </div>
-    <div class="lc-arrow">→</div>
-    <div class="lc-step">
-      <div class="lc-bubble test">
-        <span class="lc-icon">T</span> Test
-      </div>
-    </div>
-    <div class="lc-arrow">→</div>
-    <div class="lc-step">
-      <div class="lc-bubble release">
-        <span class="lc-icon">R</span> Release
-      </div>
-    </div>
-    <div class="lc-arrow">→</div>
-    <div class="lc-step">
-      <div class="lc-bubble deploy">
-        <span class="lc-icon">D</span> Deploy
-      </div>
-    </div>
-    <div class="lc-arrow">→</div>
-    <div class="lc-step">
-      <div class="lc-bubble monitor">
-        <span class="lc-icon">M</span> Monitor
-      </div>
-    </div>
-    <div class="lc-arrow" style="color: var(--accent-green);">↺</div>
-  </div>
-</div>
-
-<!-- ─── What is DevOps ──────────────────────────────────────── -->
-<section class="section" aria-labelledby="what-heading">
-  <div class="container">
-    <div class="section-header">
-      <span class="tag">// overview</span>
-      <h2 id="what-heading">Why DevOps Changes Everything</h2>
-      <p>
-        A philosophy, a culture, and a set of practices that unite
-        software development with IT operations for rapid, reliable delivery.
-      </p>
-    </div>
-
-    <div class="cards-grid stagger">
-      <div class="card">
-        <div class="feature-icon green">🔄</div>
-        <h3>Continuous Integration</h3>
+  <!-- ─── What is DevOps ──────────────────────────────────────── -->
+  <section class="section" aria-labelledby="what-heading">
+    <div class="container">
+      <div class="section-header">
+        <span class="tag">// overview</span>
+        <h2 id="what-heading">Why DevOps Changes Everything</h2>
         <p>
-          Developers merge code frequently into a shared repository, triggering
-          automated builds and tests — catching bugs before they multiply.
+          A philosophy, a culture, and a set of practices that unite
+          software development with IT operations for rapid, reliable delivery.
         </p>
       </div>
-      <div class="card">
-        <div class="feature-icon cyan">🚀</div>
-        <h3>Continuous Delivery</h3>
-        <p>
-          Every code change is automatically prepared for a production release,
-          enabling teams to deploy at any moment with confidence.
-        </p>
-      </div>
-      <div class="card">
-        <div class="feature-icon orange">🏗️</div>
-        <h3>Infrastructure as Code</h3>
-        <p>
-          Manage and provision infrastructure through version-controlled code
-          instead of manual processes — reproducible, scalable, auditable.
-        </p>
-      </div>
-      <div class="card">
-        <div class="feature-icon purple">📊</div>
-        <h3>Observability & Monitoring</h3>
-        <p>
-          Real-time insight into system health, performance, and user experience
-          through metrics, logs, and distributed traces.
-        </p>
-      </div>
-      <div class="card">
-        <div class="feature-icon green">🤝</div>
-        <h3>Collaboration Culture</h3>
-        <p>
-          Breaking down silos between Dev, Ops, and Security teams to build
-          shared ownership, accountability, and faster feedback loops.
-        </p>
-      </div>
-      <div class="card">
-        <div class="feature-icon cyan">🛡️</div>
-        <h3>DevSecOps Integration</h3>
-        <p>
-          Security is shifted left — embedded into every stage of the pipeline
-          rather than bolted on at the end of the release cycle.
-        </p>
+
+      <div class="cards-grid stagger">
+        <div class="card">
+          <div class="feature-icon green">🔄</div>
+          <h3>Continuous Integration</h3>
+          <p>
+            Developers merge code frequently into a shared repository, triggering
+            automated builds and tests — catching bugs before they multiply.
+          </p>
+        </div>
+        <div class="card">
+          <div class="feature-icon cyan">🚀</div>
+          <h3>Continuous Delivery</h3>
+          <p>
+            Every code change is automatically prepared for a production release,
+            enabling teams to deploy at any moment with confidence.
+          </p>
+        </div>
+        <div class="card">
+          <div class="feature-icon orange">🏗️</div>
+          <h3>Infrastructure as Code</h3>
+          <p>
+            Manage and provision infrastructure through version-controlled code
+            instead of manual processes — reproducible, scalable, auditable.
+          </p>
+        </div>
+        <div class="card">
+          <div class="feature-icon purple">📊</div>
+          <h3>Observability & Monitoring</h3>
+          <p>
+            Real-time insight into system health, performance, and user experience
+            through metrics, logs, and distributed traces.
+          </p>
+        </div>
+        <div class="card">
+          <div class="feature-icon green">🤝</div>
+          <h3>Collaboration Culture</h3>
+          <p>
+            Breaking down silos between Dev, Ops, and Security teams to build
+            shared ownership, accountability, and faster feedback loops.
+          </p>
+        </div>
+        <div class="card">
+          <div class="feature-icon cyan">🛡️</div>
+          <h3>DevSecOps Integration</h3>
+          <p>
+            Security is shifted left — embedded into every stage of the pipeline
+            rather than bolted on at the end of the release cycle.
+          </p>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ─── Tools Preview ─────────────────────────────────────── -->
-<section class="section section--alt" aria-labelledby="tools-heading">
-  <div class="container">
-    <div class="section-header">
-      <span class="tag">// toolchain</span>
-      <h2 id="tools-heading">The Modern DevOps Stack</h2>
-      <p>Battle-tested tools powering today's most productive engineering teams.</p>
-    </div>
+  <!-- ─── Tools Preview ─────────────────────────────────────── -->
+  <section class="section section--alt" aria-labelledby="tools-heading">
+    <div class="container">
+      <div class="section-header">
+        <span class="tag">// toolchain</span>
+        <h2 id="tools-heading">The Modern DevOps Stack</h2>
+        <p>Battle-tested tools powering today's most productive engineering teams.</p>
+      </div>
 
-    <div class="cards-grid-4 stagger">
-      <div class="card tool-card">
-        <div class="tool-logo tl-docker">Docker</div>
-        <h3>Docker</h3>
-        <p style="font-size:0.85rem;">Package applications into portable containers that run consistently everywhere.</p>
-        <span class="tool-tag cat-container">Container</span>
+      <div class="cards-grid-4 stagger">
+        <div class="card tool-card">
+          <div class="tool-logo tl-docker">Docker</div>
+          <h3>Docker</h3>
+          <p style="font-size:0.85rem;">Package applications into portable containers that run consistently everywhere.
+          </p>
+          <span class="tool-tag cat-container">Container</span>
+        </div>
+        <div class="card tool-card">
+          <div class="tool-logo tl-k8s">K8s</div>
+          <h3>Kubernetes</h3>
+          <p style="font-size:0.85rem;">Orchestrate containerised workloads across clusters with auto-scaling and
+            self-healing.</p>
+          <span class="tool-tag cat-container">Orchestration</span>
+        </div>
+        <div class="card tool-card">
+          <div class="tool-logo tl-jenkins">Jenkins</div>
+          <h3>Jenkins</h3>
+          <p style="font-size:0.85rem;">Automate building, testing, and deploying code with a vast plugin ecosystem.</p>
+          <span class="tool-tag cat-cicd">CI/CD</span>
+        </div>
+        <div class="card tool-card">
+          <div class="tool-logo tl-tf">Terraform</div>
+          <h3>Terraform</h3>
+          <p style="font-size:0.85rem;">Provision cloud infrastructure declaratively across AWS, Azure, GCP and more.
+          </p>
+          <span class="tool-tag cat-iac">IaC</span>
+        </div>
       </div>
-      <div class="card tool-card">
-        <div class="tool-logo tl-k8s">K8s</div>
-        <h3>Kubernetes</h3>
-        <p style="font-size:0.85rem;">Orchestrate containerised workloads across clusters with auto-scaling and self-healing.</p>
-        <span class="tool-tag cat-container">Orchestration</span>
-      </div>
-      <div class="card tool-card">
-        <div class="tool-logo tl-jenkins">Jenkins</div>
-        <h3>Jenkins</h3>
-        <p style="font-size:0.85rem;">Automate building, testing, and deploying code with a vast plugin ecosystem.</p>
-        <span class="tool-tag cat-cicd">CI/CD</span>
-      </div>
-      <div class="card tool-card">
-        <div class="tool-logo tl-tf">Terraform</div>
-        <h3>Terraform</h3>
-        <p style="font-size:0.85rem;">Provision cloud infrastructure declaratively across AWS, Azure, GCP and more.</p>
-        <span class="tool-tag cat-iac">IaC</span>
-      </div>
-    </div>
 
-    <div style="text-align:center; margin-top:2.5rem;">
-      <a href="tools.html" class="btn btn-ghost">View All Tools →</a>
-    </div>
-  </div>
-</section>
-
-<!-- ─── CTA Banner ────────────────────────────────────────── -->
-<section class="section" aria-labelledby="cta-heading">
-  <div class="container">
-    <div class="cta-banner">
-      <div class="cta-banner-text">
-        <h2 id="cta-heading">Ready to Start Your<br><span class="text-green">DevOps Journey?</span></h2>
-        <p style="margin-top:0.5rem;">Explore concepts, workflows, and tools that elite teams use every day.</p>
-      </div>
-      <div style="display:flex; gap:1rem; flex-wrap:wrap; position:relative; z-index:1;">
-        <a href="concepts.html" class="btn btn-primary">Learn Concepts</a>
-        <a href="contact.html"  class="btn btn-secondary">Get In Touch</a>
+      <div style="text-align:center; margin-top:2.5rem;">
+        <a href="tools.html" class="btn btn-ghost">View All Tools →</a>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ─── Footer ────────────────────────────────────────────── -->
-<footer class="footer" role="contentinfo">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="nav-logo">DevOpsHub</div>
-        <p>
-          A comprehensive resource for DevOps engineers, platform teams,
-          and anyone building modern software delivery pipelines.
-        </p>
-      </div>
-      <div class="footer-col">
-        <h4>Pages</h4>
-        <ul class="footer-links">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About DevOps</a></li>
-          <li><a href="tools.html">Tools</a></li>
-          <li><a href="concepts.html">Concepts</a></li>
-          <li><a href="workflow.html">Workflow</a></li>
-          <li><a href="roadmap.html">Roadmap</a></li>
-      <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Concepts</h4>
-        <ul class="footer-links">
-          <li><a href="concepts.html">CI/CD Pipelines</a></li>
-          <li><a href="concepts.html">Infrastructure as Code</a></li>
-          <li><a href="concepts.html">Microservices</a></li>
-          <li><a href="concepts.html">Monitoring</a></li>
-          <li><a href="concepts.html">Automation</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Tools</h4>
-        <ul class="footer-links">
-          <li><a href="tools.html">Docker</a></li>
-          <li><a href="tools.html">Kubernetes</a></li>
-          <li><a href="tools.html">Jenkins</a></li>
-          <li><a href="tools.html">Terraform</a></li>
-          <li><a href="tools.html">Ansible</a></li>
-        </ul>
+  <!-- ─── CTA Banner ────────────────────────────────────────── -->
+  <section class="section" aria-labelledby="cta-heading">
+    <div class="container">
+      <div class="cta-banner">
+        <div class="cta-banner-text">
+          <h2 id="cta-heading">Ready to Start Your<br><span class="text-green">DevOps Journey?</span></h2>
+          <p style="margin-top:0.5rem;">Explore concepts, workflows, and tools that elite teams use every day.</p>
+        </div>
+        <div style="display:flex; gap:1rem; flex-wrap:wrap; position:relative; z-index:1;">
+          <a href="concepts.html" class="btn btn-primary">Learn Concepts</a>
+          <a href="contact.html" class="btn btn-secondary">Get In Touch</a>
+        </div>
       </div>
     </div>
+  </section>
 
-    <div class="footer-bottom">
-      <p>© 2025 DevOpsHub. Powered by HTML5, CSS3 &amp; Vanilla JS.</p>
-      <div class="footer-status">
-        <span class="status-dot"></span>
-        All systems operational
+  <!-- ─── Footer ────────────────────────────────────────────── -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo">DevOpsHub</div>
+          <p>
+            A comprehensive resource for DevOps engineers, platform teams,
+            and anyone building modern software delivery pipelines.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Pages</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About DevOps</a></li>
+            <li><a href="tools.html">Tools</a></li>
+            <li><a href="concepts.html">Concepts</a></li>
+            <li><a href="workflow.html">Workflow</a></li>
+            <li><a href="roadmap.html">Roadmap</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Concepts</h4>
+          <ul class="footer-links">
+            <li><a href="concepts.html">CI/CD Pipelines</a></li>
+            <li><a href="concepts.html">Infrastructure as Code</a></li>
+            <li><a href="concepts.html">Microservices</a></li>
+            <li><a href="concepts.html">Monitoring</a></li>
+            <li><a href="concepts.html">Automation</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Tools</h4>
+          <ul class="footer-links">
+            <li><a href="tools.html">Docker</a></li>
+            <li><a href="tools.html">Kubernetes</a></li>
+            <li><a href="tools.html">Jenkins</a></li>
+            <li><a href="tools.html">Terraform</a></li>
+            <li><a href="tools.html">Ansible</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2025 DevOpsHub. Powered by HTML5, CSS3 &amp; Vanilla JS.</p>
+        <div class="footer-status">
+          <span class="status-dot"></span>
+          All systems operational
+        </div>
       </div>
     </div>
-  </div>
-</footer>
+  </footer>
 
-<script src="main.js" defer></script>
+  <script src="main.js" defer></script>
 </body>
+
 </html>
