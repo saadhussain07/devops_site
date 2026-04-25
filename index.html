@@ -6,6 +6,7 @@
   <meta name="description" content="DevOps Hub — Learn DevOps culture, tools, and workflows for modern software delivery.">
   <title>DevOps Hub — Home</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
 <body>
 
@@ -61,15 +62,15 @@
 
       <div class="hero-stats">
         <div class="hero-stat">
-          <div class="hero-stat-num">46×</div>
+          <div class="hero-stat-num" data-counter="46" data-suffix="×">46×</div>
           <div class="hero-stat-label">More frequent deployments</div>
         </div>
         <div class="hero-stat">
-          <div class="hero-stat-num">99.9%</div>
+          <div class="hero-stat-num" data-counter="99.9" data-suffix="%" data-decimals="1">99.9%</div>
           <div class="hero-stat-label">Target availability SLA</div>
         </div>
         <div class="hero-stat">
-          <div class="hero-stat-num">440×</div>
+          <div class="hero-stat-num" data-counter="440" data-suffix="×">440×</div>
           <div class="hero-stat-label">Faster failure recovery</div>
         </div>
       </div>
@@ -84,7 +85,7 @@
       <span class="terminal-dot"></span>
       <span class="terminal-title">pipeline.yml — CI/CD Runner</span>
     </div>
-    <div class="terminal-body">
+    <div class="terminal-body" id="terminal-body">
       <span class="t-line"><span class="t-prompt">$</span> <span class="t-cmd">git push origin main</span></span>
       <span class="t-line t-out"><span class="t-green">✔</span> Branch <span class="t-cyan">main</span> pushed</span>
       <span class="t-line">&nbsp;</span>
@@ -319,7 +320,7 @@
     </div>
 
     <div class="footer-bottom">
-      <p>© 2025 DevOpsHub. Built with HTML5 &amp; CSS3 only — no JavaScript.</p>
+      <p>© 2025 DevOpsHub. Powered by HTML5, CSS3 &amp; Vanilla JS.</p>
       <div class="footer-status">
         <span class="status-dot"></span>
         All systems operational
@@ -328,5 +329,6 @@
   </div>
 </footer>
 
+<script src="main.js" defer></script>
 </body>
 </html>

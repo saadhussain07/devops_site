@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Page Not Found · DevOps Hub</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .error-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .error-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(255,92,26,0.06), transparent 60%),
+        linear-gradient(180deg, var(--bg-void) 0%, var(--bg-base) 100%);
+    }
+
+    .error-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 75%);
+    }
+
+    .error-content {
+      position: relative;
+      z-index: 1;
+      max-width: 560px;
+    }
+
+    .error-code {
+      font-family: var(--font-mono);
+      font-size: clamp(5rem, 18vw, 10rem);
+      font-weight: 700;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--accent-orange), #ff9966);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.25rem;
+      animation: glow-pulse 3s ease-in-out infinite;
+    }
+
+    .error-terminal {
+      background: var(--bg-card);
+      border: 1px solid rgba(255,92,26,0.3);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin: 2rem auto;
+      max-width: 420px;
+      text-align: left;
+      box-shadow: 0 0 40px rgba(255,92,26,0.15);
+    }
+
+    .error-terminal-bar {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.55rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .error-terminal-bar span {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    .error-terminal-body {
+      padding: 1.1rem 1.25rem 1.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 2;
+    }
+
+    .err-line { display: block; }
+    .err-prompt { color: var(--accent-green); }
+    .err-red    { color: var(--accent-orange); }
+    .err-dim    { color: var(--text-muted); }
+    .err-cyan   { color: var(--accent-cyan); }
+
+    .error-title {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .error-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    .error-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .sitemap-chips {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .sitemap-chip {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      padding: 0.3rem 0.85rem;
+      border-radius: 2rem;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      background: var(--bg-card);
+      transition: all var(--transition);
+    }
+
+    .sitemap-chip:hover {
+      border-color: var(--border-strong);
+      color: var(--accent-green);
+      background: var(--bg-card-hover);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── Navigation ─────────────────────────────────────────── -->
+<nav class="nav" role="navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">DevOpsHub</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle sr-only">
+    <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </label>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="tools.html">Tools</a></li>
+      <li><a href="concepts.html">Concepts</a></li>
+      <li><a href="workflow.html">Workflow</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ─── Error Content ────────────────────────────────────────── -->
+<main class="error-page" aria-labelledby="error-heading">
+  <div class="error-bg"></div>
+  <div class="error-grid"></div>
+
+  <div class="error-content">
+    <div class="error-code" aria-label="Error 404">404</div>
+
+    <div class="error-terminal" aria-label="Terminal error output">
+      <div class="error-terminal-bar">
+        <span class="terminal-dot" style="width:8px;height:8px;border-radius:50%;background:#ff5f57;"></span>
+        <span class="terminal-dot" style="width:8px;height:8px;border-radius:50%;background:#ffbd2e;"></span>
+        <span class="terminal-dot" style="width:8px;height:8px;border-radius:50%;background:#28c840;"></span>
+        <span style="flex:1;text-align:center;">bash — devopshub.io</span>
+      </div>
+      <div class="error-terminal-body">
+        <span class="err-line"><span class="err-prompt">$</span> curl https://rocketdevops.vercel.app<span id="err-path"></span></span>
+        <span class="err-line err-red">Error: 404 Not Found</span>
+        <span class="err-line err-dim">↳ The requested route does not exist.</span>
+        <span class="err-line">&nbsp;</span>
+        <span class="err-line"><span class="err-prompt">$</span> kubectl get route <span class="err-red">[404]</span></span>
+        <span class="err-line err-dim">No resources found in this namespace.</span>
+        <span class="err-line">&nbsp;</span>
+        <span class="err-line err-cyan">→ Suggestion: navigate to a valid path below</span>
+        <span class="err-line"><span class="err-prompt">$</span> <span class="t-cursor"></span></span>
+      </div>
+    </div>
+
+    <h1 class="error-title" id="error-heading">Page not found — deployment failed?</h1>
+    <p class="error-desc">
+      This URL doesn't exist in the cluster. It may have been moved,
+      deleted, or you may have mistyped the path.
+    </p>
+
+    <div class="error-actions">
+      <a href="index.html" class="btn btn-primary">← Back to Home</a>
+      <a href="contact.html" class="btn btn-secondary">Report Issue</a>
+    </div>
+
+    <div class="sitemap-chips" role="navigation" aria-label="Site links">
+      <a href="about.html"    class="sitemap-chip">About</a>
+      <a href="tools.html"    class="sitemap-chip">Tools</a>
+      <a href="concepts.html" class="sitemap-chip">Concepts</a>
+      <a href="workflow.html" class="sitemap-chip">Workflow</a>
+      <a href="contact.html"  class="sitemap-chip">Contact</a>
+    </div>
+  </div>
+</main>
+
+<script>
+  // Show the path that 404'd
+  const p = document.getElementById('err-path');
+  if (p) p.textContent = window.location.pathname;
+</script>
+<script src="main.js" defer></script>
+</body>
+</html>

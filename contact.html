@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Contact DevOps Hub — Get in touch with our DevOps team.">
   <title>Contact — DevOps Hub</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <style>
     /* ── Contact page extras ──────────────────────────────── */
 
@@ -63,12 +65,32 @@
       border: 1px solid;
     }
 
-    .s-pill.ok  { border-color: rgba(45,255,122,0.3); color: var(--accent-green); background: rgba(45,255,122,0.06); }
-    .s-pill.ok .s-dot  { background: var(--accent-green); animation: pulse-dot 2s ease-in-out infinite; }
-    .s-pill.warn { border-color: rgba(255,216,30,0.3); color: #ffd81e; background: rgba(255,216,30,0.06); }
-    .s-pill.warn .s-dot { background: #ffd81e; }
+    .s-pill.ok {
+      border-color: rgba(45, 255, 122, 0.3);
+      color: var(--accent-green);
+      background: rgba(45, 255, 122, 0.06);
+    }
 
-    .s-dot { width: 5px; height: 5px; border-radius: 50%; }
+    .s-pill.ok .s-dot {
+      background: var(--accent-green);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    .s-pill.warn {
+      border-color: rgba(255, 216, 30, 0.3);
+      color: #ffd81e;
+      background: rgba(255, 216, 30, 0.06);
+    }
+
+    .s-pill.warn .s-dot {
+      background: #ffd81e;
+    }
+
+    .s-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+    }
 
     /* ── Contact layout ───────────────────────────────────── */
     .contact-grid {
@@ -79,7 +101,11 @@
     }
 
     /* ── Contact sidebar ──────────────────────────────────── */
-    .contact-sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+    .contact-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
 
     .sidebar-block {
       background: var(--bg-card);
@@ -111,22 +137,27 @@
       margin-bottom: 1.1rem;
     }
 
-    .sidebar-detail:last-child { margin-bottom: 0; }
+    .sidebar-detail:last-child {
+      margin-bottom: 0;
+    }
 
     .sidebar-icon {
-      width: 36px; height: 36px;
+      width: 36px;
+      height: 36px;
       border-radius: var(--radius);
-      background: rgba(45,255,122,0.07);
+      background: rgba(45, 255, 122, 0.07);
       border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 0.95rem;
       flex-shrink: 0;
       transition: all var(--transition);
     }
 
     .sidebar-block:hover .sidebar-icon {
-      background: rgba(45,255,122,0.12);
-      border-color: rgba(45,255,122,0.25);
+      background: rgba(45, 255, 122, 0.12);
+      border-color: rgba(45, 255, 122, 0.25);
     }
 
     .sidebar-label {
@@ -159,8 +190,13 @@
       font-size: 0.7rem;
     }
 
-    .resp-label { color: var(--text-muted); }
-    .resp-val   { color: var(--text-primary); }
+    .resp-label {
+      color: var(--text-muted);
+    }
+
+    .resp-val {
+      color: var(--text-primary);
+    }
 
     .resp-track {
       height: 3px;
@@ -220,11 +256,28 @@
       gap: 0.75rem;
     }
 
-    .form-win-dots { display: flex; gap: 5px; }
-    .form-win-dot  { width: 10px; height: 10px; border-radius: 50%; }
-    .fwd-r { background: #ff5f57; }
-    .fwd-y { background: #ffbd2e; }
-    .fwd-g { background: #28c840; }
+    .form-win-dots {
+      display: flex;
+      gap: 5px;
+    }
+
+    .form-win-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .fwd-r {
+      background: #ff5f57;
+    }
+
+    .fwd-y {
+      background: #ffbd2e;
+    }
+
+    .fwd-g {
+      background: #28c840;
+    }
 
     .form-card-title {
       font-family: var(--font-mono);
@@ -234,9 +287,13 @@
       text-align: center;
     }
 
-    .form-card-body { padding: 2rem; }
+    .form-card-body {
+      padding: 2rem;
+    }
 
-    .field-group { margin-bottom: 1.4rem; }
+    .field-group {
+      margin-bottom: 1.4rem;
+    }
 
     .field-label {
       display: flex;
@@ -291,18 +348,20 @@
     .field-group textarea:focus {
       border-color: var(--accent-green);
       background: var(--bg-card);
-      box-shadow: 0 0 0 3px rgba(45,255,122,0.08);
+      box-shadow: 0 0 0 3px rgba(45, 255, 122, 0.08);
     }
 
     .field-group input:valid:not(:placeholder-shown) {
-      border-color: rgba(45,255,122,0.4);
+      border-color: rgba(45, 255, 122, 0.4);
     }
 
     .field-group input:invalid:not(:placeholder-shown) {
-      border-color: rgba(255,92,26,0.5);
+      border-color: rgba(255, 92, 26, 0.5);
     }
 
-    .field-group select option { background: var(--bg-surface); }
+    .field-group select option {
+      background: var(--bg-surface);
+    }
 
     .field-group textarea {
       resize: vertical;
@@ -338,13 +397,14 @@
     }
 
     .check-item:has(input:checked) {
-      border-color: rgba(45,255,122,0.4);
-      background: rgba(45,255,122,0.05);
+      border-color: rgba(45, 255, 122, 0.4);
+      background: rgba(45, 255, 122, 0.05);
       color: var(--text-primary);
     }
 
     .check-item input[type="checkbox"] {
-      width: 14px; height: 14px;
+      width: 14px;
+      height: 14px;
       accent-color: var(--accent-green);
       cursor: pointer;
       flex-shrink: 0;
@@ -375,7 +435,11 @@
     }
 
     /* ── FAQ accordion (CSS-only) ─────────────────────────── */
-    .faq-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
 
     .faq-item {
       background: var(--bg-card);
@@ -384,7 +448,9 @@
       overflow: hidden;
     }
 
-    .faq-toggle { display: none; }
+    .faq-toggle {
+      display: none;
+    }
 
     .faq-question {
       display: flex;
@@ -400,20 +466,25 @@
       gap: 1rem;
     }
 
-    .faq-question:hover { color: var(--accent-green); }
+    .faq-question:hover {
+      color: var(--accent-green);
+    }
 
     .faq-icon {
-      width: 22px; height: 22px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
       border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 0.8rem;
       flex-shrink: 0;
       transition: all var(--transition);
       color: var(--text-muted);
     }
 
-    .faq-toggle:checked ~ .faq-question .faq-icon {
+    .faq-toggle:checked~.faq-question .faq-icon {
       transform: rotate(45deg);
       border-color: var(--accent-green);
       color: var(--accent-green);
@@ -422,12 +493,12 @@
     .faq-answer {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.4s cubic-bezier(0,1,0,1);
+      transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
     }
 
-    .faq-toggle:checked ~ .faq-answer {
+    .faq-toggle:checked~.faq-answer {
       max-height: 300px;
-      transition: max-height 0.5s cubic-bezier(0.5,0,1,0);
+      transition: max-height 0.5s cubic-bezier(0.5, 0, 1, 0);
     }
 
     .faq-answer-inner {
@@ -440,544 +511,561 @@
     }
 
     @media (max-width: 960px) {
-      .contact-grid { grid-template-columns: 1fr; }
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 600px) {
-      .two-col    { grid-template-columns: 1fr; }
-      .check-group{ grid-template-columns: 1fr; }
-      .social-links { grid-template-columns: 1fr; }
-      .form-footer{ flex-direction: column; align-items: flex-start; }
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+
+      .check-group {
+        grid-template-columns: 1fr;
+      }
+
+      .social-links {
+        grid-template-columns: 1fr;
+      }
+
+      .form-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
+
 <body>
 
-<!-- ─── Navigation ─────────────────────────────────────────── -->
-<nav class="nav" role="navigation" aria-label="Main navigation">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo">DevOpsHub</a>
-    <input type="checkbox" id="nav-toggle" class="nav-toggle sr-only">
-    <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle menu">
-      <span></span><span></span><span></span>
-    </label>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="tools.html">Tools</a></li>
-      <li><a href="concepts.html">Concepts</a></li>
-      <li><a href="workflow.html">Workflow</a></li>
-      <li><a href="contact.html" class="active">Contact</a></li>
-    </ul>
-  </div>
-</nav>
+  <!-- ─── Navigation ─────────────────────────────────────────── -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">DevOpsHub</a>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle sr-only">
+      <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </label>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="tools.html">Tools</a></li>
+        <li><a href="concepts.html">Concepts</a></li>
+        <li><a href="workflow.html">Workflow</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
 
-<!-- ─── Page Header ─────────────────────────────────────────── -->
-<header class="page-header">
-  <div class="container">
-    <span class="tag">// get in touch</span>
-    <h1>Let's <span class="text-green">Connect</span></h1>
-    <p>
-      Have a DevOps question, a collaboration idea, or just want to talk pipelines?
-      We're here — and we respond fast.
-    </p>
-  </div>
-</header>
+  <!-- ─── Page Header ─────────────────────────────────────────── -->
+  <header class="page-header">
+    <div class="container">
+      <span class="tag">// get in touch</span>
+      <h1>Let's <span class="text-green">Connect</span></h1>
+      <p>
+        Have a DevOps question, a collaboration idea, or just want to talk pipelines?
+        We're here — and we respond fast.
+      </p>
+    </div>
+  </header>
 
-<!-- ─── System Status Bar ───────────────────────────────────── -->
-<div style="padding:1.5rem 0; border-bottom:1px solid var(--border);">
-  <div class="container">
-    <div class="status-bar" role="status" aria-label="System status">
-      <div class="status-bar-left">
-        <span class="status-dot" style="width:10px;height:10px;border-radius:50%;background:var(--accent-green);animation:pulse-dot 2s ease-in-out infinite;flex-shrink:0;"></span>
-        <div>
-          <h4>All Systems Operational</h4>
-          <p>Last checked: just now · Uptime 99.98% (90d)</p>
+  <!-- ─── System Status Bar ───────────────────────────────────── -->
+  <div style="padding:1.5rem 0; border-bottom:1px solid var(--border);">
+    <div class="container">
+      <div class="status-bar" role="status" aria-label="System status">
+        <div class="status-bar-left">
+          <span class="status-dot"
+            style="width:10px;height:10px;border-radius:50%;background:var(--accent-green);animation:pulse-dot 2s ease-in-out infinite;flex-shrink:0;"></span>
+          <div>
+            <h4>All Systems Operational</h4>
+            <p>Last checked: just now · Uptime 99.98% (90d)</p>
+          </div>
         </div>
-      </div>
-      <div class="status-pills" role="list" aria-label="Service status list">
-        <div class="s-pill ok" role="listitem"><span class="s-dot"></span>API Gateway</div>
-        <div class="s-pill ok" role="listitem"><span class="s-dot"></span>CI Runner</div>
-        <div class="s-pill ok" role="listitem"><span class="s-dot"></span>Container Registry</div>
-        <div class="s-pill ok" role="listitem"><span class="s-dot"></span>Monitoring</div>
-        <div class="s-pill ok" role="listitem"><span class="s-dot"></span>Email Relay</div>
+        <div class="status-pills" role="list" aria-label="Service status list">
+          <div class="s-pill ok" role="listitem"><span class="s-dot"></span>API Gateway</div>
+          <div class="s-pill ok" role="listitem"><span class="s-dot"></span>CI Runner</div>
+          <div class="s-pill ok" role="listitem"><span class="s-dot"></span>Container Registry</div>
+          <div class="s-pill ok" role="listitem"><span class="s-dot"></span>Monitoring</div>
+          <div class="s-pill ok" role="listitem"><span class="s-dot"></span>Email Relay</div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- ─── Main Contact Section ────────────────────────────────── -->
-<section class="contact-page-wrap" aria-labelledby="contact-heading">
-  <div class="container">
-    <div class="contact-grid">
+  <!-- ─── Main Contact Section ────────────────────────────────── -->
+  <section class="contact-page-wrap" aria-labelledby="contact-heading">
+    <div class="container">
+      <div class="contact-grid">
 
-      <!-- ── Sidebar ─────────────────────────────────────── -->
-      <aside class="contact-sidebar" aria-label="Contact information">
+        <!-- ── Sidebar ─────────────────────────────────────── -->
+        <aside class="contact-sidebar" aria-label="Contact information">
 
-        <!-- Contact details -->
-        <div class="sidebar-block">
-          <h4>Contact Details</h4>
+          <!-- Contact details -->
+          <div class="sidebar-block">
+            <h4>Contact Details</h4>
 
-          <div class="sidebar-detail">
-            <div class="sidebar-icon">📧</div>
-            <div>
-              <div class="sidebar-label">Email</div>
-              <div class="sidebar-value">hello@devopshub.io</div>
-            </div>
-          </div>
-
-          <div class="sidebar-detail">
-            <div class="sidebar-icon">💬</div>
-            <div>
-              <div class="sidebar-label">Slack Community</div>
-              <div class="sidebar-value">devopshub.slack.com</div>
-            </div>
-          </div>
-
-          <div class="sidebar-detail">
-            <div class="sidebar-icon">🌍</div>
-            <div>
-              <div class="sidebar-label">Headquarters</div>
-              <div class="sidebar-value">Remote-first · UTC±0 core hours</div>
-            </div>
-          </div>
-
-          <div class="sidebar-detail">
-            <div class="sidebar-icon">📞</div>
-            <div>
-              <div class="sidebar-label">Office Hours</div>
-              <div class="sidebar-value">Mon–Fri, 09:00–18:00 UTC</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Response time -->
-        <div class="sidebar-block">
-          <h4>Typical Response Times</h4>
-          <div class="response-bar">
-            <div>
-              <div class="resp-row">
-                <span class="resp-label">General inquiry</span>
-                <span class="resp-val">&lt; 24h</span>
+            <div class="sidebar-detail">
+              <div class="sidebar-icon">📧</div>
+              <div>
+                <div class="sidebar-label">Email</div>
+                <div class="sidebar-value">muhammdsaadhussain49@gmail.com</div>
               </div>
-              <div class="resp-track"><div class="resp-fill" style="width:35%;"></div></div>
             </div>
-            <div>
-              <div class="resp-row">
-                <span class="resp-label">Consulting request</span>
-                <span class="resp-val">&lt; 4h</span>
+
+            <div class="sidebar-detail">
+              <div class="sidebar-icon">💬</div>
+              <div>
+                <div class="sidebar-label">Slack Community</div>
+                <div class="sidebar-value">devopshub.slack.com</div>
               </div>
-              <div class="resp-track"><div class="resp-fill" style="width:15%;background:var(--accent-cyan);"></div></div>
             </div>
-            <div>
-              <div class="resp-row">
-                <span class="resp-label">Partnership proposal</span>
-                <span class="resp-val">&lt; 48h</span>
+
+            <div class="sidebar-detail">
+              <div class="sidebar-icon">🌍</div>
+              <div>
+                <div class="sidebar-label">Headquarters</div>
+                <div class="sidebar-value">Remote-first ·</div>
               </div>
-              <div class="resp-track"><div class="resp-fill" style="width:55%;background:var(--accent-orange);"></div></div>
             </div>
-            <div>
-              <div class="resp-row">
-                <span class="resp-label">Community support</span>
-                <span class="resp-val">&lt; 2h</span>
+
+            <div class="sidebar-detail">
+              <div class="sidebar-icon">📞</div>
+              <div>
+                <div class="sidebar-label">Phone</div>
+                <div class="sidebar-value">+92 302 555 9916</div>
               </div>
-              <div class="resp-track"><div class="resp-fill" style="width:10%;background:var(--accent-purple);"></div></div>
+            </div>
+            
+            <div class="sidebar-detail">
+              <div class="sidebar-icon">🕐</div>
+              <div>
+                <div class="sidebar-label">Office Hours</div>
+                <div class="sidebar-value">Mon–Fri, 09:00–18:00 PKT</div>
+              </div>
+            </div>
+
+          <!-- Response time -->
+          <div class="sidebar-block">
+            <h4>Typical Response Times</h4>
+            <div class="response-bar">
+              <div>
+                <div class="resp-row">
+                  <span class="resp-label">General inquiry</span>
+                  <span class="resp-val">&lt; 24h</span>
+                </div>
+                <div class="resp-track">
+                  <div class="resp-fill" style="width:35%;"></div>
+                </div>
+              </div>
+              <div>
+                <div class="resp-row">
+                  <span class="resp-label">Consulting request</span>
+                  <span class="resp-val">&lt; 4h</span>
+                </div>
+                <div class="resp-track">
+                  <div class="resp-fill" style="width:15%;background:var(--accent-cyan);"></div>
+                </div>
+              </div>
+              <div>
+                <div class="resp-row">
+                  <span class="resp-label">Partnership proposal</span>
+                  <span class="resp-val">&lt; 48h</span>
+                </div>
+                <div class="resp-track">
+                  <div class="resp-fill" style="width:55%;background:var(--accent-orange);"></div>
+                </div>
+              </div>
+              <div>
+                <div class="resp-row">
+                  <span class="resp-label">Community support</span>
+                  <span class="resp-val">&lt; 2h</span>
+                </div>
+                <div class="resp-track">
+                  <div class="resp-fill" style="width:10%;background:var(--accent-purple);"></div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Social / community links -->
-        <div class="sidebar-block">
-          <h4>Community &amp; Social</h4>
-          <div class="social-links">
-            <a class="social-link" href="#" aria-label="GitHub">
-              <span>⌨</span> GitHub
-            </a>
-            <a class="social-link" href="#" aria-label="Twitter / X">
-              <span>✕</span> Twitter
-            </a>
-            <a class="social-link" href="#" aria-label="LinkedIn">
-              <span>in</span> LinkedIn
-            </a>
-            <a class="social-link" href="#" aria-label="YouTube">
-              <span>▶</span> YouTube
-            </a>
-            <a class="social-link" href="#" aria-label="Discord">
-              <span>#</span> Discord
-            </a>
-            <a class="social-link" href="#" aria-label="RSS Feed">
-              <span>◉</span> RSS Feed
-            </a>
-          </div>
-        </div>
-
-      </aside>
-
-      <!-- ── Contact Form ────────────────────────────────── -->
-      <div>
-        <div class="form-card" role="main">
-          <div class="form-card-header">
-            <div class="form-win-dots">
-              <span class="form-win-dot fwd-r"></span>
-              <span class="form-win-dot fwd-y"></span>
-              <span class="form-win-dot fwd-g"></span>
+          <!-- Social / community links -->
+          <div class="sidebar-block">
+            <h4>Community &amp; Social</h4>
+            <div class="social-links">
+              <a class="social-link" href="#" aria-label="GitHub">
+                <span>⌨</span> GitHub
+              </a>
+              <a class="social-link" href="#" aria-label="Twitter / X">
+                <span>✕</span> Twitter
+              </a>
+              <a class="social-link" href="#" aria-label="LinkedIn">
+                <span>in</span> LinkedIn
+              </a>
+              <a class="social-link" href="#" aria-label="YouTube">
+                <span>▶</span> YouTube
+              </a>
+              <a class="social-link" href="#" aria-label="Discord">
+                <span>#</span> Discord
+              </a>
+              <a class="social-link" href="#" aria-label="RSS Feed">
+                <span>◉</span> RSS Feed
+              </a>
             </div>
-            <span class="form-card-title">new_message.sh — DevOps Hub Contact Form</span>
           </div>
 
-          <div class="form-card-body">
-            <form action="#" method="POST" novalidate aria-label="Contact form">
+        </aside>
 
-              <!-- Name + Email -->
-              <div class="two-col">
+        <!-- ── Contact Form ────────────────────────────────── -->
+        <div>
+          <div class="form-card" role="main">
+            <div class="form-card-header">
+              <div class="form-win-dots">
+                <span class="form-win-dot fwd-r"></span>
+                <span class="form-win-dot fwd-y"></span>
+                <span class="form-win-dot fwd-g"></span>
+              </div>
+              <span class="form-card-title">new_message.sh — DevOps Hub Contact Form</span>
+            </div>
+
+            <div class="form-card-body">
+              <form id="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" novalidate
+                aria-label="Contact form">
+
+                <!-- Name + Email -->
+                <div class="two-col">
+                  <div class="field-group">
+                    <div class="field-label">
+                      <label for="first-name">First Name</label>
+                      <span class="field-required">required</span>
+                    </div>
+                    <input type="text" id="first-name" name="first_name" placeholder="Ada" required
+                      autocomplete="given-name" minlength="2">
+                  </div>
+                  <div class="field-group">
+                    <div class="field-label">
+                      <label for="last-name">Last Name</label>
+                      <span class="field-required">required</span>
+                    </div>
+                    <input type="text" id="last-name" name="last_name" placeholder="Lovelace" required
+                      autocomplete="family-name" minlength="2">
+                  </div>
+                </div>
+
+                <!-- Email + Company -->
+                <div class="two-col">
+                  <div class="field-group">
+                    <div class="field-label">
+                      <label for="email">Work Email</label>
+                      <span class="field-required">required</span>
+                    </div>
+                    <input type="email" id="email" name="email" placeholder="ada@acme.io" required autocomplete="email">
+                  </div>
+                  <div class="field-group">
+                    <div class="field-label">
+                      <label for="company">Company / Org</label>
+                    </div>
+                    <input type="text" id="company" name="company" placeholder="Acme Corp" autocomplete="organization">
+                  </div>
+                </div>
+
+                <!-- Role + Team size -->
+                <div class="two-col">
+                  <div class="field-group">
+                    <div class="field-label">
+                      <label for="role">Your Role</label>
+                    </div>
+                    <select id="role" name="role">
+                      <option value="" disabled selected>Select your role…</option>
+                      <option>DevOps Engineer</option>
+                      <option>Platform Engineer</option>
+                      <option>SRE / Reliability Engineer</option>
+                      <option>Cloud Architect</option>
+                      <option>Backend Developer</option>
+                      <option>Engineering Manager</option>
+                      <option>CTO / VP Engineering</option>
+                      <option>Student / Learning</option>
+                      <option>Other</option>
+                    </select>
+                  </div>
+                  <div class="field-group">
+                    <div class="field-label">
+                      <label for="team-size">Team Size</label>
+                    </div>
+                    <select id="team-size" name="team_size">
+                      <option value="" disabled selected>Select size…</option>
+                      <option>Solo / Freelancer</option>
+                      <option>2–10 engineers</option>
+                      <option>11–50 engineers</option>
+                      <option>51–200 engineers</option>
+                      <option>200+ engineers</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Subject -->
                 <div class="field-group">
                   <div class="field-label">
-                    <label for="first-name">First Name</label>
+                    <label for="subject">Subject</label>
                     <span class="field-required">required</span>
                   </div>
-                  <input
-                    type="text"
-                    id="first-name"
-                    name="first_name"
-                    placeholder="Ada"
-                    required
-                    autocomplete="given-name"
-                    minlength="2"
-                  >
+                  <input type="text" id="subject" name="subject"
+                    placeholder="e.g. DevOps consulting — Kubernetes migration" required>
                 </div>
+
+                <!-- Topic checkboxes -->
                 <div class="field-group">
                   <div class="field-label">
-                    <label for="last-name">Last Name</label>
+                    <label>I'm interested in…</label>
+                  </div>
+                  <div class="check-group" role="group" aria-label="Topic selection">
+                    <label class="check-item">
+                      <input type="checkbox" name="topics" value="cicd"> CI/CD Pipelines
+                    </label>
+                    <label class="check-item">
+                      <input type="checkbox" name="topics" value="k8s"> Kubernetes &amp; Containers
+                    </label>
+                    <label class="check-item">
+                      <input type="checkbox" name="topics" value="iac"> Infrastructure as Code
+                    </label>
+                    <label class="check-item">
+                      <input type="checkbox" name="topics" value="monitoring"> Monitoring &amp; SRE
+                    </label>
+                    <label class="check-item">
+                      <input type="checkbox" name="topics" value="security"> DevSecOps
+                    </label>
+                    <label class="check-item">
+                      <input type="checkbox" name="topics" value="consulting"> Consulting
+                    </label>
+                    <label class="check-item">
+                      <input type="checkbox" name="topics" value="training"> Training / Workshops
+                    </label>
+                    <label class="check-item">
+                      <input type="checkbox" name="topics" value="other"> Something else
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Message -->
+                <div class="field-group">
+                  <div class="field-label">
+                    <label for="message">Message</label>
                     <span class="field-required">required</span>
                   </div>
-                  <input
-                    type="text"
-                    id="last-name"
-                    name="last_name"
-                    placeholder="Lovelace"
-                    required
-                    autocomplete="family-name"
-                    minlength="2"
-                  >
+                  <textarea id="message" name="message"
+                    placeholder="Describe your challenge, question, or idea — the more detail the better. What does your current stack look like? What problem are you solving?"
+                    required minlength="20"></textarea>
+                  <div class="field-hint">Minimum 20 characters · Markdown formatting supported.</div>
                 </div>
-              </div>
 
-              <!-- Email + Company -->
-              <div class="two-col">
+                <!-- Preferred contact method -->
                 <div class="field-group">
                   <div class="field-label">
-                    <label for="email">Work Email</label>
-                    <span class="field-required">required</span>
+                    <label for="contact-method">Preferred Contact Method</label>
                   </div>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="ada@acme.io"
-                    required
-                    autocomplete="email"
-                  >
+                  <select id="contact-method" name="contact_method">
+                    <option value="" disabled selected>How should we reply?</option>
+                    <option>Email (preferred)</option>
+                    <option>Slack DM</option>
+                    <option>Video call (Google Meet / Zoom)</option>
+                    <option>No preference</option>
+                  </select>
                 </div>
-                <div class="field-group">
-                  <div class="field-label">
-                    <label for="company">Company / Org</label>
-                  </div>
-                  <input
-                    type="text"
-                    id="company"
-                    name="company"
-                    placeholder="Acme Corp"
-                    autocomplete="organization"
-                  >
-                </div>
-              </div>
 
-              <!-- Role + Team size -->
-              <div class="two-col">
+                <!-- How did you hear -->
                 <div class="field-group">
                   <div class="field-label">
-                    <label for="role">Your Role</label>
+                    <label for="source">How did you find us?</label>
                   </div>
-                  <select id="role" name="role">
-                    <option value="" disabled selected>Select your role…</option>
-                    <option>DevOps Engineer</option>
-                    <option>Platform Engineer</option>
-                    <option>SRE / Reliability Engineer</option>
-                    <option>Cloud Architect</option>
-                    <option>Backend Developer</option>
-                    <option>Engineering Manager</option>
-                    <option>CTO / VP Engineering</option>
-                    <option>Student / Learning</option>
+                  <select id="source" name="source">
+                    <option value="" disabled selected>Select one…</option>
+                    <option>Google / Search engine</option>
+                    <option>GitHub</option>
+                    <option>Twitter / X</option>
+                    <option>LinkedIn</option>
+                    <option>Word of mouth</option>
+                    <option>Dev.to / Medium / Blog</option>
+                    <option>Conference / Meetup</option>
                     <option>Other</option>
                   </select>
                 </div>
-                <div class="field-group">
-                  <div class="field-label">
-                    <label for="team-size">Team Size</label>
-                  </div>
-                  <select id="team-size" name="team_size">
-                    <option value="" disabled selected>Select size…</option>
-                    <option>Solo / Freelancer</option>
-                    <option>2–10 engineers</option>
-                    <option>11–50 engineers</option>
-                    <option>51–200 engineers</option>
-                    <option>200+ engineers</option>
-                  </select>
-                </div>
-              </div>
 
-              <!-- Subject -->
-              <div class="field-group">
-                <div class="field-label">
-                  <label for="subject">Subject</label>
-                  <span class="field-required">required</span>
+                <!-- Submit -->
+                <div class="form-footer">
+                  <div class="form-note">Your data is encrypted in transit and never sold.</div>
+                  <button type="submit" class="btn btn-primary form-submit" style="width:auto;padding:0.8rem 2rem;">
+                    Send Message →
+                  </button>
                 </div>
-                <input
-                  type="text"
-                  id="subject"
-                  name="subject"
-                  placeholder="e.g. DevOps consulting — Kubernetes migration"
-                  required
-                >
-              </div>
 
-              <!-- Topic checkboxes -->
-              <div class="field-group">
-                <div class="field-label">
-                  <label>I'm interested in…</label>
-                </div>
-                <div class="check-group" role="group" aria-label="Topic selection">
-                  <label class="check-item">
-                    <input type="checkbox" name="topics" value="cicd"> CI/CD Pipelines
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="topics" value="k8s"> Kubernetes &amp; Containers
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="topics" value="iac"> Infrastructure as Code
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="topics" value="monitoring"> Monitoring &amp; SRE
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="topics" value="security"> DevSecOps
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="topics" value="consulting"> Consulting
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="topics" value="training"> Training / Workshops
-                  </label>
-                  <label class="check-item">
-                    <input type="checkbox" name="topics" value="other"> Something else
-                  </label>
-                </div>
-              </div>
-
-              <!-- Message -->
-              <div class="field-group">
-                <div class="field-label">
-                  <label for="message">Message</label>
-                  <span class="field-required">required</span>
-                </div>
-                <textarea
-                  id="message"
-                  name="message"
-                  placeholder="Describe your challenge, question, or idea — the more detail the better. What does your current stack look like? What problem are you solving?"
-                  required
-                  minlength="20"
-                ></textarea>
-                <div class="field-hint">Minimum 20 characters · Markdown formatting supported.</div>
-              </div>
-
-              <!-- Preferred contact method -->
-              <div class="field-group">
-                <div class="field-label">
-                  <label for="contact-method">Preferred Contact Method</label>
-                </div>
-                <select id="contact-method" name="contact_method">
-                  <option value="" disabled selected>How should we reply?</option>
-                  <option>Email (preferred)</option>
-                  <option>Slack DM</option>
-                  <option>Video call (Google Meet / Zoom)</option>
-                  <option>No preference</option>
-                </select>
-              </div>
-
-              <!-- How did you hear -->
-              <div class="field-group">
-                <div class="field-label">
-                  <label for="source">How did you find us?</label>
-                </div>
-                <select id="source" name="source">
-                  <option value="" disabled selected>Select one…</option>
-                  <option>Google / Search engine</option>
-                  <option>GitHub</option>
-                  <option>Twitter / X</option>
-                  <option>LinkedIn</option>
-                  <option>Word of mouth</option>
-                  <option>Dev.to / Medium / Blog</option>
-                  <option>Conference / Meetup</option>
-                  <option>Other</option>
-                </select>
-              </div>
-
-              <!-- Submit -->
-              <div class="form-footer">
-                <div class="form-note">Your data is encrypted in transit and never sold.</div>
-                <button type="submit" class="btn btn-primary form-submit" style="width:auto;padding:0.8rem 2rem;">
-                  Send Message →
-                </button>
-              </div>
-
-            </form>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
 
-    </div>
-  </div>
-</section>
-
-<!-- ─── FAQ Section ──────────────────────────────────────────── -->
-<section class="section section--alt" aria-labelledby="faq-heading">
-  <div class="container">
-    <div class="section-header">
-      <span class="tag">// faq</span>
-      <h2 id="faq-heading">Frequently Asked Questions</h2>
-      <p>Click any question to expand the answer.</p>
-    </div>
-
-    <div class="faq-list" style="max-width:780px; margin:0 auto;" role="list">
-
-      <div class="faq-item" role="listitem">
-        <input type="checkbox" id="faq1" class="faq-toggle sr-only">
-        <label class="faq-question" for="faq1">
-          <span>What DevOps consulting services do you offer?</span>
-          <span class="faq-icon">+</span>
-        </label>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            We offer a range of services including CI/CD pipeline design and implementation, Kubernetes cluster architecture, Infrastructure as Code migrations (Terraform, Ansible), observability stack setup (Prometheus + Grafana), DevSecOps integration, and bespoke DevOps training workshops for engineering teams of any size.
-          </div>
-        </div>
-      </div>
-
-      <div class="faq-item" role="listitem">
-        <input type="checkbox" id="faq2" class="faq-toggle sr-only">
-        <label class="faq-question" for="faq2">
-          <span>How quickly can you help us get a CI/CD pipeline running?</span>
-          <span class="faq-icon">+</span>
-        </label>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            For most greenfield projects, we can have a fully functional CI/CD pipeline running within 1–3 days using GitHub Actions or GitLab CI with Docker and a basic Kubernetes deployment. More complex enterprise migrations with existing legacy systems typically take 2–6 weeks for a phased rollout, with the first automated pipeline live within the first week.
-          </div>
-        </div>
-      </div>
-
-      <div class="faq-item" role="listitem">
-        <input type="checkbox" id="faq3" class="faq-toggle sr-only">
-        <label class="faq-question" for="faq3">
-          <span>Do you work with teams that are new to DevOps?</span>
-          <span class="faq-icon">+</span>
-        </label>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            Absolutely — in fact, some of our most rewarding engagements are with teams making their first steps into DevOps. We tailor our approach to your current maturity level. We start with a DevOps assessment, identify the highest-value quick wins, and build a roadmap that the team can own and grow independently over time. We don't create dependency — we build capability.
-          </div>
-        </div>
-      </div>
-
-      <div class="faq-item" role="listitem">
-        <input type="checkbox" id="faq4" class="faq-toggle sr-only">
-        <label class="faq-question" for="faq4">
-          <span>Which cloud providers do you support?</span>
-          <span class="faq-icon">+</span>
-        </label>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            We have deep expertise across all three major cloud providers: AWS (EKS, ECS, CodePipeline, CloudFormation), Google Cloud (GKE, Cloud Build, Artifact Registry), and Microsoft Azure (AKS, Azure DevOps, Bicep). We also work with multi-cloud and hybrid cloud setups, and are cloud-agnostic by philosophy — we recommend the best fit for your workload, not the platform we prefer.
-          </div>
-        </div>
-      </div>
-
-      <div class="faq-item" role="listitem">
-        <input type="checkbox" id="faq5" class="faq-toggle sr-only">
-        <label class="faq-question" for="faq5">
-          <span>Can I contribute to DevOps Hub content or tools?</span>
-          <span class="faq-icon">+</span>
-        </label>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            Yes! DevOps Hub is community-driven. We welcome contributions including technical articles, case studies, tool reviews, open-source templates, and Helm charts. Reach out via the contact form with "Community Contribution" in the subject line, or open a pull request directly on our GitHub organisation. All contributors are credited and celebrated.
-          </div>
-        </div>
-      </div>
-
-      <div class="faq-item" role="listitem">
-        <input type="checkbox" id="faq6" class="faq-toggle sr-only">
-        <label class="faq-question" for="faq6">
-          <span>What does an engagement typically cost?</span>
-          <span class="faq-icon">+</span>
-        </label>
-        <div class="faq-answer">
-          <div class="faq-answer-inner">
-            Pricing depends on scope and team size. We offer hourly advisory sessions for quick consultations, fixed-price project engagements for defined deliverables (e.g. "build our CI/CD pipeline"), and retainer packages for ongoing support and growth partnerships. Reach out with your specific needs and we'll send a tailored proposal within 48 hours — no commitment required.
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ─── Footer ────────────────────────────────────────────────── -->
-<footer class="footer" role="contentinfo">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="nav-logo">DevOpsHub</div>
-        <p>A comprehensive resource for DevOps engineers, platform teams, and anyone building modern software delivery pipelines.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Pages</h4>
-        <ul class="footer-links">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About DevOps</a></li>
-          <li><a href="tools.html">Tools</a></li>
-          <li><a href="concepts.html">Concepts</a></li>
-          <li><a href="workflow.html">Workflow</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Concepts</h4>
-        <ul class="footer-links">
-          <li><a href="concepts.html">CI/CD Pipelines</a></li>
-          <li><a href="concepts.html">Infrastructure as Code</a></li>
-          <li><a href="concepts.html">Microservices</a></li>
-          <li><a href="concepts.html">Monitoring</a></li>
-          <li><a href="concepts.html">Automation</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Connect</h4>
-        <ul class="footer-links">
-          <li><a href="#">GitHub</a></li>
-          <li><a href="#">Twitter / X</a></li>
-          <li><a href="#">LinkedIn</a></li>
-          <li><a href="#">Discord</a></li>
-          <li><a href="#">RSS Feed</a></li>
-        </ul>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>© 2025 DevOpsHub. Built with HTML5 &amp; CSS3 only — no JavaScript.</p>
-      <div class="footer-status"><span class="status-dot"></span>All systems operational</div>
-    </div>
-  </div>
-</footer>
+  </section>
 
+  <!-- ─── FAQ Section ──────────────────────────────────────────── -->
+  <section class="section section--alt" aria-labelledby="faq-heading">
+    <div class="container">
+      <div class="section-header">
+        <span class="tag">// faq</span>
+        <h2 id="faq-heading">Frequently Asked Questions</h2>
+        <p>Click any question to expand the answer.</p>
+      </div>
+
+      <div class="faq-list" style="max-width:780px; margin:0 auto;" role="list">
+
+        <div class="faq-item" role="listitem">
+          <input type="checkbox" id="faq1" class="faq-toggle sr-only">
+          <label class="faq-question" for="faq1">
+            <span>What DevOps consulting services do you offer?</span>
+            <span class="faq-icon">+</span>
+          </label>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              We offer a range of services including CI/CD pipeline design and implementation, Kubernetes cluster
+              architecture, Infrastructure as Code migrations (Terraform, Ansible), observability stack setup
+              (Prometheus + Grafana), DevSecOps integration, and bespoke DevOps training workshops for engineering teams
+              of any size.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <input type="checkbox" id="faq2" class="faq-toggle sr-only">
+          <label class="faq-question" for="faq2">
+            <span>How quickly can you help us get a CI/CD pipeline running?</span>
+            <span class="faq-icon">+</span>
+          </label>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              For most greenfield projects, we can have a fully functional CI/CD pipeline running within 1–3 days using
+              GitHub Actions or GitLab CI with Docker and a basic Kubernetes deployment. More complex enterprise
+              migrations with existing legacy systems typically take 2–6 weeks for a phased rollout, with the first
+              automated pipeline live within the first week.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <input type="checkbox" id="faq3" class="faq-toggle sr-only">
+          <label class="faq-question" for="faq3">
+            <span>Do you work with teams that are new to DevOps?</span>
+            <span class="faq-icon">+</span>
+          </label>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Absolutely — in fact, some of our most rewarding engagements are with teams making their first steps into
+              DevOps. We tailor our approach to your current maturity level. We start with a DevOps assessment, identify
+              the highest-value quick wins, and build a roadmap that the team can own and grow independently over time.
+              We don't create dependency — we build capability.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <input type="checkbox" id="faq4" class="faq-toggle sr-only">
+          <label class="faq-question" for="faq4">
+            <span>Which cloud providers do you support?</span>
+            <span class="faq-icon">+</span>
+          </label>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              We have deep expertise across all three major cloud providers: AWS (EKS, ECS, CodePipeline,
+              CloudFormation), Google Cloud (GKE, Cloud Build, Artifact Registry), and Microsoft Azure (AKS, Azure
+              DevOps, Bicep). We also work with multi-cloud and hybrid cloud setups, and are cloud-agnostic by
+              philosophy — we recommend the best fit for your workload, not the platform we prefer.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <input type="checkbox" id="faq5" class="faq-toggle sr-only">
+          <label class="faq-question" for="faq5">
+            <span>Can I contribute to DevOps Hub content or tools?</span>
+            <span class="faq-icon">+</span>
+          </label>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Yes! DevOps Hub is community-driven. We welcome contributions including technical articles, case studies,
+              tool reviews, open-source templates, and Helm charts. Reach out via the contact form with "Community
+              Contribution" in the subject line, or open a pull request directly on our GitHub organisation. All
+              contributors are credited and celebrated.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <input type="checkbox" id="faq6" class="faq-toggle sr-only">
+          <label class="faq-question" for="faq6">
+            <span>What does an engagement typically cost?</span>
+            <span class="faq-icon">+</span>
+          </label>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Pricing depends on scope and team size. We offer hourly advisory sessions for quick consultations,
+              fixed-price project engagements for defined deliverables (e.g. "build our CI/CD pipeline"), and retainer
+              packages for ongoing support and growth partnerships. Reach out with your specific needs and we'll send a
+              tailored proposal within 48 hours — no commitment required.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Footer ────────────────────────────────────────────────── -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo">DevOpsHub</div>
+          <p>A comprehensive resource for DevOps engineers, platform teams, and anyone building modern software delivery
+            pipelines.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Pages</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About DevOps</a></li>
+            <li><a href="tools.html">Tools</a></li>
+            <li><a href="concepts.html">Concepts</a></li>
+            <li><a href="workflow.html">Workflow</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Concepts</h4>
+          <ul class="footer-links">
+            <li><a href="concepts.html">CI/CD Pipelines</a></li>
+            <li><a href="concepts.html">Infrastructure as Code</a></li>
+            <li><a href="concepts.html">Microservices</a></li>
+            <li><a href="concepts.html">Monitoring</a></li>
+            <li><a href="concepts.html">Automation</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Connect</h4>
+          <ul class="footer-links">
+            <li><a href="#">GitHub</a></li>
+            <li><a href="#">Twitter / X</a></li>
+            <li><a href="#">LinkedIn</a></li>
+            <li><a href="#">Discord</a></li>
+            <li><a href="#">RSS Feed</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 DevOpsHub. Powered by HTML5, CSS3 &amp; Vanilla JS.</p>
+        <div class="footer-status"><span class="status-dot"></span>All systems operational</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js" defer></script>
 </body>
+
 </html>
