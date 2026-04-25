@@ -424,3 +424,27 @@
     ticking = true;
   }, { passive: true });
 })();
+/* ── Theme Toggle ─────────────────────────────────────────── */
+(function initThemeToggle() {
+  const btn = document.getElementById('theme-toggle');
+  if (!btn) return;
+
+  const STORAGE_KEY = 'devopshub_theme';
+  const saved = localStorage.getItem(STORAGE_KEY);
+
+  // Apply saved preference on load
+  if (saved === 'light') {
+    document.body.classList.add('light-mode');
+    btn.textContent = '☀️';
+  }
+
+  btn.addEventListener('click', () => {
+    const isLight = document.body.classList.toggle('light-mode');
+    btn.textContent = isLight ? '☀️' : '🌙';
+    localStorage.setItem(STORAGE_KEY, isLight ? 'light' : 'dark');
+
+    // Animate the button
+    btn.style.transform = 'rotate(360deg)';
+    setTimeout(() => { btn.style.transform = ''; }, 400);
+  });
+})();

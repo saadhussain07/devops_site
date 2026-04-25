@@ -48,6 +48,63 @@
   --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
+/* ── Light mode overrides ─────────────────────────────── */
+body.light-mode {
+  --bg-void:       #f0f4f8;
+  --bg-base:       #f5f8fa;
+  --bg-surface:    #e8edf2;
+  --bg-card:       #ffffff;
+  --bg-card-hover: #f0f5f9;
+
+  --text-primary:  #1a2332;
+  --text-secondary:#3d5266;
+  --text-muted:    #7a92a8;
+  --text-bright:   #0d1b2a;
+
+  --border:        rgba(0,0,0,0.08);
+  --border-strong: rgba(0,0,0,0.18);
+
+  --glow-green:    0 0 20px rgba(45,180,90,0.2), 0 0 60px rgba(45,180,90,0.06);
+  --glow-cyan:     0 0 20px rgba(0,140,200,0.2), 0 0 60px rgba(0,140,200,0.06);
+}
+
+body.light-mode .nav {
+  background: rgba(245,248,250,0.92);
+}
+
+body.light-mode .hero-grid {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px);
+}
+
+body.light-mode .terminal-body,
+body.light-mode .code-body { background: #1a1a2e; border-radius: 0 0 8px 8px; }
+
+body.light-mode .hero-terminal { box-shadow: 0 8px 40px rgba(0,0,0,0.15); }
+
+/* Toggle button */
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent-green);
+  color: var(--accent-green);
+  transform: rotate(20deg);
+}
 
 html {
   scroll-behavior: smooth;
