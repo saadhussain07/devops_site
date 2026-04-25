@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Search DevOps Hub — find articles, tools, concepts, and guides instantly.">
+  <meta name="robots" content="index, follow">
+  <title>Search — DevOps Hub</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── Search page ──────────────────────────────────────── */
+    .search-hero {
+      padding: 4rem 0 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .search-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 50% 0%,
+        rgba(45,255,122,0.06), transparent 65%);
+    }
+
+    .search-hero .container { position: relative; z-index: 1; }
+
+    .search-hero h1 { margin-bottom: 0.5rem; }
+    .search-hero p  { margin-bottom: 2rem; }
+
+    /* Big search box */
+    .search-box-wrap {
+      position: relative;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .search-box-icon {
+      position: absolute;
+      left: 1.1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      pointer-events: none;
+      transition: color var(--transition);
+    }
+
+    .search-box-wrap:focus-within .search-box-icon {
+      color: var(--accent-green);
+    }
+
+    #search-input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1rem 3.5rem 1rem 3.2rem;
+      font-family: var(--font-body);
+      font-size: 1.05rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: all var(--transition);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+    }
+
+    #search-input::placeholder { color: var(--text-muted); }
+
+    #search-input:focus {
+      border-color: var(--accent-green);
+      box-shadow: 0 0 0 4px rgba(45,255,122,0.1),
+                  0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    #search-clear {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: none;
+      padding: 0.2rem;
+      border-radius: 50%;
+      transition: all var(--transition);
+      line-height: 1;
+    }
+
+    #search-clear:hover { color: var(--accent-orange); }
+    #search-clear.visible { display: block; }
+
+    /* Stats bar */
+    .search-stats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .search-stat {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .search-stat strong {
+      color: var(--accent-green);
+      font-weight: 700;
+    }
+
+    /* Filter chips */
+    .search-filters {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1.25rem;
+    }
+
+    .sf-chip {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      padding: 0.3rem 0.85rem;
+      border-radius: 2rem;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      background: transparent;
+      cursor: pointer;
+      transition: all var(--transition);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .sf-chip:hover,
+    .sf-chip.active {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+      background: rgba(45,255,122,0.07);
+    }
+
+    /* ── Results area ─────────────────────────────────────── */
+    #results-area {
+      min-height: 300px;
+      padding: 2rem 0 4rem;
+    }
+
+    /* Empty / welcome state */
+    .search-welcome {
+      text-align: center;
+      padding: 3rem 0;
+    }
+
+    .search-welcome-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.4;
+    }
+
+    .search-welcome h3 {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .search-welcome p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    /* Result count */
+    .results-count {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .results-count strong { color: var(--accent-green); }
+
+    .results-time {
+      color: var(--text-muted);
+      font-size: 0.68rem;
+    }
+
+    /* No results */
+    .no-results {
+      text-align: center;
+      padding: 3rem 0;
+    }
+
+    .no-results-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .no-results h3   { margin-bottom: 0.5rem; color: var(--text-secondary); }
+    .no-results p    { font-size: 0.85rem; color: var(--text-muted); }
+
+    /* Result card */
+    .result-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 0.85rem;
+      transition: all var(--transition);
+      display: block;
+      text-decoration: none;
+      cursor: pointer;
+      animation: fade-up 0.3s ease both;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--accent-green);
+      opacity: 0;
+      transition: opacity var(--transition);
+      border-radius: 3px 0 0 3px;
+    }
+
+    .result-card:hover {
+      border-color: var(--border-strong);
+      background: var(--bg-card-hover);
+      transform: translateX(4px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    }
+
+    .result-card:hover::before { opacity: 1; }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .result-page-badge {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      padding: 0.12rem 0.6rem;
+      border-radius: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border: 1px solid;
+      flex-shrink: 0;
+    }
+
+    .badge-home      { color: var(--accent-green);  border-color: rgba(45,255,122,0.35);  background: rgba(45,255,122,0.08); }
+    .badge-about     { color: var(--accent-cyan);   border-color: rgba(0,229,255,0.35);   background: rgba(0,229,255,0.08); }
+    .badge-tools     { color: var(--accent-orange); border-color: rgba(255,92,26,0.35);   background: rgba(255,92,26,0.08); }
+    .badge-concepts  { color: var(--accent-purple); border-color: rgba(139,92,246,0.35);  background: rgba(139,92,246,0.08); }
+    .badge-workflow  { color: #ffd81e;              border-color: rgba(255,216,30,0.35);  background: rgba(255,216,30,0.07); }
+    .badge-roadmap   { color: var(--accent-green);  border-color: rgba(45,255,122,0.35);  background: rgba(45,255,122,0.08); }
+    .badge-quiz      { color: var(--accent-cyan);   border-color: rgba(0,229,255,0.35);   background: rgba(0,229,255,0.08); }
+    .badge-blog      { color: var(--accent-orange); border-color: rgba(255,92,26,0.35);   background: rgba(255,92,26,0.08); }
+    .badge-contact   { color: var(--accent-purple); border-color: rgba(139,92,246,0.35);  background: rgba(139,92,246,0.08); }
+
+    .result-category {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    .result-title {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--text-bright);
+      margin-bottom: 0.35rem;
+      line-height: 1.4;
+      transition: color var(--transition);
+    }
+
+    .result-card:hover .result-title { color: var(--accent-green); }
+
+    .result-excerpt {
+      font-size: 0.83rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* Highlight matched text */
+    .result-excerpt mark,
+    .result-title mark {
+      background: rgba(45,255,122,0.2);
+      color: var(--accent-green);
+      border-radius: 2px;
+      padding: 0 2px;
+      font-style: normal;
+    }
+
+    .result-url {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    /* Popular searches */
+    .popular-searches {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+
+    .popular-searches h4 {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .popular-tags {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .popular-tag {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: 2rem;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      background: var(--bg-card);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .popular-tag:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      background: rgba(0,229,255,0.06);
+    }
+
+    /* Keyboard shortcut hint */
+    .kbd-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    .kbd {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.1rem 0.35rem;
+      font-size: 0.6rem;
+    }
+
+    @media (max-width: 600px) {
+      #search-input { font-size: 0.95rem; padding: 0.85rem 3rem 0.85rem 2.8rem; }
+      .results-count { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav injected by nav HTML in body -->
+
+<header class="search-hero">
+  <div class="container">
+    <span class="tag">// search</span>
+    <h1>Search <span class="text-green">DevOps Hub</span></h1>
+    <p>Instantly search across all pages, tools, concepts, and articles.</p>
+
+    <!-- Search box -->
+    <div class="search-box-wrap">
+      <span class="search-box-icon">🔍</span>
+      <input
+        type="search"
+        id="search-input"
+        placeholder="Search Docker, Kubernetes, CI/CD, Terraform…"
+        autocomplete="off"
+        spellcheck="false"
+        aria-label="Search DevOps Hub"
+        autofocus
+      >
+      <button id="search-clear" aria-label="Clear search">✕</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="search-stats">
+      <div class="search-stat">📄 <strong>9</strong> pages indexed</div>
+      <div class="search-stat">🔧 <strong>120+</strong> topics covered</div>
+      <div class="search-stat">⚡ <strong>Instant</strong> results</div>
+      <div class="search-stat">
+        <span class="kbd-hint">
+          Press <span class="kbd">/</span> to focus search
+        </span>
+      </div>
+    </div>
+
+    <!-- Category filters -->
+    <div class="search-filters" role="group" aria-label="Filter by category">
+      <button class="sf-chip active" data-cat="all">All</button>
+      <button class="sf-chip" data-cat="tools">Tools</button>
+      <button class="sf-chip" data-cat="concepts">Concepts</button>
+      <button class="sf-chip" data-cat="workflow">Workflow</button>
+      <button class="sf-chip" data-cat="roadmap">Roadmap</button>
+      <button class="sf-chip" data-cat="blog">Blog</button>
+      <button class="sf-chip" data-cat="quiz">Quiz</button>
+    </div>
+  </div>
+</header>
+
+<!-- Results -->
+<section id="results-area">
+  <div class="container">
+
+    <!-- Welcome state -->
+    <div class="search-welcome" id="welcome-state">
+      <div class="search-welcome-icon">⌨️</div>
+      <h3>Start typing to search…</h3>
+      <p>Search across tools, concepts, workflow stages, roadmap skills, blog articles and more.</p>
+
+      <div class="popular-searches" style="margin-top:2rem;">
+        <h4>Popular searches</h4>
+        <div class="popular-tags">
+          <span class="popular-tag" data-query="Docker">Docker</span>
+          <span class="popular-tag" data-query="Kubernetes">Kubernetes</span>
+          <span class="popular-tag" data-query="CI/CD">CI/CD</span>
+          <span class="popular-tag" data-query="Terraform">Terraform</span>
+          <span class="popular-tag" data-query="Prometheus">Prometheus</span>
+          <span class="popular-tag" data-query="Jenkins">Jenkins</span>
+          <span class="popular-tag" data-query="GitOps">GitOps</span>
+          <span class="popular-tag" data-query="DevSecOps">DevSecOps</span>
+          <span class="popular-tag" data-query="Ansible">Ansible</span>
+          <span class="popular-tag" data-query="SRE">SRE</span>
+          <span class="popular-tag" data-query="DORA">DORA</span>
+          <span class="popular-tag" data-query="Helm">Helm</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results list -->
+    <div id="results-list" style="display:none;">
+      <div class="results-count" id="results-count"></div>
+      <div id="results-cards"></div>
+    </div>
+
+    <!-- No results state -->
+    <div class="no-results" id="no-results" style="display:none;">
+      <div class="no-results-icon">🔭</div>
+      <h3>No results found</h3>
+      <p>Try different keywords, or browse our pages directly below.</p>
+      <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;">
+        <a href="tools.html"    class="btn btn-ghost">Tools</a>
+        <a href="concepts.html" class="btn btn-ghost">Concepts</a>
+        <a href="roadmap.html"  class="btn btn-ghost">Roadmap</a>
+        <a href="blog.html"     class="btn btn-ghost">Blog</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo" style="font-family:monospace;color:#2dff7a;font-weight:700;">DevOpsHub</div>
+        <p>A comprehensive resource for DevOps engineers, platform teams, and anyone building modern software delivery pipelines.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="tools.html">Tools</a></li>
+          <li><a href="concepts.html">Concepts</a></li>
+          <li><a href="workflow.html">Workflow</a></li>
+          <li><a href="roadmap.html">Roadmap</a></li>
+          <li><a href="quiz.html">Quiz</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Search</h4>
+        <ul class="footer-links">
+          <li><a href="search.html?q=Docker">Docker</a></li>
+          <li><a href="search.html?q=Kubernetes">Kubernetes</a></li>
+          <li><a href="search.html?q=Terraform">Terraform</a></li>
+          <li><a href="search.html?q=CI/CD">CI/CD</a></li>
+          <li><a href="search.html?q=Monitoring">Monitoring</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Topics</h4>
+        <ul class="footer-links">
+          <li><a href="search.html?q=DevSecOps">DevSecOps</a></li>
+          <li><a href="search.html?q=GitOps">GitOps</a></li>
+          <li><a href="search.html?q=SRE">SRE</a></li>
+          <li><a href="search.html?q=Ansible">Ansible</a></li>
+          <li><a href="search.html?q=Prometheus">Prometheus</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 DevOpsHub. Powered by HTML5, CSS3 &amp; Vanilla JS.</p>
+      <div class="footer-status"><span class="status-dot"></span>All systems operational</div>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js" defer></script>
+<script>
+'use strict';
+/* ═══════════════════════════════════════════════════════════
+   SEARCH ENGINE — client-side, zero dependencies
+   Full content index of all DevOps Hub pages
+═══════════════════════════════════════════════════════════ */
+
+const INDEX = [
+  /* ── HOME ─────────────────────────────────────────────── */
+  { page:'home', badge:'badge-home', url:'index.html', cat:'home',
+    title:'DevOps Hub — Ship Faster, Break Nothing, Scale Everything',
+    body:'DevOps bridges development and operations to deliver software at the speed of business with the reliability of infrastructure. Continuous Integration CI CD Infrastructure as Code IaC monitoring observability collaboration culture DevSecOps security. 46x more frequent deployments 99.9 percent availability 440x faster failure recovery.' },
+  { page:'home', badge:'badge-home', url:'index.html', cat:'home',
+    title:'Continuous Integration — automated builds and tests',
+    body:'Developers merge code frequently into a shared repository triggering automated builds and tests catching bugs before they multiply. Continuous Delivery every code change is automatically prepared for a production release.' },
+  { page:'home', badge:'badge-home', url:'index.html', cat:'home',
+    title:'DevOps Lifecycle — Plan Code Build Test Release Deploy Monitor',
+    body:'The DevOps lifecycle is an infinite loop of seven stages Plan Code Build Test Release Deploy Monitor. Each stage feeds into the next creating a continuous delivery pipeline.' },
+
+  /* ── ABOUT ─────────────────────────────────────────────── */
+  { page:'about', badge:'badge-about', url:'about.html', cat:'about',
+    title:'What is DevOps?',
+    body:'DevOps is a cultural and professional movement that stresses communication collaboration and integration between software developers and IT operations. It removes the wall between teams who write code and teams who run it. DevOps is not a tool a job title or a methodology it is a mindset shift.' },
+  { page:'about', badge:'badge-about', url:'about.html', cat:'about',
+    title:'History and Evolution of DevOps — 2001 to Present',
+    body:'2001 Agile Manifesto. 2009 Patrick Debois coined DevOps term at DevOpsDays Ghent Belgium. 2013 Docker containers. 2014 Kubernetes Google. 2016 DORA metrics Nicole Forsgren. 2020 Platform Engineering DevSecOps GitOps AIOps MLOps.' },
+  { page:'about', badge:'badge-about', url:'about.html', cat:'about',
+    title:'Benefits of DevOps — DORA metrics and performance',
+    body:'46x more deployments 440x faster recovery 5x lower change failure rate 50 percent less rework 99.9 percent availability higher profitability better employee satisfaction NPS. Elite performers deploy on demand.' },
+  { page:'about', badge:'badge-about', url:'about.html', cat:'about',
+    title:'Three Pillars of DevOps — Culture Process Tools',
+    body:'Culture people psychological safety blameless post mortems shared ownership continuous learning. Process CI CD pipelines agile sprints infrastructure automation. Tools source control containers orchestration monitoring cloud native.' },
+
+  /* ── TOOLS ─────────────────────────────────────────────── */
+  { page:'tools', badge:'badge-tools', url:'tools.html', cat:'tools',
+    title:'Docker — Container platform',
+    body:'Docker packages applications into lightweight portable containers that run consistently everywhere. Dockerfile multi stage builds layer caching Docker Compose Docker Hub registry 13 million developers 7 million images. Container runtime isolation.' },
+  { page:'tools', badge:'badge-tools', url:'tools.html', cat:'tools',
+    title:'Kubernetes K8s — Container orchestration',
+    body:'Kubernetes is the de facto standard for container orchestration. Originally developed at Google open sourced 2014. Automates deployment scaling self healing load balancing. YAML manifests horizontal pod autoscaling HPA rolling updates rollbacks Helm charts CNCF graduated. 96 percent market adoption.' },
+  { page:'tools', badge:'badge-tools', url:'tools.html', cat:'tools',
+    title:'Jenkins — CI/CD automation server',
+    body:'Jenkins is the most widely deployed open source automation server. Orchestrates build test deploy pipeline using Jenkinsfile declarative scripted pipeline Groovy DSL. 1800 plus plugins distributed builds agent nodes Blue Ocean UI. 300k installations.' },
+  { page:'tools', badge:'badge-tools', url:'tools.html', cat:'tools',
+    title:'Terraform — Infrastructure as Code IaC',
+    body:'HashiCorp Terraform defines cloud infrastructure using HCL declarative language. Provisions resources across AWS Azure GCP 1000 plus providers. Plan Apply workflow state management remote backends S3 Terraform Cloud modules OpenTofu.' },
+  { page:'tools', badge:'badge-tools', url:'tools.html', cat:'tools',
+    title:'Ansible — Configuration management agentless',
+    body:'Red Hat Ansible is agentless configuration management. Uses Playbooks written in YAML to configure systems deploy software orchestrate deployments over SSH WinRM. Idempotent Galaxy community role library AWX AAP enterprise automation.' },
+  { page:'tools', badge:'badge-tools', url:'tools.html', cat:'tools',
+    title:'GitHub Actions — Native CI/CD',
+    body:'GitHub Actions is native CI/CD built into GitHub. Workflows defined in .github/workflows YAML triggered by push pull request schedule. Matrix builds reusable workflows community actions marketplace OIDC cloud authentication.' },
+  { page:'tools', badge:'badge-tools', url:'tools.html', cat:'tools',
+    title:'GitLab CI — Complete DevOps platform',
+    body:'GitLab complete DevOps platform source control CI/CD .gitlab-ci.yml multi stage pipeline DAG auto DevOps container registry package registry self hosted enterprise compliance pipelines.' },
+  { page:'tools', badge:'badge-tools', url:'tools.html', cat:'tools',
+    title:'Helm — Kubernetes package manager',
+    body:'Helm is the package manager for Kubernetes. Charts define install upgrade Kubernetes applications. Values injection release management rollback Artifact Hub thousands community charts.' },
+  { page:'tools', badge:'badge-tools', url:'tools.html', cat:'tools',
+    title:'Prometheus — Monitoring metrics time series',
+    body:'Prometheus open source monitoring system time series database. Scrapes metrics via HTTP PromQL query language Alertmanager pull based Kubernetes native service discovery.' },
+  { page:'tools', badge:'badge-tools', url:'tools.html', cat:'tools',
+    title:'Grafana — Observability dashboards',
+    body:'Grafana open source observability data visualisation platform. Connects to Prometheus Loki Tempo Elasticsearch. Beautiful dashboards alerting on call routing LGTM observability stack Grafana Cloud.' },
+  { page:'tools', badge:'badge-tools', url:'tools.html', cat:'tools',
+    title:'HashiCorp Vault — Secrets management',
+    body:'Vault centralised secrets management data protection. Stores API keys passwords certificates tokens. Dynamic secret generation lease renewal revocation zero long lived credentials PKI certificate authority HCL policies.' },
+  { page:'tools', badge:'badge-tools', url:'tools.html', cat:'tools',
+    title:'Git — Version control system',
+    body:'Git distributed version control created by Linus Torvalds 2005. Enables branching strategies Git Flow trunk based development GitHub Flow. Signed commits tags hooks pre commit automation.' },
+
+  /* ── CONCEPTS ──────────────────────────────────────────── */
+  { page:'concepts', badge:'badge-concepts', url:'concepts.html', cat:'concepts',
+    title:'CI/CD Pipelines — Continuous Integration and Delivery',
+    body:'Continuous Integration developers merge code frequently automated builds tests run on every commit. Continuous Delivery every validated change prepared for production. Continuous Deployment automatic deploy to production no manual gate. Jenkins GitHub Actions GitLab CI CircleCI Argo CD artifact registry deployment gates.' },
+  { page:'concepts', badge:'badge-concepts', url:'concepts.html', cat:'concepts',
+    title:'Infrastructure as Code IaC — Terraform Ansible',
+    body:'Infrastructure as Code manages provisions computing infrastructure through machine readable configuration files. Version controlled reproducible auditable testable reviewable. Declarative idempotent. Terraform Pulumi Ansible CloudFormation. Plan Apply workflow state drift detection.' },
+  { page:'concepts', badge:'badge-concepts', url:'concepts.html', cat:'concepts',
+    title:'Monitoring and Observability — Metrics Logs Traces',
+    body:'Three pillars of observability metrics logs traces. RED method Rate Errors Duration. USE method Utilisation Saturation Errors. DORA metrics deployment frequency lead time MTTR change failure rate. SLOs SLAs error budgets on call runbooks incident response Prometheus Grafana OpenTelemetry Datadog.' },
+  { page:'concepts', badge:'badge-concepts', url:'concepts.html', cat:'concepts',
+    title:'Automation and Toil Elimination',
+    body:'Toil is repetitive manual automatable work that does not provide enduring value. Automate build test deployment pipelines infrastructure provisioning auto remediation ChatOps self service developer platforms. Ansible playbooks Taskfiles ArgoCD Rundeck. 99 percent reduction in provisioning time.' },
+  { page:'concepts', badge:'badge-concepts', url:'concepts.html', cat:'concepts',
+    title:'Microservices Architecture — Service Mesh',
+    body:'Microservices structures application as collection of small independently deployable services communicating via APIs REST gRPC messaging queues. Single responsibility independent deployability decentralised data fault isolation technology heterogeneity. Kubernetes Istio Linkerd Kafka API gateway.' },
+
+  /* ── WORKFLOW ──────────────────────────────────────────── */
+  { page:'workflow', badge:'badge-workflow', url:'workflow.html', cat:'workflow',
+    title:'DevOps Lifecycle — Seven Stage Loop',
+    body:'Plan Code Build Test Release Deploy Monitor. The seven stage DevOps lifecycle is an infinite continuous loop. Each stage feeds into the next creating a complete software delivery pipeline.' },
+  { page:'workflow', badge:'badge-workflow', url:'workflow.html', cat:'workflow',
+    title:'Plan Stage — Backlog Sprint Requirements',
+    body:'Plan stage defines requirements prioritises backlog creates sprint goals. Product engineering operations align on what gets built why when. Jira Linear Confluence Notion. Sprint backlog user stories Architecture Decision Records ADRs Definition of Done.' },
+  { page:'workflow', badge:'badge-workflow', url:'workflow.html', cat:'workflow',
+    title:'Code Stage — Git Pull Requests Code Review',
+    body:'Developers write code on feature branches. Pull requests trigger peer review automated linting SAST scanning before merging. Git GitHub GitLab. Pre commit hooks pass code review approved.' },
+  { page:'workflow', badge:'badge-workflow', url:'workflow.html', cat:'workflow',
+    title:'Build Stage — Docker CI compilation',
+    body:'CI server compiles code runs unit tests packages application into deployable artefact Docker image JAR binary pushed to registry. Docker Jenkins Gradle Maven. Image tagged pushed build artefacts unit test report.' },
+  { page:'workflow', badge:'badge-workflow', url:'workflow.html', cat:'workflow',
+    title:'Test Stage — Integration E2E Performance Security',
+    body:'Automated integration end to end performance security tests run against packaged artefact in staging. Failures block promotion to release. Jest Cypress Selenium k6 Snyk. Coverage threshold performance baseline validated.' },
+  { page:'workflow', badge:'badge-workflow', url:'workflow.html', cat:'workflow',
+    title:'Release Stage — Versioning Semantic Release',
+    body:'Versioned release candidate tagged in registry. Change approval automated or lightweight human gate marks build ready for production. GitHub Releases Semantic Release Spinnaker. Semantic version tag CHANGELOG change request approved.' },
+  { page:'workflow', badge:'badge-workflow', url:'workflow.html', cat:'workflow',
+    title:'Deploy Stage — Rolling Blue Green Canary Kubernetes',
+    body:'Deploy to production using rolling updates blue green or canary strategies gradually shifting traffic. Auto rollback on failure zero downtime. Kubernetes Argo CD Flux CD Helm. Deployment event recorded canary at 100 percent traffic.' },
+  { page:'workflow', badge:'badge-workflow', url:'workflow.html', cat:'workflow',
+    title:'Monitor Stage — Prometheus Grafana SLO Alerting',
+    body:'Real time metrics logs traces confirm deployment healthy. SLO burn rate alerts trigger on call if degraded. Feedback flows back to Plan completing the loop. Prometheus Grafana PagerDuty Datadog. SLOs green no P1 P2 alerts.' },
+  { page:'workflow', badge:'badge-workflow', url:'workflow.html', cat:'workflow',
+    title:'Deployment Strategies — Rolling Blue-Green Canary Feature Flags',
+    body:'Rolling update replace old instances gradually zero downtime. Blue Green maintain two identical environments switch traffic instantly instant rollback. Canary release small percentage traffic 5 25 50 100 percent gradual. Feature flags toggle runtime configuration A/B testing LaunchDarkly Flagsmith.' },
+  { page:'workflow', badge:'badge-workflow', url:'workflow.html', cat:'workflow',
+    title:'DORA Metrics — Deployment Frequency Lead Time MTTR Change Failure Rate',
+    body:'Four DORA metrics measure DevOps performance. Deployment Frequency how often deploy. Lead Time for Changes commit to production less than one hour elite. Time to Restore MTTR less than one hour elite. Change Failure Rate 0 to 5 percent elite.' },
+
+  /* ── ROADMAP ───────────────────────────────────────────── */
+  { page:'roadmap', badge:'badge-roadmap', url:'roadmap.html', cat:'roadmap',
+    title:'DevOps Roadmap 2025 — Complete Learning Path',
+    body:'Interactive learning roadmap from zero to senior DevOps engineer. Four phases 18 skill areas 80 plus individual skills. Check off skills as you learn track progress. Approximately 12 months to complete.' },
+  { page:'roadmap', badge:'badge-roadmap', url:'roadmap.html', cat:'roadmap',
+    title:'Phase 1 Foundations — Linux Shell Git Networking Programming',
+    body:'Linux filesystem permissions shell commands grep sed awk bash scripting process management cron jobs SSH. Networking OSI TCP IP DNS DHCP HTTP HTTPS TLS SSL load balancers firewalls VPN. Git branching pull requests merge rebase hooks semantic versioning. Python YAML JSON regex REST APIs Makefile.' },
+  { page:'roadmap', badge:'badge-roadmap', url:'roadmap.html', cat:'roadmap',
+    title:'Phase 2 Core DevOps — Docker CI/CD IaC Cloud Monitoring',
+    body:'Docker containers Dockerfile multi stage builds Docker Compose registries security scanning. GitHub Actions Jenkins GitLab CI pipelines artifact management secrets OIDC. Terraform Ansible modules remote backends policy code. AWS GCP Azure IAM serverless cost optimization certifications. Prometheus Grafana logs traces SLOs on call.' },
+  { page:'roadmap', badge:'badge-roadmap', url:'roadmap.html', cat:'roadmap',
+    title:'Phase 3 Advanced — Kubernetes GitOps DevSecOps Microservices',
+    body:'Kubernetes architecture Deployments StatefulSets Helm RBAC autoscaling network policies CKA CKAD. GitOps Argo CD Flux CD canary Argo Rollouts image automation. DevSecOps SAST DAST Vault container scanning SBOM Sigstore zero trust mTLS. Microservices service mesh Istio Linkerd gRPC Kafka API gateway.' },
+  { page:'roadmap', badge:'badge-roadmap', url:'roadmap.html', cat:'roadmap',
+    title:'Phase 4 Expert — Platform Engineering SRE FinOps AIOps MLOps',
+    body:'Platform Engineering IDP Backstage Crossplane self service golden path templates developer experience DX metrics. SRE Site Reliability Engineering error budgets chaos engineering LitmusChaos capacity planning blameless post mortems toil elimination. FinOps cloud cost Kubecost reserved instances spot. AIOps MLOps ML pipeline model registry vLLM GitHub Copilot.' },
+
+  /* ── QUIZ ──────────────────────────────────────────────── */
+  { page:'quiz', badge:'badge-quiz', url:'quiz.html', cat:'quiz',
+    title:'DevOps Quiz 2025 — Test Your Knowledge',
+    body:'20 questions covering Docker Kubernetes CI/CD Terraform Ansible Prometheus monitoring DevSecOps DORA metrics culture SRE. 30 seconds per question timer. Pass score 70 percent. Grade S A B C F. Instant feedback explanation after every answer. Shuffle randomise questions.' },
+  { page:'quiz', badge:'badge-quiz', url:'quiz.html', cat:'quiz',
+    title:'Quiz — Docker Kubernetes CI/CD IaC Monitoring Security Culture',
+    body:'Quiz categories Docker multi stage builds system prune. Kubernetes Deployment StatefulSet rollout undo Ingress Helm. CI/CD Continuous Delivery Deployment GitHub Actions pipeline as code. Terraform state plan apply. Ansible agentless SSH. RED method SLO Alertmanager. DevSecOps shift left SBOM. DORA metrics Three Ways.' },
+
+  /* ── BLOG ──────────────────────────────────────────────── */
+  { page:'blog', badge:'badge-blog', url:'blog.html', cat:'blog',
+    title:'Docker for DevOps Engineers: A Complete Beginner\'s Guide',
+    body:'Docker containers images Dockerfile COPY RUN CMD FROM WORKDIR EXPOSE ENV multi stage builds Docker Compose volumes networks registries ECR GCR Docker Hub. docker build run ps logs stop rm images system prune. Node.js Go Alpine minimal images.' },
+  { page:'blog', badge:'badge-blog', url:'blog.html', cat:'blog',
+    title:'Build a CI/CD Pipeline with GitHub Actions from Scratch',
+    body:'GitHub Actions workflows YAML .github/workflows triggers push pull request schedule. Jobs steps actions runners secrets OIDC. docker login build push matrix builds reusable workflows. Node.js setup cache npm ci test build deploy.' },
+  { page:'blog', badge:'badge-blog', url:'blog.html', cat:'blog',
+    title:'Kubernetes for Beginners: Pods, Deployments & Services',
+    body:'Kubernetes Pod smallest unit Deployment manage replicas rolling updates rollback Service ClusterIP networking DNS. kubectl apply get describe logs exec scale set image rollout undo. kind minikube local cluster YAML manifests resources requests limits.' },
+  { page:'blog', badge:'badge-blog', url:'blog.html', cat:'blog',
+    title:'Terraform on AWS: Provision Your First Cloud Infrastructure',
+    body:'Terraform HCL providers resources VPC subnet EC2 instance init plan apply destroy state tfvars modules versions aws region. AWS infrastructure as code reproducible auditable review pull request. RDS database auto scaling.' },
+  { page:'blog', badge:'badge-blog', url:'blog.html', cat:'blog',
+    title:'Set Up Prometheus & Grafana Monitoring in 30 Minutes',
+    body:'Prometheus Grafana Helm kube prometheus stack monitoring namespace port forward dashboard import PromQL rate errors histogram quantile P99 latency CPU usage node exporter Alertmanager. Kubernetes observability metrics scraping.' },
+  { page:'blog', badge:'badge-blog', url:'blog.html', cat:'blog',
+    title:'How to Add Security Scanning to Your CI/CD Pipeline',
+    body:'DevSecOps shift left SAST Semgrep OWASP static analysis dependency audit npm audit Trivy container scan image vulnerability CRITICAL HIGH Gitleaks secrets detection exit code 1 block merge pipeline security gates.' },
+  { page:'blog', badge:'badge-blog', url:'blog.html', cat:'blog',
+    title:'DORA Metrics Explained: Measure Your DevOps Performance',
+    body:'DORA four metrics deployment frequency lead time changes MTTR mean time restore change failure rate. Elite multiple per day less than one hour recovery 0 to 5 percent failure. Low performers monthly 6 months week 46 to 60 percent. Measure track improve organisational performance profitability.' },
+
+  /* ── CONTACT ───────────────────────────────────────────── */
+  { page:'contact', badge:'badge-contact', url:'contact.html', cat:'contact',
+    title:'Contact DevOps Hub — Get In Touch',
+    body:'Contact form consulting training partnership collaboration DevOps engineering platform engineering Kubernetes migration CI/CD pipeline IaC infrastructure. Email hello@devopshub.io. Response within 24 hours. Remote first UTC office hours Monday Friday.' },
+  { page:'contact', badge:'badge-contact', url:'contact.html', cat:'contact',
+    title:'DevOps Consulting Services — CI/CD Kubernetes IaC Training',
+    body:'CI/CD pipeline design implementation Kubernetes cluster architecture Infrastructure as Code migrations Terraform Ansible observability stack Prometheus Grafana DevSecOps integration training workshops. AWS GCP Azure cloud providers multi cloud hybrid cloud.' },
+];
+
+/* ═══════════════════════════════════════════════════════════
+   SEARCH ENGINE
+═══════════════════════════════════════════════════════════ */
+const input       = document.getElementById('search-input');
+const clearBtn    = document.getElementById('search-clear');
+const welcomeEl   = document.getElementById('welcome-state');
+const resultsList = document.getElementById('results-list');
+const resultsCards= document.getElementById('results-cards');
+const resultsCount= document.getElementById('results-count');
+const noResults   = document.getElementById('no-results');
+
+let currentCat    = 'all';
+let searchTimeout = null;
+
+/* ── Category filter ── */
+document.querySelectorAll('.sf-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.sf-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    currentCat = chip.dataset.cat;
+    doSearch(input.value.trim());
+  });
+});
+
+/* ── Popular tag clicks ── */
+document.querySelectorAll('.popular-tag').forEach(tag => {
+  tag.addEventListener('click', () => {
+    input.value = tag.dataset.query;
+    input.focus();
+    doSearch(tag.dataset.query);
+    clearBtn.classList.add('visible');
+  });
+});
+
+/* ── URL param support ── e.g. search.html?q=Docker */
+(function checkUrlParam() {
+  const params = new URLSearchParams(window.location.search);
+  const q      = params.get('q');
+  if (q) {
+    input.value = q;
+    clearBtn.classList.add('visible');
+    doSearch(q);
+  }
+})();
+
+/* ── Input handler ── */
+input.addEventListener('input', () => {
+  const q = input.value.trim();
+  clearBtn.classList.toggle('visible', q.length > 0);
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => doSearch(q), 120);
+});
+
+/* ── Clear button ── */
+clearBtn.addEventListener('click', () => {
+  input.value = '';
+  clearBtn.classList.remove('visible');
+  showWelcome();
+  input.focus();
+  history.replaceState(null, '', window.location.pathname);
+});
+
+/* ── Keyboard shortcut / to focus ── */
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement !== input) {
+    e.preventDefault();
+    input.focus();
+    input.select();
+  }
+});
+
+/* ── Search logic ── */
+function doSearch(query) {
+  if (!query || query.length < 2) { showWelcome(); return; }
+
+  const t0    = performance.now();
+  const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+
+  let pool = currentCat === 'all'
+    ? INDEX
+    : INDEX.filter(item => item.cat === currentCat || item.page === currentCat);
+
+  /* Score each item */
+  const scored = pool.map(item => {
+    const titleL = item.title.toLowerCase();
+    const bodyL  = item.body.toLowerCase();
+    let score    = 0;
+
+    terms.forEach(term => {
+      if (titleL.includes(term)) score += 10;
+      if (bodyL.includes(term))  score += 3;
+      if (titleL.startsWith(term)) score += 5;
+    });
+
+    return { ...item, score };
+  }).filter(i => i.score > 0)
+    .sort((a, b) => b.score - a.score);
+
+  const t1 = performance.now();
+
+  /* Update URL */
+  history.replaceState(null, '', `?q=${encodeURIComponent(query)}`);
+
+  /* Render */
+  if (scored.length === 0) {
+    showNoResults();
+  } else {
+    showResults(scored, query, Math.round(t1 - t0));
+  }
+}
+
+function showWelcome() {
+  welcomeEl.style.display   = '';
+  resultsList.style.display = 'none';
+  noResults.style.display   = 'none';
+}
+
+function showNoResults() {
+  welcomeEl.style.display   = 'none';
+  resultsList.style.display = 'none';
+  noResults.style.display   = '';
+}
+
+function showResults(items, query, ms) {
+  welcomeEl.style.display   = 'none';
+  noResults.style.display   = 'none';
+  resultsList.style.display = '';
+
+  resultsCount.innerHTML = `
+    Found <strong>${items.length}</strong> result${items.length !== 1 ? 's' : ''}
+    for "<strong>${escHtml(query)}</strong>"
+    <span class="results-time">in ${ms}ms</span>
+  `;
+
+  resultsCards.innerHTML = items.map((item, i) => {
+    const excerpt = highlight(truncate(item.body, 160), query.split(/\s+/));
+    const title   = highlight(item.title, query.split(/\s+/));
+    return `
+      <a class="result-card" href="${item.url}" style="animation-delay:${i * 0.04}s">
+        <div class="result-header">
+          <span class="result-page-badge ${item.badge}">${item.page}</span>
+          <span class="result-category">${item.cat}</span>
+        </div>
+        <div class="result-title">${title}</div>
+        <div class="result-excerpt">${excerpt}</div>
+        <div class="result-url">🔗 rocketdevops.vercel.app/${item.url}</div>
+      </a>
+    `;
+  }).join('');
+}
+
+/* ── Utilities ── */
+function highlight(text, terms) {
+  let out = escHtml(text);
+  terms.forEach(term => {
+    if (!term) return;
+    const re = new RegExp(`(${escRe(term)})`, 'gi');
+    out = out.replace(re, '<mark>$1</mark>');
+  });
+  return out;
+}
+
+function truncate(str, len) {
+  if (str.length <= len) return str;
+  return str.substring(0, len).replace(/\s\S*$/, '') + '…';
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function escRe(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+</script>
+</body>
+</html>
