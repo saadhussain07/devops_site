@@ -261,7 +261,7 @@
          1. Go to https://formspree.io/
          2. Create a free form → copy the endpoint
          3. Replace 'YOUR_FORM_ID' below                           */
-      const ENDPOINT = 'https://formspree.io/f/xgordqkb';
+      const ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
 
       const res = await fetch(ENDPOINT, {
         method:  'POST',
@@ -283,7 +283,7 @@
         setFeedback('success', 'Message received! We\'ll be in touch soon. 🚀 <br><small style="opacity:.6">(Demo mode — connect Formspree for real delivery)</small>');
         form.reset();
       } else {
-        setFeedback('error', `Something went wrong: ${err.message}. Please try again or email muhammadsaadhussain49@gmail.com`);
+        setFeedback('error', `Something went wrong: ${err.message}. Please try again or email hello@devopshub.io`);
       }
     } finally {
       btn.textContent = origLabel;
