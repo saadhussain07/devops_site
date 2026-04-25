@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DevOps Quiz — Test your knowledge of CI/CD, Docker, Kubernetes, Terraform and more.">
+  <meta name="keywords" content="DevOps quiz, Kubernetes quiz, Docker quiz, CI/CD quiz, DevOps test">
+  <meta name="author" content="DevOps Hub">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="DevOps Quiz 2025 — Test Your Knowledge">
+  <meta property="og:description" content="20 questions covering Docker, Kubernetes, CI/CD, Terraform, monitoring and DevOps culture.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://rocketdevops.vercel.app/quiz.html">
+  <title>DevOps Quiz 2025 — DevOps Hub</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── Quiz page styles ─────────────────────────────────── */
+
+    /* Intro screen */
+    .quiz-intro {
+      max-width: 680px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 4rem 0;
+    }
+
+    .quiz-intro h1 { margin-bottom: 1rem; }
+    .quiz-intro p  { font-size: 1.05rem; margin-bottom: 2rem; }
+
+    .quiz-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+      text-align: left;
+    }
+
+    .quiz-meta-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .quiz-meta-icon { font-size: 1.4rem; }
+
+    .quiz-meta-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .quiz-meta-val {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* Category selector */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 0.75rem;
+      margin: 1.5rem 0 2rem;
+      text-align: left;
+    }
+
+    .cat-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 0.85rem 1rem;
+      cursor: pointer;
+      transition: all var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+
+    .cat-btn:hover,
+    .cat-btn.selected {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+      background: rgba(45,255,122,0.07);
+    }
+
+    .cat-btn.selected { font-weight: 700; }
+    .cat-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+
+    /* ── Quiz arena ───────────────────────────────────────── */
+    #quiz-arena { display: none; max-width: 760px; margin: 0 auto; }
+
+    /* HUD bar */
+    .quiz-hud {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 0.85rem 1.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .hud-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+    }
+
+    .hud-val {
+      font-family: var(--font-mono);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .hud-val.green  { color: var(--accent-green); }
+    .hud-val.red    { color: var(--accent-orange); }
+    .hud-val.cyan   { color: var(--accent-cyan); }
+    .hud-val.warn   { color: #ffd81e; }
+
+    .hud-label {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Timer ring */
+    .timer-ring-wrap {
+      position: relative;
+      width: 48px; height: 48px;
+    }
+
+    .timer-ring-svg {
+      transform: rotate(-90deg);
+      width: 48px; height: 48px;
+    }
+
+    .timer-ring-bg {
+      fill: none;
+      stroke: var(--bg-surface);
+      stroke-width: 3;
+    }
+
+    .timer-ring-fill {
+      fill: none;
+      stroke: var(--accent-green);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-dasharray: 126;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear, stroke 0.3s;
+    }
+
+    .timer-ring-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* Progress bar */
+    .quiz-progress-bar {
+      height: 4px;
+      background: var(--bg-surface);
+      border-radius: 2px;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+
+    .quiz-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-green));
+      border-radius: 2px;
+      transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* Question card */
+    .question-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      animation: fade-up 0.4s ease both;
+    }
+
+    .question-header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .question-num {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+    }
+
+    .question-cat-badge {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      padding: 0.15rem 0.6rem;
+      border-radius: 2px;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .question-body { padding: 1.75rem 1.5rem 1.25rem; }
+
+    .question-text {
+      font-size: 1.05rem;
+      color: var(--text-bright);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      font-family: var(--font-body);
+    }
+
+    /* Options */
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .option-btn {
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.9rem 1rem;
+      cursor: pointer;
+      transition: all var(--transition);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      text-align: left;
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--accent-green);
+      color: var(--text-primary);
+      background: rgba(45,255,122,0.05);
+      transform: translateY(-1px);
+    }
+
+    .option-btn:disabled { cursor: default; }
+
+    .option-btn.correct {
+      border-color: var(--accent-green) !important;
+      background: rgba(45,255,122,0.1) !important;
+      color: var(--accent-green) !important;
+    }
+
+    .option-btn.wrong {
+      border-color: var(--accent-orange) !important;
+      background: rgba(255,92,26,0.1) !important;
+      color: var(--accent-orange) !important;
+    }
+
+    .option-btn.reveal {
+      border-color: rgba(45,255,122,0.35) !important;
+      background: rgba(45,255,122,0.05) !important;
+    }
+
+    .option-key {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      width: 22px; height: 22px;
+      border-radius: 4px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--text-muted);
+      transition: all var(--transition);
+    }
+
+    .option-btn.correct .option-key { background: var(--accent-green);  color: var(--bg-void); border-color: var(--accent-green); }
+    .option-btn.wrong   .option-key { background: var(--accent-orange); color: var(--bg-void); border-color: var(--accent-orange); }
+
+    /* Explanation box */
+    .explanation-box {
+      margin: 1rem 1.5rem 1.5rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      display: none;
+      animation: fade-up 0.3s ease both;
+    }
+
+    .explanation-box.show { display: block; }
+
+    .explanation-header {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .explanation-header.correct-hdr { color: var(--accent-green); }
+    .explanation-header.wrong-hdr   { color: var(--accent-orange); }
+
+    .explanation-text {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* Next btn */
+    .quiz-next-wrap {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0 1.5rem 1.5rem;
+    }
+
+    #next-btn {
+      display: none;
+      animation: fade-up 0.3s 0.1s ease both;
+    }
+
+    /* ── Results screen ───────────────────────────────────── */
+    #results-screen {
+      display: none;
+      max-width: 680px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 2rem 0 4rem;
+    }
+
+    .score-ring-wrap {
+      position: relative;
+      width: 160px; height: 160px;
+      margin: 2rem auto;
+    }
+
+    .score-ring-svg {
+      transform: rotate(-90deg);
+      width: 160px; height: 160px;
+    }
+
+    .score-ring-bg   { fill: none; stroke: var(--bg-surface); stroke-width: 10; }
+    .score-ring-fill { fill: none; stroke: var(--accent-green); stroke-width: 10; stroke-linecap: round; stroke-dasharray: 440; stroke-dashoffset: 440; transition: stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1) 0.3s; }
+
+    .score-ring-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .score-pct {
+      font-family: var(--font-mono);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--accent-green);
+      line-height: 1;
+    }
+
+    .score-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .grade-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 0.4rem 1.5rem;
+      border-radius: 2rem;
+      border: 1px solid;
+      margin-bottom: 1rem;
+    }
+
+    .grade-s { border-color: rgba(45,255,122,0.5);  color: var(--accent-green);  background: rgba(45,255,122,0.1); }
+    .grade-a { border-color: rgba(0,229,255,0.5);   color: var(--accent-cyan);   background: rgba(0,229,255,0.1); }
+    .grade-b { border-color: rgba(255,216,30,0.5);  color: #ffd81e;              background: rgba(255,216,30,0.08); }
+    .grade-c { border-color: rgba(255,92,26,0.5);   color: var(--accent-orange); background: rgba(255,92,26,0.1); }
+    .grade-f { border-color: rgba(255,92,26,0.7);   color: var(--accent-orange); background: rgba(255,92,26,0.12); }
+
+    .result-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    .result-stat {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1rem;
+    }
+
+    .result-stat-val {
+      font-family: var(--font-mono);
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+
+    .result-stat-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    /* Review list */
+    .review-list {
+      text-align: left;
+      margin-top: 2.5rem;
+    }
+
+    .review-list h3 {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .review-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid rgba(45,255,122,0.05);
+      font-size: 0.85rem;
+    }
+
+    .review-icon { flex-shrink: 0; font-size: 1rem; margin-top: 0.1rem; }
+    .review-q    { color: var(--text-secondary); flex: 1; line-height: 1.5; }
+    .review-a    { font-family: var(--font-mono); font-size: 0.75rem; margin-top: 0.25rem; }
+    .review-a.correct-a { color: var(--accent-green); }
+    .review-a.wrong-a   { color: var(--accent-orange); }
+
+    .result-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .options-grid  { grid-template-columns: 1fr; }
+      .result-stats  { grid-template-columns: 1fr 1fr; }
+      .quiz-meta-grid{ grid-template-columns: 1fr 1fr; }
+      .category-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── Navigation ─────────────────────────────────────────── -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">DevOpsHub</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle sr-only">
+    <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </label>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="tools.html">Tools</a></li>
+      <li><a href="concepts.html">Concepts</a></li>
+      <li><a href="workflow.html">Workflow</a></li>
+      <li><a href="roadmap.html">Roadmap</a></li>
+      <li><a href="quiz.html" class="active">Quiz</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ─── Intro Screen ──────────────────────────────────────── -->
+<section class="section" id="intro-screen" aria-labelledby="quiz-title">
+  <div class="container">
+    <div class="quiz-intro">
+      <span class="tag">// test yourself</span>
+      <h1 id="quiz-title">DevOps <span class="text-green">Quiz</span></h1>
+      <p>20 questions covering the full DevOps spectrum — tools, concepts, culture and best practices. Each question has a 30-second timer. How well do you know your DevOps?</p>
+
+      <div class="quiz-meta-grid">
+        <div class="quiz-meta-card">
+          <div class="quiz-meta-icon">❓</div>
+          <div>
+            <div class="quiz-meta-label">Questions</div>
+            <div class="quiz-meta-val">20</div>
+          </div>
+        </div>
+        <div class="quiz-meta-card">
+          <div class="quiz-meta-icon">⏱️</div>
+          <div>
+            <div class="quiz-meta-label">Per question</div>
+            <div class="quiz-meta-val">30s</div>
+          </div>
+        </div>
+        <div class="quiz-meta-card">
+          <div class="quiz-meta-icon">🏆</div>
+          <div>
+            <div class="quiz-meta-label">Pass score</div>
+            <div class="quiz-meta-val">70%</div>
+          </div>
+        </div>
+        <div class="quiz-meta-card">
+          <div class="quiz-meta-icon">🎯</div>
+          <div>
+            <div class="quiz-meta-label">Difficulty</div>
+            <div class="quiz-meta-val">Mixed</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:left; margin-bottom:0.5rem;">
+        <span class="tag" style="margin-bottom:0.75rem; display:inline-block;">Filter by category (optional)</span>
+      </div>
+
+      <div class="category-grid" id="cat-grid" role="group" aria-label="Quiz categories">
+        <button class="cat-btn selected" data-cat="all"><span class="cat-dot"></span>All Topics</button>
+        <button class="cat-btn" data-cat="docker"><span class="cat-dot"></span>Docker</button>
+        <button class="cat-btn" data-cat="kubernetes"><span class="cat-dot"></span>Kubernetes</button>
+        <button class="cat-btn" data-cat="cicd"><span class="cat-dot"></span>CI/CD</button>
+        <button class="cat-btn" data-cat="iac"><span class="cat-dot"></span>IaC</button>
+        <button class="cat-btn" data-cat="monitoring"><span class="cat-dot"></span>Monitoring</button>
+        <button class="cat-btn" data-cat="culture"><span class="cat-dot"></span>Culture & SRE</button>
+        <button class="cat-btn" data-cat="security"><span class="cat-dot"></span>Security</button>
+      </div>
+
+      <button class="btn btn-primary" id="start-btn" style="font-size:1rem; padding:0.9rem 2.5rem;">
+        Start Quiz →
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Quiz Arena ────────────────────────────────────────── -->
+<section class="section" id="quiz-arena" aria-label="Quiz questions" style="padding-top:2rem;">
+  <div class="container">
+
+    <!-- HUD -->
+    <div class="quiz-hud" role="status" aria-live="polite">
+      <div class="hud-item">
+        <div class="hud-val cyan" id="hud-q">1/20</div>
+        <div class="hud-label">Question</div>
+      </div>
+      <div class="hud-item">
+        <div class="hud-val green" id="hud-correct">0</div>
+        <div class="hud-label">Correct</div>
+      </div>
+      <div class="hud-item">
+        <div class="hud-val red" id="hud-wrong">0</div>
+        <div class="hud-label">Wrong</div>
+      </div>
+      <div class="hud-item">
+        <div class="hud-val" id="hud-streak">0🔥</div>
+        <div class="hud-label">Streak</div>
+      </div>
+      <!-- Timer ring -->
+      <div class="timer-ring-wrap" aria-label="Time remaining">
+        <svg class="timer-ring-svg" viewBox="0 0 48 48">
+          <circle class="timer-ring-bg"   cx="24" cy="24" r="20"/>
+          <circle class="timer-ring-fill" cx="24" cy="24" r="20" id="timer-ring"/>
+        </svg>
+        <div class="timer-ring-text" id="timer-text">30</div>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="quiz-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="quiz-prog-bar">
+      <div class="quiz-progress-fill" id="quiz-prog-fill" style="width:0%"></div>
+    </div>
+
+    <!-- Question card -->
+    <div class="question-card" id="question-card">
+      <div class="question-header">
+        <span class="question-num" id="q-num">Question 1 of 20</span>
+        <span class="question-cat-badge" id="q-cat">Docker</span>
+      </div>
+      <div class="question-body">
+        <div class="question-text" id="q-text">Loading question…</div>
+        <div class="options-grid" id="options-grid"></div>
+      </div>
+      <div class="explanation-box" id="explanation-box">
+        <div class="explanation-header" id="exp-header"></div>
+        <div class="explanation-text" id="exp-text"></div>
+      </div>
+      <div class="quiz-next-wrap">
+        <button class="btn btn-primary" id="next-btn">Next Question →</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── Results Screen ────────────────────────────────────── -->
+<section class="section" id="results-screen" aria-labelledby="results-title" style="padding-top:2rem;">
+  <div class="container">
+    <div id="results-screen-inner">
+
+      <span class="tag" style="display:block;width:fit-content;margin:0 auto 0.5rem;">// results</span>
+      <h1 id="results-title" style="text-align:center;">Quiz <span class="text-green">Complete!</span></h1>
+
+      <!-- Score ring -->
+      <div class="score-ring-wrap" aria-label="Your score">
+        <svg class="score-ring-svg" viewBox="0 0 160 160">
+          <circle class="score-ring-bg"   cx="80" cy="80" r="70"/>
+          <circle class="score-ring-fill" cx="80" cy="80" r="70" id="score-ring-fill"/>
+        </svg>
+        <div class="score-ring-center">
+          <div class="score-pct" id="score-pct">0%</div>
+          <div class="score-label">Score</div>
+        </div>
+      </div>
+
+      <div class="grade-badge" id="grade-badge"></div>
+      <div id="grade-msg" style="color:var(--text-secondary);margin-bottom:0.5rem;"></div>
+
+      <!-- Stats -->
+      <div class="result-stats">
+        <div class="result-stat">
+          <div class="result-stat-val text-green" id="res-correct">0</div>
+          <div class="result-stat-label">Correct</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat-val text-orange" id="res-wrong">0</div>
+          <div class="result-stat-label">Wrong</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat-val text-cyan" id="res-time">0s</div>
+          <div class="result-stat-label">Avg time</div>
+        </div>
+        <div class="result-stat">
+          <div class="result-stat-val" id="res-streak">0</div>
+          <div class="result-stat-label">Best streak</div>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="result-actions">
+        <button class="btn btn-primary" id="retry-btn">Retry Quiz 🔄</button>
+        <a href="roadmap.html" class="btn btn-secondary">View Roadmap →</a>
+        <a href="concepts.html" class="btn btn-ghost">Study Concepts</a>
+      </div>
+
+      <!-- Review list -->
+      <div class="review-list">
+        <h3>📋 Question Review</h3>
+        <div id="review-items"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── Footer ────────────────────────────────────────────── -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">DevOpsHub</div>
+        <p>A comprehensive resource for DevOps engineers, platform teams, and anyone building modern software delivery pipelines.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="tools.html">Tools</a></li>
+          <li><a href="concepts.html">Concepts</a></li>
+          <li><a href="workflow.html">Workflow</a></li>
+          <li><a href="roadmap.html">Roadmap</a></li>
+          <li><a href="quiz.html">Quiz</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Quiz Topics</h4>
+        <ul class="footer-links">
+          <li><a href="quiz.html">Docker</a></li>
+          <li><a href="quiz.html">Kubernetes</a></li>
+          <li><a href="quiz.html">CI/CD</a></li>
+          <li><a href="quiz.html">IaC</a></li>
+          <li><a href="quiz.html">Monitoring</a></li>
+          <li><a href="quiz.html">Security</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Learn More</h4>
+        <ul class="footer-links">
+          <li><a href="concepts.html">Core Concepts</a></li>
+          <li><a href="roadmap.html">Learning Path</a></li>
+          <li><a href="tools.html">Tools Guide</a></li>
+          <li><a href="contact.html">Get Help</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 DevOpsHub. Powered by HTML5, CSS3 &amp; Vanilla JS.</p>
+      <div class="footer-status"><span class="status-dot"></span>All systems operational</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ─── Quiz Engine ───────────────────────────────────────── -->
+<script src="main.js" defer></script>
+<script>
+'use strict';
+
+/* ═══════════════════════════════════════════
+   QUESTION BANK — 20 questions
+════════════════════════════════════════════ */
+const ALL_QUESTIONS = [
+  {
+    cat: 'docker',
+    q: 'What does a Dockerfile\'s COPY instruction do differently from ADD?',
+    opts: ['COPY supports URLs and auto-extracts archives', 'COPY only copies local files, ADD also supports URLs and tar extraction', 'They are identical', 'ADD is deprecated'],
+    ans: 1,
+    exp: 'COPY only copies local files into the image. ADD additionally supports URLs and automatically extracts tar archives — but COPY is preferred for clarity.'
+  },
+  {
+    cat: 'docker',
+    q: 'Which Docker command removes all stopped containers, unused networks, dangling images, and build cache?',
+    opts: ['docker rm -f $(docker ps -a)', 'docker rmi --all', 'docker system prune', 'docker clean --all'],
+    ans: 2,
+    exp: '"docker system prune" reclaims disk space by removing all unused Docker objects. Add -a to also remove unused images.'
+  },
+  {
+    cat: 'docker',
+    q: 'What is the purpose of a multi-stage Docker build?',
+    opts: ['To run multiple containers at once', 'To build for multiple CPU architectures', 'To reduce final image size by separating build and runtime stages', 'To cache layers across multiple Dockerfiles'],
+    ans: 2,
+    exp: 'Multi-stage builds let you use a large build image (with compilers, SDKs) and then copy only the compiled artifacts into a minimal runtime image, dramatically reducing image size.'
+  },
+  {
+    cat: 'kubernetes',
+    q: 'In Kubernetes, what is the difference between a Deployment and a StatefulSet?',
+    opts: ['Deployments are for databases, StatefulSets for web apps', 'StatefulSets provide stable network identities and persistent storage per pod', 'They are identical, just different names', 'StatefulSets auto-scale, Deployments don\'t'],
+    ans: 1,
+    exp: 'StatefulSets give each pod a stable hostname and persistent volume — essential for databases like PostgreSQL and Kafka. Deployments treat pods as interchangeable.'
+  },
+  {
+    cat: 'kubernetes',
+    q: 'What does kubectl rollout undo deployment/my-app do?',
+    opts: ['Deletes the deployment', 'Scales down to zero replicas', 'Rolls back to the previous revision', 'Restarts all pods'],
+    ans: 2,
+    exp: '"kubectl rollout undo" reverts a Deployment to its previous revision, restoring the last known-good configuration automatically.'
+  },
+  {
+    cat: 'kubernetes',
+    q: 'Which Kubernetes object would you use to expose a web application to external internet traffic?',
+    opts: ['ClusterIP Service', 'Ingress', 'ConfigMap', 'PersistentVolume'],
+    ans: 1,
+    exp: 'An Ingress manages external access to services via HTTP/HTTPS, providing host-based routing, TLS termination, and path-based routing — more capable than a simple LoadBalancer service.'
+  },
+  {
+    cat: 'cicd',
+    q: 'What is the key difference between Continuous Delivery and Continuous Deployment?',
+    opts: ['They are the same thing', 'Continuous Delivery requires manual approval before production; Continuous Deployment deploys automatically', 'Continuous Deployment runs more tests', 'Continuous Delivery only covers the build stage'],
+    ans: 1,
+    exp: 'With Continuous Delivery every change is production-ready but a human approves the release. Continuous Deployment goes further — every passing build deploys to production automatically with no human gate.'
+  },
+  {
+    cat: 'cicd',
+    q: 'In GitHub Actions, what does the "on: push: branches: [main]" trigger mean?',
+    opts: ['The workflow runs when someone forks the repo', 'The workflow runs on every push to the main branch', 'It triggers a pull request', 'It runs on a schedule'],
+    ans: 1,
+    exp: 'This event trigger fires the workflow whenever code is pushed to the "main" branch, making it the standard trigger for CI pipelines.'
+  },
+  {
+    cat: 'cicd',
+    q: 'What is a "pipeline as code" approach?',
+    opts: ['Writing pipelines in a GUI drag-and-drop tool', 'Defining CI/CD pipeline configuration in version-controlled files alongside application code', 'Using AI to auto-generate pipelines', 'Only running pipelines on cloud servers'],
+    ans: 1,
+    exp: 'Pipeline as Code (e.g., Jenkinsfile, .gitlab-ci.yml, GitHub Actions YAML) stores pipeline definitions in the repo alongside code, enabling versioning, review, and testing of the pipeline itself.'
+  },
+  {
+    cat: 'iac',
+    q: 'What does Terraform "state" represent?',
+    opts: ['The current health of your servers', 'A mapping between Terraform configuration and real-world infrastructure resources', 'A backup of your cloud account', 'The Terraform version being used'],
+    ans: 1,
+    exp: 'Terraform state (terraform.tfstate) tracks which real infrastructure resources correspond to which Terraform resources. It\'s essential for plan/apply to know what already exists vs what to create/destroy.'
+  },
+  {
+    cat: 'iac',
+    q: 'Which Terraform command shows what changes will be made WITHOUT applying them?',
+    opts: ['terraform apply --dry-run', 'terraform validate', 'terraform plan', 'terraform diff'],
+    ans: 2,
+    exp: '"terraform plan" generates an execution plan showing exactly what actions Terraform will take — create, update, or destroy resources — without making any actual changes.'
+  },
+  {
+    cat: 'iac',
+    q: 'Ansible is described as "agentless". What does this mean?',
+    opts: ['It doesn\'t need a network connection', 'No software agent needs to be installed on target machines — it uses SSH', 'It runs without a control node', 'It works without YAML'],
+    ans: 1,
+    exp: 'Ansible connects to remote machines over SSH (or WinRM for Windows) and runs commands directly — no agent software needs to be pre-installed on target hosts, simplifying setup and maintenance.'
+  },
+  {
+    cat: 'monitoring',
+    q: 'What does the "RED method" stand for in service monitoring?',
+    opts: ['Reliability, Efficiency, Durability', 'Rate, Errors, Duration', 'Requests, Events, Data', 'Response, Errors, Downtime'],
+    ans: 1,
+    exp: 'The RED method (coined by Tom Wilkie) focuses on three key metrics for every service: Rate (requests/second), Errors (failed requests), and Duration (latency distribution).'
+  },
+  {
+    cat: 'monitoring',
+    q: 'In Prometheus, what is the purpose of an "Alertmanager"?',
+    opts: ['To store metrics long-term', 'To create dashboards', 'To handle alerts — deduplication, grouping, routing and silencing', 'To scrape metrics from services'],
+    ans: 2,
+    exp: 'Alertmanager receives alerts from Prometheus, deduplicates them, groups related ones, routes them to the right receiver (Slack, PagerDuty, email) and supports silences and inhibition rules.'
+  },
+  {
+    cat: 'monitoring',
+    q: 'What is an SLO (Service Level Objective)?',
+    opts: ['A legal contract with customers', 'A target reliability goal, e.g. 99.9% availability over 30 days', 'The maximum number of requests per second', 'An Ansible module for monitoring'],
+    ans: 1,
+    exp: 'An SLO is an internal reliability target — a measurable goal like "99.9% of requests complete in under 200ms." SLOs inform error budgets: when the budget is spent, feature work pauses in favour of reliability.'
+  },
+  {
+    cat: 'culture',
+    q: 'What is the "Three Ways" principle in the DevOps Handbook?',
+    opts: ['Plan, Build, Release', 'Flow, Feedback, Continuous Learning & Experimentation', 'Dev, Ops, Security', 'Agile, Lean, Six Sigma'],
+    ans: 1,
+    exp: 'The Three Ways are foundational DevOps principles: First Way (Flow — fast left-to-right delivery), Second Way (Feedback — fast right-to-left feedback loops), Third Way (Continuous Learning through experimentation and risk-taking).'
+  },
+  {
+    cat: 'culture',
+    q: 'What are DORA\'s four key metrics for measuring DevOps performance?',
+    opts: ['Speed, Quality, Cost, Security', 'Deployment Frequency, Lead Time, MTTR, Change Failure Rate', 'Uptime, Latency, Throughput, Errors', 'Commits, PRs, Builds, Releases'],
+    ans: 1,
+    exp: 'The four DORA metrics are: Deployment Frequency (how often you deploy), Lead Time for Changes (commit to production), MTTR (how fast you recover from failures), and Change Failure Rate (% of deployments causing incidents).'
+  },
+  {
+    cat: 'security',
+    q: 'What does "shifting security left" mean in DevSecOps?',
+    opts: ['Moving servers to a different data centre', 'Integrating security testing early in the development pipeline rather than at the end', 'Having a dedicated security team review at release', 'Using left-hand side encryption algorithms'],
+    ans: 1,
+    exp: 'Shifting left means bringing security checks (SAST, dependency scanning, secrets detection) into the earliest stages of development — on every commit — rather than only at the end before release, when fixes are far more expensive.'
+  },
+  {
+    cat: 'security',
+    q: 'What is a Software Bill of Materials (SBOM) in the context of supply chain security?',
+    opts: ['A list of cloud services used', 'A complete inventory of all software components, dependencies and their versions in an application', 'A financial report of software costs', 'A Kubernetes manifest for security policies'],
+    ans: 1,
+    exp: 'An SBOM is a formal, machine-readable inventory of all components in a software product — like a food ingredient label. It enables organisations to quickly identify if a vulnerable component (e.g., Log4Shell) exists anywhere in their stack.'
+  },
+  {
+    cat: 'kubernetes',
+    q: 'What is Helm in the Kubernetes ecosystem?',
+    opts: ['A Kubernetes alternative orchestrator', 'A package manager for Kubernetes that uses Charts to define applications', 'A monitoring tool for clusters', 'A network policy engine'],
+    ans: 1,
+    exp: 'Helm is the package manager for Kubernetes. Charts are packages of pre-configured Kubernetes resources. Helm manages releases, supports rollbacks, and templating with values.yaml — think of it as apt/brew for Kubernetes.'
+  },
+];
+
+/* ═══════════════════════════════════════════
+   QUIZ ENGINE
+════════════════════════════════════════════ */
+const TIMER_SECONDS = 30;
+const CIRCUMFERENCE  = 2 * Math.PI * 20; // r=20 for HUD ring
+
+let questions      = [];
+let currentIdx     = 0;
+let score          = 0;
+let wrongCount     = 0;
+let streak         = 0;
+let bestStreak     = 0;
+let timerInterval  = null;
+let timeLeft       = TIMER_SECONDS;
+let timeTaken      = [];
+let answers        = [];
+let selectedCat    = 'all';
+let answered       = false;
+
+/* DOM refs */
+const introScreen   = document.getElementById('intro-screen');
+const quizArena     = document.getElementById('quiz-arena');
+const resultsScreen = document.getElementById('results-screen');
+const startBtn      = document.getElementById('start-btn');
+const nextBtn       = document.getElementById('next-btn');
+const retryBtn      = document.getElementById('retry-btn');
+
+/* ── Category selector ── */
+document.querySelectorAll('.cat-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedCat = btn.dataset.cat;
+  });
+});
+
+/* ── Start ── */
+startBtn.addEventListener('click', startQuiz);
+retryBtn.addEventListener('click', () => { location.reload(); });
+nextBtn.addEventListener('click', nextQuestion);
+
+function startQuiz() {
+  // Filter + shuffle
+  let pool = selectedCat === 'all' ? [...ALL_QUESTIONS]
+    : ALL_QUESTIONS.filter(q => q.cat === selectedCat);
+  if (pool.length < 5) pool = [...ALL_QUESTIONS]; // fallback if too few
+  questions = shuffle(pool).slice(0, 20);
+
+  currentIdx = 0; score = 0; wrongCount = 0;
+  streak = 0; bestStreak = 0; answers = []; timeTaken = [];
+
+  introScreen.style.display = 'none';
+  quizArena.style.display   = 'block';
+  resultsScreen.style.display = 'none';
+
+  renderQuestion();
+}
+
+function renderQuestion() {
+  answered = false;
+  const q = questions[currentIdx];
+
+  // HUD
+  document.getElementById('hud-q').textContent       = `${currentIdx + 1}/${questions.length}`;
+  document.getElementById('hud-correct').textContent  = score;
+  document.getElementById('hud-wrong').textContent    = wrongCount;
+  document.getElementById('hud-streak').textContent   = `${streak}🔥`;
+
+  // Progress
+  const pct = (currentIdx / questions.length) * 100;
+  document.getElementById('quiz-prog-fill').style.width = pct + '%';
+  document.getElementById('quiz-prog-bar').setAttribute('aria-valuenow', Math.round(pct));
+
+  // Question
+  document.getElementById('q-num').textContent  = `Question ${currentIdx + 1} of ${questions.length}`;
+  document.getElementById('q-cat').textContent  = q.cat.toUpperCase();
+  document.getElementById('q-text').textContent = q.q;
+
+  // Options
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML = '';
+  const keys = ['A', 'B', 'C', 'D'];
+  const shuffledOpts = shuffleOpts(q.opts, q.ans);
+
+  shuffledOpts.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="option-key">${keys[i]}</span><span>${opt}</span>`;
+    btn.dataset.idx = i;
+    btn.dataset.correct = (i === shuffledOpts.correctIdx) ? '1' : '0';
+    btn.addEventListener('click', () => selectOption(btn, shuffledOpts.correctIdx, q));
+    grid.appendChild(btn);
+  });
+
+  // Explanation
+  const expBox = document.getElementById('explanation-box');
+  expBox.classList.remove('show');
+
+  // Next btn
+  nextBtn.style.display = 'none';
+
+  // Timer
+  startTimer();
+}
+
+function selectOption(selectedBtn, correctIdx, q) {
+  if (answered) return;
+  answered = true;
+  clearInterval(timerInterval);
+
+  const elapsed = TIMER_SECONDS - timeLeft;
+  timeTaken.push(elapsed);
+
+  const isCorrect = selectedBtn.dataset.correct === '1';
+  const allBtns   = document.querySelectorAll('.option-btn');
+
+  allBtns.forEach(btn => {
+    btn.disabled = true;
+    if (btn.dataset.correct === '1') btn.classList.add(isCorrect ? 'correct' : 'reveal');
+  });
+
+  if (isCorrect) {
+    selectedBtn.classList.add('correct');
+    score++;
+    streak++;
+    if (streak > bestStreak) bestStreak = streak;
+  } else {
+    selectedBtn.classList.add('wrong');
+    wrongCount++;
+    streak = 0;
+  }
+
+  answers.push({ q: q.q, correct: isCorrect, answer: q.opts[q.ans] });
+
+  // HUD update
+  document.getElementById('hud-correct').textContent = score;
+  document.getElementById('hud-wrong').textContent   = wrongCount;
+  document.getElementById('hud-streak').textContent  = `${streak}🔥`;
+
+  // Explanation
+  const expBox    = document.getElementById('explanation-box');
+  const expHeader = document.getElementById('exp-header');
+  const expText   = document.getElementById('exp-text');
+  expHeader.textContent = isCorrect ? '✔ Correct!' : '✖ Incorrect';
+  expHeader.className   = 'explanation-header ' + (isCorrect ? 'correct-hdr' : 'wrong-hdr');
+  expText.textContent   = q.exp;
+  expBox.classList.add('show');
+
+  // Next btn
+  nextBtn.style.display = 'inline-flex';
+  nextBtn.textContent   = currentIdx < questions.length - 1 ? 'Next Question →' : 'See Results →';
+}
+
+function nextQuestion() {
+  currentIdx++;
+  if (currentIdx >= questions.length) {
+    showResults();
+  } else {
+    // Re-animate card
+    const card = document.getElementById('question-card');
+    card.style.animation = 'none';
+    void card.offsetHeight;
+    card.style.animation = '';
+    renderQuestion();
+  }
+}
+
+function startTimer() {
+  timeLeft = TIMER_SECONDS;
+  updateTimerUI();
+
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerUI();
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      timeExpired();
+    }
+  }, 1000);
+}
+
+function updateTimerUI() {
+  const ring = document.getElementById('timer-ring');
+  const txt  = document.getElementById('timer-text');
+  const offset = CIRCUMFERENCE - (timeLeft / TIMER_SECONDS) * CIRCUMFERENCE;
+  ring.style.strokeDashoffset = offset;
+  ring.style.stroke = timeLeft <= 8 ? '#ff5c1a' : timeLeft <= 15 ? '#ffd81e' : '#2dff7a';
+  txt.textContent   = timeLeft;
+  txt.style.color   = timeLeft <= 8 ? '#ff5c1a' : timeLeft <= 15 ? '#ffd81e' : 'var(--text-primary)';
+}
+
+function timeExpired() {
+  if (answered) return;
+  answered = true;
+  timeTaken.push(TIMER_SECONDS);
+
+  const q       = questions[currentIdx];
+  const allBtns = document.querySelectorAll('.option-btn');
+
+  allBtns.forEach(btn => {
+    btn.disabled = true;
+    if (btn.dataset.correct === '1') btn.classList.add('reveal');
+  });
+
+  wrongCount++;
+  streak = 0;
+  answers.push({ q: q.q, correct: false, answer: q.opts[q.ans] });
+
+  document.getElementById('hud-wrong').textContent  = wrongCount;
+  document.getElementById('hud-streak').textContent = `${streak}🔥`;
+
+  const expBox    = document.getElementById('explanation-box');
+  const expHeader = document.getElementById('exp-header');
+  const expText   = document.getElementById('exp-text');
+  expHeader.textContent = '⏱ Time\'s up!';
+  expHeader.className   = 'explanation-header wrong-hdr';
+  expText.textContent   = q.exp;
+  expBox.classList.add('show');
+
+  nextBtn.style.display = 'inline-flex';
+  nextBtn.textContent   = currentIdx < questions.length - 1 ? 'Next Question →' : 'See Results →';
+}
+
+function showResults() {
+  quizArena.style.display     = 'none';
+  resultsScreen.style.display = 'block';
+
+  const pct     = Math.round((score / questions.length) * 100);
+  const avgTime = timeTaken.length ? Math.round(timeTaken.reduce((a,b)=>a+b,0)/timeTaken.length) : 0;
+
+  // Score ring animation
+  const ring   = document.getElementById('score-ring-fill');
+  const offset = 440 - (pct / 100) * 440;
+  setTimeout(() => { ring.style.strokeDashoffset = offset; }, 100);
+
+  // Color ring by score
+  ring.style.stroke = pct >= 85 ? '#2dff7a' : pct >= 70 ? '#00e5ff' : pct >= 50 ? '#ffd81e' : '#ff5c1a';
+
+  // Animate score pct
+  const pctEl = document.getElementById('score-pct');
+  let n = 0;
+  const counter = setInterval(() => {
+    n = Math.min(n + 2, pct);
+    pctEl.textContent = n + '%';
+    if (n >= pct) clearInterval(counter);
+  }, 20);
+
+  // Grade
+  const gradeEl = document.getElementById('grade-badge');
+  const msgEl   = document.getElementById('grade-msg');
+  if (pct >= 90) {
+    gradeEl.textContent = '🏆 Grade: S — DevOps Expert';
+    gradeEl.className = 'grade-badge grade-s';
+    msgEl.textContent = 'Outstanding! You have mastery-level DevOps knowledge.';
+  } else if (pct >= 75) {
+    gradeEl.textContent = '⭐ Grade: A — Advanced';
+    gradeEl.className = 'grade-badge grade-a';
+    msgEl.textContent = 'Excellent work! You have strong DevOps fundamentals and beyond.';
+  } else if (pct >= 60) {
+    gradeEl.textContent = '✅ Grade: B — Intermediate';
+    gradeEl.className = 'grade-badge grade-b';
+    msgEl.textContent = 'Good job! A few gaps to fill — check the concepts page.';
+  } else if (pct >= 40) {
+    gradeEl.textContent = '📚 Grade: C — Needs Work';
+    gradeEl.className = 'grade-badge grade-c';
+    msgEl.textContent = 'Keep studying! The roadmap and concepts pages will help.';
+  } else {
+    gradeEl.textContent = '🔁 Grade: F — Try Again';
+    gradeEl.className = 'grade-badge grade-f';
+    msgEl.textContent = 'Don\'t give up! Start with the DevOps Roadmap and study the basics.';
+  }
+
+  // Stats
+  document.getElementById('res-correct').textContent = score;
+  document.getElementById('res-wrong').textContent   = wrongCount;
+  document.getElementById('res-time').textContent    = avgTime + 's';
+  document.getElementById('res-streak').textContent  = bestStreak;
+
+  // Review list
+  const reviewEl = document.getElementById('review-items');
+  reviewEl.innerHTML = '';
+  answers.forEach((a, i) => {
+    const div = document.createElement('div');
+    div.className = 'review-item';
+    div.innerHTML = `
+      <div class="review-icon">${a.correct ? '✅' : '❌'}</div>
+      <div>
+        <div class="review-q">Q${i+1}. ${a.q}</div>
+        <div class="review-a ${a.correct ? 'correct-a' : 'wrong-a'}">
+          ${a.correct ? '✔ Correct' : `✖ Answer: ${a.answer}`}
+        </div>
+      </div>`;
+    reviewEl.appendChild(div);
+  });
+}
+
+/* ── Shuffle utilities ── */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function shuffleOpts(opts, correctIdx) {
+  const indexed = opts.map((o, i) => ({ o, correct: i === correctIdx }));
+  for (let i = indexed.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indexed[i], indexed[j]] = [indexed[j], indexed[i]];
+  }
+  return {
+    opts: indexed.map(x => x.o),
+    correctIdx: indexed.findIndex(x => x.correct),
+  };
+}
+
+</script>
+</body>
+</html>
