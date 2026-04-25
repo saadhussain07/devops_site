@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DevOps Blog — Tutorials, guides and best practices on CI/CD, Docker, Kubernetes, Terraform and more.">
+  <meta name="keywords" content="DevOps blog, Kubernetes tutorial, Docker guide, CI/CD tutorial, Terraform guide, DevOps articles">
+  <meta name="author" content="DevOps Hub">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="DevOps Blog — Tutorials & Guides">
+  <meta property="og:description" content="In-depth DevOps tutorials, guides and best practices for engineers at every level.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://rocketdevops.vercel.app/blog.html">
+  <title>DevOps Blog — Tutorials & Guides · DevOps Hub</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── Blog page styles ─────────────────────────────────── */
+
+    /* Featured article hero */
+    .blog-hero {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 360px;
+      transition: all var(--transition);
+    }
+
+    .blog-hero:hover {
+      border-color: var(--border-strong);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      transform: translateY(-2px);
+    }
+
+    .blog-hero-visual {
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .blog-hero-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .blog-hero-icon {
+      font-size: 5rem;
+      position: relative;
+      z-index: 1;
+      animation: float 4s ease-in-out infinite;
+      filter: drop-shadow(0 0 30px rgba(45,255,122,0.4));
+    }
+
+    .blog-hero-content {
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .blog-hero-content .tag { margin-bottom: 1rem; }
+
+    .blog-hero-content h2 {
+      font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
+    }
+
+    .blog-hero-content p {
+      font-size: 0.92rem;
+      margin-bottom: 1.5rem;
+      flex: 1;
+    }
+
+    .blog-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    .blog-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    /* Filter bar */
+    .blog-filter {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .blog-filter-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-right: 0.25rem;
+    }
+
+    .filter-pill {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: 2rem;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition);
+      background: transparent;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .filter-pill:hover,
+    .filter-pill.active {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+      background: rgba(45,255,122,0.07);
+    }
+
+    /* Blog grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Article card */
+    .article-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: all var(--transition);
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .article-card:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.35), var(--glow-green);
+    }
+
+    .article-thumb {
+      height: 160px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: all var(--transition);
+    }
+
+    .article-thumb::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: 0.6;
+    }
+
+    .article-thumb-emoji {
+      position: relative;
+      z-index: 1;
+      transition: transform var(--transition);
+    }
+
+    .article-card:hover .article-thumb-emoji {
+      transform: scale(1.15);
+    }
+
+    .article-thumb-glow {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .article-card:hover .article-thumb-glow { opacity: 1; }
+
+    .thumb-green  .article-thumb-glow { background: radial-gradient(circle at 50% 60%, rgba(45,255,122,0.15), transparent 60%); }
+    .thumb-cyan   .article-thumb-glow { background: radial-gradient(circle at 50% 60%, rgba(0,229,255,0.15), transparent 60%); }
+    .thumb-orange .article-thumb-glow { background: radial-gradient(circle at 50% 60%, rgba(255,92,26,0.15), transparent 60%); }
+    .thumb-purple .article-thumb-glow { background: radial-gradient(circle at 50% 60%, rgba(139,92,246,0.15), transparent 60%); }
+
+    .article-body {
+      padding: 1.4rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .article-tags {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-tag {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      padding: 0.12rem 0.55rem;
+      border-radius: 2px;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .article-tag.green  { border-color: rgba(45,255,122,0.3);  color: var(--accent-green); }
+    .article-tag.cyan   { border-color: rgba(0,229,255,0.3);   color: var(--accent-cyan); }
+    .article-tag.orange { border-color: rgba(255,92,26,0.3);   color: var(--accent-orange); }
+    .article-tag.purple { border-color: rgba(139,92,246,0.3);  color: var(--accent-purple); }
+
+    .article-title {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--text-bright);
+      line-height: 1.4;
+      margin-bottom: 0.6rem;
+      transition: color var(--transition);
+    }
+
+    .article-card:hover .article-title { color: var(--accent-green); }
+
+    .article-excerpt {
+      font-size: 0.83rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex: 1;
+      margin-bottom: 1rem;
+    }
+
+    .article-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--border);
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .article-author {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .author-avatar {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: rgba(45,255,122,0.15);
+      border: 1px solid rgba(45,255,122,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--accent-green);
+      font-family: var(--font-mono);
+    }
+
+    .author-name {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    .article-read-time {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    /* Read more link */
+    .article-read-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--accent-green);
+      margin-top: 0.5rem;
+      transition: gap var(--transition);
+    }
+
+    .article-card:hover .article-read-more { gap: 0.6rem; }
+
+    /* Newsletter strip */
+    .newsletter-strip {
+      background: var(--bg-card);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      margin-top: 3rem;
+    }
+
+    .newsletter-strip::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-green), var(--accent-cyan));
+    }
+
+    .newsletter-strip::after {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(45,255,122,0.06), transparent 60%);
+    }
+
+    .newsletter-strip h3 { margin-bottom: 0.5rem; }
+    .newsletter-strip p  { margin-bottom: 1.5rem; max-width: 480px; margin-left: auto; margin-right: auto; }
+
+    .newsletter-form {
+      display: flex;
+      gap: 0.75rem;
+      max-width: 420px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .newsletter-input {
+      flex: 1;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.7rem 1rem;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: all var(--transition);
+    }
+
+    .newsletter-input::placeholder { color: var(--text-muted); }
+
+    .newsletter-input:focus {
+      border-color: var(--accent-green);
+      box-shadow: 0 0 0 3px rgba(45,255,122,0.08);
+    }
+
+    /* Sidebar for large screen */
+    .blog-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    .blog-sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .sidebar-widget {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .widget-header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .widget-body { padding: 1.25rem; }
+
+    /* Popular articles widget */
+    .popular-list { list-style: none; display: flex; flex-direction: column; gap: 0.85rem; }
+
+    .popular-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: var(--radius);
+      transition: all var(--transition);
+    }
+
+    .popular-item:hover { background: rgba(45,255,122,0.05); }
+
+    .popular-num {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      width: 16px;
+      flex-shrink: 0;
+      padding-top: 0.1rem;
+    }
+
+    .popular-title {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      transition: color var(--transition);
+    }
+
+    .popular-item:hover .popular-title { color: var(--accent-green); }
+
+    /* Tags widget */
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag-cloud-item {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 2rem;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--transition);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .tag-cloud-item:hover {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+    }
+
+    /* Stats widget */
+    .stats-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+    }
+
+    .stats-row-label { color: var(--text-muted); }
+    .stats-row-val   { font-family: var(--font-mono); color: var(--accent-green); font-weight: 700; }
+
+    /* ── Full Article Modal (CSS) ─────────────────────────── */
+    .article-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(4,8,10,0.92);
+      z-index: 2000;
+      display: none;
+      overflow-y: auto;
+      padding: 2rem 1rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .article-modal-overlay.open { display: block; }
+
+    .article-modal {
+      max-width: 760px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      animation: fade-up 0.35s ease both;
+    }
+
+    .modal-header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-close {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-muted);
+      font-size: 1rem;
+      width: 32px; height: 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+      font-family: var(--font-mono);
+    }
+
+    .modal-close:hover { border-color: var(--accent-orange); color: var(--accent-orange); }
+
+    .modal-body { padding: 2rem 2rem 3rem; }
+
+    .modal-body h1 {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      margin-bottom: 1rem;
+      line-height: 1.3;
+    }
+
+    .modal-body h2 {
+      font-size: 1.2rem;
+      margin: 2rem 0 0.75rem;
+      color: var(--accent-green);
+    }
+
+    .modal-body h3 {
+      font-size: 1rem;
+      margin: 1.5rem 0 0.5rem;
+      color: var(--accent-cyan);
+    }
+
+    .modal-body p {
+      font-size: 0.92rem;
+      line-height: 1.85;
+      margin-bottom: 1rem;
+    }
+
+    .modal-body ul, .modal-body ol {
+      margin: 0.5rem 0 1rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .modal-body li {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .modal-body pre {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      overflow-x: auto;
+      margin: 1rem 0;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.8;
+      color: var(--accent-green);
+    }
+
+    .modal-body code {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      background: rgba(45,255,122,0.08);
+      color: var(--accent-green);
+      padding: 0.1rem 0.4rem;
+      border-radius: 3px;
+      border: 1px solid rgba(45,255,122,0.15);
+    }
+
+    .modal-body pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: inherit;
+    }
+
+    .modal-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
+      margin: 2rem 0;
+    }
+
+    .article-callout {
+      background: rgba(45,255,122,0.06);
+      border: 1px solid rgba(45,255,122,0.2);
+      border-left: 3px solid var(--accent-green);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+    }
+
+    .article-callout p { margin: 0; font-size: 0.88rem; color: var(--text-secondary); }
+    .article-callout strong { color: var(--accent-green); }
+
+    @media (max-width: 900px) {
+      .blog-layout          { grid-template-columns: 1fr; }
+      .blog-sidebar         { display: none; }
+      .blog-hero            { grid-template-columns: 1fr; }
+      .blog-hero-visual     { height: 160px; border-right: none; border-bottom: 1px solid var(--border); }
+    }
+
+    @media (max-width: 580px) {
+      .newsletter-form { flex-direction: column; }
+      .blog-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── Navigation ─────────────────────────────────────────── -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">DevOpsHub</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle sr-only">
+    <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </label>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="tools.html">Tools</a></li>
+      <li><a href="concepts.html">Concepts</a></li>
+      <li><a href="workflow.html">Workflow</a></li>
+      <li><a href="roadmap.html">Roadmap</a></li>
+      <li><a href="quiz.html">Quiz</a></li>
+      <li><a href="blog.html" class="active">Blog</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ─── Page Header ─────────────────────────────────────────── -->
+<header class="page-header">
+  <div class="container">
+    <span class="tag">// knowledge base</span>
+    <h1>DevOps <span class="text-green">Blog</span></h1>
+    <p>In-depth tutorials, guides and best practices — written for engineers who build and ship real systems.</p>
+  </div>
+</header>
+
+<!-- ─── Main Content ─────────────────────────────────────────── -->
+<section class="section" style="padding-top:2.5rem;">
+  <div class="container">
+
+    <!-- Featured Article -->
+    <div class="blog-hero" id="featured-card" role="article" aria-label="Featured article" tabindex="0">
+      <div class="blog-hero-visual">
+        <div class="blog-hero-icon">🐳</div>
+      </div>
+      <div class="blog-hero-content">
+        <span class="tag">⭐ Featured Article</span>
+        <div class="blog-meta">
+          <span class="blog-meta-item">📅 Jan 15, 2025</span>
+          <span class="blog-meta-item">⏱ 8 min read</span>
+          <span class="blog-meta-item">🏷 Docker · Beginner</span>
+        </div>
+        <h2>Docker for DevOps Engineers: A Complete Beginner's Guide</h2>
+        <p>Everything you need to know about containers — from writing your first Dockerfile to pushing production images. Start here if you're new to Docker.</p>
+        <button class="btn btn-primary" onclick="openArticle('docker-guide')" style="align-self:flex-start;">
+          Read Article →
+        </button>
+      </div>
+    </div>
+
+    <!-- Filter bar -->
+    <div class="blog-filter" role="group" aria-label="Filter articles">
+      <span class="blog-filter-label">Filter:</span>
+      <button class="filter-pill active" data-filter="all">All</button>
+      <button class="filter-pill" data-filter="docker">Docker</button>
+      <button class="filter-pill" data-filter="kubernetes">Kubernetes</button>
+      <button class="filter-pill" data-filter="cicd">CI/CD</button>
+      <button class="filter-pill" data-filter="iac">IaC</button>
+      <button class="filter-pill" data-filter="monitoring">Monitoring</button>
+      <button class="filter-pill" data-filter="security">Security</button>
+      <button class="filter-pill" data-filter="culture">Culture</button>
+    </div>
+
+    <!-- Layout: Grid + Sidebar -->
+    <div class="blog-layout">
+
+      <!-- Articles grid -->
+      <div>
+        <div class="blog-grid" id="articles-grid">
+
+          <!-- Article 1 -->
+          <article class="article-card" data-cat="cicd" onclick="openArticle('cicd-github-actions')" tabindex="0" role="button" aria-label="Read: GitHub Actions CI/CD Pipeline from Scratch">
+            <div class="article-thumb thumb-green">
+              <div class="article-thumb-emoji">🔁</div>
+              <div class="article-thumb-glow"></div>
+            </div>
+            <div class="article-body">
+              <div class="article-tags">
+                <span class="article-tag green">CI/CD</span>
+                <span class="article-tag">GitHub Actions</span>
+                <span class="article-tag">Beginner</span>
+              </div>
+              <div class="article-title">Build a CI/CD Pipeline with GitHub Actions from Scratch</div>
+              <div class="article-excerpt">Step-by-step guide to automating your build, test, and deploy workflow using GitHub Actions — from zero to a production-ready pipeline.</div>
+              <div class="article-footer">
+                <div class="article-author">
+                  <div class="author-avatar">DH</div>
+                  <span class="author-name">DevOps Hub</span>
+                </div>
+                <span class="article-read-time">⏱ 10 min</span>
+              </div>
+              <span class="article-read-more">Read more →</span>
+            </div>
+          </article>
+
+          <!-- Article 2 -->
+          <article class="article-card" data-cat="kubernetes" onclick="openArticle('k8s-beginners')" tabindex="0" role="button" aria-label="Read: Kubernetes for Beginners">
+            <div class="article-thumb thumb-cyan">
+              <div class="article-thumb-emoji">⚙️</div>
+              <div class="article-thumb-glow"></div>
+            </div>
+            <div class="article-body">
+              <div class="article-tags">
+                <span class="article-tag cyan">Kubernetes</span>
+                <span class="article-tag">Containers</span>
+                <span class="article-tag">Beginner</span>
+              </div>
+              <div class="article-title">Kubernetes for Beginners: Pods, Deployments & Services Explained</div>
+              <div class="article-excerpt">Demystifying Kubernetes core objects — understand Pods, ReplicaSets, Deployments, and Services with real examples you can run locally.</div>
+              <div class="article-footer">
+                <div class="article-author">
+                  <div class="author-avatar">DH</div>
+                  <span class="author-name">DevOps Hub</span>
+                </div>
+                <span class="article-read-time">⏱ 12 min</span>
+              </div>
+              <span class="article-read-more">Read more →</span>
+            </div>
+          </article>
+
+          <!-- Article 3 -->
+          <article class="article-card" data-cat="iac" onclick="openArticle('terraform-aws')" tabindex="0" role="button" aria-label="Read: Terraform on AWS">
+            <div class="article-thumb thumb-purple">
+              <div class="article-thumb-emoji">🏗️</div>
+              <div class="article-thumb-glow"></div>
+            </div>
+            <div class="article-body">
+              <div class="article-tags">
+                <span class="article-tag purple">Terraform</span>
+                <span class="article-tag">AWS</span>
+                <span class="article-tag">Intermediate</span>
+              </div>
+              <div class="article-title">Terraform on AWS: Provision Your First Cloud Infrastructure</div>
+              <div class="article-excerpt">Hands-on tutorial provisioning a VPC, EC2 instance, and RDS database on AWS using Terraform — with remote state and modules.</div>
+              <div class="article-footer">
+                <div class="article-author">
+                  <div class="author-avatar">DH</div>
+                  <span class="author-name">DevOps Hub</span>
+                </div>
+                <span class="article-read-time">⏱ 15 min</span>
+              </div>
+              <span class="article-read-more">Read more →</span>
+            </div>
+          </article>
+
+          <!-- Article 4 -->
+          <article class="article-card" data-cat="monitoring" onclick="openArticle('prometheus-grafana')" tabindex="0" role="button" aria-label="Read: Prometheus and Grafana Setup">
+            <div class="article-thumb thumb-orange">
+              <div class="article-thumb-emoji">📊</div>
+              <div class="article-thumb-glow"></div>
+            </div>
+            <div class="article-body">
+              <div class="article-tags">
+                <span class="article-tag orange">Monitoring</span>
+                <span class="article-tag">Prometheus</span>
+                <span class="article-tag">Grafana</span>
+              </div>
+              <div class="article-title">Set Up Prometheus & Grafana Monitoring in 30 Minutes</div>
+              <div class="article-excerpt">A practical guide to deploying the full Prometheus + Grafana observability stack on Kubernetes with dashboards and alerting rules.</div>
+              <div class="article-footer">
+                <div class="article-author">
+                  <div class="author-avatar">DH</div>
+                  <span class="author-name">DevOps Hub</span>
+                </div>
+                <span class="article-read-time">⏱ 11 min</span>
+              </div>
+              <span class="article-read-more">Read more →</span>
+            </div>
+          </article>
+
+          <!-- Article 5 -->
+          <article class="article-card" data-cat="security" onclick="openArticle('devsecops-pipeline')" tabindex="0" role="button" aria-label="Read: DevSecOps Pipeline Security">
+            <div class="article-thumb thumb-green">
+              <div class="article-thumb-emoji">🛡️</div>
+              <div class="article-thumb-glow"></div>
+            </div>
+            <div class="article-body">
+              <div class="article-tags">
+                <span class="article-tag green">DevSecOps</span>
+                <span class="article-tag">Security</span>
+                <span class="article-tag">Advanced</span>
+              </div>
+              <div class="article-title">How to Add Security Scanning to Your CI/CD Pipeline</div>
+              <div class="article-excerpt">Shift security left by integrating SAST, dependency scanning, and container image scanning directly into your GitHub Actions pipeline.</div>
+              <div class="article-footer">
+                <div class="article-author">
+                  <div class="author-avatar">DH</div>
+                  <span class="author-name">DevOps Hub</span>
+                </div>
+                <span class="article-read-time">⏱ 9 min</span>
+              </div>
+              <span class="article-read-more">Read more →</span>
+            </div>
+          </article>
+
+          <!-- Article 6 -->
+          <article class="article-card" data-cat="culture" onclick="openArticle('dora-metrics')" tabindex="0" role="button" aria-label="Read: DORA Metrics Guide">
+            <div class="article-thumb thumb-cyan">
+              <div class="article-thumb-emoji">📈</div>
+              <div class="article-thumb-glow"></div>
+            </div>
+            <div class="article-body">
+              <div class="article-tags">
+                <span class="article-tag cyan">Culture</span>
+                <span class="article-tag">DORA</span>
+                <span class="article-tag">SRE</span>
+              </div>
+              <div class="article-title">DORA Metrics Explained: Measure and Improve Your DevOps Performance</div>
+              <div class="article-excerpt">What are the four DORA metrics, how do you measure them, and what does elite performance actually look like in the real world?</div>
+              <div class="article-footer">
+                <div class="article-author">
+                  <div class="author-avatar">DH</div>
+                  <span class="author-name">DevOps Hub</span>
+                </div>
+                <span class="article-read-time">⏱ 7 min</span>
+              </div>
+              <span class="article-read-more">Read more →</span>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Newsletter strip -->
+        <div class="newsletter-strip">
+          <h3>📬 Get New Articles <span class="text-green">Every Week</span></h3>
+          <p>DevOps tutorials, tool guides, and best practices — straight to your inbox. No spam, unsubscribe anytime.</p>
+          <div class="newsletter-form">
+            <input type="email" class="newsletter-input" placeholder="your@email.com" aria-label="Email address">
+            <button class="btn btn-primary" onclick="subscribeNewsletter(this)">Subscribe</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="blog-sidebar" aria-label="Blog sidebar">
+
+        <!-- Popular articles -->
+        <div class="sidebar-widget">
+          <div class="widget-header">🔥 Popular Articles</div>
+          <div class="widget-body">
+            <ul class="popular-list">
+              <li class="popular-item" onclick="openArticle('docker-guide')">
+                <span class="popular-num">01</span>
+                <span class="popular-title">Docker for DevOps Engineers: A Complete Beginner's Guide</span>
+              </li>
+              <li class="popular-item" onclick="openArticle('cicd-github-actions')">
+                <span class="popular-num">02</span>
+                <span class="popular-title">Build a CI/CD Pipeline with GitHub Actions from Scratch</span>
+              </li>
+              <li class="popular-item" onclick="openArticle('k8s-beginners')">
+                <span class="popular-num">03</span>
+                <span class="popular-title">Kubernetes for Beginners: Pods, Deployments & Services</span>
+              </li>
+              <li class="popular-item" onclick="openArticle('terraform-aws')">
+                <span class="popular-num">04</span>
+                <span class="popular-title">Terraform on AWS: Provision Your First Cloud Infrastructure</span>
+              </li>
+              <li class="popular-item" onclick="openArticle('dora-metrics')">
+                <span class="popular-num">05</span>
+                <span class="popular-title">DORA Metrics Explained: Measure Your DevOps Performance</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Tag cloud -->
+        <div class="sidebar-widget">
+          <div class="widget-header">🏷 Topics</div>
+          <div class="widget-body">
+            <div class="tag-cloud">
+              <span class="tag-cloud-item">Docker</span>
+              <span class="tag-cloud-item">Kubernetes</span>
+              <span class="tag-cloud-item">CI/CD</span>
+              <span class="tag-cloud-item">Terraform</span>
+              <span class="tag-cloud-item">Ansible</span>
+              <span class="tag-cloud-item">Prometheus</span>
+              <span class="tag-cloud-item">Grafana</span>
+              <span class="tag-cloud-item">GitHub Actions</span>
+              <span class="tag-cloud-item">Jenkins</span>
+              <span class="tag-cloud-item">DevSecOps</span>
+              <span class="tag-cloud-item">SRE</span>
+              <span class="tag-cloud-item">DORA</span>
+              <span class="tag-cloud-item">GitOps</span>
+              <span class="tag-cloud-item">Helm</span>
+              <span class="tag-cloud-item">AWS</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blog stats -->
+        <div class="sidebar-widget">
+          <div class="widget-header">📊 Blog Stats</div>
+          <div class="widget-body">
+            <div class="stats-list">
+              <div class="stats-row">
+                <span class="stats-row-label">Total Articles</span>
+                <span class="stats-row-val">7</span>
+              </div>
+              <div class="stats-row">
+                <span class="stats-row-label">Topics Covered</span>
+                <span class="stats-row-val">8</span>
+              </div>
+              <div class="stats-row">
+                <span class="stats-row-label">Avg Read Time</span>
+                <span class="stats-row-val">10 min</span>
+              </div>
+              <div class="stats-row">
+                <span class="stats-row-label">Updated</span>
+                <span class="stats-row-val">2025</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick links -->
+        <div class="sidebar-widget">
+          <div class="widget-header">🔗 Quick Links</div>
+          <div class="widget-body">
+            <div style="display:flex;flex-direction:column;gap:0.5rem;">
+              <a href="roadmap.html" class="btn btn-ghost" style="font-size:0.75rem;padding:0.5rem 1rem;">📍 DevOps Roadmap</a>
+              <a href="quiz.html"    class="btn btn-ghost" style="font-size:0.75rem;padding:0.5rem 1rem;">🎯 Take the Quiz</a>
+              <a href="tools.html"   class="btn btn-ghost" style="font-size:0.75rem;padding:0.5rem 1rem;">🛠 Browse Tools</a>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Article Modal ─────────────────────────────────────── -->
+<div class="article-modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="article-modal">
+    <div class="modal-header">
+      <span style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-muted);" id="modal-breadcrumb">Blog / Article</span>
+      <button class="modal-close" onclick="closeArticle()" aria-label="Close article">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- ─── Footer ────────────────────────────────────────────── -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">DevOpsHub</div>
+        <p>In-depth DevOps tutorials, tools, and guides for engineers building modern software delivery systems.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="tools.html">Tools</a></li>
+          <li><a href="concepts.html">Concepts</a></li>
+          <li><a href="workflow.html">Workflow</a></li>
+          <li><a href="roadmap.html">Roadmap</a></li>
+          <li><a href="quiz.html">Quiz</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Articles</h4>
+        <ul class="footer-links">
+          <li><a href="blog.html">Docker Guide</a></li>
+          <li><a href="blog.html">GitHub Actions</a></li>
+          <li><a href="blog.html">Kubernetes Basics</a></li>
+          <li><a href="blog.html">Terraform AWS</a></li>
+          <li><a href="blog.html">Prometheus & Grafana</a></li>
+          <li><a href="blog.html">DORA Metrics</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Topics</h4>
+        <ul class="footer-links">
+          <li><a href="blog.html">Docker</a></li>
+          <li><a href="blog.html">Kubernetes</a></li>
+          <li><a href="blog.html">CI/CD</a></li>
+          <li><a href="blog.html">Security</a></li>
+          <li><a href="blog.html">Monitoring</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 DevOpsHub. Powered by HTML5, CSS3 &amp; Vanilla JS.</p>
+      <div class="footer-status"><span class="status-dot"></span>All systems operational</div>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js" defer></script>
+<script>
+'use strict';
+
+/* ── Article content ──────────────────────────────────────── */
+const ARTICLES = {
+  'docker-guide': {
+    title: 'Docker for DevOps Engineers: A Complete Beginner\'s Guide',
+    meta:  '🐳 Docker · Jan 15, 2025 · 8 min read · Beginner',
+    body: `
+      <h1>Docker for DevOps Engineers: A Complete Beginner's Guide</h1>
+      <div class="blog-meta" style="margin-bottom:1.5rem;">
+        <span class="blog-meta-item">🐳 Docker</span>
+        <span class="blog-meta-item">📅 Jan 15, 2025</span>
+        <span class="blog-meta-item">⏱ 8 min read</span>
+        <span class="blog-meta-item">👤 DevOps Hub</span>
+      </div>
+
+      <p>Docker changed how we build, ship, and run software. Before containers, "it works on my machine" was a real, painful problem. Docker solved it by packaging your application and everything it needs — runtime, libraries, config — into a single portable unit called a <strong>container</strong>.</p>
+
+      <p>This guide walks you through Docker from scratch: what it is, why it matters, and how to write your first Dockerfile and ship a real application.</p>
+
+      <div class="modal-divider"></div>
+
+      <h2>What is Docker?</h2>
+      <p>Docker is a platform that allows you to package applications into containers. A container is a lightweight, standalone, executable package that includes everything needed to run a piece of software — code, runtime, system tools, libraries, and settings.</p>
+
+      <div class="article-callout">
+        <p><strong>Key insight:</strong> Containers share the host OS kernel but run in isolated user spaces. This makes them far lighter than VMs — a container starts in milliseconds, not minutes.</p>
+      </div>
+
+      <h2>Core Docker Concepts</h2>
+
+      <h3>Images vs Containers</h3>
+      <p>An <strong>image</strong> is a read-only blueprint — like a class in programming. A <strong>container</strong> is a running instance of that image — like an object. One image can run as many containers as you need.</p>
+
+      <h3>Dockerfile</h3>
+      <p>A Dockerfile is a text file with instructions to build a Docker image. Here's a real example for a Node.js app:</p>
+
+      <pre><code># Use official Node.js image as base
+FROM node:20-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy dependency files first (for layer caching)
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy source code
+COPY . .
+
+# Expose port
+EXPOSE 3000
+
+# Start the application
+CMD ["node", "server.js"]</code></pre>
+
+      <h3>Key Dockerfile Instructions</h3>
+      <ul>
+        <li><code>FROM</code> — base image to start from</li>
+        <li><code>WORKDIR</code> — set working directory inside the container</li>
+        <li><code>COPY</code> — copy files from host to container</li>
+        <li><code>RUN</code> — execute a command during build</li>
+        <li><code>EXPOSE</code> — document which port the app uses</li>
+        <li><code>CMD</code> — command to run when container starts</li>
+        <li><code>ENV</code> — set environment variables</li>
+      </ul>
+
+      <h2>Essential Docker Commands</h2>
+      <pre><code># Build an image from Dockerfile
+docker build -t myapp:1.0 .
+
+# Run a container
+docker run -d -p 3000:3000 --name myapp myapp:1.0
+
+# List running containers
+docker ps
+
+# View container logs
+docker logs myapp -f
+
+# Stop and remove container
+docker stop myapp && docker rm myapp
+
+# List images
+docker images
+
+# Remove unused resources
+docker system prune</code></pre>
+
+      <h2>Multi-Stage Builds (Production Best Practice)</h2>
+      <p>Multi-stage builds let you use a large build image (with compilers and dev tools) but produce a tiny final image with only what's needed to run:</p>
+
+      <pre><code># Stage 1: Build
+FROM golang:1.21 AS builder
+WORKDIR /app
+COPY . .
+RUN go build -o myapp .
+
+# Stage 2: Run (tiny final image)
+FROM alpine:3.19
+COPY --from=builder /app/myapp /myapp
+CMD ["/myapp"]</code></pre>
+
+      <div class="article-callout">
+        <p><strong>Result:</strong> The Go build image is ~800MB. The final Alpine image is ~10MB. Multi-stage builds are essential for production.</p>
+      </div>
+
+      <h2>Docker Compose</h2>
+      <p>For applications with multiple services (app + database + cache), use Docker Compose:</p>
+
+      <pre><code>version: '3.9'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://user:pass@db:5432/mydb
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: pass
+      POSTGRES_USER: user
+      POSTGRES_DB: mydb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+
+volumes:
+  pgdata:</code></pre>
+
+      <p>Run everything with a single command: <code>docker compose up -d</code></p>
+
+      <h2>Next Steps</h2>
+      <ul>
+        <li>Learn Kubernetes to orchestrate containers at scale</li>
+        <li>Set up a private Docker registry (ECR, GCR, or Docker Hub)</li>
+        <li>Add Docker to your CI/CD pipeline with GitHub Actions</li>
+        <li>Explore container security scanning with Trivy</li>
+      </ul>
+    `
+  },
+
+  'cicd-github-actions': {
+    title: 'Build a CI/CD Pipeline with GitHub Actions from Scratch',
+    meta: '🔁 CI/CD · Feb 3, 2025 · 10 min read · Beginner',
+    body: `
+      <h1>Build a CI/CD Pipeline with GitHub Actions from Scratch</h1>
+      <div class="blog-meta" style="margin-bottom:1.5rem;">
+        <span class="blog-meta-item">🔁 CI/CD</span>
+        <span class="blog-meta-item">📅 Feb 3, 2025</span>
+        <span class="blog-meta-item">⏱ 10 min read</span>
+      </div>
+
+      <p>GitHub Actions is one of the most powerful and beginner-friendly CI/CD tools available today. It's built directly into GitHub — no external servers, no plugins to manage. In this guide, you'll build a complete pipeline from scratch.</p>
+
+      <h2>How GitHub Actions Works</h2>
+      <p>Workflows are defined in YAML files inside <code>.github/workflows/</code> in your repository. They are triggered by events — pushes, pull requests, schedules, and more.</p>
+
+      <h2>Your First Workflow</h2>
+      <pre><code># .github/workflows/ci.yml
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build
+        run: npm run build</code></pre>
+
+      <h2>Adding Docker Build & Push</h2>
+      <pre><code>  docker:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: \${{ secrets.DOCKER_USERNAME }}
+          password: \${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: myuser/myapp:\${{ github.sha }}</code></pre>
+
+      <div class="article-callout">
+        <p><strong>Tip:</strong> Never hardcode credentials. Add secrets in GitHub → Settings → Secrets and variables → Actions.</p>
+      </div>
+
+      <h2>Key GitHub Actions Concepts</h2>
+      <ul>
+        <li><strong>Workflow</strong> — the YAML file defining your automation</li>
+        <li><strong>Job</strong> — a set of steps that run on the same runner</li>
+        <li><strong>Step</strong> — a single task (run a command or use an action)</li>
+        <li><strong>Action</strong> — reusable unit from the Actions Marketplace</li>
+        <li><strong>Runner</strong> — the machine that executes your workflow</li>
+        <li><strong>Secrets</strong> — encrypted variables for credentials</li>
+      </ul>
+    `
+  },
+
+  'k8s-beginners': {
+    title: 'Kubernetes for Beginners: Pods, Deployments & Services Explained',
+    meta: '⚙️ Kubernetes · Feb 20, 2025 · 12 min read · Beginner',
+    body: `
+      <h1>Kubernetes for Beginners: Pods, Deployments & Services Explained</h1>
+      <div class="blog-meta" style="margin-bottom:1.5rem;">
+        <span class="blog-meta-item">⚙️ Kubernetes</span>
+        <span class="blog-meta-item">📅 Feb 20, 2025</span>
+        <span class="blog-meta-item">⏱ 12 min read</span>
+      </div>
+
+      <p>Kubernetes (K8s) is the de facto standard for running containerised applications at scale. It automates deployment, scaling, and management of containers across a cluster of machines. Here's what every beginner needs to know.</p>
+
+      <h2>Core Objects</h2>
+
+      <h3>Pod — The Smallest Unit</h3>
+      <p>A Pod is the smallest deployable unit in Kubernetes. It wraps one or more containers that share network and storage.</p>
+      <pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: my-app
+spec:
+  containers:
+  - name: app
+    image: nginx:alpine
+    ports:
+    - containerPort: 80</code></pre>
+
+      <h3>Deployment — Managing Replicas</h3>
+      <p>You almost never create Pods directly. Use a Deployment to manage multiple replicas with rolling updates and rollbacks.</p>
+      <pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: app
+        image: myapp:1.0
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"</code></pre>
+
+      <h3>Service — Networking</h3>
+      <p>A Service exposes your Pods via a stable DNS name and IP address, load balancing across all healthy Pods.</p>
+      <pre><code>apiVersion: v1
+kind: Service
+metadata:
+  name: my-app-service
+spec:
+  selector:
+    app: my-app
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: ClusterIP</code></pre>
+
+      <h2>Essential kubectl Commands</h2>
+      <pre><code># Apply manifest
+kubectl apply -f deployment.yaml
+
+# Get resources
+kubectl get pods
+kubectl get deployments
+kubectl get services
+
+# Describe a resource
+kubectl describe pod my-app-abc123
+
+# View logs
+kubectl logs my-app-abc123 -f
+
+# Execute into a container
+kubectl exec -it my-app-abc123 -- /bin/sh
+
+# Scale a deployment
+kubectl scale deployment my-app --replicas=5
+
+# Rolling update
+kubectl set image deployment/my-app app=myapp:2.0
+
+# Rollback
+kubectl rollout undo deployment/my-app</code></pre>
+
+      <div class="article-callout">
+        <p><strong>Practice tip:</strong> Use <code>kind</code> or <code>minikube</code> to run a local Kubernetes cluster on your laptop for free. No cloud account needed.</p>
+      </div>
+    `
+  },
+
+  'terraform-aws': {
+    title: 'Terraform on AWS: Provision Your First Cloud Infrastructure',
+    meta: '🏗️ Terraform · Mar 5, 2025 · 15 min read · Intermediate',
+    body: `
+      <h1>Terraform on AWS: Provision Your First Cloud Infrastructure</h1>
+      <div class="blog-meta" style="margin-bottom:1.5rem;">
+        <span class="blog-meta-item">🏗️ Terraform</span>
+        <span class="blog-meta-item">📅 Mar 5, 2025</span>
+        <span class="blog-meta-item">⏱ 15 min read</span>
+      </div>
+
+      <p>Terraform lets you define your entire cloud infrastructure as code. Instead of clicking through the AWS console and forgetting what you did, everything is versioned, reviewable, and repeatable.</p>
+
+      <h2>Installation & Setup</h2>
+      <pre><code># Install Terraform (macOS)
+brew install terraform
+
+# Verify
+terraform version
+
+# Configure AWS credentials
+aws configure</code></pre>
+
+      <h2>Project Structure</h2>
+      <pre><code>my-infra/
+├── main.tf          # Core resources
+├── variables.tf     # Input variables
+├── outputs.tf       # Output values
+├── terraform.tfvars # Variable values
+└── versions.tf      # Provider versions</code></pre>
+
+      <h2>Provision a VPC + EC2 Instance</h2>
+      <pre><code># versions.tf
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = var.region
+}
+
+# main.tf
+resource "aws_vpc" "main" {
+  cidr_block = "10.0.0.0/16"
+  tags = { Name = "devops-hub-vpc" }
+}
+
+resource "aws_subnet" "public" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = "10.0.1.0/24"
+  map_public_ip_on_launch = true
+}
+
+resource "aws_instance" "web" {
+  ami           = "ami-0c02fb55956c7d316"
+  instance_type = "t3.micro"
+  subnet_id     = aws_subnet.public.id
+  tags = { Name = "web-server" }
+}</code></pre>
+
+      <h2>The Terraform Workflow</h2>
+      <pre><code># Initialise — download providers
+terraform init
+
+# Preview changes
+terraform plan
+
+# Apply changes
+terraform apply
+
+# Destroy resources
+terraform destroy</code></pre>
+
+      <div class="article-callout">
+        <p><strong>Always review</strong> <code>terraform plan</code> output before applying. It shows exactly what will be created, modified, or destroyed.</p>
+      </div>
+    `
+  },
+
+  'prometheus-grafana': {
+    title: 'Set Up Prometheus & Grafana Monitoring in 30 Minutes',
+    meta: '📊 Monitoring · Mar 18, 2025 · 11 min read · Intermediate',
+    body: `
+      <h1>Set Up Prometheus & Grafana Monitoring in 30 Minutes</h1>
+      <div class="blog-meta" style="margin-bottom:1.5rem;">
+        <span class="blog-meta-item">📊 Monitoring</span>
+        <span class="blog-meta-item">📅 Mar 18, 2025</span>
+        <span class="blog-meta-item">⏱ 11 min read</span>
+      </div>
+
+      <p>Prometheus scrapes metrics from your services. Grafana visualises them. Together they form the most popular open-source observability stack in the world. Here's how to get it running on Kubernetes in under 30 minutes.</p>
+
+      <h2>Install with Helm</h2>
+      <pre><code># Add Prometheus community chart repo
+helm repo add prometheus-community \
+  https://prometheus-community.github.io/helm-charts
+helm repo update
+
+# Install kube-prometheus-stack (includes Grafana)
+helm install monitoring \
+  prometheus-community/kube-prometheus-stack \
+  --namespace monitoring \
+  --create-namespace</code></pre>
+
+      <h2>Access Grafana</h2>
+      <pre><code># Port-forward Grafana
+kubectl port-forward svc/monitoring-grafana \
+  3000:80 -n monitoring
+
+# Default credentials
+Username: admin
+Password: prom-operator</code></pre>
+
+      <h2>Key PromQL Queries</h2>
+      <pre><code># Request rate (RED: Rate)
+rate(http_requests_total[5m])
+
+# Error rate (RED: Errors)
+rate(http_requests_total{status=~"5.."}[5m])
+  / rate(http_requests_total[5m])
+
+# P99 latency (RED: Duration)
+histogram_quantile(0.99,
+  rate(http_request_duration_seconds_bucket[5m])
+)
+
+# CPU usage
+100 - (avg by(instance)(
+  rate(node_cpu_seconds_total{mode="idle"}[5m])
+) * 100)</code></pre>
+
+      <div class="article-callout">
+        <p><strong>Import dashboards:</strong> Grafana has thousands of pre-built dashboards. Try ID <code>1860</code> for Node Exporter Full — an excellent starting point for server monitoring.</p>
+      </div>
+    `
+  },
+
+  'devsecops-pipeline': {
+    title: 'How to Add Security Scanning to Your CI/CD Pipeline',
+    meta: '🛡️ DevSecOps · Apr 2, 2025 · 9 min read · Advanced',
+    body: `
+      <h1>How to Add Security Scanning to Your CI/CD Pipeline</h1>
+      <div class="blog-meta" style="margin-bottom:1.5rem;">
+        <span class="blog-meta-item">🛡️ Security</span>
+        <span class="blog-meta-item">📅 Apr 2, 2025</span>
+        <span class="blog-meta-item">⏱ 9 min read</span>
+      </div>
+
+      <p>Security shouldn't be an afterthought reviewed at the end of a release cycle. Shifting left means integrating security checks into every stage of your CI/CD pipeline — automatically, on every commit.</p>
+
+      <h2>Four Layers of Pipeline Security</h2>
+      <ul>
+        <li><strong>SAST</strong> — Static Application Security Testing (source code analysis)</li>
+        <li><strong>Dependency scanning</strong> — Check third-party libraries for known CVEs</li>
+        <li><strong>Container scanning</strong> — Scan Docker images for vulnerabilities</li>
+        <li><strong>Secrets detection</strong> — Find accidentally committed credentials</li>
+      </ul>
+
+      <h2>Complete Security Pipeline</h2>
+      <pre><code>name: Security Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  sast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Semgrep SAST
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: p/owasp-top-ten
+
+  dependency-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dependency audit
+        run: npm audit --audit-level=high
+
+  container-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t myapp:test .
+      - name: Trivy container scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: myapp:test
+          severity: HIGH,CRITICAL
+          exit-code: 1
+
+  secrets-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: GitLeaks secrets scan
+        uses: gitleaks/gitleaks-action@v2</code></pre>
+
+      <div class="article-callout">
+        <p><strong>Golden rule:</strong> Set <code>exit-code: 1</code> on CRITICAL findings so the pipeline fails and blocks the merge. Security gates only work if they're enforced.</p>
+      </div>
+    `
+  },
+
+  'dora-metrics': {
+    title: 'DORA Metrics Explained: Measure and Improve Your DevOps Performance',
+    meta: '📈 Culture · Apr 10, 2025 · 7 min read · All levels',
+    body: `
+      <h1>DORA Metrics Explained: Measure and Improve Your DevOps Performance</h1>
+      <div class="blog-meta" style="margin-bottom:1.5rem;">
+        <span class="blog-meta-item">📈 Culture & SRE</span>
+        <span class="blog-meta-item">📅 Apr 10, 2025</span>
+        <span class="blog-meta-item">⏱ 7 min read</span>
+      </div>
+
+      <p>How do you know if your DevOps practices are actually improving? The DORA (DevOps Research and Assessment) team spent years analysing thousands of organisations and identified four metrics that reliably predict software delivery performance.</p>
+
+      <h2>The Four DORA Metrics</h2>
+
+      <h3>1. Deployment Frequency</h3>
+      <p>How often your team successfully deploys to production. Elite teams deploy multiple times per day. Low performers deploy monthly or less frequently.</p>
+
+      <h3>2. Lead Time for Changes</h3>
+      <p>The time from a code commit to that code running in production. Elite: less than one hour. Low performers: 6 months or more.</p>
+
+      <h3>3. Mean Time to Restore (MTTR)</h3>
+      <p>How long it takes to recover from a production failure. Elite teams restore in less than one hour using automated rollbacks and runbooks.</p>
+
+      <h3>4. Change Failure Rate</h3>
+      <p>The percentage of deployments that cause a production failure requiring a fix or rollback. Elite: 0–5%. High performers maintain this through automated testing and canary deployments.</p>
+
+      <h2>Elite vs Low Performer Benchmarks</h2>
+      <pre><code>Metric                  Elite         Low Performer
+──────────────────────────────────────────────────
+Deployment Frequency    Multiple/day  < Once/month
+Lead Time               < 1 hour      6+ months
+MTTR                    < 1 hour      1+ week
+Change Failure Rate     0–5%          46–60%</code></pre>
+
+      <h2>How to Start Measuring</h2>
+      <ul>
+        <li>Track deployment timestamps in your CI/CD system</li>
+        <li>Record incident start and resolution times</li>
+        <li>Tag production incidents caused by deployments</li>
+        <li>Calculate lead time from first commit to deploy timestamp</li>
+      </ul>
+
+      <div class="article-callout">
+        <p><strong>Key finding:</strong> DORA research shows these metrics are leading indicators of organisational performance — teams that score Elite are twice as likely to exceed profitability and productivity goals.</p>
+      </div>
+    `
+  }
+};
+
+/* ── Open / Close modal ───────────────────────────────────── */
+function openArticle(id) {
+  const article = ARTICLES[id];
+  if (!article) return;
+
+  const overlay = document.getElementById('modal-overlay');
+  const body    = document.getElementById('modal-body');
+  const crumb   = document.getElementById('modal-breadcrumb');
+
+  body.innerHTML  = article.body;
+  crumb.textContent = 'Blog / ' + article.title.substring(0, 40) + '…';
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  overlay.scrollTop = 0;
+}
+
+function closeArticle() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* Close on overlay click */
+document.getElementById('modal-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeArticle();
+});
+
+/* Close on Escape */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeArticle();
+});
+
+/* ── Filter pills ─────────────────────────────────────────── */
+document.querySelectorAll('.filter-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    const f = pill.dataset.filter;
+    document.querySelectorAll('.article-card').forEach(card => {
+      card.style.display = (f === 'all' || card.dataset.cat === f) ? '' : 'none';
+    });
+  });
+});
+
+/* ── Newsletter ───────────────────────────────────────────── */
+function subscribeNewsletter(btn) {
+  const input = btn.previousElementSibling;
+  const email = input.value.trim();
+  if (!email || !email.includes('@')) {
+    input.style.borderColor = 'rgba(255,92,26,0.5)';
+    input.focus();
+    return;
+  }
+  btn.textContent = '✓ Subscribed!';
+  btn.disabled    = true;
+  input.value     = '';
+  input.style.borderColor = 'rgba(45,255,122,0.4)';
+  setTimeout(() => {
+    btn.textContent = 'Subscribe';
+    btn.disabled    = false;
+    input.style.borderColor = '';
+  }, 3000);
+}
+
+/* ── Keyboard nav for article cards ──────────────────────── */
+document.querySelectorAll('.article-card').forEach(card => {
+  card.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      card.click();
+    }
+  });
+});
+</script>
+</body>
+</html>
