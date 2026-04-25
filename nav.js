@@ -13,6 +13,8 @@
    ============================================================ */
 
 (function () {
+  function init() {
+  function init() {
 
   /* ── 1. Inject CSS ────────────────────────────────────── */
   const style = document.createElement('style');
@@ -538,5 +540,13 @@
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeDrawer();
   });
+
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
 
 })();
