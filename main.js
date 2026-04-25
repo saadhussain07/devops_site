@@ -424,3 +424,101 @@
     ticking = true;
   }, { passive: true });
 })();
+
+/* ═══════════════════════════════════════════════════════════
+   SHARED NAVBAR — behaviour
+═══════════════════════════════════════════════════════════ */
+(function initNav() {
+  const nav      = document.getElementById('dh-nav');
+  const progress = document.getElementById('dh-progress');
+  const burger   = document.getElementById('dh-burger');
+  const drawer   = document.getElementById('dh-drawer');
+  const themeBtn = document.getElementById('dh-theme-btn');
+
+  if (!nav) return; // safety guard
+
+  /* ── Scroll progress + hide/show ── */
+  let lastY = 0, ticking = false;
+
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    requestAnimationFrame(() => {
+      const y = window.scrollY;
+      const { scrollHeight, clientHeight } = document.documentElement;
+      const pct = scrollHeight > clientHeight
+        ? (y / (scrollHeight - clientHeight)) * 100 : 0;
+
+      if (progress) progress.style.width = pct + '%';
+
+      /* Hide going down past 100px, show going up */
+      if (y > lastY && y > 100) {
+        nav.classList.add('dh-hidden');
+        closeMobile();
+      } else {
+        nav.classList.remove('dh-hidden');
+      }
+
+      nav.classList.toggle('dh-scrolled', y > 40);
+      lastY   = y;
+      ticking = false;
+    });
+    ticking = true;
+  }, { passive: true });
+
+  /* ── Mobile drawer ── */
+  function openMobile() {
+    burger.classList.add('dh-open');
+    drawer.classList.add('dh-open');
+    burger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMobile() {
+    if (!burger || !drawer) return;
+    burger.classList.remove('dh-open');
+    drawer.classList.remove('dh-open');
+    burger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  if (burger) {
+    burger.addEventListener('click', () =>
+      drawer.classList.contains('dh-open') ? closeMobile() : openMobile()
+    );
+  }
+
+  /* Close drawer on link click or outside tap */
+  if (drawer) {
+    drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMobile));
+  }
+  document.addEventListener('click', e => {
+    if (nav && drawer && !nav.contains(e.target) && !drawer.contains(e.target)) closeMobile();
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMobile(); });
+
+  /* ── Theme toggle ── */
+  const THEME_KEY = 'devopshub_theme';
+
+  function applyTheme(light) {
+    document.body.classList.toggle('light-mode', light);
+    if (themeBtn) themeBtn.textContent = light ? '☀️' : '🌙';
+  }
+
+  /* Apply saved on load */
+  applyTheme(localStorage.getItem(THEME_KEY) === 'light');
+
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      const isLight = document.body.classList.toggle('light-mode');
+      themeBtn.textContent = isLight ? '☀️' : '🌙';
+      localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark');
+      /* Spin effect */
+      themeBtn.style.transition = 'transform 0.4s ease';
+      themeBtn.style.transform  = 'rotate(360deg)';
+      setTimeout(() => {
+        themeBtn.style.transform  = '';
+        themeBtn.style.transition = '';
+      }, 420);
+    });
+  }
+})();

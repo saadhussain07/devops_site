@@ -498,6 +498,45 @@
   </style>
 </head>
 <body>
+<!-- ═══ NAVBAR ═══ -->
+<nav id="dh-nav" role="navigation" aria-label="Main navigation">
+  <div id="dh-progress"></div>
+  <div id="dh-inner">
+    <a href="index.html" id="dh-logo"><span id="dh-prompt">&gt;</span>DevOpsHub</a>
+    <ul id="dh-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="tools.html">Tools</a></li>
+      <li><a href="concepts.html">Concepts</a></li>
+      <li><a href="workflow.html">Workflow</a></li>
+      <li><a href="roadmap.html">Roadmap</a></li>
+      <li><a href="quiz.html" class="dh-active">Quiz</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div id="dh-controls">
+      <button id="dh-theme-btn" title="Toggle theme">🌙</button>
+      <button id="dh-burger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div id="dh-drawer">
+  <ul>
+    <li><a href="index.html">⌂ Home</a></li>
+    <li><a href="about.html">◎ About</a></li>
+    <li><a href="tools.html">⚙ Tools</a></li>
+    <li><a href="concepts.html">◈ Concepts</a></li>
+    <li><a href="workflow.html">↺ Workflow</a></li>
+    <li><a href="roadmap.html">◉ Roadmap</a></li>
+    <li><a href="quiz.html" class="dh-active">◆ Quiz</a></li>
+    <li><a href="blog.html">✎ Blog</a></li>
+    <li><a href="contact.html">✉ Contact</a></li>
+  </ul>
+</div>
+<!-- ═══ END NAVBAR ═══ -->
+
 
 <!-- ─── Intro Screen ──────────────────────────────────────── -->
 <section class="section" id="intro-screen" aria-labelledby="quiz-title">
@@ -729,7 +768,6 @@
 </footer>
 
 <!-- ─── Quiz Engine ───────────────────────────────────────── -->
-<script src="nav.js"></script>
 <script src="main.js" defer></script>
 <script>
 'use strict';
