@@ -522,3 +522,39 @@
     });
   }
 })();
+
+/* ── Auto-sync nav links from single source of truth ─────── */
+(function syncNav() {
+  const NAV_PAGES = [
+    { href: 'index.html',    label: 'Home',     icon: '⌂' },
+    { href: 'about.html',    label: 'About',    icon: '◎' },
+    { href: 'tools.html',    label: 'Tools',    icon: '⚙' },
+    { href: 'concepts.html', label: 'Concepts', icon: '◈' },
+    { href: 'workflow.html', label: 'Workflow', icon: '↺' },
+    { href: 'roadmap.html',  label: 'Roadmap',  icon: '◉' },
+    { href: 'quiz.html',     label: 'Quiz',     icon: '◆' },
+    { href: 'blog.html',     label: 'Blog',     icon: '✎' },
+    { href: 'search.html',   label: 'Search',   icon: '🔍' },
+    { href: 'contact.html',  label: 'Contact',  icon: '✉' },
+  ];
+
+  const desktopNav = document.getElementById('dh-links');
+  const drawerNav  = document.querySelector('#dh-drawer ul');
+  if (!desktopNav || !drawerNav) return;
+
+  const current = window.location.pathname.split('/').pop() || 'index.html';
+
+  /* Rebuild desktop links */
+  desktopNav.innerHTML = NAV_PAGES.map(p => {
+    const active = (p.href === current || (p.href === 'index.html' && current === ''))
+      ? ' class="dh-active"' : '';
+    return `<li><a href="${p.href}"${active}>${p.label}</a></li>`;
+  }).join('');
+
+  /* Rebuild drawer links */
+  drawerNav.innerHTML = NAV_PAGES.map(p => {
+    const active = (p.href === current || (p.href === 'index.html' && current === ''))
+      ? ' class="dh-active"' : '';
+    return `<li><a href="${p.href}"${active}>${p.icon} ${p.label}</a></li>`;
+  }).join('');
+})();
