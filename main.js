@@ -534,8 +534,9 @@
     { href: 'roadmap.html',  label: 'Roadmap',  icon: '◉' },
     { href: 'quiz.html',     label: 'Quiz',     icon: '◆' },
     { href: 'blog.html',     label: 'Blog',     icon: '✎' },
-    { href: 'search.html',   label: 'Search',   icon: '🔍' },
-    { href: 'contact.html',  label: 'Contact',  icon: '✉' },
+    { href: 'search.html',      label: 'Search',      icon: '🔍' },
+    { href: 'cheatsheets.html', label: 'Cheatsheets', icon: '📋' },
+    { href: 'contact.html',     label: 'Contact',     icon: '✉' },
   ];
 
   const desktopNav = document.getElementById('dh-links');

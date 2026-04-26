@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DevOps Cheatsheets — Quick reference commands for Docker, Kubernetes, Git, Terraform, Linux, CI/CD and more.">
+  <meta name="keywords" content="DevOps cheatsheet, Docker commands, Kubernetes kubectl, Git commands, Terraform cheatsheet, Linux commands">
+  <meta name="author" content="DevOps Hub">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="DevOps Cheatsheets — Quick Reference Commands">
+  <meta property="og:description" content="Click-to-copy command reference for Docker, Kubernetes, Git, Terraform, Linux and more.">
+  <meta property="og:url" content="https://rocketdevops.vercel.app/cheatsheets.html">
+  <title>DevOps Cheatsheets — DevOps Hub</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── Cheatsheets page ────────────────────────────────── */
+    .cs-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    /* Sticky sidebar TOC */
+    .cs-toc {
+      position: sticky;
+      top: 80px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .cs-toc-header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .cs-toc-list {
+      list-style: none;
+      padding: 0.5rem 0;
+    }
+
+    .cs-toc-list a {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.5rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.73rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all var(--transition);
+      border-left: 2px solid transparent;
+    }
+
+    .cs-toc-list a:hover,
+    .cs-toc-list a.toc-active {
+      color: var(--accent-green);
+      background: rgba(45,255,122,0.06);
+      border-left-color: var(--accent-green);
+      padding-left: 1.25rem;
+    }
+
+    .toc-icon { font-size: 0.9rem; }
+
+    /* Sheet section */
+    .cs-sheet {
+      margin-bottom: 3rem;
+      scroll-margin-top: 80px;
+    }
+
+    .cs-sheet-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cs-sheet-icon {
+      width: 48px; height: 48px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .cs-sheet-title h2 {
+      font-size: 1.3rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .cs-sheet-title p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .cs-copy-all {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+
+    .cs-copy-all:hover {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    /* Command grid */
+    .cs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 0.75rem;
+    }
+
+    /* Command card */
+    .cmd-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: all var(--transition);
+    }
+
+    .cmd-card:hover {
+      border-color: var(--border-strong);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .cmd-label {
+      padding: 0.45rem 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cmd-body {
+      padding: 0.75rem 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent-green);
+      line-height: 1.6;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.5rem;
+      transition: background var(--transition);
+    }
+
+    .cmd-body:hover {
+      background: rgba(45,255,122,0.04);
+    }
+
+    .cmd-text { flex: 1; word-break: break-all; }
+
+    .cmd-copy-btn {
+      background: none;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 0.1rem 0.3rem;
+      transition: all var(--transition);
+      flex-shrink: 0;
+      font-family: var(--font-mono);
+      white-space: nowrap;
+    }
+
+    .cmd-copy-btn:hover {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+    }
+
+    .cmd-copy-btn.copied {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+      background: rgba(45,255,122,0.1);
+    }
+
+    /* Category colors */
+    .cs-sheet.docker   .cs-sheet-icon { background: rgba(29,99,237,0.12);  border-color: rgba(29,99,237,0.3);  }
+    .cs-sheet.k8s      .cs-sheet-icon { background: rgba(50,108,229,0.12); border-color: rgba(50,108,229,0.3); }
+    .cs-sheet.git      .cs-sheet-icon { background: rgba(240,80,48,0.12);  border-color: rgba(240,80,48,0.3);  }
+    .cs-sheet.terraform .cs-sheet-icon{ background: rgba(123,66,188,0.12); border-color: rgba(123,66,188,0.3); }
+    .cs-sheet.linux    .cs-sheet-icon { background: rgba(45,255,122,0.1);  border-color: rgba(45,255,122,0.25);}
+    .cs-sheet.helm     .cs-sheet-icon { background: rgba(15,22,137,0.2);   border-color: rgba(92,114,255,0.3); }
+    .cs-sheet.ansible  .cs-sheet-icon { background: rgba(255,0,0,0.08);    border-color: rgba(255,96,96,0.3);  }
+    .cs-sheet.prometheus .cs-sheet-icon{ background: rgba(230,82,44,0.1);  border-color: rgba(230,82,44,0.3);  }
+
+    /* Comment lines inside commands */
+    .cmd-comment { color: var(--text-muted); font-style: italic; }
+
+    /* Tag pill on label */
+    .cmd-tag {
+      font-size: 0.58rem;
+      padding: 0.08rem 0.45rem;
+      border-radius: 2px;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .cmd-tag.danger { border-color: rgba(255,92,26,0.4); color: var(--accent-orange); }
+    .cmd-tag.tip    { border-color: rgba(45,255,122,0.4); color: var(--accent-green); }
+    .cmd-tag.new    { border-color: rgba(0,229,255,0.4); color: var(--accent-cyan); }
+
+    /* Search within page */
+    .cs-search-wrap {
+      position: relative;
+      max-width: 420px;
+      margin-bottom: 2rem;
+    }
+
+    .cs-search-icon {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+      font-size: 0.9rem;
+    }
+
+    #cs-search {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.65rem 1rem 0.65rem 2.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: all var(--transition);
+    }
+
+    #cs-search::placeholder { color: var(--text-muted); }
+    #cs-search:focus {
+      border-color: var(--accent-green);
+      box-shadow: 0 0 0 3px rgba(45,255,122,0.08);
+    }
+
+    /* Download button */
+    .cs-download-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .cs-download-bar p {
+      font-size: 0.85rem;
+      margin: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .cs-layout { grid-template-columns: 1fr; }
+      .cs-toc    { position: static; display: none; }
+      .cs-grid   { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 500px) {
+      .cs-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="container">
+    <span class="tag">// quick reference</span>
+    <h1>DevOps <span class="text-green">Cheatsheets</span></h1>
+    <p>Click any command to copy it instantly. 8 tools, 120+ commands — bookmark this page.</p>
+  </div>
+</header>
+
+<section class="section" style="padding-top:2rem;">
+  <div class="container">
+
+    <!-- Filter + download bar -->
+    <div class="cs-download-bar">
+      <p>💡 <strong style="color:var(--text-primary);">Click any command</strong> to copy to clipboard instantly.</p>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+        <button class="btn btn-ghost" onclick="downloadAll()" style="font-size:0.78rem;padding:0.5rem 1rem;">⬇ Download All (.txt)</button>
+        <button class="btn btn-ghost" onclick="expandAll()" style="font-size:0.78rem;padding:0.5rem 1rem;" id="expand-btn">⊞ Expand All</button>
+      </div>
+    </div>
+
+    <!-- Inline search -->
+    <div class="cs-search-wrap">
+      <span class="cs-search-icon">🔍</span>
+      <input type="search" id="cs-search" placeholder="Filter commands… e.g. docker run, kubectl get" autocomplete="off">
+    </div>
+
+    <div class="cs-layout">
+
+      <!-- TOC sidebar -->
+      <aside class="cs-toc" aria-label="Table of contents">
+        <div class="cs-toc-header">Contents</div>
+        <ul class="cs-toc-list">
+          <li><a href="#docker"     class="toc-active"><span class="toc-icon">🐳</span>Docker</a></li>
+          <li><a href="#kubernetes"><span class="toc-icon">⚙️</span>Kubernetes</a></li>
+          <li><a href="#git">       <span class="toc-icon">🌿</span>Git</a></li>
+          <li><a href="#terraform"> <span class="toc-icon">🏗️</span>Terraform</a></li>
+          <li><a href="#linux">     <span class="toc-icon">🐧</span>Linux</a></li>
+          <li><a href="#helm">      <span class="toc-icon">⛵</span>Helm</a></li>
+          <li><a href="#ansible">   <span class="toc-icon">🤖</span>Ansible</a></li>
+          <li><a href="#prometheus"><span class="toc-icon">📊</span>Prometheus</a></li>
+        </ul>
+      </aside>
+
+      <!-- Cheatsheets -->
+      <main>
+
+        <!-- ── DOCKER ──────────────────────────────────── -->
+        <div class="cs-sheet docker" id="docker">
+          <div class="cs-sheet-header">
+            <div class="cs-sheet-icon">🐳</div>
+            <div class="cs-sheet-title">
+              <h2>Docker</h2>
+              <p>Container lifecycle, images, networking, volumes</p>
+            </div>
+            <button class="cs-copy-all" onclick="copySheet('docker')">Copy All</button>
+          </div>
+          <div class="cs-grid">
+            <div class="cmd-card"><div class="cmd-label">Build image<span class="cmd-tag tip">essential</span></div><div class="cmd-body"><span class="cmd-text">docker build -t myapp:1.0 .</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Build with no cache</div><div class="cmd-body"><span class="cmd-text">docker build --no-cache -t myapp:1.0 .</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Run container<span class="cmd-tag tip">essential</span></div><div class="cmd-body"><span class="cmd-text">docker run -d -p 8080:80 --name myapp myapp:1.0</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Run interactive shell</div><div class="cmd-body"><span class="cmd-text">docker run -it myapp:1.0 /bin/sh</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Exec into running container</div><div class="cmd-body"><span class="cmd-text">docker exec -it myapp /bin/bash</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">View logs (follow)</div><div class="cmd-body"><span class="cmd-text">docker logs myapp -f --tail 100</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">List running containers</div><div class="cmd-body"><span class="cmd-text">docker ps</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">List all containers</div><div class="cmd-body"><span class="cmd-text">docker ps -a</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Stop container</div><div class="cmd-body"><span class="cmd-text">docker stop myapp</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Remove container</div><div class="cmd-body"><span class="cmd-text">docker rm myapp</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">List images</div><div class="cmd-body"><span class="cmd-text">docker images</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Remove image</div><div class="cmd-body"><span class="cmd-text">docker rmi myapp:1.0</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Push to registry</div><div class="cmd-body"><span class="cmd-text">docker push myuser/myapp:1.0</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Pull image</div><div class="cmd-body"><span class="cmd-text">docker pull nginx:alpine</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">System cleanup<span class="cmd-tag danger">destructive</span></div><div class="cmd-body"><span class="cmd-text">docker system prune -af --volumes</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Inspect container</div><div class="cmd-body"><span class="cmd-text">docker inspect myapp</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Copy file from container</div><div class="cmd-body"><span class="cmd-text">docker cp myapp:/app/log.txt ./log.txt</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Stats (live resource usage)</div><div class="cmd-body"><span class="cmd-text">docker stats</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Docker Compose up</div><div class="cmd-body"><span class="cmd-text">docker compose up -d --build</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Docker Compose down</div><div class="cmd-body"><span class="cmd-text">docker compose down -v</span><button class="cmd-copy-btn">copy</button></div></div>
+          </div>
+        </div>
+
+        <!-- ── KUBERNETES ──────────────────────────────── -->
+        <div class="cs-sheet k8s" id="kubernetes">
+          <div class="cs-sheet-header">
+            <div class="cs-sheet-icon">⚙️</div>
+            <div class="cs-sheet-title">
+              <h2>Kubernetes (kubectl)</h2>
+              <p>Cluster management, deployments, debugging</p>
+            </div>
+            <button class="cs-copy-all" onclick="copySheet('kubernetes')">Copy All</button>
+          </div>
+          <div class="cs-grid">
+            <div class="cmd-card"><div class="cmd-label">Get all pods</div><div class="cmd-body"><span class="cmd-text">kubectl get pods -A</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Get pods with details</div><div class="cmd-body"><span class="cmd-text">kubectl get pods -o wide</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Describe pod</div><div class="cmd-body"><span class="cmd-text">kubectl describe pod &lt;pod-name&gt;</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">View pod logs</div><div class="cmd-body"><span class="cmd-text">kubectl logs &lt;pod-name&gt; -f --tail=100</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Exec into pod</div><div class="cmd-body"><span class="cmd-text">kubectl exec -it &lt;pod-name&gt; -- /bin/sh</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Apply manifest</div><div class="cmd-body"><span class="cmd-text">kubectl apply -f deployment.yaml</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Delete resource</div><div class="cmd-body"><span class="cmd-text">kubectl delete -f deployment.yaml</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Scale deployment</div><div class="cmd-body"><span class="cmd-text">kubectl scale deployment myapp --replicas=5</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Rolling update image</div><div class="cmd-body"><span class="cmd-text">kubectl set image deployment/myapp app=myapp:2.0</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Rollback deployment</div><div class="cmd-body"><span class="cmd-text">kubectl rollout undo deployment/myapp</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Rollout status</div><div class="cmd-body"><span class="cmd-text">kubectl rollout status deployment/myapp</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Get services</div><div class="cmd-body"><span class="cmd-text">kubectl get svc -A</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Port forward</div><div class="cmd-body"><span class="cmd-text">kubectl port-forward svc/myapp 8080:80</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Get namespaces</div><div class="cmd-body"><span class="cmd-text">kubectl get ns</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Set namespace context</div><div class="cmd-body"><span class="cmd-text">kubectl config set-context --current --namespace=prod</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Get nodes</div><div class="cmd-body"><span class="cmd-text">kubectl get nodes -o wide</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Top pods (resource usage)</div><div class="cmd-body"><span class="cmd-text">kubectl top pods --sort-by=memory</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Get events</div><div class="cmd-body"><span class="cmd-text">kubectl get events --sort-by=.lastTimestamp</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Apply all in directory</div><div class="cmd-body"><span class="cmd-text">kubectl apply -f ./k8s/</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Force delete stuck pod<span class="cmd-tag danger">force</span></div><div class="cmd-body"><span class="cmd-text">kubectl delete pod &lt;name&gt; --grace-period=0 --force</span><button class="cmd-copy-btn">copy</button></div></div>
+          </div>
+        </div>
+
+        <!-- ── GIT ────────────────────────────────────── -->
+        <div class="cs-sheet git" id="git">
+          <div class="cs-sheet-header">
+            <div class="cs-sheet-icon">🌿</div>
+            <div class="cs-sheet-title">
+              <h2>Git</h2>
+              <p>Version control, branching, history, remotes</p>
+            </div>
+            <button class="cs-copy-all" onclick="copySheet('git')">Copy All</button>
+          </div>
+          <div class="cs-grid">
+            <div class="cmd-card"><div class="cmd-label">Clone repo</div><div class="cmd-body"><span class="cmd-text">git clone https://github.com/user/repo.git</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Stage all changes</div><div class="cmd-body"><span class="cmd-text">git add -A</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Commit with message</div><div class="cmd-body"><span class="cmd-text">git commit -m "feat: add new feature"</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Push to remote</div><div class="cmd-body"><span class="cmd-text">git push origin main</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Create & switch branch</div><div class="cmd-body"><span class="cmd-text">git checkout -b feature/my-feature</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Switch branch</div><div class="cmd-body"><span class="cmd-text">git switch main</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Pull latest changes</div><div class="cmd-body"><span class="cmd-text">git pull origin main --rebase</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">View status</div><div class="cmd-body"><span class="cmd-text">git status</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">View log (pretty)</div><div class="cmd-body"><span class="cmd-text">git log --oneline --graph --all</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Stash changes</div><div class="cmd-body"><span class="cmd-text">git stash push -m "work in progress"</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Pop stash</div><div class="cmd-body"><span class="cmd-text">git stash pop</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Rebase onto main</div><div class="cmd-body"><span class="cmd-text">git rebase origin/main</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Squash last 3 commits</div><div class="cmd-body"><span class="cmd-text">git rebase -i HEAD~3</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Undo last commit (keep changes)</div><div class="cmd-body"><span class="cmd-text">git reset --soft HEAD~1</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Discard file changes</div><div class="cmd-body"><span class="cmd-text">git checkout -- filename.txt</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Create tag</div><div class="cmd-body"><span class="cmd-text">git tag -a v1.0.0 -m "Release 1.0.0"</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Push tags</div><div class="cmd-body"><span class="cmd-text">git push origin --tags</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">List remotes</div><div class="cmd-body"><span class="cmd-text">git remote -v</span><button class="cmd-copy-btn">copy</button></div></div>
+          </div>
+        </div>
+
+        <!-- ── TERRAFORM ───────────────────────────────── -->
+        <div class="cs-sheet terraform" id="terraform">
+          <div class="cs-sheet-header">
+            <div class="cs-sheet-icon">🏗️</div>
+            <div class="cs-sheet-title">
+              <h2>Terraform</h2>
+              <p>IaC — init, plan, apply, state, workspaces</p>
+            </div>
+            <button class="cs-copy-all" onclick="copySheet('terraform')">Copy All</button>
+          </div>
+          <div class="cs-grid">
+            <div class="cmd-card"><div class="cmd-label">Initialise project<span class="cmd-tag tip">always first</span></div><div class="cmd-body"><span class="cmd-text">terraform init</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Preview changes</div><div class="cmd-body"><span class="cmd-text">terraform plan</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Apply changes</div><div class="cmd-body"><span class="cmd-text">terraform apply</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Apply without prompt</div><div class="cmd-body"><span class="cmd-text">terraform apply -auto-approve</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Destroy all resources<span class="cmd-tag danger">destructive</span></div><div class="cmd-body"><span class="cmd-text">terraform destroy</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Validate config</div><div class="cmd-body"><span class="cmd-text">terraform validate</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Format code</div><div class="cmd-body"><span class="cmd-text">terraform fmt -recursive</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Show state</div><div class="cmd-body"><span class="cmd-text">terraform show</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">List state resources</div><div class="cmd-body"><span class="cmd-text">terraform state list</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Remove resource from state</div><div class="cmd-body"><span class="cmd-text">terraform state rm aws_instance.web</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Import existing resource</div><div class="cmd-body"><span class="cmd-text">terraform import aws_instance.web i-1234567890</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Create workspace</div><div class="cmd-body"><span class="cmd-text">terraform workspace new staging</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Switch workspace</div><div class="cmd-body"><span class="cmd-text">terraform workspace select prod</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Output values</div><div class="cmd-body"><span class="cmd-text">terraform output</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Plan with var file</div><div class="cmd-body"><span class="cmd-text">terraform plan -var-file=prod.tfvars</span><button class="cmd-copy-btn">copy</button></div></div>
+          </div>
+        </div>
+
+        <!-- ── LINUX ───────────────────────────────────── -->
+        <div class="cs-sheet linux" id="linux">
+          <div class="cs-sheet-header">
+            <div class="cs-sheet-icon">🐧</div>
+            <div class="cs-sheet-title">
+              <h2>Linux / Shell</h2>
+              <p>Files, processes, networking, system info</p>
+            </div>
+            <button class="cs-copy-all" onclick="copySheet('linux')">Copy All</button>
+          </div>
+          <div class="cs-grid">
+            <div class="cmd-card"><div class="cmd-label">Find files by name</div><div class="cmd-body"><span class="cmd-text">find /var/log -name "*.log" -mtime -7</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Search inside files</div><div class="cmd-body"><span class="cmd-text">grep -r "error" /var/log/ --include="*.log"</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Disk usage</div><div class="cmd-body"><span class="cmd-text">du -sh /* | sort -rh | head -20</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Check disk space</div><div class="cmd-body"><span class="cmd-text">df -h</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">System resource usage</div><div class="cmd-body"><span class="cmd-text">htop</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">List open ports</div><div class="cmd-body"><span class="cmd-text">ss -tulnp</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Kill process by name</div><div class="cmd-body"><span class="cmd-text">pkill -f "process-name"</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Follow log file</div><div class="cmd-body"><span class="cmd-text">tail -f /var/log/syslog</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Archive directory</div><div class="cmd-body"><span class="cmd-text">tar -czf archive.tar.gz ./directory/</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Extract archive</div><div class="cmd-body"><span class="cmd-text">tar -xzf archive.tar.gz</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">SCP file to remote</div><div class="cmd-body"><span class="cmd-text">scp file.txt user@host:/remote/path/</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">SSH with key</div><div class="cmd-body"><span class="cmd-text">ssh -i ~/.ssh/key.pem user@host</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Change permissions</div><div class="cmd-body"><span class="cmd-text">chmod 755 script.sh</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Change owner</div><div class="cmd-body"><span class="cmd-text">chown -R www-data:www-data /var/www/</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Crontab edit</div><div class="cmd-body"><span class="cmd-text">crontab -e</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Systemctl service status</div><div class="cmd-body"><span class="cmd-text">systemctl status nginx</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">View memory usage</div><div class="cmd-body"><span class="cmd-text">free -h</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Check network connectivity</div><div class="cmd-body"><span class="cmd-text">curl -I https://example.com</span><button class="cmd-copy-btn">copy</button></div></div>
+          </div>
+        </div>
+
+        <!-- ── HELM ───────────────────────────────────── -->
+        <div class="cs-sheet helm" id="helm">
+          <div class="cs-sheet-header">
+            <div class="cs-sheet-icon">⛵</div>
+            <div class="cs-sheet-title">
+              <h2>Helm</h2>
+              <p>Kubernetes package manager — install, upgrade, rollback</p>
+            </div>
+            <button class="cs-copy-all" onclick="copySheet('helm')">Copy All</button>
+          </div>
+          <div class="cs-grid">
+            <div class="cmd-card"><div class="cmd-label">Add repo</div><div class="cmd-body"><span class="cmd-text">helm repo add stable https://charts.helm.sh/stable</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Update repos</div><div class="cmd-body"><span class="cmd-text">helm repo update</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Search for chart</div><div class="cmd-body"><span class="cmd-text">helm search repo nginx</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Install chart</div><div class="cmd-body"><span class="cmd-text">helm install myrelease stable/nginx</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Install with values file</div><div class="cmd-body"><span class="cmd-text">helm install myapp ./chart -f values.prod.yaml</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Upgrade release</div><div class="cmd-body"><span class="cmd-text">helm upgrade myapp ./chart -f values.yaml</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Upgrade or install</div><div class="cmd-body"><span class="cmd-text">helm upgrade --install myapp ./chart</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Rollback release</div><div class="cmd-body"><span class="cmd-text">helm rollback myapp 1</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">List releases</div><div class="cmd-body"><span class="cmd-text">helm list -A</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Uninstall release</div><div class="cmd-body"><span class="cmd-text">helm uninstall myapp</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Dry run install</div><div class="cmd-body"><span class="cmd-text">helm install myapp ./chart --dry-run --debug</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Show chart values</div><div class="cmd-body"><span class="cmd-text">helm show values stable/nginx</span><button class="cmd-copy-btn">copy</button></div></div>
+          </div>
+        </div>
+
+        <!-- ── ANSIBLE ────────────────────────────────── -->
+        <div class="cs-sheet ansible" id="ansible">
+          <div class="cs-sheet-header">
+            <div class="cs-sheet-icon">🤖</div>
+            <div class="cs-sheet-title">
+              <h2>Ansible</h2>
+              <p>Agentless automation — playbooks, inventory, ad-hoc</p>
+            </div>
+            <button class="cs-copy-all" onclick="copySheet('ansible')">Copy All</button>
+          </div>
+          <div class="cs-grid">
+            <div class="cmd-card"><div class="cmd-label">Ping all hosts</div><div class="cmd-body"><span class="cmd-text">ansible all -m ping -i inventory.ini</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Run playbook</div><div class="cmd-body"><span class="cmd-text">ansible-playbook -i inventory.ini playbook.yml</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Dry run (check mode)</div><div class="cmd-body"><span class="cmd-text">ansible-playbook playbook.yml --check</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Run with extra vars</div><div class="cmd-body"><span class="cmd-text">ansible-playbook playbook.yml -e "env=prod"</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Limit to specific host</div><div class="cmd-body"><span class="cmd-text">ansible-playbook playbook.yml --limit web01</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Ad-hoc command on all</div><div class="cmd-body"><span class="cmd-text">ansible all -m shell -a "uptime"</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">List hosts in inventory</div><div class="cmd-body"><span class="cmd-text">ansible-inventory -i inventory.ini --list</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Encrypt file with vault</div><div class="cmd-body"><span class="cmd-text">ansible-vault encrypt secrets.yml</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Run with vault password</div><div class="cmd-body"><span class="cmd-text">ansible-playbook playbook.yml --ask-vault-pass</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Verbose output</div><div class="cmd-body"><span class="cmd-text">ansible-playbook playbook.yml -vvv</span><button class="cmd-copy-btn">copy</button></div></div>
+          </div>
+        </div>
+
+        <!-- ── PROMETHEUS ─────────────────────────────── -->
+        <div class="cs-sheet prometheus" id="prometheus">
+          <div class="cs-sheet-header">
+            <div class="cs-sheet-icon">📊</div>
+            <div class="cs-sheet-title">
+              <h2>Prometheus (PromQL)</h2>
+              <p>Metrics queries — RED method, resources, alerts</p>
+            </div>
+            <button class="cs-copy-all" onclick="copySheet('prometheus')">Copy All</button>
+          </div>
+          <div class="cs-grid">
+            <div class="cmd-card"><div class="cmd-label">Request rate (RED: Rate)</div><div class="cmd-body"><span class="cmd-text">rate(http_requests_total[5m])</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Error rate (RED: Errors)</div><div class="cmd-body"><span class="cmd-text">rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m])</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">P99 latency (RED: Duration)</div><div class="cmd-body"><span class="cmd-text">histogram_quantile(0.99, rate(http_request_duration_seconds_bucket[5m]))</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">CPU usage percent</div><div class="cmd-body"><span class="cmd-text">100 - (avg by(instance)(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Memory usage percent</div><div class="cmd-body"><span class="cmd-text">(1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Disk usage percent</div><div class="cmd-body"><span class="cmd-text">(1 - node_filesystem_free_bytes / node_filesystem_size_bytes) * 100</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Pod restart count</div><div class="cmd-body"><span class="cmd-text">kube_pod_container_status_restarts_total</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Pods not running</div><div class="cmd-body"><span class="cmd-text">kube_pod_status_phase{phase!="Running"}</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Increase over time</div><div class="cmd-body"><span class="cmd-text">increase(http_requests_total[1h])</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Top 5 by metric value</div><div class="cmd-body"><span class="cmd-text">topk(5, rate(http_requests_total[5m]))</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Sum by label</div><div class="cmd-body"><span class="cmd-text">sum by(service) (rate(http_requests_total[5m]))</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Alert: high error rate</div><div class="cmd-body"><span class="cmd-text">rate(http_requests_total{status=~"5.."}[5m]) > 0.05</span><button class="cmd-copy-btn">copy</button></div></div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+</section>
+
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div style="font-family:monospace;color:#2dff7a;font-weight:700;font-size:1rem;">DevOpsHub</div>
+        <p>Quick reference cheatsheets for DevOps engineers — bookmark, share, and use daily.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="tools.html">Tools</a></li>
+          <li><a href="concepts.html">Concepts</a></li>
+          <li><a href="roadmap.html">Roadmap</a></li>
+          <li><a href="quiz.html">Quiz</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Cheatsheets</h4>
+        <ul class="footer-links">
+          <li><a href="#docker">Docker</a></li>
+          <li><a href="#kubernetes">Kubernetes</a></li>
+          <li><a href="#git">Git</a></li>
+          <li><a href="#terraform">Terraform</a></li>
+          <li><a href="#linux">Linux</a></li>
+          <li><a href="#helm">Helm</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>More Tools</h4>
+        <ul class="footer-links">
+          <li><a href="#ansible">Ansible</a></li>
+          <li><a href="#prometheus">Prometheus</a></li>
+          <li><a href="search.html">Search</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 DevOpsHub. Powered by HTML5, CSS3 &amp; Vanilla JS.</p>
+      <div class="footer-status"><span class="status-dot"></span>All systems operational</div>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js" defer></script>
+<script>
+'use strict';
+
+/* ── Click to copy on every command card ─────────────────── */
+document.querySelectorAll('.cmd-card').forEach(card => {
+  const text = card.querySelector('.cmd-text');
+  const btn  = card.querySelector('.cmd-copy-btn');
+  if (!text || !btn) return;
+
+  async function copyCmd() {
+    const val = text.textContent.trim();
+    try {
+      await navigator.clipboard.writeText(val);
+      btn.textContent = '✓';
+      btn.classList.add('copied');
+      card.style.borderColor = 'rgba(45,255,122,0.5)';
+      setTimeout(() => {
+        btn.textContent = 'copy';
+        btn.classList.remove('copied');
+        card.style.borderColor = '';
+      }, 1800);
+    } catch { btn.textContent = '✗'; setTimeout(() => btn.textContent = 'copy', 1500); }
+  }
+
+  btn.addEventListener('click', e => { e.stopPropagation(); copyCmd(); });
+  text.addEventListener('click', copyCmd);
+});
+
+/* ── Copy all in a sheet ─────────────────────────────────── */
+function copySheet(sectionId) {
+  const section = document.getElementById(sectionId);
+  if (!section) return;
+  const cmds = [...section.querySelectorAll('.cmd-text')]
+    .map(el => el.textContent.trim()).join('\n');
+  navigator.clipboard.writeText(cmds).then(() => {
+    const btn = section.querySelector('.cs-copy-all');
+    if (btn) { btn.textContent = '✓ Copied!'; setTimeout(() => btn.textContent = 'Copy All', 2000); }
+  });
+}
+
+/* ── Download all as .txt ────────────────────────────────── */
+function downloadAll() {
+  const sections = document.querySelectorAll('.cs-sheet');
+  let output = 'DEVOPS HUB — CHEATSHEETS\n========================\n\n';
+  sections.forEach(sec => {
+    const title = sec.querySelector('h2')?.textContent || '';
+    const cmds  = [...sec.querySelectorAll('.cmd-text')].map(el => '  ' + el.textContent.trim());
+    const labels = [...sec.querySelectorAll('.cmd-label')].map(el => el.childNodes[0]?.textContent?.trim() || '');
+    output += `## ${title}\n`;
+    cmds.forEach((cmd, i) => { output += `${labels[i] ? '# ' + labels[i] + '\n' : ''}${cmd}\n\n`; });
+    output += '\n';
+  });
+  const blob = new Blob([output], { type: 'text/plain' });
+  const a = Object.assign(document.createElement('a'), {
+    href: URL.createObjectURL(blob), download: 'devops-cheatsheets.txt'
+  });
+  a.click(); URL.revokeObjectURL(a.href);
+}
+
+/* ── Inline filter search ────────────────────────────────── */
+document.getElementById('cs-search').addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  document.querySelectorAll('.cmd-card').forEach(card => {
+    const text  = (card.querySelector('.cmd-text')?.textContent || '').toLowerCase();
+    const label = (card.querySelector('.cmd-label')?.textContent || '').toLowerCase();
+    card.style.display = (!q || text.includes(q) || label.includes(q)) ? '' : 'none';
+  });
+  /* Hide empty sections */
+  document.querySelectorAll('.cs-sheet').forEach(sec => {
+    const visible = [...sec.querySelectorAll('.cmd-card')].some(c => c.style.display !== 'none');
+    sec.style.display = visible ? '' : 'none';
+  });
+});
+
+/* ── Expand all toggle ───────────────────────────────────── */
+let expanded = false;
+function expandAll() {
+  expanded = !expanded;
+  document.getElementById('expand-btn').textContent = expanded ? '⊟ Collapse All' : '⊞ Expand All';
+}
+
+/* ── TOC active on scroll ────────────────────────────────── */
+const tocLinks = document.querySelectorAll('.cs-toc-list a');
+const sheets   = document.querySelectorAll('.cs-sheet');
+
+const io = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      tocLinks.forEach(a => a.classList.remove('toc-active'));
+      const active = document.querySelector(`.cs-toc-list a[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('toc-active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sheets.forEach(s => io.observe(s));
+</script>
+</body>
+</html>
