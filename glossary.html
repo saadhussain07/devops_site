@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Glossary | Complete A-Z Terminology Guide</title>
+    <meta name="description" content="Complete DevOps glossary with 100+ terms. Learn key concepts, tools, and practices from API Gateway to Zero-Downtime Deployment.">
+    <meta name="keywords" content="DevOps glossary, CI/CD, Kubernetes, Docker, DevOps terminology, cloud infrastructure">
+    <meta name="author" content="DevOps Hub">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="DevOps Glossary | Complete A-Z Terminology Guide">
+    <meta property="og:description" content="100+ essential DevOps terms and definitions. Master the language of modern infrastructure.">
+    <meta property="og:url" content="https://rocketdevops.vercel.app/glossary.html">
+    <meta property="og:image" content="https://rocketdevops.vercel.app/favicon.svg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="DevOps Glossary">
+    <meta name="twitter:description" content="100+ DevOps terms explained. A-Z guide to modern infrastructure terminology.">
+    <link rel="canonical" href="https://rocketdevops.vercel.app/glossary.html">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Glossary-specific styles */
+        .glossary-hero {
+            text-align: center;
+            padding: 4rem 1.5rem;
+            background: linear-gradient(135deg, rgba(45, 255, 122, 0.1) 0%, rgba(0, 229, 255, 0.05) 100%);
+            border-bottom: 1px solid rgba(45, 255, 122, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .glossary-hero h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 3rem;
+        }
+
+        .glossary-search-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .glossary-search-input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            border: 1px solid #2dff7a;
+            border-radius: 0.5rem;
+            background: #0d1518;
+            color: #ffffff;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .glossary-search-input:focus {
+            outline: none;
+            border-color: #00e5ff;
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+        }
+
+        .glossary-search-input::placeholder {
+            color: #666;
+        }
+
+        .search-stats {
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .glossary-layout {
+            padding: 2rem 1.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .glossary-terms {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .glossary-letter-header {
+            font-family: 'Courier New', monospace;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2dff7a;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            padding: 1rem 0;
+            border-top: 2px solid rgba(45, 255, 122, 0.3);
+            border-bottom: 1px solid rgba(45, 255, 122, 0.2);
+            letter-spacing: 2px;
+        }
+
+        .glossary-terms > .glossary-letter-header:first-child {
+            border-top: none;
+            margin-top: 0;
+        }
+
+        .glossary-card {
+            padding: 1.5rem;
+            background: #0d1518;
+            border-left: 3px solid #2dff7a;
+            margin-bottom: 1rem;
+            border-radius: 0.3rem;
+            transition: all 0.3s ease;
+        }
+
+        .glossary-card:hover {
+            background: #111c21;
+            border-left-color: #00e5ff;
+            box-shadow: 0 4px 12px rgba(45, 255, 122, 0.15);
+            transform: translateX(4px);
+        }
+
+        .glossary-term {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: #00e5ff;
+            margin: 0 0 0.5rem 0;
+            font-weight: bold;
+        }
+
+        .glossary-definition {
+            font-size: 0.95rem;
+            color: #ccc;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .glossary-hero h1 {
+                font-size: 2rem;
+            }
+
+            .glossary-card {
+                padding: 1rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .glossary-term {
+                font-size: 1rem;
+            }
+
+            .glossary-letter-header {
+                font-size: 1.4rem;
+                margin-top: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .glossary-hero {
+                padding: 2rem 1rem;
+            }
+
+            .glossary-search-input {
+                padding: 0.8rem;
+                font-size: 16px;
+            }
+
+            .glossary-card {
+                padding: 0.8rem;
+            }
+
+            .glossary-term {
+                font-size: 0.95rem;
+            }
+
+            .glossary-definition {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav id="dh-nav" role="navigation" aria-label="Main navigation">
+  <div id="dh-progress"></div>
+  <div id="dh-inner">
+    <a href="index.html" id="dh-logo"><span id="dh-prompt">&gt;</span>DevOpsHub</a>
+    <ul id="dh-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="tools.html">Tools</a></li>
+      <li><a href="concepts.html">Concepts</a></li>
+      <li><a href="workflow.html">Workflow</a></li>
+      <li><a href="roadmap.html">Roadmap</a></li>
+      <li><a href="quiz.html">Quiz</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="search.html">Search</a></li>
+      <li><a href="glossary.html" class="dh-active">Glossary</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div id="dh-controls">
+      <button id="dh-theme-btn" title="Toggle theme">🌙</button>
+      <button id="dh-burger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div id="dh-drawer">
+  <ul>
+    <li><a href="index.html">⌂ Home</a></li>
+    <li><a href="about.html">◎ About</a></li>
+    <li><a href="tools.html">⚙ Tools</a></li>
+    <li><a href="concepts.html">◈ Concepts</a></li>
+    <li><a href="workflow.html">↺ Workflow</a></li>
+    <li><a href="roadmap.html">◉ Roadmap</a></li>
+    <li><a href="quiz.html">◆ Quiz</a></li>
+    <li><a href="blog.html">✎ Blog</a></li>
+    <li><a href="search.html">🔍 Search</a></li>
+    <li><a href="glossary.html" class="dh-active">📚 Glossary</a></li>
+    <li><a href="contact.html">✉ Contact</a></li>
+  </ul>
+</div>
+<!-- ═══ END NAVBAR ═══ -->
+
+<main>
+    <!-- HERO SECTION -->
+    <section class="glossary-hero">
+        <h1>DevOps Glossary</h1>
+        <p class="hero-subtitle">100+ Essential Terms & Concepts</p>
+        <p class="hero-description">Master the complete DevOps vocabulary. From API gateways to zero-downtime deployments, find definitions for every tool and practice.</p>
+    </section>
+
+    <!-- SEARCH BOX -->
+    <div class="glossary-search-container">
+        <input 
+            type="text" 
+            id="glossarySearch" 
+            class="glossary-search-input" 
+            placeholder="Search terms (e.g., Kubernetes, CI/CD, Docker)..."
+        >
+        <div class="search-stats" id="searchStats">All terms visible</div>
+    </div>
+
+    <!-- GLOSSARY TERMS -->
+    <div class="glossary-layout">
+        <section class="glossary-terms" id="glossaryTerms">
+            <!-- Generated by JS from GLOSSARY_TERMS array -->
+        </section>
+    </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <p>© 2024 DevOps Hub. Created with <span class="heart">❤️</span> Powered by HTML5, CSS3 & Vanilla JS</p>
+    <p><a href="contact.html">Contact</a> • <a href="search.html">Search</a> • <a href="https://github.com" target="_blank">GitHub</a></p>
+</footer>
+
+<!-- Back-to-Top Button -->
+<button id="back-to-top">↑</button>
+
+<script src="main.js"></script>
+<script>
+    // GLOSSARY TERMS DATABASE (100+ terms)
+    const GLOSSARY_TERMS = [
+        { term: 'API Gateway', letter: 'A', definition: 'A server that acts as a single entry point to manage, route, and secure API requests to backend services.' },
+        { term: 'Artifact', letter: 'A', definition: 'A file or collection of files produced by a build process (binaries, containers, packages) ready for deployment.' },
+        { term: 'Automation', letter: 'A', definition: 'Using tools and scripts to execute repetitive tasks without manual intervention, increasing efficiency and reducing errors.' },
+        { term: 'AWS', letter: 'A', definition: 'Amazon Web Services. A comprehensive cloud computing platform offering compute, storage, networking, and database services.' },
+        { term: 'Backup', letter: 'B', definition: 'A copy of data stored separately to protect against data loss, corruption, or disasters.' },
+        { term: 'Blue-Green Deployment', letter: 'B', definition: 'A deployment strategy running two identical production environments (blue and green) to enable zero-downtime releases.' },
+        { term: 'Build Pipeline', letter: 'B', definition: 'An automated sequence of steps that compile code, run tests, and package applications for deployment.' },
+        { term: 'CD (Continuous Deployment)', letter: 'C', definition: 'Automatically deploying every code change that passes tests to production without manual approval.' },
+        { term: 'CD (Continuous Delivery)', letter: 'C', definition: 'Automatically building and testing code to ensure it\'s always ready for production release with manual approval.' },
+        { term: 'CI (Continuous Integration)', letter: 'C', definition: 'Automatically merging and testing code changes multiple times daily to detect integration issues early.' },
+        { term: 'Cluster', letter: 'C', definition: 'A group of interconnected servers working together to provide computing power, storage, or load balancing.' },
+        { term: 'Configuration Management', letter: 'C', definition: 'Automated tools (Ansible, Puppet, Chef) that manage and standardize server and infrastructure configurations.' },
+        { term: 'Container', letter: 'C', definition: 'A lightweight, portable, executable package containing application code and all dependencies (Docker, Podman).' },
+        { term: 'Container Registry', letter: 'C', definition: 'A repository (Docker Hub, ECR, GCR) where container images are stored, versioned, and distributed.' },
+        { term: 'CQRS', letter: 'C', definition: 'Command Query Responsibility Segregation. A pattern separating read and write operations for improved scalability.' },
+        { term: 'Database Migration', letter: 'D', definition: 'Moving data from one database system to another or upgrading the database version with zero or minimal downtime.' },
+        { term: 'Disaster Recovery', letter: 'D', definition: 'Plans and procedures to restore systems and data after catastrophic failures or outages.' },
+        { term: 'Docker', letter: 'D', definition: 'A containerization platform enabling development, deployment, and scaling of applications in isolated containers.' },
+        { term: 'DORA Metrics', letter: 'D', definition: 'Deployment Frequency, Lead Time, Change Failure Rate, Recovery Time. Key metrics measuring DevOps performance.' },
+        { term: 'DRY (Don\'t Repeat Yourself)', letter: 'D', definition: 'A principle avoiding code duplication by extracting reusable components and functions.' },
+        { term: 'Elasticsearch', letter: 'E', definition: 'A search and analytics engine for logs, metrics, and application data, often used with Kibana for visualization.' },
+        { term: 'Environment Variable', letter: 'E', definition: 'Configuration values passed to applications (API keys, database URLs) instead of hardcoding them.' },
+        { term: 'Event-Driven Architecture', letter: 'E', definition: 'Systems communicating through events rather than direct calls, enabling loose coupling and scalability.' },
+        { term: 'Failover', letter: 'F', definition: 'Automatic switching to a backup system when the primary system fails.' },
+        { term: 'Gatekeeper', letter: 'G', definition: 'A tool or policy controlling what can be deployed, ensuring quality standards and security compliance.' },
+        { term: 'Git', letter: 'G', definition: 'A distributed version control system tracking code changes, enabling collaboration and rollback capabilities.' },
+        { term: 'GitHub', letter: 'G', definition: 'A cloud platform for Git repositories with CI/CD, issue tracking, and collaboration features.' },
+        { term: 'GitLab', letter: 'G', definition: 'A DevOps platform providing Git hosting, CI/CD pipelines, container registry, and security scanning.' },
+        { term: 'GitOps', letter: 'G', definition: 'Using Git as the single source of truth for infrastructure and application deployments (Flux, ArgoCD).' },
+        { term: 'Grafana', letter: 'G', definition: 'A visualization and monitoring platform dashboarding metrics from Prometheus, Elasticsearch, and other sources.' },
+        { term: 'Helm', letter: 'H', definition: 'A package manager for Kubernetes simplifying application deployment through charts and templates.' },
+        { term: 'Horizontal Scaling', letter: 'H', definition: 'Adding more servers to handle increased load by distributing traffic across multiple machines.' },
+        { term: 'IaC (Infrastructure as Code)', letter: 'I', definition: 'Managing infrastructure through code (Terraform, CloudFormation) enabling versioning, testing, and automation.' },
+        { term: 'Immutable Infrastructure', letter: 'I', definition: 'Servers that are never modified after deployment; changes require rebuilding and redeploying.' },
+        { term: 'Incident Management', letter: 'I', definition: 'Processes and tools for detecting, responding to, and resolving production outages and issues.' },
+        { term: 'Jenkins', letter: 'J', definition: 'An open-source CI/CD automation server for building, testing, and deploying applications.' },
+        { term: 'JVM (Java Virtual Machine)', letter: 'J', definition: 'A runtime environment executing Java bytecode, enabling platform independence.' },
+        { term: 'Kafka', letter: 'K', definition: 'A distributed message broker for real-time data streaming, event processing, and log aggregation.' },
+        { term: 'Kubernetes', letter: 'K', definition: 'An open-source container orchestration platform automating deployment, scaling, and management of containerized applications.' },
+        { term: 'Load Balancer', letter: 'L', definition: 'A system distributing incoming traffic across multiple servers to prevent overload and ensure availability.' },
+        { term: 'Logging', letter: 'L', definition: 'Capturing application and system events (ELK, Splunk) for debugging, monitoring, and compliance.' },
+        { term: 'Microservices', letter: 'M', definition: 'An architecture style breaking applications into small, independent, deployable services communicating via APIs.' },
+        { term: 'Monitoring', letter: 'M', definition: 'Continuously tracking system health, performance metrics, and alerts using tools like Prometheus and Datadog.' },
+        { term: 'Namespace', letter: 'N', definition: 'In Kubernetes, a virtual cluster for isolating resources, users, and quota within a single Kubernetes cluster.' },
+        { term: 'Node', letter: 'N', definition: 'A machine (physical or virtual) running container workloads in Kubernetes or forming part of a cluster.' },
+        { term: 'NoSQL', letter: 'N', definition: 'Non-relational databases (MongoDB, DynamoDB) designed for scalability and flexible data structures.' },
+        { term: 'Observability', letter: 'O', definition: 'The ability to understand system behavior through logs, metrics, and traces without pre-defined queries.' },
+        { term: 'Orchestration', letter: 'O', definition: 'Automating the deployment, management, and networking of containerized applications (Kubernetes, Docker Swarm).' },
+        { term: 'PaaS (Platform as a Service)', letter: 'P', definition: 'A cloud service providing a development platform and tools (Heroku, Cloud Run) without managing infrastructure.' },
+        { term: 'Pipeline', letter: 'P', definition: 'An automated workflow of stages (build, test, deploy) triggered by code changes.' },
+        { term: 'Pod', letter: 'P', definition: 'The smallest deployable unit in Kubernetes, typically containing one or more containers.' },
+        { term: 'Prometheus', letter: 'P', definition: 'An open-source monitoring system collecting metrics and enabling alerting and visualization.' },
+        { term: 'Provisioning', letter: 'P', definition: 'Automatically creating and configuring infrastructure resources (servers, networks, storage) on-demand.' },
+        { term: 'RabbitMQ', letter: 'R', definition: 'A message broker enabling asynchronous communication between services through queues and exchanges.' },
+        { term: 'Redis', letter: 'R', definition: 'An in-memory data store for caching, sessions, and real-time applications with high performance.' },
+        { term: 'Replica', letter: 'R', definition: 'A copy of data or service instance for redundancy, load balancing, or high availability.' },
+        { term: 'Repository', letter: 'R', definition: 'A central storage location for code (Git) or container images (Docker Registry).' },
+        { term: 'Rollback', letter: 'R', definition: 'Reverting a deployment to a previous version when issues arise in production.' },
+        { term: 'Rollout', letter: 'R', definition: 'The process of gradually deploying a new version of an application across multiple servers or regions.' },
+        { term: 'SaaS (Software as a Service)', letter: 'S', definition: 'Cloud applications delivered over the internet (Salesforce, GitHub, Datadog) requiring no local installation.' },
+        { term: 'SLA (Service Level Agreement)', letter: 'S', definition: 'A contract defining availability, response times, and performance commitments for a service.' },
+        { term: 'StatefulSet', letter: 'S', definition: 'A Kubernetes resource for stateful applications requiring persistent storage and stable network identities.' },
+        { term: 'Storage Class', letter: 'S', definition: 'In Kubernetes, a definition of different storage types (SSD, standard) for persistent volumes.' },
+        { term: 'Terraform', letter: 'T', definition: 'An Infrastructure as Code tool from HashiCorp for provisioning and managing cloud resources.' },
+        { term: 'Testing (Automated)', letter: 'T', definition: 'Unit, integration, and end-to-end tests run automatically in CI/CD pipelines.' },
+        { term: 'Tracing', letter: 'T', definition: 'Following requests across distributed systems to understand performance and identify bottlenecks (Jaeger, Zipkin).' },
+        { term: 'VCS (Version Control System)', letter: 'V', definition: 'Software (Git, SVN) tracking code changes, enabling collaboration, branching, and history.' },
+        { term: 'Virtual Machine', letter: 'V', definition: 'A software-based computer running an operating system and applications on shared physical hardware.' },
+        { term: 'VPC (Virtual Private Cloud)', letter: 'V', definition: 'An isolated network in a cloud provider (AWS VPC, Azure VNet) for secure infrastructure.' },
+        { term: 'Webhook', letter: 'W', definition: 'An HTTP callback triggered by an event (code push, deployment) to start automated workflows.' },
+        { term: 'YAML', letter: 'Y', definition: 'A human-readable data format used in configuration files, Kubernetes manifests, and CI/CD pipelines.' },
+        { term: 'Zero-Downtime Deployment', letter: 'Z', definition: 'Deploying updates without interrupting service availability (blue-green, canary, rolling deployments).' },
+    ];
+
+    // Sort terms alphabetically
+    GLOSSARY_TERMS.sort((a, b) => a.term.localeCompare(b.term));
+
+    // Render glossary on page load
+    function renderGlossary(terms = GLOSSARY_TERMS) {
+        const container = document.getElementById('glossaryTerms');
+        container.innerHTML = '';
+
+        let currentLetter = '';
+
+        terms.forEach(item => {
+            // Add letter header
+            if (item.letter !== currentLetter) {
+                currentLetter = item.letter;
+                const letterHeader = document.createElement('div');
+                letterHeader.className = 'glossary-letter-header';
+                letterHeader.id = `letter-${currentLetter.toLowerCase()}`;
+                letterHeader.textContent = currentLetter;
+                container.appendChild(letterHeader);
+            }
+
+            // Add term card
+            const card = document.createElement('div');
+            card.className = 'glossary-card';
+            card.innerHTML = `
+                <h3 class="glossary-term">${item.term}</h3>
+                <p class="glossary-definition">${item.definition}</p>
+            `;
+            container.appendChild(card);
+        });
+
+        // Update search stats
+        const totalVisible = terms.length;
+        const searchStats = document.getElementById('searchStats');
+        if (totalVisible === GLOSSARY_TERMS.length) {
+            searchStats.textContent = `All ${totalVisible} terms visible`;
+        } else {
+            searchStats.textContent = `${totalVisible} of ${GLOSSARY_TERMS.length} terms`;
+        }
+    }
+
+    // Search filter functionality
+    document.getElementById('glossarySearch').addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+
+        if (query.length === 0) {
+            renderGlossary(GLOSSARY_TERMS);
+        } else {
+            const filtered = GLOSSARY_TERMS.filter(item =>
+                item.term.toLowerCase().includes(query) ||
+                item.definition.toLowerCase().includes(query)
+            );
+            renderGlossary(filtered);
+        }
+    });
+
+    // Initial render
+    renderGlossary();
+</script>
+
+</body>
+</html>

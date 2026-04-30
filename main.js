@@ -536,6 +536,7 @@
     { href: 'blog.html',     label: 'Blog',     icon: '✎' },
     { href: 'search.html',      label: 'Search',      icon: '🔍' },
     { href: 'cheatsheets.html', label: 'Cheatsheets', icon: '📋' },
+    { href: 'glossary.html', label: 'Glossary', icon: '📚' },
     { href: 'contact.html',     label: 'Contact',     icon: '✉' },
   ];
 
