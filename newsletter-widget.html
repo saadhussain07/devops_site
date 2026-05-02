@@ -1,0 +1,219 @@
+<!-- 
+═══════════════════════════════════════════════════════════
+NEWSLETTER SIGNUP WIDGET
+Newsletter signup section to add to your homepage (index.html)
+Insert this section before the footer
+
+This uses Mailchimp's embed form.
+═══════════════════════════════════════════════════════════
+-->
+
+<section class="newsletter-section">
+    <div class="newsletter-container">
+        <h2>📬 Stay Updated on DevOps Trends</h2>
+        <p>Get weekly insights on CI/CD, Kubernetes, cloud infrastructure, and DevOps best practices delivered to your inbox.</p>
+        
+        <!-- Mailchimp Form Embed -->
+        <div id="mc_embed_shell">
+            <link href="//cdn-images.mailchimp.com/embedcode/classic/css/email-capture.css" rel="stylesheet" type="text/css">
+            <style type="text/css">
+                #mc_embed_signup {
+                    background: transparent !important;
+                    font: inherit;
+                    padding: 0 !important;
+                }
+                
+                #mc_embed_signup .mc-field-group {
+                    margin-bottom: 1.5rem;
+                }
+                
+                #mc_embed_signup label {
+                    color: #2dff7a;
+                    font-weight: bold;
+                    margin-bottom: 0.5rem;
+                    display: block;
+                }
+                
+                #mc_embed_signup input[type="email"] {
+                    padding: 0.8rem 1rem;
+                    width: 100%;
+                    max-width: 400px;
+                    border: 1px solid #2dff7a;
+                    background: #0d1518;
+                    color: #ffffff;
+                    border-radius: 0.3rem;
+                    font-size: 1rem;
+                    box-sizing: border-box;
+                    transition: all 0.3s ease;
+                }
+                
+                #mc_embed_signup input[type="email"]:focus {
+                    outline: none;
+                    border-color: #00e5ff;
+                    box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+                }
+                
+                #mc_embed_signup input[type="submit"] {
+                    background: linear-gradient(135deg, #2dff7a 0%, #00e5ff 100%);
+                    color: #04080a;
+                    padding: 0.8rem 2rem;
+                    border: none;
+                    border-radius: 0.3rem;
+                    font-weight: bold;
+                    cursor: pointer;
+                    font-size: 1rem;
+                    transition: all 0.3s ease;
+                    margin-top: 0.5rem;
+                }
+                
+                #mc_embed_signup input[type="submit"]:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 20px rgba(45, 255, 122, 0.3);
+                }
+                
+                #mc_embed_signup .response {
+                    margin-top: 1rem;
+                    padding: 0.8rem;
+                    border-radius: 0.3rem;
+                }
+                
+                #mce-success-response {
+                    color: #2dff7a;
+                    background: rgba(45, 255, 122, 0.1);
+                    border: 1px solid #2dff7a;
+                }
+                
+                #mce-error-response {
+                    color: #ff5c1a;
+                    background: rgba(255, 92, 26, 0.1);
+                    border: 1px solid #ff5c1a;
+                }
+
+                #mc_embed_signup .checkbox {
+                    margin-bottom: 1rem;
+                }
+
+                #mc_embed_signup .checkbox input {
+                    margin-right: 0.5rem;
+                }
+
+                #mc_embed_signup .checkbox label {
+                    display: inline;
+                    color: #aaa;
+                    font-weight: normal;
+                    font-size: 0.9rem;
+                    margin-bottom: 0;
+                }
+            </style>
+            
+            <form action="https://rocketdevops.us14.list-manage.com/subscribe/post?u=YOUR_USER_ID&id=YOUR_LIST_ID" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
+                <div id="mc_embed_signup_scroll">
+                    <div class="mc-field-group">
+                        <label for="mce-EMAIL">Email Address <span class="asterisk">*</span></label>
+                        <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" required="" aria-required="true" placeholder="your@email.com">
+                    </div>
+
+                    <div id="mce-responses" class="response">
+                        <div class="response" id="mce-error-response" style="display: none;"></div>
+                        <div class="response" id="mce-success-response" style="display: none;"></div>
+                    </div>
+
+                    <div aria-hidden="true" style="position: absolute; left: -5000px;">
+                        <input type="text" name="b_YOUR_USER_ID_YOUR_LIST_ID" tabindex="-1" value="">
+                    </div>
+
+                    <div class="optionalParent">
+                        <div class="clear">
+                            <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script>
+        <script type="text/javascript">
+            (function($) {
+                window.fnames = new Array(); 
+                window.ftypes = new Array();
+                fnames[0]='EMAIL';ftypes[0]='email';
+                fnames[1]='FNAME';ftypes[1]='text';
+                fnames[2]='LNAME';ftypes[2]='text'; 
+                fnames[3]='ADDRESS';ftypes[3]='address';
+                fnames[4]='PHONE';ftypes[4]='phone';
+                fnames[5]='BIRTHDAY';ftypes[5]='birthday';
+            }(jQuery));
+            var $mcj = jQuery.noConflict(true);
+        </script>
+
+        <p class="newsletter-privacy">We respect your privacy. Unsubscribe at any time. <a href="privacy-policy.html">See our Privacy Policy</a></p>
+    </div>
+</section>
+
+<!-- 
+═══════════════════════════════════════════════════════════
+NEWSLETTER SECTION CSS
+
+Add this to your styles.css at the end:
+═══════════════════════════════════════════════════════════
+-->
+
+<style>
+/* Newsletter Section */
+.newsletter-section {
+    margin: 4rem 0;
+    padding: 3rem 1.5rem;
+    background: linear-gradient(135deg, rgba(45, 255, 122, 0.08) 0%, rgba(0, 229, 255, 0.05) 100%);
+    border-top: 2px solid rgba(45, 255, 122, 0.3);
+    border-bottom: 2px solid rgba(45, 255, 122, 0.3);
+}
+
+.newsletter-container {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.newsletter-section h2 {
+    font-family: 'Courier New', monospace;
+    font-size: 1.8rem;
+    color: #2dff7a;
+    margin-bottom: 0.5rem;
+}
+
+.newsletter-section p {
+    color: #ccc;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+}
+
+.newsletter-privacy {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 1.5rem;
+}
+
+.newsletter-privacy a {
+    color: #00e5ff;
+    text-decoration: none;
+}
+
+.newsletter-privacy a:hover {
+    color: #2dff7a;
+}
+
+@media (max-width: 768px) {
+    .newsletter-section {
+        padding: 2rem 1rem;
+        margin: 2rem 0;
+    }
+
+    .newsletter-section h2 {
+        font-size: 1.5rem;
+    }
+
+    #mc_embed_signup input[type="email"] {
+        max-width: 100%;
+    }
+}
+</style>
