@@ -305,30 +305,25 @@
 </head>
 <body>
 <!-- ═══ NAVBAR ═══ -->
-<nav id="dh-nav" role="navigation" aria-label="Main navigation">
+<nav id="dh-nav" aria-label="Main navigation">
   <div id="dh-progress"></div>
   <div id="dh-inner">
-    <a href="index.html" id="dh-logo"><span id="dh-prompt">&gt;</span>DevOpsHub</a>
-    <ul id="dh-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="tools.html">Tools</a></li>
-      <li><a href="concepts.html">Concepts</a></li>
-      <li><a href="workflow.html">Workflow</a></li>
-      <li><a href="roadmap.html">Roadmap</a></li>
-      <li><a href="quiz.html">Quiz</a></li>
-      <li><a href="blog.html">Blog</a></li>
-      <li><li><a href="search.html">Search</a></li>
-      <a href="contact.html">Contact</a></li>
-    </ul>
+    <a href="index.html" id="dh-logo">
+      <span id="dh-prompt">&gt;</span> DevOpsHub
+    </a>
+    <ul id="dh-links"></ul>
     <div id="dh-controls">
-      <button id="dh-theme-btn" title="Toggle theme">🌙</button>
-      <button id="dh-burger" aria-label="Toggle menu">
+      <button id="dh-theme-btn" aria-label="Toggle theme">🌙</button>
+      <button id="dh-burger" aria-label="Open menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
   </div>
 </nav>
+
+<div id="dh-drawer">
+  <ul></ul>
+</div>
 <div id="dh-drawer">
   <ul>
     <li><a href="index.html">⌂ Home</a></li>
