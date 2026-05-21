@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>if (!localStorage.getItem('devopshub_user')) { window.location.replace('login.html'); }</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Search DevOps Hub — find articles, tools, concepts, and guides instantly.">
@@ -428,6 +429,7 @@
 <!-- ═══ END NAVBAR ═══ -->
 
 <header class="search-hero">
+  <script>if (!localStorage.getItem('devopshub_user')) { window.location.replace('login.html'); }</script>
   <div class="container">
     <span class="tag">// search</span>
     <h1>Search <span class="text-green">DevOps Hub</span></h1>
@@ -931,3 +933,4 @@ function escRe(s) {
 </script>
 </body>
 </html>
+

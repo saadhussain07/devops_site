@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>if (!localStorage.getItem('devopshub_user')) { window.location.replace('login.html'); }</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="DevOps Workflow — Plan, Code, Build, Test, Release, Deploy, Monitor lifecycle visualised.">
@@ -402,6 +403,7 @@
 
 <!-- ─── Page Header ─────────────────────────────────────────── -->
 <header class="page-header">
+  <script>if (!localStorage.getItem('devopshub_user')) { window.location.replace('login.html'); }</script>
   <div class="container">
     <span class="tag">// lifecycle</span>
     <h1>The DevOps <span class="text-green">Workflow</span></h1>
@@ -825,3 +827,4 @@
 <script src="main.js" defer></script>
 </body>
 </html>
+
