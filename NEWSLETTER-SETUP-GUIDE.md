@@ -1,9 +1,11 @@
 # Step 9: Newsletter Integration Setup Guide
 
 ## Overview
+
 This guide walks you through setting up a newsletter signup form on your DevOps Hub website using **Mailchimp** (free, easy, powerful).
 
 ## Why Mailchimp?
+
 - ✅ Free tier: Up to 500 contacts + unlimited emails
 - ✅ Beautiful email templates
 - ✅ Automation workflows
@@ -15,12 +17,14 @@ This guide walks you through setting up a newsletter signup form on your DevOps 
 ## Part 1: Create Mailchimp Account
 
 ### Step 1: Sign Up
+
 1. Go to **https://mailchimp.com**
 2. Click **Sign Up Free**
 3. Enter your email and create account
 4. Verify your email
 
 ### Step 2: Create Your First Audience
+
 1. In Mailchimp dashboard, click **Audience**
 2. Click **Create an audience**
 3. Fill in:
@@ -35,6 +39,7 @@ This guide walks you through setting up a newsletter signup form on your DevOps 
 ## Part 2: Get Your Mailchimp Form Code
 
 ### Step 1: Create Signup Form
+
 1. In Mailchimp, go to **Audience** → **Audience settings**
 2. Click **Audience name and defaults**
 3. Go to **Signup forms**
@@ -42,12 +47,14 @@ This guide walks you through setting up a newsletter signup form on your DevOps 
 5. Find and click the **form** or **Create** if none exist
 
 ### Step 2: Find Your Form ID
+
 1. In the signup form settings, look for form details
 2. Note your:
    - **User ID** (looks like: 1a2b3c4d5e6f7g8h9i0j)
    - **List ID** (looks like: a1b2c3d4e5)
 
 **Quick shortcut to find these:**
+
 1. Go to **Audience** → **Audience settings**
 2. Scroll to **API keys**
 3. Your **User ID** is here
@@ -61,6 +68,7 @@ This guide walks you through setting up a newsletter signup form on your DevOps 
 ## Part 3: Get the Embed Form
 
 ### Option A: Use Mailchimp's Hosted Form (Easiest)
+
 1. In **Signup forms** → Click **Signup form URL**
 2. Copy the URL provided
 3. Add to your homepage as a button:
@@ -69,6 +77,7 @@ This guide walks you through setting up a newsletter signup form on your DevOps 
    ```
 
 ### Option B: Embed the Form on Your Page (Better for UX)
+
 1. In **Signup forms** → Click **Embedded forms**
 2. Choose **Classic form**
 3. Copy the provided form code
@@ -87,6 +96,7 @@ https://rocketdevops.us14.list-manage.com/subscribe/post?u=USER_ID&id=LIST_ID
 ```
 
 **Where:**
+
 - `u=` is your User ID
 - `id=` is your List ID
 
@@ -99,16 +109,19 @@ Copy the entire newsletter widget from `newsletter-widget.html` and paste it int
 ### Step 3: Update with Your Mailchimp Details
 
 Find this line in the pasted code:
+
 ```html
 <form action="https://rocketdevops.us14.list-manage.com/subscribe/post?u=YOUR_USER_ID&id=YOUR_LIST_ID"
 ```
 
 Replace:
+
 - `YOUR_USER_ID` → Your actual User ID from Mailchimp
 - `YOUR_LIST_ID` → Your actual List ID from Mailchimp
 - `us14` → Your server (check your form URL)
 
 **Example (fake):**
+
 ```html
 <form action="https://rocketdevops.us14.list-manage.com/subscribe/post?u=1a2b3c4d5e6f7g8h9i0j&id=a1b2c3d4e5"
 ```
@@ -116,6 +129,7 @@ Replace:
 ### Step 4: Optional - Add to Other Pages
 
 Repeat Step 2 for:
+
 - **blog.html** (before footer)
 - **concepts.html** (before footer)
 - **workflow.html** (before footer)
@@ -150,16 +164,19 @@ Once you have subscribers:
 ## Troubleshooting
 
 ### Form not appearing?
+
 - Check that the action URL has correct User ID and List ID
 - Verify HTML syntax is correct
 - Check browser console for errors
 
 ### Emails not captured?
+
 - Verify the form action URL is correct
 - Test with a real email in your own Mailchimp audience
 - Check Mailchimp spam settings
 
 ### "List not found" error?
+
 - Double-check your List ID spelling
 - Make sure the Mailchimp account is verified
 - Ensure the audience is active (not deleted)
@@ -169,6 +186,7 @@ Once you have subscribers:
 ## Email Capture Stats You'll Track
 
 Once live, monitor in Mailchimp:
+
 - **Subscriber Growth** — How many per day
 - **Engagement** — Open rates, click rates
 - **Bounce Rate** — Invalid emails
@@ -179,6 +197,7 @@ Once live, monitor in Mailchimp:
 ## Advanced (Optional): Webhook Notifications
 
 If you want to notify yourself when someone subscribes:
+
 1. In Mailchimp: **Audience** → **Webhooks**
 2. Add your notification email
 3. Get alerts for new subscribers in real-time
