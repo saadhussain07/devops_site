@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sign In — DevOps Hub</title>
   <style>
-    /* ── Variables ─────────────────────────────────────── */
     :root {
       --primary:       #0f766e;
       --primary-light: #14b8a6;
@@ -26,7 +25,6 @@
       --font-body:    'Trebuchet MS', 'Lucida Grande', sans-serif;
       --transition:    0.22s cubic-bezier(0.4,0,0.2,1);
     }
-
     [data-theme="dark"] {
       --bg:         #0a0a0a;
       --bg-card:    #161616;
@@ -38,10 +36,7 @@
       --shadow:     0 4px 24px rgba(0,0,0,0.4);
       --shadow-lg:  0 12px 40px rgba(0,0,0,0.6);
     }
-
-    /* ── Reset ─────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: var(--font-body);
       background: var(--bg);
@@ -52,8 +47,6 @@
       transition: background var(--transition), color var(--transition);
       overflow: hidden;
     }
-
-    /* ── Left panel ────────────────────────────────────── */
     .left {
       background: linear-gradient(145deg, #0c5f58 0%, #0f766e 40%, #0d9488 70%, #14b8a6 100%);
       display: flex;
@@ -63,8 +56,6 @@
       position: relative;
       overflow: hidden;
     }
-
-    /* Grid overlay */
     .left::before {
       content: '';
       position: absolute;
@@ -74,8 +65,6 @@
         linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
       background-size: 48px 48px;
     }
-
-    /* Radial glow */
     .left::after {
       content: '';
       position: absolute;
@@ -83,9 +72,7 @@
       width: 400px; height: 400px;
       background: radial-gradient(circle, rgba(249,115,22,0.2) 0%, transparent 65%);
     }
-
     .left-content { position: relative; z-index: 1; }
-
     .brand {
       display: flex;
       align-items: center;
@@ -96,12 +83,9 @@
       color: #ffffff;
       text-decoration: none;
     }
-
     .brand-prompt { color: #f97316; animation: blink 1s step-end infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-
     .left-hero { margin-top: 4rem; }
-
     .left-hero h1 {
       font-family: var(--font-mono);
       font-size: clamp(1.6rem, 3vw, 2.4rem);
@@ -111,16 +95,13 @@
       margin-bottom: 1rem;
       letter-spacing: -0.02em;
     }
-
     .left-hero h1 span { color: #f97316; }
-
     .left-hero p {
       font-size: 0.95rem;
       color: rgba(255,255,255,0.75);
       line-height: 1.7;
       max-width: 340px;
     }
-
     .left-stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -129,7 +110,6 @@
       position: relative;
       z-index: 1;
     }
-
     .stat-box {
       background: rgba(255,255,255,0.08);
       border: 1px solid rgba(255,255,255,0.15);
@@ -137,7 +117,6 @@
       padding: 1rem 1.2rem;
       backdrop-filter: blur(8px);
     }
-
     .stat-num {
       font-family: var(--font-mono);
       font-size: 1.6rem;
@@ -145,7 +124,6 @@
       color: #ffffff;
       display: block;
     }
-
     .stat-label {
       font-size: 0.72rem;
       color: rgba(255,255,255,0.6);
@@ -153,7 +131,6 @@
       letter-spacing: 0.08em;
       margin-top: 0.2rem;
     }
-
     .left-footer {
       position: relative;
       z-index: 1;
@@ -162,8 +139,6 @@
       color: rgba(255,255,255,0.4);
       letter-spacing: 0.1em;
     }
-
-    /* ── Right panel ───────────────────────────────────── */
     .right {
       display: flex;
       flex-direction: column;
@@ -175,8 +150,6 @@
       min-height: 100vh;
       position: relative;
     }
-
-    /* Theme toggle */
     .theme-btn {
       position: absolute;
       top: 1.5rem; right: 1.5rem;
@@ -190,13 +163,7 @@
       display: flex; align-items: center; justify-content: center;
       transition: all var(--transition);
     }
-    .theme-btn:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-      transform: rotate(20deg);
-    }
-
-    /* Card */
+    .theme-btn:hover { border-color: var(--primary); color: var(--primary); transform: rotate(20deg); }
     .card {
       width: 100%;
       max-width: 420px;
@@ -207,15 +174,11 @@
       box-shadow: var(--shadow);
       animation: slide-up 0.5s cubic-bezier(0.4,0,0.2,1) both;
     }
-
     @keyframes slide-up {
       from { opacity: 0; transform: translateY(20px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-
-    /* Card header */
     .card-header { margin-bottom: 2rem; }
-
     .card-tag {
       display: inline-block;
       font-family: var(--font-mono);
@@ -229,7 +192,6 @@
       border-radius: 2px;
       margin-bottom: 0.9rem;
     }
-
     .card-header h2 {
       font-family: var(--font-mono);
       font-size: 1.5rem;
@@ -238,25 +200,16 @@
       letter-spacing: -0.02em;
       margin-bottom: 0.4rem;
     }
-
-    .card-header p {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    /* Tabs */
+    .card-header p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
     .tabs {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0;
       background: var(--bg-surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 3px;
       margin-bottom: 1.75rem;
     }
-
     .tab-btn {
       font-family: var(--font-mono);
       font-size: 0.75rem;
@@ -271,20 +224,15 @@
       transition: all var(--transition);
       font-weight: 600;
     }
-
     .tab-btn.active {
       background: var(--bg-card);
       color: var(--primary);
       box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
-
-    /* Forms */
     .form { display: none; flex-direction: column; gap: 1.1rem; }
     .form.active { display: flex; animation: fade-in 0.3s ease both; }
     @keyframes fade-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-
     .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
-
     .form-group label {
       font-family: var(--font-mono);
       font-size: 0.68rem;
@@ -293,9 +241,7 @@
       color: var(--text-hint);
       font-weight: 600;
     }
-
     .input-wrap { position: relative; }
-
     .input-wrap input {
       width: 100%;
       padding: 0.7rem 0.9rem 0.7rem 2.5rem;
@@ -308,20 +254,12 @@
       outline: none;
       transition: all var(--transition);
     }
-
     .input-wrap input::placeholder { color: var(--text-hint); }
-
     .input-wrap input:focus {
       border-color: var(--border-focus);
       background: var(--bg-card);
       box-shadow: 0 0 0 3px rgba(15,118,110,0.1);
     }
-
-    .input-wrap input.error {
-      border-color: #e24b4a;
-      box-shadow: 0 0 0 3px rgba(226,75,74,0.1);
-    }
-
     .input-icon {
       position: absolute;
       left: 0.8rem;
@@ -331,7 +269,6 @@
       color: var(--text-hint);
       pointer-events: none;
     }
-
     .input-toggle {
       position: absolute;
       right: 0.8rem;
@@ -346,27 +283,10 @@
       transition: color var(--transition);
     }
     .input-toggle:hover { color: var(--primary); }
-
-    .field-hint {
-      font-size: 0.72rem;
-      color: var(--text-hint);
-      margin-top: 0.1rem;
-    }
+    .field-hint { font-size: 0.72rem; color: var(--text-hint); margin-top: 0.1rem; }
     .field-hint.err { color: #e24b4a; }
-
-    /* Form row */
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-    }
-
-    /* Forgot */
-    .forgot-row {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: -0.4rem;
-    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .forgot-row { display: flex; justify-content: flex-end; margin-top: -0.4rem; }
     .forgot-row a {
       font-size: 0.78rem;
       color: var(--primary);
@@ -374,8 +294,6 @@
       font-family: var(--font-mono);
     }
     .forgot-row a:hover { color: var(--primary-light); }
-
-    /* Submit button */
     .btn-submit {
       width: 100%;
       padding: 0.8rem;
@@ -390,46 +308,14 @@
       border-radius: var(--radius);
       cursor: pointer;
       transition: all var(--transition);
-      position: relative;
-      overflow: hidden;
       margin-top: 0.4rem;
     }
-
-    .btn-submit:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(15,118,110,0.35);
-    }
-
+    .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(15,118,110,0.35); }
     .btn-submit:active { transform: translateY(0); }
-
-    .btn-submit.loading {
-      pointer-events: none;
-      opacity: 0.75;
-    }
-
-    /* Divider */
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin: 0.25rem 0;
-    }
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-    .divider span {
-      font-size: 0.7rem;
-      color: var(--text-hint);
-      font-family: var(--font-mono);
-      letter-spacing: 0.08em;
-      white-space: nowrap;
-    }
-
-    /* Google button */
+    .btn-submit.loading { pointer-events: none; opacity: 0.75; }
+    .divider { display: flex; align-items: center; gap: 0.75rem; margin: 0.25rem 0; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .divider span { font-size: 0.7rem; color: var(--text-hint); font-family: var(--font-mono); letter-spacing: 0.08em; white-space: nowrap; }
     .btn-google {
       width: 100%;
       padding: 0.72rem;
@@ -448,19 +334,8 @@
       justify-content: center;
       gap: 0.6rem;
     }
-
-    .btn-google:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-      background: rgba(15,118,110,0.05);
-    }
-
-    .google-icon {
-      width: 16px; height: 16px;
-      flex-shrink: 0;
-    }
-
-    /* Feedback banner */
+    .btn-google:hover { border-color: var(--primary); color: var(--primary); background: rgba(15,118,110,0.05); }
+    .google-icon { width: 16px; height: 16px; flex-shrink: 0; }
     .feedback {
       display: none;
       padding: 0.75rem 1rem;
@@ -469,43 +344,16 @@
       font-size: 0.78rem;
       line-height: 1.5;
       border: 1px solid;
+      margin-bottom: 0.5rem;
       animation: fade-in 0.25s ease;
     }
-    .feedback.success {
-      display: block;
-      background: rgba(15,118,110,0.08);
-      border-color: rgba(15,118,110,0.3);
-      color: var(--primary);
-    }
-    .feedback.error {
-      display: block;
-      background: rgba(226,75,74,0.08);
-      border-color: rgba(226,75,74,0.3);
-      color: #a32d2d;
-    }
-
-    /* Terms */
-    .terms {
-      font-size: 0.72rem;
-      color: var(--text-hint);
-      text-align: center;
-      line-height: 1.6;
-      margin-top: 0.25rem;
-    }
+    .feedback.success { display: block; background: rgba(15,118,110,0.08); border-color: rgba(15,118,110,0.3); color: var(--primary); }
+    .feedback.error   { display: block; background: rgba(226,75,74,0.08);  border-color: rgba(226,75,74,0.3);  color: #a32d2d; }
+    .terms { font-size: 0.72rem; color: var(--text-hint); text-align: center; line-height: 1.6; margin-top: 0.25rem; }
     .terms a { color: var(--primary); text-decoration: none; }
     .terms a:hover { color: var(--primary-light); }
-
-    /* Footer below card */
-    .right-footer {
-      margin-top: 1.75rem;
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--text-hint);
-      text-align: center;
-    }
+    .right-footer { margin-top: 1.75rem; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-hint); text-align: center; }
     .right-footer a { color: var(--primary); text-decoration: none; }
-
-    /* ── Responsive ─────────────────────────────────────── */
     @media (max-width: 768px) {
       body { grid-template-columns: 1fr; overflow: auto; }
       .left { display: none; }
@@ -517,7 +365,7 @@
 </head>
 <body>
 
-  <!-- ── Left Panel ──────────────────────────────────── -->
+  <!-- Left Panel -->
   <div class="left">
     <div class="left-content">
       <a href="index.html" class="brand">
@@ -528,30 +376,16 @@
         <p>Join thousands of engineers learning DevOps culture, tools, and workflows for modern software delivery.</p>
       </div>
     </div>
-
     <div class="left-stats">
-      <div class="stat-box">
-        <span class="stat-num">80+</span>
-        <span class="stat-label">Skills to learn</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-num">12</span>
-        <span class="stat-label">Core tools</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-num">20</span>
-        <span class="stat-label">Quiz questions</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-num">Free</span>
-        <span class="stat-label">Always & forever</span>
-      </div>
+      <div class="stat-box"><span class="stat-num">80+</span><span class="stat-label">Skills to learn</span></div>
+      <div class="stat-box"><span class="stat-num">12</span><span class="stat-label">Core tools</span></div>
+      <div class="stat-box"><span class="stat-num">20</span><span class="stat-label">Quiz questions</span></div>
+      <div class="stat-box"><span class="stat-num">Free</span><span class="stat-label">Always & forever</span></div>
     </div>
-
     <div class="left-footer">v3.0 &nbsp;// &nbsp;2025 &nbsp;// &nbsp;DevOps Hub</div>
   </div>
 
-  <!-- ── Right Panel ─────────────────────────────────── -->
+  <!-- Right Panel -->
   <div class="right">
     <button class="theme-btn" id="theme-btn" aria-label="Toggle theme">🌙</button>
 
@@ -562,16 +396,14 @@
         <p>Sign in to your account or create a new one to track your progress.</p>
       </div>
 
-      <!-- Tabs -->
       <div class="tabs">
         <button class="tab-btn active" data-tab="signin">Sign In</button>
         <button class="tab-btn" data-tab="signup">Sign Up</button>
       </div>
 
-      <!-- Feedback -->
       <div class="feedback" id="feedback"></div>
 
-      <!-- ── Sign In Form ───────────────────────────── -->
+      <!-- Sign In Form -->
       <form class="form active" id="signin-form" novalidate>
         <div class="form-group">
           <label for="si-email">Email address</label>
@@ -580,7 +412,6 @@
             <input type="email" id="si-email" placeholder="you@example.com" autocomplete="email" required />
           </div>
         </div>
-
         <div class="form-group">
           <label for="si-password">Password</label>
           <div class="input-wrap">
@@ -589,15 +420,11 @@
             <button type="button" class="input-toggle" data-target="si-password">👁</button>
           </div>
         </div>
-
         <div class="forgot-row">
           <a href="#" id="forgot-link">Forgot password?</a>
         </div>
-
         <button type="submit" class="btn-submit" id="signin-btn">Sign In →</button>
-
         <div class="divider"><span>or continue with</span></div>
-
         <button type="button" class="btn-google" id="google-signin">
           <svg class="google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -609,7 +436,7 @@
         </button>
       </form>
 
-      <!-- ── Sign Up Form ───────────────────────────── -->
+      <!-- Sign Up Form -->
       <form class="form" id="signup-form" novalidate>
         <div class="form-row">
           <div class="form-group">
@@ -627,7 +454,6 @@
             </div>
           </div>
         </div>
-
         <div class="form-group">
           <label for="su-email">Email address</label>
           <div class="input-wrap">
@@ -635,7 +461,6 @@
             <input type="email" id="su-email" placeholder="you@example.com" autocomplete="email" required />
           </div>
         </div>
-
         <div class="form-group">
           <label for="su-password">Password</label>
           <div class="input-wrap">
@@ -645,7 +470,6 @@
           </div>
           <span class="field-hint" id="pw-hint"></span>
         </div>
-
         <div class="form-group">
           <label for="su-confirm">Confirm password</label>
           <div class="input-wrap">
@@ -654,11 +478,8 @@
             <button type="button" class="input-toggle" data-target="su-confirm">👁</button>
           </div>
         </div>
-
         <button type="submit" class="btn-submit" id="signup-btn">Create Account →</button>
-
         <div class="divider"><span>or continue with</span></div>
-
         <button type="button" class="btn-google" id="google-signup">
           <svg class="google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -668,7 +489,6 @@
           </svg>
           Continue with Google
         </button>
-
         <p class="terms">By signing up you agree to our <a href="privacy-policy.html">Privacy Policy</a> and <a href="#">Terms of Service</a>.</p>
       </form>
     </div>
@@ -679,14 +499,16 @@
   </div>
 
   <script>
-    /* ── Year ── */
+    /* Year */
     document.getElementById('yr').textContent = new Date().getFullYear();
 
-    /* ── Theme toggle ── */
-    const html = document.documentElement;
+    /* Theme toggle */
+    const html     = document.documentElement;
     const themeBtn = document.getElementById('theme-btn');
-    const saved = localStorage.getItem('devopshub_theme');
-    if (saved === 'dark') { html.setAttribute('data-theme','dark'); themeBtn.textContent = '☀️'; }
+    if (localStorage.getItem('devopshub_theme') === 'dark') {
+      html.setAttribute('data-theme', 'dark');
+      themeBtn.textContent = '☀️';
+    }
     themeBtn.addEventListener('click', () => {
       const isDark = html.getAttribute('data-theme') === 'dark';
       html.setAttribute('data-theme', isDark ? 'light' : 'dark');
@@ -694,20 +516,18 @@
       localStorage.setItem('devopshub_theme', isDark ? 'light' : 'dark');
     });
 
-    /* ── Tabs ── */
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    const forms   = document.querySelectorAll('.form');
-    tabBtns.forEach(btn => {
+    /* Tabs */
+    document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        tabBtns.forEach(b => b.classList.remove('active'));
-        forms.forEach(f => f.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
         btn.classList.add('active');
         document.getElementById(btn.dataset.tab + '-form').classList.add('active');
         clearFeedback();
       });
     });
 
-    /* ── Password toggle ── */
+    /* Password toggle */
     document.querySelectorAll('.input-toggle').forEach(btn => {
       btn.addEventListener('click', () => {
         const input = document.getElementById(btn.dataset.target);
@@ -716,91 +536,104 @@
       });
     });
 
-    /* ── Password strength hint ── */
+    /* Password strength */
     const pwInput = document.getElementById('su-password');
     const pwHint  = document.getElementById('pw-hint');
-    pwInput?.addEventListener('input', () => {
+    pwInput.addEventListener('input', () => {
       const v = pwInput.value;
       if (!v) { pwHint.textContent = ''; return; }
       if (v.length < 6)  { pwHint.textContent = 'Too short'; pwHint.className = 'field-hint err'; return; }
       if (v.length < 8)  { pwHint.textContent = 'Weak — add more characters'; pwHint.className = 'field-hint err'; return; }
-      if (!/[A-Z]/.test(v) || !/[0-9]/.test(v)) { pwHint.textContent = 'Add uppercase + numbers for a stronger password'; pwHint.className = 'field-hint'; return; }
-      pwHint.textContent = '✔ Strong password'; pwHint.className = 'field-hint'; pwHint.style.color = '#0f766e';
+      if (!/[A-Z]/.test(v) || !/[0-9]/.test(v)) { pwHint.textContent = 'Add uppercase + numbers'; pwHint.className = 'field-hint'; return; }
+      pwHint.textContent = '✔ Strong password';
+      pwHint.className = 'field-hint';
+      pwHint.style.color = '#0f766e';
     });
 
-    /* ── Feedback helpers ── */
+    /* Feedback */
     const fb = document.getElementById('feedback');
     function showFeedback(type, msg) {
       fb.className = 'feedback ' + type;
       fb.textContent = msg;
       fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
-    function clearFeedback() { fb.className = 'feedback'; fb.textContent = ''; }
+    function clearFeedback() {
+      fb.className = 'feedback';
+      fb.textContent = '';
+    }
+
+    /* Helper */
+    function fakeDelay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
     /* ── Sign In ── */
     document.getElementById('signin-form').addEventListener('submit', async e => {
       e.preventDefault();
       clearFeedback();
+
       const email = document.getElementById('si-email').value.trim();
       const pass  = document.getElementById('si-password').value;
-      if (!email || !pass) { showFeedback('error', '✖  Please fill in all fields.'); return; }
+
+      if (!email || !pass) {
+        showFeedback('error', '✖  Please fill in all fields.');
+        return;
+      }
 
       const btn = document.getElementById('signin-btn');
-      btn.textContent = '⟳  Signing in…'; btn.classList.add('loading');
+      btn.textContent = '⟳  Signing in…';
+      btn.classList.add('loading');
 
-      /* ── Connect Firebase here ──────────────────────────────
-         Replace this block with real Firebase signInWithEmailAndPassword()
-         import { signInWithEmailAndPassword } from "firebase/auth";
-         const cred = await signInWithEmailAndPassword(auth, email, pass);
-         window.location.href = 'index.html';
-      ────────────────────────────────────────────────────── */
       await fakeDelay(1200);
-      showFeedback('success', '✔  Signed in successfully! Redirecting…');
-      setTimeout(() => window.location.href = 'index.html', 1400);
 
-      btn.textContent = 'Sign In →'; btn.classList.remove('loading');
+      localStorage.setItem('devopshub_user', JSON.stringify({ email: email }));
+      showFeedback('success', '✔  Signed in successfully! Redirecting…');
+      setTimeout(() => { window.location.href = 'index.html'; }, 1400);
+
+      btn.textContent = 'Sign In →';
+      btn.classList.remove('loading');
     });
 
     /* ── Sign Up ── */
     document.getElementById('signup-form').addEventListener('submit', async e => {
       e.preventDefault();
       clearFeedback();
+
       const fname   = document.getElementById('su-fname').value.trim();
       const lname   = document.getElementById('su-lname').value.trim();
       const email   = document.getElementById('su-email').value.trim();
       const pass    = document.getElementById('su-password').value;
       const confirm = document.getElementById('su-confirm').value;
 
-      if (!fname || !lname || !email || !pass || !confirm) { showFeedback('error', '✖  Please fill in all fields.'); return; }
-      if (pass.length < 8) { showFeedback('error', '✖  Password must be at least 8 characters.'); return; }
-      if (pass !== confirm) { showFeedback('error', '✖  Passwords do not match.'); return; }
+      if (!fname || !lname || !email || !pass || !confirm) {
+        showFeedback('error', '✖  Please fill in all fields.');
+        return;
+      }
+      if (pass.length < 8) {
+        showFeedback('error', '✖  Password must be at least 8 characters.');
+        return;
+      }
+      if (pass !== confirm) {
+        showFeedback('error', '✖  Passwords do not match.');
+        return;
+      }
 
       const btn = document.getElementById('signup-btn');
-      btn.textContent = '⟳  Creating account…'; btn.classList.add('loading');
+      btn.textContent = '⟳  Creating account…';
+      btn.classList.add('loading');
 
-      /* ── Connect Firebase here ──────────────────────────────
-         import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-         const cred = await createUserWithEmailAndPassword(auth, email, pass);
-         await updateProfile(cred.user, { displayName: fname + ' ' + lname });
-         window.location.href = 'index.html';
-      ────────────────────────────────────────────────────── */
       await fakeDelay(1400);
-      showFeedback('success', '✔  Account created! Welcome to DevOps Hub.');
-      setTimeout(() => window.location.href = 'index.html', 1500);
 
-      btn.textContent = 'Create Account →'; btn.classList.remove('loading');
+      localStorage.setItem('devopshub_user', JSON.stringify({ name: fname + ' ' + lname, email: email }));
+      showFeedback('success', '✔  Account created! Welcome to DevOps Hub.');
+      setTimeout(() => { window.location.href = 'index.html'; }, 1500);
+
+      btn.textContent = 'Create Account →';
+      btn.classList.remove('loading');
     });
 
-    /* ── Google buttons (placeholder) ── */
+    /* ── Google (placeholder) ── */
     document.querySelectorAll('.btn-google').forEach(btn => {
       btn.addEventListener('click', () => {
-        showFeedback('success', '⟳  Connecting to Google… (Connect Firebase to enable)');
-        /* ── Firebase Google Auth ──────────────────────────────
-           import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-           const provider = new GoogleAuthProvider();
-           await signInWithPopup(auth, provider);
-           window.location.href = 'index.html';
-        ────────────────────────────────────────────────────── */
+        showFeedback('success', '⟳  Connect Firebase to enable Google sign-in.');
       });
     });
 
@@ -808,13 +641,12 @@
     document.getElementById('forgot-link').addEventListener('click', e => {
       e.preventDefault();
       const email = document.getElementById('si-email').value.trim();
-      if (!email) { showFeedback('error', '✖  Enter your email above first, then click Forgot password.'); return; }
-      showFeedback('success', '✔  Password reset link sent to ' + email + ' (Connect Firebase to enable)');
-      /* ── Firebase sendPasswordResetEmail(auth, email) ── */
+      if (!email) {
+        showFeedback('error', '✖  Enter your email first, then click Forgot password.');
+        return;
+      }
+      showFeedback('success', '✔  Reset link sent to ' + email + ' (connect Firebase to enable).');
     });
-
-    /* ── Helper ── */
-    function fakeDelay(ms) { return new Promise(r => setTimeout(r, ms)); }
   </script>
 </body>
 </html>
