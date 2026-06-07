@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AIOps — AI-Powered IT Operations. Multi-agent LLM frameworks for autonomous fault detection and remediation in cloud-native Kubernetes systems.">
+  <meta name="keywords" content="AIOps, LLM agents, Kubernetes fault detection, autonomous remediation, Prometheus, Loki, Jaeger, multi-agent AI, cloud-native, IEEE TNSM">
+  <meta name="author" content="DevOps Hub">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="AIOps — AI-Powered Cloud-Native Operations">
+  <meta property="og:description" content="Multi-agent LLM frameworks for autonomous fault detection and remediation. Research-backed, Kubernetes-native, production-proven.">
+  <meta property="og:url" content="https://rocketdevops.vercel.app/aiops.html">
+  <title>AIOps — AI-Powered Operations · DevOps Hub</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ══════════════════════════════════════════════════════════
+       AIOps page — exclusive styles
+    ══════════════════════════════════════════════════════════ */
+
+    /* ── AI Pulse animation ─────────────────────────────── */
+    @keyframes ai-pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(45,255,122,0.6), 0 0 20px rgba(45,255,122,0.3); }
+      50%      { box-shadow: 0 0 0 12px rgba(45,255,122,0), 0 0 40px rgba(45,255,122,0.5); }
+    }
+
+    @keyframes data-flow {
+      0%   { stroke-dashoffset: 200; opacity: 0; }
+      20%  { opacity: 1; }
+      100% { stroke-dashoffset: 0; opacity: 1; }
+    }
+
+    @keyframes node-appear {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes orbit {
+      from { transform: rotate(0deg) translateX(70px) rotate(0deg); }
+      to   { transform: rotate(360deg) translateX(70px) rotate(-360deg); }
+    }
+
+    @keyframes scanline-move {
+      from { transform: translateY(-100%); }
+      to   { transform: translateY(100vh); }
+    }
+
+    @keyframes blink-alert {
+      0%,100% { background: rgba(255,92,26,0.15); border-color: rgba(255,92,26,0.5); }
+      50%     { background: rgba(255,92,26,0.3);  border-color: var(--accent-orange); }
+    }
+
+    @keyframes heal-glow {
+      0%   { box-shadow: 0 0 0 0 rgba(45,255,122,0); }
+      50%  { box-shadow: 0 0 30px 8px rgba(45,255,122,0.4); }
+      100% { box-shadow: 0 0 0 0 rgba(45,255,122,0); }
+    }
+
+    /* ── Hero ───────────────────────────────────────────── */
+    .aiops-hero {
+      min-height: calc(100vh - 62px);
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 4rem 0;
+    }
+
+    .aiops-hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 80% 50%, rgba(45,255,122,0.07) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 10% 80%, rgba(0,229,255,0.05) 0%, transparent 50%),
+        radial-gradient(ellipse 30% 30% at 50% 10%, rgba(139,92,246,0.04) 0%, transparent 50%);
+    }
+
+    .aiops-hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(45,255,122,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(45,255,122,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, black 20%, transparent 75%);
+    }
+
+    .aiops-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 640px;
+    }
+
+    .aiops-hero h1 { margin-bottom: 1.25rem; animation: fade-up 0.7s ease both; }
+    .aiops-hero p  { font-size: 1.1rem; margin-bottom: 2rem; animation: fade-up 0.7s 0.15s ease both; }
+
+    .hero-badge-row {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+      animation: fade-up 0.7s 0.05s ease both;
+    }
+
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.28rem 0.8rem;
+      border-radius: 2rem;
+      border: 1px solid;
+    }
+
+    .ai-badge.green  { color: var(--accent-green);  border-color: rgba(45,255,122,0.4);  background: rgba(45,255,122,0.08); }
+    .ai-badge.cyan   { color: var(--accent-cyan);   border-color: rgba(0,229,255,0.4);   background: rgba(0,229,255,0.08); }
+    .ai-badge.purple { color: var(--accent-purple); border-color: rgba(139,92,246,0.4);  background: rgba(139,92,246,0.08); }
+    .ai-badge.orange { color: var(--accent-orange); border-color: rgba(255,92,26,0.4);   background: rgba(255,92,26,0.08); }
+
+    .ai-badge-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: ai-pulse 2s ease-in-out infinite;
+    }
+
+    /* ── Neural Orb visual (right side) ────────────────── */
+    .aiops-orb-wrap {
+      position: absolute;
+      right: 5%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: min(420px, 42%);
+      aspect-ratio: 1;
+      animation: fade-up 0.8s 0.2s ease both;
+    }
+
+    .orb-center {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(45,255,122,0.25) 0%, rgba(45,255,122,0.05) 60%, transparent 100%);
+      border: 2px solid rgba(45,255,122,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      animation: ai-pulse 2.5s ease-in-out infinite;
+      z-index: 3;
+    }
+
+    .orb-ring {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1px solid;
+      animation: spin-slow linear infinite;
+    }
+
+    .orb-ring-1 {
+      width: 200px; height: 200px;
+      border-color: rgba(45,255,122,0.2);
+      animation-duration: 12s;
+    }
+
+    .orb-ring-2 {
+      width: 280px; height: 280px;
+      border-color: rgba(0,229,255,0.15);
+      animation-duration: 20s;
+      animation-direction: reverse;
+    }
+
+    .orb-ring-3 {
+      width: 360px; height: 360px;
+      border-color: rgba(139,92,246,0.1);
+      animation-duration: 30s;
+    }
+
+    /* Orbiting nodes */
+    .orb-node {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 10px; height: 10px;
+      margin: -5px;
+    }
+
+    .orb-node span {
+      display: block;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 8px var(--accent-green);
+    }
+
+    .orb-node:nth-child(1) { animation: orbit 8s linear infinite; }
+    .orb-node:nth-child(2) { animation: orbit 12s 3s linear infinite reverse; }
+    .orb-node:nth-child(2) span { background: var(--accent-cyan); box-shadow: 0 0 8px var(--accent-cyan); }
+    .orb-node:nth-child(3) { animation: orbit 16s 6s linear infinite; }
+    .orb-node:nth-child(3) span { background: var(--accent-purple); box-shadow: 0 0 8px var(--accent-purple); }
+
+    /* Floating labels on orb */
+    .orb-label {
+      position: absolute;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--accent-green);
+      background: rgba(4,8,10,0.85);
+      border: 1px solid rgba(45,255,122,0.25);
+      padding: 0.2rem 0.55rem;
+      border-radius: 3px;
+      white-space: nowrap;
+      animation: glow-pulse 3s ease-in-out infinite;
+    }
+
+    /* ── Stats bar ──────────────────────────────────────── */
+    .aiops-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin: 3rem 0;
+    }
+
+    .aiops-stat {
+      background: var(--bg-card);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all var(--transition);
+    }
+
+    .aiops-stat:hover { background: var(--bg-card-hover); }
+
+    .aiops-stat-val {
+      font-family: var(--font-mono);
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+
+    .aiops-stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-family: var(--font-mono);
+    }
+
+    .aiops-stat-sub {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* ── Section title bar ──────────────────────────────── */
+    .section-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-eyebrow::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border-strong), transparent);
+    }
+
+    /* ── Evolution timeline ─────────────────────────────── */
+    .evolution-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      position: relative;
+    }
+
+    .evolution-steps::before {
+      content: '';
+      position: absolute;
+      top: 32px;
+      left: 12.5%; right: 12.5%;
+      height: 2px;
+      background: linear-gradient(90deg,
+        var(--accent-orange), #ffd81e, var(--accent-cyan), var(--accent-green));
+      z-index: 0;
+    }
+
+    .evo-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 0.75rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .evo-node {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      border: 2px solid;
+      background: var(--bg-base);
+      margin-bottom: 1rem;
+      transition: all var(--transition);
+    }
+
+    .evo-step:hover .evo-node { transform: scale(1.1); }
+
+    .evo-step:nth-child(1) .evo-node { border-color: var(--accent-orange); box-shadow: 0 0 20px rgba(255,92,26,0.3); }
+    .evo-step:nth-child(2) .evo-node { border-color: #ffd81e;              box-shadow: 0 0 20px rgba(255,216,30,0.3); }
+    .evo-step:nth-child(3) .evo-node { border-color: var(--accent-cyan);   box-shadow: 0 0 20px rgba(0,229,255,0.3); }
+    .evo-step:nth-child(4) .evo-node { border-color: var(--accent-green);  box-shadow: 0 0 20px rgba(45,255,122,0.4); animation: ai-pulse 2s ease-in-out infinite; }
+
+    .evo-era {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+
+    .evo-title { font-size: 0.92rem; margin-bottom: 0.4rem; }
+    .evo-desc  { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* ── Multi-agent architecture diagram ───────────────── */
+    .arch-diagram {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .arch-diagram::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(45,255,122,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(45,255,122,0.02) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    .arch-layer {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 1rem;
+    }
+
+    .arch-layer-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .arch-layer-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .arch-nodes {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .arch-node {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      text-align: center;
+      min-width: 120px;
+      transition: all var(--transition);
+      position: relative;
+    }
+
+    .arch-node:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-strong);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .arch-node-icon { font-size: 1.4rem; margin-bottom: 0.35rem; }
+
+    .arch-node-title {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-primary);
+      margin-bottom: 0.15rem;
+    }
+
+    .arch-node-sub {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    /* Node color accents */
+    .arch-node.green  { border-color: rgba(45,255,122,0.3);  }
+    .arch-node.cyan   { border-color: rgba(0,229,255,0.3);   }
+    .arch-node.orange { border-color: rgba(255,92,26,0.3);   }
+    .arch-node.purple { border-color: rgba(139,92,246,0.3);  }
+    .arch-node.yellow { border-color: rgba(255,216,30,0.3);  }
+
+    .arch-node.green:hover  { box-shadow: 0 8px 24px rgba(0,0,0,0.3), var(--glow-green);  }
+    .arch-node.cyan:hover   { box-shadow: 0 8px 24px rgba(0,0,0,0.3), var(--glow-cyan);   }
+    .arch-node.orange:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.3), var(--glow-orange); }
+
+    /* Arrow connectors */
+    .arch-arrow {
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent-green);
+      padding: 0.3rem 0;
+      animation: glow-pulse 2s ease-in-out infinite;
+    }
+
+    /* LLM brain badge */
+    .llm-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(139,92,246,0.1);
+      border: 1px solid rgba(139,92,246,0.4);
+      border-radius: 2rem;
+      padding: 0.4rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--accent-purple);
+      margin: 0.5rem auto;
+      display: flex;
+      width: fit-content;
+    }
+
+    /* ── Observability triad ────────────────────────────── */
+    .obs-triad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .obs-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .obs-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    }
+
+    .obs-card.prometheus::after { background: var(--accent-orange); }
+    .obs-card.loki::after       { background: var(--accent-green);  }
+    .obs-card.jaeger::after     { background: var(--accent-cyan);   }
+
+    .obs-card:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.35);
+    }
+
+    .obs-logo {
+      width: 56px; height: 56px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      border: 1px solid var(--border);
+      margin-bottom: 1.25rem;
+    }
+
+    .obs-card.prometheus .obs-logo { background: rgba(230,82,44,0.12); border-color: rgba(230,82,44,0.3); }
+    .obs-card.loki       .obs-logo { background: rgba(45,255,122,0.1); border-color: rgba(45,255,122,0.3); }
+    .obs-card.jaeger     .obs-logo { background: rgba(0,229,255,0.1);  border-color: rgba(0,229,255,0.3); }
+
+    .obs-card h3 { font-size: 1.1rem; margin-bottom: 0.4rem; }
+
+    .obs-role {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      padding: 0.15rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .obs-card.prometheus .obs-role { color: var(--accent-orange); }
+    .obs-card.loki       .obs-role { color: var(--accent-green); }
+    .obs-card.jaeger     .obs-role { color: var(--accent-cyan); }
+
+    .obs-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-top: 0.75rem;
+    }
+
+    .obs-features li {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      padding-left: 1rem;
+      position: relative;
+    }
+    .obs-features li::before { content: '▸'; position: absolute; left: 0; color: var(--accent-green); }
+
+    /* ── Research Paper Card ────────────────────────────── */
+    .paper-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(45,255,122,0.25);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .paper-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-green), var(--accent-cyan), var(--accent-orange));
+    }
+
+    .paper-card-inner {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 0;
+    }
+
+    .paper-main {
+      padding: 2rem 2rem 2rem 2.5rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .paper-journal {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(139,92,246,0.1);
+      border: 1px solid rgba(139,92,246,0.3);
+      border-radius: 2rem;
+      padding: 0.3rem 0.9rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--accent-purple);
+      letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+    }
+
+    .paper-title {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      color: var(--text-bright);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .paper-title span { color: var(--accent-green); }
+
+    .paper-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .paper-meta-item {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .paper-abstract {
+      font-size: 0.88rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+
+    .paper-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .paper-tag {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      padding: 0.15rem 0.6rem;
+      border-radius: 2px;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Results panel */
+    .paper-results {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      background: var(--bg-surface);
+    }
+
+    .paper-results-header {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .result-metric {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .result-metric-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .result-metric-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+    }
+
+    .result-metric-val {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent-green);
+    }
+
+    .result-bar-outer {
+      height: 5px;
+      background: var(--bg-card);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .result-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+      animation: bar-fill 2s cubic-bezier(0.4,0,0.2,1) both;
+    }
+
+    @keyframes bar-fill {
+      from { width: 0 !important; }
+    }
+
+    .result-note {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    /* ORCID badge */
+    .orcid-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(166,206,57,0.1);
+      border: 1px solid rgba(166,206,57,0.35);
+      border-radius: 2rem;
+      padding: 0.35rem 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: #a6ce39;
+    }
+
+    /* ── Fault Demo Terminal ─────────────────────────────── */
+    .demo-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .demo-terminal {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .demo-terminal-bar {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .demo-terminal-bar span.dot-r { width:8px;height:8px;border-radius:50%;background:#ff5f57; }
+    .demo-terminal-bar span.dot-y { width:8px;height:8px;border-radius:50%;background:#ffbd2e; }
+    .demo-terminal-bar span.dot-g { width:8px;height:8px;border-radius:50%;background:#28c840; }
+
+    .demo-title {
+      flex: 1;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    .demo-body {
+      padding: 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      line-height: 1.9;
+      min-height: 260px;
+    }
+
+    .demo-line { display: block; }
+    .demo-prompt   { color: var(--accent-green); }
+    .demo-time     { color: var(--text-muted); font-size: 0.68rem; }
+    .demo-alert    { color: var(--accent-orange); animation: blink-alert 1.5s ease-in-out 3; }
+    .demo-detect   { color: #ffd81e; }
+    .demo-rca      { color: var(--accent-cyan); }
+    .demo-heal     { color: var(--accent-green); }
+    .demo-success  { color: var(--accent-green); font-weight: 700; }
+
+    /* ── Fault scenarios cards ──────────────────────────── */
+    .faults-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .fault-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      transition: all var(--transition);
+      border-top: 3px solid transparent;
+    }
+
+    .fault-card:hover {
+      border-top-color: var(--accent-green);
+      transform: translateY(-3px);
+      box-shadow: var(--glow-green);
+    }
+
+    .fault-num {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .fault-icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
+    .fault-name { font-family: var(--font-mono); font-size: 0.88rem; color: var(--text-primary); margin-bottom: 0.35rem; }
+    .fault-desc { font-size: 0.78rem; color: var(--text-muted); }
+
+    .fault-acc {
+      margin-top: 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--accent-green);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    /* ── CTA section ────────────────────────────────────── */
+    .aiops-cta {
+      background: var(--bg-card);
+      border: 1px solid rgba(45,255,122,0.2);
+      border-radius: var(--radius-lg);
+      padding: 3rem 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .aiops-cta::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-green), var(--accent-cyan), var(--accent-orange));
+    }
+
+    .aiops-cta::after {
+      content: '';
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(45,255,122,0.06), transparent 60%);
+      pointer-events: none;
+    }
+
+    /* ── Responsive ─────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .aiops-orb-wrap { display: none; }
+      .paper-card-inner { grid-template-columns: 1fr; }
+      .paper-main { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+
+    @media (max-width: 768px) {
+      .aiops-stats      { grid-template-columns: 1fr 1fr; }
+      .evolution-steps  { grid-template-columns: 1fr 1fr; }
+      .evolution-steps::before { display: none; }
+      .obs-triad        { grid-template-columns: 1fr; }
+      .demo-wrap        { grid-template-columns: 1fr; }
+      .faults-grid      { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .aiops-stats  { grid-template-columns: 1fr 1fr; }
+      .faults-grid  { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav id="dh-nav" aria-label="Main navigation">
+  <div id="dh-progress"></div>
+  <div id="dh-inner">
+    <a href="index.html" id="dh-logo"><span id="dh-prompt">&gt;</span> DevOpsHub</a>
+    <ul id="dh-links"></ul>
+    <div id="dh-controls">
+      <button id="dh-theme-btn" aria-label="Toggle theme">🌙</button>
+      <button id="dh-burger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div id="dh-drawer">
+  <ul>
+    <li><a href="index.html">⌂ Home</a></li>
+    <li><a href="about.html">◎ About</a></li>
+    <li><a href="tools.html">⚙ Tools</a></li>
+    <li><a href="concepts.html">◈ Concepts</a></li>
+    <li><a href="workflow.html">↺ Workflow</a></li>
+    <li><a href="roadmap.html">◉ Roadmap</a></li>
+    <li><a href="quiz.html">◆ Quiz</a></li>
+    <li><a href="blog.html">✎ Blog</a></li>
+    <li><a href="aiops.html" class="dh-active">🤖 AIOps</a></li>
+    <li><a href="search.html">🔍 Search</a></li>
+    <li><a href="contact.html">✉ Contact</a></li>
+  </ul>
+</div>
+<!-- ═══ END NAVBAR ═══ -->
+
+<!-- ══════════════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════════════ -->
+<section class="aiops-hero" aria-labelledby="aiops-hero-title">
+  <div class="aiops-hero-bg"></div>
+  <div class="aiops-hero-grid"></div>
+
+  <div class="container" style="width:100%; position:relative; z-index:2;">
+    <div class="aiops-hero-content">
+
+      <div class="hero-badge-row">
+        <span class="ai-badge green"><span class="ai-badge-dot"></span>Live Research</span>
+        <span class="ai-badge purple">IEEE TNSM 2026</span>
+        <span class="ai-badge cyan">Cloud-Native AI</span>
+        <span class="ai-badge orange">Kubernetes-Native</span>
+      </div>
+
+      <h1>
+        <span class="text-green">AI-Powered</span><br>
+        IT Operations.<br>
+        Autonomous. Intelligent.
+      </h1>
+
+      <p>
+        AIOps uses machine learning and large language models to automate
+        fault detection, root cause analysis, and self-healing — moving
+        from reactive firefighting to proactive, autonomous operations.
+      </p>
+
+      <div class="hero-cta" style="animation: fade-up 0.7s 0.3s ease both; display:flex; gap:1rem; flex-wrap:wrap;">
+        <a href="#research" class="btn btn-primary">View Research Paper →</a>
+        <a href="#architecture" class="btn btn-secondary">See Architecture</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Neural Orb -->
+  <div class="aiops-orb-wrap" aria-hidden="true">
+    <div class="orb-ring orb-ring-3"></div>
+    <div class="orb-ring orb-ring-2"></div>
+    <div class="orb-ring orb-ring-1"></div>
+    <div class="orb-center">🧠</div>
+    <div class="orb-node"><span></span></div>
+    <div class="orb-node"><span></span></div>
+    <div class="orb-node"><span></span></div>
+    <!-- Floating labels -->
+    <div class="orb-label" style="top:18%; left:55%;">Fault Detection</div>
+    <div class="orb-label" style="top:72%; left:52%;">Auto-Remediation</div>
+    <div class="orb-label" style="top:44%; left:10%;">RCA Agent</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     KEY METRICS
+══════════════════════════════════════════════════════════ -->
+<div class="container" style="padding:0 1.5rem;">
+  <div class="aiops-stats" aria-label="Research results">
+    <div class="aiops-stat">
+      <div class="aiops-stat-val text-green" data-counter="86" data-suffix="%">86%</div>
+      <div class="aiops-stat-label">F1 Score</div>
+      <div class="aiops-stat-sub">Fault detection accuracy</div>
+    </div>
+    <div class="aiops-stat">
+      <div class="aiops-stat-val text-cyan" data-counter="30" data-suffix="s">30s</div>
+      <div class="aiops-stat-label">MTTR</div>
+      <div class="aiops-stat-sub">Mean time to remediate</div>
+    </div>
+    <div class="aiops-stat">
+      <div class="aiops-stat-val text-orange" data-counter="82" data-suffix="%">82%</div>
+      <div class="aiops-stat-label">RCA Accuracy</div>
+      <div class="aiops-stat-sub">Root cause identification</div>
+    </div>
+    <div class="aiops-stat">
+      <div class="aiops-stat-val" style="color:var(--accent-purple);">p≤0.05</div>
+      <div class="aiops-stat-label">Significance</div>
+      <div class="aiops-stat-sub">Statistical validation</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     WHAT IS AIOPS
+══════════════════════════════════════════════════════════ -->
+<section class="section" aria-labelledby="what-aiops">
+  <div class="container">
+
+    <div class="section-eyebrow">
+      <span class="tag">// definition</span>
+    </div>
+    <h2 id="what-aiops" style="margin-bottom:1rem;">
+      What is <span class="text-green">AIOps?</span>
+    </h2>
+    <p style="max-width:680px; font-size:1rem; margin-bottom:3rem;">
+      AIOps (Artificial Intelligence for IT Operations) applies AI and ML to automate
+      and enhance IT operations — turning massive volumes of telemetry data into
+      actionable intelligence. It's the evolution from humans watching dashboards
+      to systems that watch, reason, and fix themselves.
+    </p>
+
+    <!-- Evolution timeline -->
+    <div class="evolution-steps" role="list" aria-label="Evolution of IT operations">
+      <div class="evo-step" role="listitem">
+        <div class="evo-node">👁️</div>
+        <div class="evo-era">2000s</div>
+        <div class="evo-title">Reactive Monitoring</div>
+        <div class="evo-desc">Humans watch dashboards. Alerts fire. Teams scramble. Mean time to detect: hours.</div>
+      </div>
+      <div class="evo-step" role="listitem">
+        <div class="evo-node">📊</div>
+        <div class="evo-era">2010s</div>
+        <div class="evo-title">Predictive Analytics</div>
+        <div class="evo-desc">ML models predict failures before they occur. Reduces surprise incidents by 60%.</div>
+      </div>
+      <div class="evo-step" role="listitem">
+        <div class="evo-node">⚡</div>
+        <div class="evo-era">2020s</div>
+        <div class="evo-title">Intelligent Correlation</div>
+        <div class="evo-desc">AI correlates metrics, logs, traces across thousands of services simultaneously.</div>
+      </div>
+      <div class="evo-step" role="listitem">
+        <div class="evo-node">🤖</div>
+        <div class="evo-era">Now</div>
+        <div class="evo-title">Autonomous Operations</div>
+        <div class="evo-desc">LLM agents detect, diagnose, and remediate faults without human intervention.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     MULTI-AGENT ARCHITECTURE
+══════════════════════════════════════════════════════════ -->
+<section class="section section--alt" id="architecture" aria-labelledby="arch-heading">
+  <div class="container">
+
+    <div class="section-eyebrow">
+      <span class="tag">// architecture</span>
+    </div>
+    <h2 id="arch-heading" style="margin-bottom:0.5rem;">
+      Multi-Agent <span class="text-green">LLM Framework</span>
+    </h2>
+    <p style="max-width:600px; margin-bottom:2rem;">
+      A layered pipeline of specialised AI agents — each with a dedicated role —
+      working in concert to autonomously manage cloud-native Kubernetes systems.
+    </p>
+
+    <div class="arch-diagram">
+
+      <!-- Input layer -->
+      <div class="arch-layer">
+        <div class="arch-layer-label">📥 Telemetry Input Layer</div>
+        <div class="arch-nodes">
+          <div class="arch-node orange">
+            <div class="arch-node-icon">📊</div>
+            <div class="arch-node-title">Prometheus</div>
+            <div class="arch-node-sub">Metrics &amp; Alerts</div>
+          </div>
+          <div class="arch-node green">
+            <div class="arch-node-icon">📋</div>
+            <div class="arch-node-title">Loki</div>
+            <div class="arch-node-sub">Log Streams</div>
+          </div>
+          <div class="arch-node cyan">
+            <div class="arch-node-icon">🔀</div>
+            <div class="arch-node-title">Jaeger</div>
+            <div class="arch-node-sub">Distributed Traces</div>
+          </div>
+          <div class="arch-node yellow">
+            <div class="arch-node-icon">☸️</div>
+            <div class="arch-node-title">K8s Events</div>
+            <div class="arch-node-sub">API Server</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-arrow">↓ &nbsp;Telemetry aggregated &amp; preprocessed &nbsp;↓</div>
+
+      <!-- LLM Orchestrator -->
+      <div class="arch-layer">
+        <div class="arch-layer-label">🧠 LLM Orchestration Layer</div>
+        <div style="text-align:center; margin-bottom:0.75rem;">
+          <span class="llm-badge">🤖 &nbsp;LLM Orchestrator — Context-aware task routing</span>
+        </div>
+        <div class="arch-nodes">
+          <div class="arch-node purple">
+            <div class="arch-node-icon">🔍</div>
+            <div class="arch-node-title">Fault Detection Agent</div>
+            <div class="arch-node-sub">Anomaly classification</div>
+          </div>
+          <div class="arch-node cyan">
+            <div class="arch-node-icon">🎯</div>
+            <div class="arch-node-title">RCA Agent</div>
+            <div class="arch-node-sub">Root cause analysis</div>
+          </div>
+          <div class="arch-node green">
+            <div class="arch-node-icon">🔧</div>
+            <div class="arch-node-title">Remediation Agent</div>
+            <div class="arch-node-sub">Auto-healing actions</div>
+          </div>
+          <div class="arch-node orange">
+            <div class="arch-node-icon">✅</div>
+            <div class="arch-node-title">Validation Agent</div>
+            <div class="arch-node-sub">Post-fix verification</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-arrow">↓ &nbsp;Validated remediation commands &nbsp;↓</div>
+
+      <!-- Action layer -->
+      <div class="arch-layer">
+        <div class="arch-layer-label">⚡ Action Execution Layer</div>
+        <div class="arch-nodes">
+          <div class="arch-node green">
+            <div class="arch-node-icon">🔄</div>
+            <div class="arch-node-title">Pod Restart</div>
+            <div class="arch-node-sub">kubectl rollout</div>
+          </div>
+          <div class="arch-node cyan">
+            <div class="arch-node-icon">📈</div>
+            <div class="arch-node-title">HPA Scale</div>
+            <div class="arch-node-sub">Horizontal scaling</div>
+          </div>
+          <div class="arch-node orange">
+            <div class="arch-node-icon">↩️</div>
+            <div class="arch-node-title">Rollback</div>
+            <div class="arch-node-sub">Deployment revert</div>
+          </div>
+          <div class="arch-node purple">
+            <div class="arch-node-icon">🛡️</div>
+            <div class="arch-node-title">Quarantine</div>
+            <div class="arch-node-sub">Isolate failing pods</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /arch-diagram -->
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     LLM AGENTS FOR KUBERNETES
+══════════════════════════════════════════════════════════ -->
+<section class="section" aria-labelledby="llm-k8s-heading">
+  <div class="container">
+
+    <div class="section-eyebrow">
+      <span class="tag">// llm + kubernetes</span>
+    </div>
+    <h2 id="llm-k8s-heading" style="margin-bottom:2rem;">
+      How <span class="text-green">LLM Agents</span> Understand Kubernetes
+    </h2>
+
+    <div class="cards-grid stagger">
+
+      <div class="card">
+        <div class="feature-icon purple">🧠</div>
+        <h3>Natural Language Reasoning</h3>
+        <p>LLMs understand Kubernetes YAML manifests, event logs, and error messages in natural language — no rigid rule engines or decision trees. They reason about failure modes the way a senior SRE would.</p>
+      </div>
+
+      <div class="card">
+        <div class="feature-icon cyan">📡</div>
+        <h3>Context-Aware Analysis</h3>
+        <p>Agents correlate signals across <span class="code-badge">kubectl describe</span>, Prometheus alerts, and Loki logs simultaneously — understanding the full context before acting. No more siloed tooling.</p>
+      </div>
+
+      <div class="card">
+        <div class="feature-icon green">⚡</div>
+        <h3>Sub-Minute Response Time</h3>
+        <p>From anomaly detection to remediation action in under 30 seconds — versus 15–45 minutes for human on-call response. The MTTR reduction directly impacts SLO burn rates.</p>
+      </div>
+
+      <div class="card">
+        <div class="feature-icon orange">🔒</div>
+        <h3>Safe Action Guardrails</h3>
+        <p>Agents operate within defined RBAC boundaries. Every remediation action is validated against a policy engine before execution — preventing hallucination-driven catastrophes in production.</p>
+      </div>
+
+      <div class="card">
+        <div class="feature-icon purple">📖</div>
+        <h3>Runbook Augmentation</h3>
+        <p>LLMs generate and execute runbook steps dynamically based on the specific failure context — not just matching predefined templates. Each incident becomes a learning opportunity.</p>
+      </div>
+
+      <div class="card">
+        <div class="feature-icon cyan">🔁</div>
+        <h3>Continuous Learning Loop</h3>
+        <p>Post-incident feedback loops improve agent accuracy over time. False positives and missed detections are used to fine-tune the model — MTTR improves with every incident handled.</p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     OBSERVABILITY TRIAD
+══════════════════════════════════════════════════════════ -->
+<section class="section section--alt" aria-labelledby="obs-heading">
+  <div class="container">
+
+    <div class="section-eyebrow">
+      <span class="tag">// observability stack</span>
+    </div>
+    <h2 id="obs-heading" style="margin-bottom:0.5rem;">
+      Prometheus · Loki · Jaeger
+    </h2>
+    <p style="max-width:560px; margin-bottom:2rem;">
+      The three pillars of the observability stack — each feeding a different signal type
+      to the AIOps agent pipeline for complete situational awareness.
+    </p>
+
+    <div class="obs-triad">
+
+      <!-- Prometheus -->
+      <div class="obs-card prometheus">
+        <div class="obs-logo">📊</div>
+        <h3>Prometheus</h3>
+        <div class="obs-role">Metrics — The "What"</div>
+        <p style="font-size:0.85rem;">
+          Prometheus scrapes time-series metrics from every Kubernetes component — CPU, memory,
+          request rates, error rates, latency. The Fault Detection Agent uses PromQL queries
+          to identify statistical anomalies in real time.
+        </p>
+        <ul class="obs-features">
+          <li>RED metrics: Rate, Errors, Duration per service</li>
+          <li>kube-state-metrics for cluster health signals</li>
+          <li>Custom metrics from application /metrics endpoints</li>
+          <li>Alertmanager fires structured alerts to agent pipeline</li>
+        </ul>
+      </div>
+
+      <!-- Loki -->
+      <div class="obs-card loki">
+        <div class="obs-logo">📋</div>
+        <h3>Grafana Loki</h3>
+        <div class="obs-role">Logs — The "Why"</div>
+        <p style="font-size:0.85rem;">
+          Loki aggregates structured logs from all pods and system components. The RCA Agent
+          uses LogQL to query log streams around the time of a detected anomaly — extracting
+          the root cause from stack traces, error messages, and audit logs.
+        </p>
+        <ul class="obs-features">
+          <li>Label-based log indexing (low storage overhead)</li>
+          <li>LogQL for contextual log correlation</li>
+          <li>Promtail agent for pod log collection</li>
+          <li>LLM parses unstructured log text naturally</li>
+        </ul>
+      </div>
+
+      <!-- Jaeger -->
+      <div class="obs-card jaeger">
+        <div class="obs-logo">🔀</div>
+        <h3>Jaeger</h3>
+        <div class="obs-role">Traces — The "Where"</div>
+        <p style="font-size:0.85rem;">
+          Jaeger captures end-to-end request traces across microservices. When a fault
+          occurs, the RCA Agent queries trace data to pinpoint exactly which service,
+          span, or dependency introduced the latency or error — in milliseconds.
+        </p>
+        <ul class="obs-features">
+          <li>OpenTelemetry SDK instrumentation</li>
+          <li>Service dependency graph generation</li>
+          <li>Span-level error attribution</li>
+          <li>Cascading failure path visualisation</li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     RESEARCH PAPER
+══════════════════════════════════════════════════════════ -->
+<section class="section" id="research" aria-labelledby="paper-heading">
+  <div class="container">
+
+    <div class="section-eyebrow">
+      <span class="tag">// ieee tnsm 2026</span>
+    </div>
+    <h2 id="paper-heading" style="margin-bottom:2rem;">
+      Research Paper
+    </h2>
+
+    <div class="paper-card">
+      <div class="paper-card-inner">
+
+        <!-- Main paper info -->
+        <div class="paper-main">
+
+          <div class="paper-journal">
+            <span>📄</span>
+            IEEE Transactions on Network and Service Management &nbsp;·&nbsp;
+            Manuscript ID: TNSM-2026-11345
+          </div>
+
+          <div class="paper-title">
+            "A Multi-Agent LLM-Driven <span>AIOps Framework</span> for Autonomous
+            Fault Detection and Remediation in Cloud-Native Systems"
+          </div>
+
+          <div class="paper-meta">
+            <span class="paper-meta-item">👤 Saad Hussain</span>
+            <span class="paper-meta-item">👤 Alishba Farrukh (Supervisor)</span>
+            <span class="paper-meta-item">🏛 University of Lahore, Sargodha Campus</span>
+            <span class="paper-meta-item">📅 2026 · Under Review</span>
+          </div>
+
+          <p class="paper-abstract">
+            This paper presents a novel multi-agent LLM-driven AIOps framework designed for
+            autonomous fault detection and remediation in cloud-native Kubernetes environments.
+            The framework employs specialised AI agents — coordinated by an LLM orchestrator —
+            to continuously monitor a live Kubernetes cluster, detect anomalies from Prometheus
+            metrics, Loki logs, and Jaeger traces, perform root cause analysis, and execute
+            targeted remediation actions without human intervention.
+          </p>
+
+          <p class="paper-abstract">
+            Evaluated across <strong style="color:var(--text-primary);">five distinct fault injection scenarios</strong>
+            on a live Kubernetes cluster, the framework achieves an F1 score of 0.86 for fault detection,
+            a mean time to remediation of 30 seconds, and a root cause identification accuracy of 82%
+            — with statistical significance at p ≤ 0.05.
+          </p>
+
+          <div class="paper-tags">
+            <span class="paper-tag">AIOps</span>
+            <span class="paper-tag">Large Language Models</span>
+            <span class="paper-tag">Kubernetes</span>
+            <span class="paper-tag">Fault Detection</span>
+            <span class="paper-tag">Multi-Agent Systems</span>
+            <span class="paper-tag">Cloud-Native</span>
+            <span class="paper-tag">Autonomous Remediation</span>
+            <span class="paper-tag">Observability</span>
+          </div>
+
+          <div style="margin-top:1.5rem; display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center;">
+            <a href="https://orcid.org/0009-0003-9132-9986"
+               target="_blank" rel="noopener noreferrer"
+               class="orcid-badge">
+              <span style="font-weight:700;">iD</span>
+              ORCID: 0009-0003-9132-9986
+            </a>
+            <span class="ai-badge purple">Under Peer Review</span>
+          </div>
+
+        </div>
+
+        <!-- Results panel -->
+        <div class="paper-results">
+          <div class="paper-results-header">📊 Experimental Results</div>
+
+          <div class="result-metric">
+            <div class="result-metric-header">
+              <span class="result-metric-label">F1 Score (Fault Detection)</span>
+              <span class="result-metric-val">0.86</span>
+            </div>
+            <div class="result-bar-outer">
+              <div class="result-bar-fill" style="width:86%"></div>
+            </div>
+            <div class="result-note">Precision × Recall balance across all fault types</div>
+          </div>
+
+          <div class="result-metric">
+            <div class="result-metric-header">
+              <span class="result-metric-label">RCA Accuracy</span>
+              <span class="result-metric-val">82%</span>
+            </div>
+            <div class="result-bar-outer">
+              <div class="result-bar-fill" style="width:82%; animation-delay:0.3s;"></div>
+            </div>
+            <div class="result-note">Root cause correctly identified in 82% of incidents</div>
+          </div>
+
+          <div class="result-metric">
+            <div class="result-metric-header">
+              <span class="result-metric-label">MTTR (Mean Time to Remediate)</span>
+              <span class="result-metric-val" style="color:var(--accent-cyan);">30s</span>
+            </div>
+            <div class="result-bar-outer">
+              <div class="result-bar-fill" style="width:95%; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green)); animation-delay:0.6s;"></div>
+            </div>
+            <div class="result-note">vs 15–45 min human on-call baseline</div>
+          </div>
+
+          <div class="result-metric">
+            <div class="result-metric-header">
+              <span class="result-metric-label">Statistical Significance</span>
+              <span class="result-metric-val" style="color:var(--accent-purple);">p ≤ 0.05</span>
+            </div>
+            <div class="result-bar-outer">
+              <div class="result-bar-fill" style="width:100%; background: var(--accent-purple); animation-delay:0.9s;"></div>
+            </div>
+            <div class="result-note">Results validated with statistical significance tests</div>
+          </div>
+
+          <div style="margin-top:0.5rem; padding-top:1rem; border-top:1px solid var(--border);">
+            <div class="result-note" style="margin-bottom:0.5rem; color:var(--text-secondary);">
+              Evaluation environment:
+            </div>
+            <div style="display:flex; flex-direction:column; gap:0.35rem;">
+              <span class="ai-badge green" style="width:fit-content; font-size:0.6rem;">☸️ &nbsp;Live Kubernetes Cluster</span>
+              <span class="ai-badge cyan" style="width:fit-content; font-size:0.6rem;">🔬 &nbsp;5 Fault Injection Scenarios</span>
+              <span class="ai-badge purple" style="width:fit-content; font-size:0.6rem;">🏛 &nbsp;University of Lahore</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     FAULT INJECTION SCENARIOS
+══════════════════════════════════════════════════════════ -->
+<section class="section section--alt" aria-labelledby="faults-heading">
+  <div class="container">
+
+    <div class="section-eyebrow">
+      <span class="tag">// experimental setup</span>
+    </div>
+    <h2 id="faults-heading" style="margin-bottom:0.5rem;">
+      5 Fault Injection <span class="text-green">Scenarios</span>
+    </h2>
+    <p style="max-width:560px; margin-bottom:2rem;">
+      Each scenario was injected into a live Kubernetes cluster and the framework
+      was evaluated on detection speed, RCA accuracy, and successful auto-remediation.
+    </p>
+
+    <div class="faults-grid">
+
+      <div class="fault-card">
+        <div class="fault-num">Scenario 01</div>
+        <div class="fault-icon">💥</div>
+        <div class="fault-name">Pod Crash Loop</div>
+        <div class="fault-desc">CrashLoopBackOff injected into a critical service deployment — continuous restart cycles.</div>
+        <div class="fault-acc">✓ Detected &amp; restarted</div>
+      </div>
+
+      <div class="fault-card">
+        <div class="fault-num">Scenario 02</div>
+        <div class="fault-icon">🔥</div>
+        <div class="fault-name">CPU Spike / Throttling</div>
+        <div class="fault-desc">Artificial CPU exhaustion causing request throttling and cascading latency increases.</div>
+        <div class="fault-acc">✓ HPA scale-out triggered</div>
+      </div>
+
+      <div class="fault-card">
+        <div class="fault-num">Scenario 03</div>
+        <div class="fault-icon">💾</div>
+        <div class="fault-name">Memory Leak (OOMKill)</div>
+        <div class="fault-desc">Simulated memory leak leading to OOMKill events and pod eviction from nodes.</div>
+        <div class="fault-acc">✓ Pod quarantined &amp; restarted</div>
+      </div>
+
+      <div class="fault-card">
+        <div class="fault-num">Scenario 04</div>
+        <div class="fault-icon">🌐</div>
+        <div class="fault-name">Network Partition</div>
+        <div class="fault-desc">Inter-service communication failure simulating a network partition between microservices.</div>
+        <div class="fault-acc">✓ RCA identified, retries injected</div>
+      </div>
+
+      <div class="fault-card">
+        <div class="fault-num">Scenario 05</div>
+        <div class="fault-icon">📦</div>
+        <div class="fault-name">Bad Deployment Rollout</div>
+        <div class="fault-desc">Deliberately broken container image causing rolling update to fail and error rate to spike.</div>
+        <div class="fault-acc">✓ Auto-rollback executed</div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     LIVE DEMO TERMINAL
+══════════════════════════════════════════════════════════ -->
+<section class="section" aria-labelledby="demo-heading">
+  <div class="container">
+
+    <div class="section-eyebrow">
+      <span class="tag">// agent in action</span>
+    </div>
+    <h2 id="demo-heading" style="margin-bottom:0.5rem;">
+      AIOps Agent — <span class="text-green">Live Simulation</span>
+    </h2>
+    <p style="max-width:560px; margin-bottom:2rem;">
+      Watch a simulated AIOps agent detect a CrashLoopBackOff fault, perform root
+      cause analysis, and execute remediation — autonomously.
+    </p>
+
+    <div class="demo-wrap">
+
+      <!-- Detection terminal -->
+      <div class="demo-terminal">
+        <div class="demo-terminal-bar">
+          <span class="dot-r"></span>
+          <span class="dot-y"></span>
+          <span class="dot-g"></span>
+          <span class="demo-title">fault-detection-agent.log</span>
+        </div>
+        <div class="demo-body" id="demo-detect-body">
+          <!-- Filled by JS -->
+        </div>
+      </div>
+
+      <!-- Remediation terminal -->
+      <div class="demo-terminal">
+        <div class="demo-terminal-bar">
+          <span class="dot-r"></span>
+          <span class="dot-y"></span>
+          <span class="dot-g"></span>
+          <span class="demo-title">remediation-agent.log</span>
+        </div>
+        <div class="demo-body" id="demo-remedy-body">
+          <!-- Filled by JS -->
+        </div>
+      </div>
+
+    </div>
+
+    <div style="text-align:center; margin-top:1.5rem;">
+      <button class="btn btn-ghost" id="replay-demo" style="font-size:0.8rem;">
+        🔄 Replay Simulation
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     CTA
+══════════════════════════════════════════════════════════ -->
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    <div class="aiops-cta">
+      <span class="tag" style="display:block;width:fit-content;margin:0 auto 1rem;">// collaborate</span>
+      <h2 style="margin-bottom:0.75rem;">
+        Interested in <span class="text-green">AIOps Research?</span>
+      </h2>
+      <p style="max-width:520px; margin:0 auto 2rem; font-size:1rem;">
+        Whether you're a researcher, engineer, or organisation looking to implement
+        autonomous operations — let's connect and build the future of cloud-native AI together.
+      </p>
+      <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; position:relative; z-index:1;">
+        <a href="contact.html" class="btn btn-primary">Get In Touch →</a>
+        <a href="roadmap.html" class="btn btn-secondary">View Learning Roadmap</a>
+        <a href="concepts.html" class="btn btn-ghost">DevOps Concepts</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div style="font-family:monospace;color:#2dff7a;font-weight:700;font-size:1.05rem;margin-bottom:0.5rem;">&gt; DevOpsHub</div>
+        <p>Cutting-edge DevOps and AIOps resources — from fundamentals to frontier research in autonomous cloud-native operations.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="tools.html">Tools</a></li>
+          <li><a href="concepts.html">Concepts</a></li>
+          <li><a href="aiops.html">AIOps</a></li>
+          <li><a href="roadmap.html">Roadmap</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>AIOps Topics</h4>
+        <ul class="footer-links">
+          <li><a href="aiops.html">What is AIOps</a></li>
+          <li><a href="aiops.html">LLM Agents for K8s</a></li>
+          <li><a href="aiops.html">Multi-Agent Framework</a></li>
+          <li><a href="aiops.html">Prometheus + Loki + Jaeger</a></li>
+          <li><a href="aiops.html">Research Paper</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Research</h4>
+        <ul class="footer-links">
+          <li><a href="aiops.html#research">IEEE TNSM Paper</a></li>
+          <li><a href="aiops.html#architecture">Agent Architecture</a></li>
+          <li><a href="aiops.html#faults-heading">Fault Scenarios</a></li>
+          <li><a href="https://orcid.org/0009-0003-9132-9986" target="_blank" rel="noopener">ORCID Profile</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 DevOpsHub. Powered by HTML5, CSS3 &amp; Vanilla JS.</p>
+      <div class="footer-status"><span class="status-dot"></span>All systems operational</div>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js" defer></script>
+<script>
+'use strict';
+
+/* ── Demo terminal animation ──────────────────────────────── */
+const detectLines = [
+  { cls: 'demo-time',   text: '[08:42:31] AIOps Agent v2.0 — Monitoring cluster...' },
+  { cls: 'demo-prompt', text: '> Polling Prometheus metrics...' },
+  { cls: 'demo-prompt', text: '> Streaming Loki logs...' },
+  { cls: 'demo-prompt', text: '> Watching K8s events...' },
+  { cls: '',            text: '' },
+  { cls: 'demo-alert',  text: '⚠  ANOMALY DETECTED at 08:42:44' },
+  { cls: 'demo-alert',  text: '   Pod: payment-svc-7d9f4c-xk2pl' },
+  { cls: 'demo-detect', text: '   Reason: CrashLoopBackOff' },
+  { cls: 'demo-detect', text: '   Restarts: 8  |  State: Error' },
+  { cls: '',            text: '' },
+  { cls: 'demo-rca',    text: '→ RCA Agent: Querying Loki logs...' },
+  { cls: 'demo-rca',    text: '  ERROR: DB_CONNECTION_REFUSED :5432' },
+  { cls: 'demo-rca',    text: '  Root Cause: PostgreSQL pod evicted' },
+  { cls: 'demo-rca',    text: '  Confidence: 94%' },
+  { cls: '',            text: '' },
+  { cls: 'demo-heal',   text: '✓ Routing to Remediation Agent...' },
+];
+
+const remedyLines = [
+  { cls: 'demo-time',    text: '[08:42:45] Remediation Agent activated' },
+  { cls: 'demo-prompt',  text: '> Validating action against RBAC...' },
+  { cls: 'demo-detect',  text: '  Policy: ALLOW pod restart in ns/prod' },
+  { cls: '',             text: '' },
+  { cls: 'demo-prompt',  text: '> kubectl rollout restart deploy/postgres' },
+  { cls: 'demo-rca',     text: '  deployment.apps/postgres restarted' },
+  { cls: '',             text: '' },
+  { cls: 'demo-prompt',  text: '> Waiting for postgres pod READY...' },
+  { cls: 'demo-detect',  text: '  postgres-6b9d7f-m4xp2  1/1  Running' },
+  { cls: '',             text: '' },
+  { cls: 'demo-prompt',  text: '> Restarting affected payment-svc...' },
+  { cls: 'demo-rca',     text: '  payment-svc-7d9f4c-n8qr1  1/1  Running' },
+  { cls: '',             text: '' },
+  { cls: 'demo-prompt',  text: '> Validation Agent: checking metrics...' },
+  { cls: 'demo-heal',    text: '  Error rate: 4.2% → 0.0% ✓' },
+  { cls: 'demo-heal',    text: '  Latency P99: 1.4s → 82ms ✓' },
+  { cls: '',             text: '' },
+  { cls: 'demo-success', text: '✅ REMEDIATION COMPLETE — 28 seconds' },
+  { cls: 'demo-success', text: '   Zero human intervention required.' },
+];
+
+function runDemo() {
+  const db = document.getElementById('demo-detect-body');
+  const rb = document.getElementById('demo-remedy-body');
+  if (!db || !rb) return;
+
+  db.innerHTML = '';
+  rb.innerHTML = '';
+
+  let di = 0, ri = 0;
+  const DELAY_D = 180, DELAY_R = 200;
+
+  function addLine(container, lineObj, delay, index, cb) {
+    setTimeout(() => {
+      const span = document.createElement('span');
+      span.className = 'demo-line ' + (lineObj.cls || '');
+      span.textContent = lineObj.text || '\u00a0';
+      container.appendChild(span);
+      container.scrollTop = container.scrollHeight;
+      if (cb) cb();
+    }, delay * index);
+  }
+
+  detectLines.forEach((line, i) => addLine(db, line, DELAY_D, i));
+
+  // Start remediation after detection finishes
+  const detOffset = detectLines.length * DELAY_D + 300;
+  remedyLines.forEach((line, i) => {
+    setTimeout(() => {
+      const span = document.createElement('span');
+      span.className = 'demo-line ' + (line.cls || '');
+      span.textContent = line.text || '\u00a0';
+      rb.appendChild(span);
+      rb.scrollTop = rb.scrollHeight;
+    }, detOffset + DELAY_R * i);
+  });
+}
+
+runDemo();
+
+document.getElementById('replay-demo').addEventListener('click', runDemo);
+</script>
+</body>
+</html>
