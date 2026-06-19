@@ -16,8 +16,20 @@
 
 /* ── 1. Scroll Progress Bar ───────────────────────────────── */
 (function initScrollProgress() {
-  const bar = document.getElementById('dh-progress');
-  if (!bar) return;
+  const bar = document.createElement('div');
+  bar.id = 'scroll-progress';
+  Object.assign(bar.style, {
+    position:       'fixed',
+    top:            '0',
+    left:           '0',
+    height:         '2px',
+    width:          '0%',
+    background:     'linear-gradient(90deg,#8b5cf6,#2dff7a,#00e5ff)',
+    zIndex:         '10001',
+    transition:     'width 0.12s linear',
+    pointerEvents:  'none',
+  });
+  document.body.appendChild(bar);
 
   window.addEventListener('scroll', () => {
     const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
@@ -56,7 +68,7 @@
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.style.opacity   = '1';
+        entry.target.style.opacity  = '1';
         entry.target.style.transform = 'translateY(0)';
         io.unobserve(entry.target);
       }
@@ -76,7 +88,7 @@
 
   const animate = (el) => {
     const target   = parseFloat(el.dataset.counter);
-    const suffix   = el.dataset.suffix   || '';
+    const suffix   = el.dataset.suffix  || '';
     const decimals = parseInt(el.dataset.decimals || '0', 10);
     const duration = 2200;
     const start    = performance.now();
@@ -108,28 +120,29 @@
   if (!body) return;
 
   const lines = [
-    { kind: 'cmd', text: 'git push origin main' },
-    { kind: 'out', text: '✔ Branch main pushed',           color: '#10b981' },
+    { kind: 'cmd',  text: 'git push origin main' },
+    { kind: 'out',  text: '✔ Branch main pushed',            color: '#2dff7a' },
     { kind: 'gap' },
-    { kind: 'cmd', text: 'jenkins build start' },
-    { kind: 'out', text: '[1/5] CLONE   ████████ 100%',    color: '#10b981' },
-    { kind: 'out', text: '[2/5] TEST    ████████ 100%',    color: '#14b8a6' },
-    { kind: 'out', text: '[3/5] BUILD   ████████ 100%',    color: '#14b8a6' },
-    { kind: 'out', text: '[4/5] PUSH    ████████ 100%',    color: '#f97316' },
-    { kind: 'out', text: '[5/5] DEPLOY  ████████ 100%',    color: '#10b981' },
+    { kind: 'cmd',  text: 'jenkins build start' },
+    { kind: 'out',  text: '[1/5] CLONE   ████████ 100%',     color: '#2dff7a' },
+    { kind: 'out',  text: '[2/5] TEST    ████████ 100%',     color: '#00e5ff' },
+    { kind: 'out',  text: '[3/5] BUILD   ████████ 100%',     color: '#00e5ff' },
+    { kind: 'out',  text: '[4/5] PUSH    ████████ 100%',     color: '#ff5c1a' },
+    { kind: 'out',  text: '[5/5] DEPLOY  ████████ 100%',     color: '#2dff7a' },
     { kind: 'gap' },
-    { kind: 'out', text: '✔ Pipeline succeeded in 2m 14s', color: '#10b981' },
-    { kind: 'out', text: '→ Deployed to production',        color: '#14b8a6' },
+    { kind: 'out',  text: '✔ Pipeline succeeded in 2m 14s',  color: '#2dff7a' },
+    { kind: 'out',  text: '→ Deployed to production',         color: '#00e5ff' },
   ];
 
   body.innerHTML = '';
 
   let li = 0, ci = 0, cur = null;
+
   const cursor = Object.assign(document.createElement('span'), { className: 't-cursor' });
 
-  function mkLine()   { const s = document.createElement('span'); s.className = 't-line'; return s; }
-  function mkPrompt() { const s = mkLine(); const p = document.createElement('span'); p.className = 't-prompt'; p.textContent = '$ '; s.appendChild(p); return s; }
-  function mkOut(col) { const s = mkLine(); s.classList.add('t-out'); if (col) s.style.color = col; return s; }
+  function mkLine()    { const s = document.createElement('span'); s.className = 't-line'; return s; }
+  function mkPrompt()  { const s = mkLine(); const p = document.createElement('span'); p.className = 't-prompt'; p.textContent = '$ '; s.appendChild(p); return s; }
+  function mkOut(col)  { const s = mkLine(); s.classList.add('t-out'); if (col) s.style.color = col; return s; }
 
   function type() {
     if (li >= lines.length) {
@@ -165,15 +178,16 @@
 
 /* ── 5. Nav Scroll-Spy ────────────────────────────────────── */
 (function initNavSpy() {
+  const navLinks = document.querySelectorAll('.nav-links a');
   const sections = document.querySelectorAll('section[id], header[id]');
   if (!sections.length) return;
 
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        document.querySelectorAll('#dh-links a').forEach(a => a.classList.remove('dh-active'));
-        const match = document.querySelector(`#dh-links a[href="#${entry.target.id}"]`);
-        if (match) match.classList.add('dh-active');
+        navLinks.forEach(a => a.classList.remove('active'));
+        const match = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+        if (match) match.classList.add('active');
       }
     });
   }, { rootMargin: '-25% 0px -65% 0px' });
@@ -187,6 +201,7 @@
   const form = document.getElementById('contact-form');
   if (!form) return;
 
+  /* ── Feedback banner ── */
   const banner = document.createElement('div');
   banner.id = 'form-feedback';
   Object.assign(banner.style, {
@@ -203,28 +218,30 @@
 
   const setFeedback = (type, msg) => {
     const map = {
-      success: { bg: 'rgba(15,118,110,0.1)',  border: 'rgba(15,118,110,0.4)', color: '#0f766e', icon: '✔' },
-      error:   { bg: 'rgba(249,115,22,0.1)',  border: 'rgba(249,115,22,0.4)', color: '#f97316', icon: '✖' },
-      loading: { bg: 'rgba(20,184,166,0.08)', border: 'rgba(20,184,166,0.3)', color: '#14b8a6', icon: '⟳' },
+      success: { bg: 'rgba(45,255,122,0.09)',  border: 'rgba(45,255,122,0.4)', color: '#2dff7a',  icon: '✔' },
+      error:   { bg: 'rgba(255,92,26,0.09)',   border: 'rgba(255,92,26,0.4)',  color: '#ff5c1a',  icon: '✖' },
+      loading: { bg: 'rgba(0,229,255,0.07)',   border: 'rgba(0,229,255,0.3)',  color: '#00e5ff',  icon: '⟳' },
     };
     const s = map[type];
     Object.assign(banner.style, {
-      display:     'block',
-      background:  s.bg,
-      borderColor: s.border,
-      color:       s.color,
+      display:         'block',
+      background:      s.bg,
+      borderColor:     s.border,
+      color:           s.color,
     });
     banner.innerHTML = `${s.icon}&nbsp;&nbsp;${msg}`;
     banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   };
 
+  /* ── Submit ── */
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    /* Validate required fields */
     let ok = true;
     form.querySelectorAll('[required]').forEach(f => {
       if (!f.value.trim()) {
-        f.style.borderColor = 'rgba(249,115,22,0.6)';
+        f.style.borderColor = 'rgba(255,92,26,0.6)';
         ok = false;
       } else {
         f.style.borderColor = '';
@@ -235,12 +252,17 @@
     const btn = form.querySelector('[type="submit"]');
     const origLabel = btn.textContent;
     btn.textContent = '⟳  Sending…';
-    btn.disabled    = true;
+    btn.disabled = true;
     btn.style.opacity = '0.65';
     setFeedback('loading', 'Sending your message — hang tight…');
 
     try {
+      /* ── Replace the URL below with your own Formspree endpoint ──
+         1. Go to https://formspree.io/
+         2. Create a free form → copy the endpoint
+         3. Replace 'YOUR_FORM_ID' below                           */
       const ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+
       const res = await fetch(ENDPOINT, {
         method:  'POST',
         body:    new FormData(form),
@@ -248,13 +270,15 @@
       });
 
       if (res.ok) {
-        setFeedback('success', "Message sent! We'll reply within 24 hours. 🚀");
+        setFeedback('success', 'Message sent! We\'ll reply within 24 hours. 🚀');
         form.reset();
       } else {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || 'Server error');
       }
     } catch (err) {
+      /* In demo mode (no real endpoint) we still show success.
+         In production remove the demo block and show the real error. */
       if (err.message.includes('Failed to fetch') || err.message.includes('YOUR_FORM_ID')) {
         setFeedback('success', 'Message received! We\'ll be in touch soon. 🚀 <br><small style="opacity:.6">(Demo mode — connect Formspree for real delivery)</small>');
         form.reset();
@@ -262,42 +286,46 @@
         setFeedback('error', `Something went wrong: ${err.message}. Please try again or email hello@devopshub.io`);
       }
     } finally {
-      btn.textContent   = origLabel;
-      btn.disabled      = false;
+      btn.textContent = origLabel;
+      btn.disabled    = false;
       btn.style.opacity = '';
     }
   });
 
+  /* ── Live field validation ── */
   form.querySelectorAll('input, textarea').forEach(f => {
     f.addEventListener('blur', () => {
-      if (f.required && !f.value.trim()) f.style.borderColor = 'rgba(249,115,22,0.5)';
+      if (f.required && !f.value.trim()) f.style.borderColor = 'rgba(255,92,26,0.5)';
     });
     f.addEventListener('input', () => {
       if (f.value.trim()) f.style.borderColor = '';
     });
   });
 
+  /* ── Character counter for message ── */
   const textarea = form.querySelector('textarea');
   const hint     = textarea?.nextElementSibling;
   if (textarea && hint) {
     textarea.addEventListener('input', () => {
       const len = textarea.value.length;
       hint.textContent = `${len} characters · Markdown supported.`;
-      hint.style.color = len >= 20 ? 'var(--primary)' : 'var(--text-muted)';
+      hint.style.color = len >= 20 ? '#2dff7a' : 'var(--text-muted)';
     });
   }
 })();
 
 
-/* ── 7. Mobile Nav Auto-close (legacy checkbox nav) ──────── */
+/* ── 7. Mobile Nav Auto-close ─────────────────────────────── */
 (function initMobileNav() {
   const toggle = document.getElementById('nav-toggle');
   if (!toggle) return;
 
+  /* Close on link click */
   document.querySelectorAll('.nav-links a').forEach(a => {
     a.addEventListener('click', () => { toggle.checked = false; });
   });
 
+  /* Close on outside tap */
   document.addEventListener('click', (e) => {
     const inner = document.querySelector('.nav-inner');
     if (inner && !inner.contains(e.target)) toggle.checked = false;
@@ -318,9 +346,9 @@
     width:         '44px',
     height:        '44px',
     borderRadius:  '50%',
-    background:    'var(--bg-card)',
-    border:        '1px solid rgba(15,118,110,0.3)',
-    color:         'var(--primary)',
+    background:    'var(--bg-card, #111c21)',
+    border:        '1px solid rgba(45,255,122,0.3)',
+    color:         '#2dff7a',
     fontSize:      '1.1rem',
     cursor:        'pointer',
     zIndex:        '500',
@@ -342,12 +370,12 @@
 
   btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
   btn.addEventListener('mouseenter', () => {
-    btn.style.boxShadow   = '0 0 20px rgba(15,118,110,0.35)';
-    btn.style.borderColor = 'rgba(15,118,110,0.7)';
+    btn.style.boxShadow  = '0 0 20px rgba(45,255,122,0.45)';
+    btn.style.borderColor = 'rgba(45,255,122,0.7)';
   });
   btn.addEventListener('mouseleave', () => {
-    btn.style.boxShadow   = '';
-    btn.style.borderColor = 'rgba(15,118,110,0.3)';
+    btn.style.boxShadow  = '';
+    btn.style.borderColor = 'rgba(45,255,122,0.3)';
   });
 })();
 
@@ -363,10 +391,10 @@
         await navigator.clipboard.writeText(badge.textContent.trim());
         const orig   = badge.textContent;
         const origBg = badge.style.background;
-        badge.textContent      = '✓ copied';
-        badge.style.background = 'rgba(15,118,110,0.2)';
+        badge.textContent    = '✓ copied';
+        badge.style.background = 'rgba(45,255,122,0.22)';
         setTimeout(() => {
-          badge.textContent      = orig;
+          badge.textContent    = orig;
           badge.style.background = origBg;
         }, 1600);
       } catch { /* clipboard blocked */ }
@@ -375,7 +403,31 @@
 })();
 
 
-/* ── 10. Shared Navbar ────────────────────────────────────── */
+/* ── 10. Nav hide/show on scroll direction ────────────────── */
+(function initNavHide() {
+  const nav = document.querySelector('.nav');
+  if (!nav) return;
+
+  let lastY = 0;
+  let ticking = false;
+
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    requestAnimationFrame(() => {
+      const y    = window.scrollY;
+      const down = y > lastY && y > 120;
+      nav.style.transform  = down ? 'translateY(-100%)' : 'translateY(0)';
+      nav.style.transition = 'transform 0.35s cubic-bezier(0.4,0,0.2,1)';
+      lastY   = y;
+      ticking = false;
+    });
+    ticking = true;
+  }, { passive: true });
+})();
+
+/* ═══════════════════════════════════════════════════════════
+   SHARED NAVBAR — behaviour
+═══════════════════════════════════════════════════════════ */
 (function initNav() {
   const nav      = document.getElementById('dh-nav');
   const progress = document.getElementById('dh-progress');
@@ -383,9 +435,9 @@
   const drawer   = document.getElementById('dh-drawer');
   const themeBtn = document.getElementById('dh-theme-btn');
 
-  if (!nav) return;
+  if (!nav) return; // safety guard
 
-  /* ── Scroll: progress + hide/show + scrolled class ── */
+  /* ── Scroll progress + hide/show ── */
   let lastY = 0, ticking = false;
 
   window.addEventListener('scroll', () => {
@@ -398,6 +450,7 @@
 
       if (progress) progress.style.width = pct + '%';
 
+      /* Hide going down past 100px, show going up */
       if (y > lastY && y > 100) {
         nav.classList.add('dh-hidden');
         closeMobile();
@@ -414,7 +467,6 @@
 
   /* ── Mobile drawer ── */
   function openMobile() {
-    if (!burger || !drawer) return;
     burger.classList.add('dh-open');
     drawer.classList.add('dh-open');
     burger.setAttribute('aria-expanded', 'true');
@@ -435,36 +487,31 @@
     );
   }
 
+  /* Close drawer on link click or outside tap */
   if (drawer) {
     drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMobile));
   }
-
   document.addEventListener('click', e => {
     if (nav && drawer && !nav.contains(e.target) && !drawer.contains(e.target)) closeMobile();
   });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMobile(); });
 
-  /* ── Theme toggle ──────────────────────────────────────────
-     CSS default = light theme (no class on body).
-     Dark mode   = body.dark-mode class added.
-     Saved in localStorage as 'dark' | 'light'.
-  ────────────────────────────────────────────────────────── */
+  /* ── Theme toggle ── */
   const THEME_KEY = 'devopshub_theme';
 
-  function applyTheme(dark) {
-    document.body.classList.toggle('dark-mode', dark);
-    if (themeBtn) themeBtn.textContent = dark ? '☀️' : '🌙';
+  function applyTheme(light) {
+    document.body.classList.toggle('light-mode', light);
+    if (themeBtn) themeBtn.textContent = light ? '☀️' : '🌙';
   }
 
-  /* Restore saved preference on every page load */
-  applyTheme(localStorage.getItem(THEME_KEY) === 'dark');
+  /* Apply saved on load */
+  applyTheme(localStorage.getItem(THEME_KEY) === 'light');
 
   if (themeBtn) {
     themeBtn.addEventListener('click', () => {
-      const isDark = document.body.classList.toggle('dark-mode');
-      themeBtn.textContent = isDark ? '☀️' : '🌙';
-      localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
-
+      const isLight = document.body.classList.toggle('light-mode');
+      themeBtn.textContent = isLight ? '☀️' : '🌙';
+      localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark');
       /* Spin effect */
       themeBtn.style.transition = 'transform 0.4s ease';
       themeBtn.style.transform  = 'rotate(360deg)';
@@ -476,38 +523,239 @@
   }
 })();
 
-
-/* ── Nav link sync (single source of truth) ───────────────── */
+/* ═══════════════════════════════════════════════════════════
+   MEGA-MENU NAVIGATION — single source of truth
+   Structure: Home | DevOps▾ | AIOps▾ | Resources▾ | Contact
+   Add a new page = add one object below. Nothing else to touch.
+═══════════════════════════════════════════════════════════ */
 (function syncNav() {
-  const NAV_PAGES = [
-    { href: 'index.html',       label: 'Home',        icon: '⌂' },
-    { href: 'about.html',       label: 'About',       icon: '◎' },
-    { href: 'tools.html',       label: 'Tools',       icon: '⚙' },
-    { href: 'concepts.html',    label: 'Concepts',    icon: '◈' },
-    { href: 'workflow.html',    label: 'Workflow',    icon: '↺' },
-    { href: 'roadmap.html',     label: 'Roadmap',     icon: '◉' },
-    { href: 'quiz.html',        label: 'Quiz',        icon: '◆' },
-    { href: 'blog.html',        label: 'Blog',        icon: '✎' },
-    { href: 'search.html',      label: 'Search',      icon: '🔍' },
-    { href: 'cheatsheets.html', label: 'Cheatsheets', icon: '📋' },
-    { href: 'glossary.html',    label: 'Glossary',    icon: '📚' },
-    { href: 'contact.html',     label: 'Contact',     icon: '✉' },
+
+  const NAV_GROUPS = [
+    { type: 'link', href: 'index.html', label: 'Home', icon: '⌂' },
+
+    { type: 'group', label: 'DevOps', icon: '⚙', items: [
+      { href: 'about.html',    icon: '◎', label: 'About',    desc: 'What is DevOps' },
+      { href: 'tools.html',    icon: '🛠', label: 'Tools',    desc: 'Docker, K8s, Jenkins…' },
+      { href: 'concepts.html', icon: '◈', label: 'Concepts', desc: 'CI/CD, IaC, Monitoring' },
+      { href: 'workflow.html', icon: '↺', label: 'Workflow', desc: '7-stage lifecycle' },
+      { href: 'roadmap.html',  icon: '◉', label: 'Roadmap',  desc: 'Skill tracker' },
+      { href: 'quiz.html',     icon: '◆', label: 'Quiz',     desc: 'Test your knowledge' },
+      { href: 'blog.html',     icon: '✎', label: 'Blog',     desc: 'Tutorials & guides' },
+    ]},
+
+    { type: 'group', label: 'AIOps', icon: '🤖', items: [
+      { href: 'aiops.html',               icon: '🧠', label: 'AIOps Overview',         desc: 'AI-powered operations' },
+      { href: 'aiops.html#research',      icon: '📄', label: 'Research Paper',         desc: 'IEEE TNSM 2026' },
+      { href: 'aiops.html#architecture',  icon: '⚡', label: 'Multi-Agent Architecture', desc: 'LLM agent pipeline' },
+    ]},
+
+    { type: 'group', label: 'Resources', icon: '📚', items: [
+      { href: 'search.html',      icon: '🔍', label: 'Search',      desc: 'Find anything instantly' },
+      { href: 'cheatsheets.html', icon: '📋', label: 'Cheatsheets', desc: '120+ copy-paste commands' },
+      { href: 'glossary.html',    icon: '📖', label: 'Glossary',    desc: '100+ DevOps terms A–Z' },
+    ]},
+
+    { type: 'link', href: 'contact.html', label: 'Contact', icon: '✉' },
   ];
 
   const desktopNav = document.getElementById('dh-links');
   const drawerNav  = document.querySelector('#dh-drawer ul');
   if (!desktopNav || !drawerNav) return;
 
-  const current = window.location.pathname.split('/').pop() || 'index.html';
+  const current = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  const stripHash = h => h.split('#')[0];
+  const isActiveHref = href => stripHash(href) === current ||
+    (stripHash(href) === 'index.html' && current === '');
 
-  const isActive = (href) =>
-    href === current || (href === 'index.html' && current === '');
+  /* ── Inject CSS once ── */
+  if (!document.getElementById('dh-dropdown-css')) {
+    const css = document.createElement('style');
+    css.id = 'dh-dropdown-css';
+    css.textContent = `
+      #dh-links { gap:.15rem; }
+      .dh-item { position:relative; list-style:none; }
+      .dh-item > a, .dh-group-label {
+        display:flex; align-items:center; gap:.3rem;
+        padding:.38rem .6rem; font-family:'Courier New',monospace;
+        font-size:.7rem; letter-spacing:.07em; text-transform:uppercase;
+        color:#7a9e92; text-decoration:none; border-radius:5px;
+        border:1px solid transparent; white-space:nowrap; cursor:pointer;
+        transition:color .2s,background .2s,border-color .2s,transform .18s;
+        user-select:none;
+      }
+      .dh-item > a:hover, .dh-item:hover > a,
+      .dh-item:hover .dh-group-label, .dh-item.dh-force-open .dh-group-label,
+      .dh-group-label.dh-active, .dh-item > a.dh-active {
+        color:#2dff7a; background:rgba(45,255,122,.09);
+        border-color:rgba(45,255,122,.22); transform:translateY(-1px);
+      }
+      .dh-caret { font-size:.55rem; opacity:.65; transition:transform .25s ease; }
+      .dh-item:hover .dh-caret, .dh-item.dh-force-open .dh-caret { transform:rotate(180deg); }
 
-  desktopNav.innerHTML = NAV_PAGES.map(p =>
-    `<li><a href="${p.href}"${isActive(p.href) ? ' class="dh-active"' : ''}>${p.label}</a></li>`
-  ).join('');
+      .dh-panel {
+        position:absolute; top:100%; left:50%;
+        transform:translateX(-50%);
+        padding-top:12px; /* invisible hover-bridge, no gap so hover never breaks */
+        opacity:0; pointer-events:none;
+        transition:opacity .2s ease;
+        z-index:60;
+      }
+      .dh-item:hover .dh-panel, .dh-item:focus-within .dh-panel,
+      .dh-item.dh-force-open .dh-panel {
+        opacity:1; pointer-events:auto;
+      }
+      .dh-panel-inner {
+        display:grid;
+        grid-template-columns:repeat(2, minmax(190px, 1fr));
+        gap:.5rem;
+        min-width:420px; max-width:580px;
+        max-height:min(60vh, 420px);
+        overflow-y:auto;
+        background:rgba(8,14,16,.98); border:1px solid rgba(45,255,122,.18);
+        border-radius:10px; padding:.6rem;
+        backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+        box-shadow:0 24px 60px rgba(0,0,0,.55);
+        scrollbar-width:thin; scrollbar-color:rgba(45,255,122,.35) transparent;
+      }
+      .dh-panel-inner::-webkit-scrollbar { width:6px; }
+      .dh-panel-inner::-webkit-scrollbar-track { background:transparent; }
+      .dh-panel-inner::-webkit-scrollbar-thumb {
+        background:rgba(45,255,122,.35); border-radius:3px;
+      }
+      .dh-panel-inner::-webkit-scrollbar-thumb:hover { background:rgba(45,255,122,.6); }
 
-  drawerNav.innerHTML = NAV_PAGES.map(p =>
-    `<li><a href="${p.href}"${isActive(p.href) ? ' class="dh-active"' : ''}>${p.icon} ${p.label}</a></li>`
-  ).join('');
+      /* Full button-style items */
+      .dh-panel-inner a {
+        display:flex; gap:.6rem; align-items:flex-start;
+        padding:.7rem .75rem;
+        border-radius:8px;
+        border:1px solid rgba(255,255,255,.07);
+        background:rgba(255,255,255,.025);
+        text-decoration:none; color:#cfe6dd;
+        transition:background .18s,border-color .18s,color .18s,transform .15s;
+      }
+      .dh-panel-inner a:hover {
+        background:rgba(45,255,122,.13);
+        border-color:rgba(45,255,122,.4);
+        color:#2dff7a;
+        transform:translateY(-2px);
+      }
+      .dh-panel-inner a.dh-active {
+        background:rgba(45,255,122,.1);
+        border-color:rgba(45,255,122,.32);
+        color:#2dff7a;
+      }
+      .dh-panel-icon { font-size:1.05rem; margin-top:1px; flex-shrink:0; }
+      .dh-panel-title { display:block; font-family:'Courier New',monospace; font-size:.74rem; }
+      .dh-panel-desc  { display:block; font-size:.64rem; color:#5f8478; margin-top:2px; }
+
+      /* Mobile drawer accordion */
+      .dh-drawer-group-toggle {
+        display:flex; justify-content:space-between; align-items:center;
+        width:100%; background:none; border:1px solid transparent; cursor:pointer;
+        padding:.65rem .9rem; font-family:'Courier New',monospace; font-size:.82rem;
+        letter-spacing:.08em; text-transform:uppercase; color:#7a9e92;
+        border-radius:6px; transition:all .2s;
+      }
+      .dh-drawer-group-toggle:hover { color:#2dff7a; background:rgba(45,255,122,.07); }
+      .dh-drawer-caret { font-size:.65rem; transition:transform .3s ease; }
+      .dh-drawer-group-toggle.dh-open .dh-drawer-caret { transform:rotate(180deg); }
+      .dh-drawer-sub {
+        max-height:0; overflow:hidden; transition:max-height .35s ease;
+        padding-left:.5rem;
+      }
+      .dh-drawer-sub.dh-open { max-height:500px; }
+      .dh-drawer-sub a {
+        display:block; padding:.5rem .9rem; font-size:.78rem; color:#7a9e92;
+        text-decoration:none; border-radius:6px; transition:all .2s;
+      }
+      .dh-drawer-sub a:hover, .dh-drawer-sub a.dh-active {
+        color:#2dff7a; background:rgba(45,255,122,.08); padding-left:1.1rem;
+      }
+
+      body.light-mode .dh-item > a, body.light-mode .dh-group-label { color:#3d5266; }
+      body.light-mode .dh-item:hover > a, body.light-mode .dh-item:hover .dh-group-label,
+      body.light-mode .dh-group-label.dh-active, body.light-mode .dh-item > a.dh-active {
+        color:#16a34a; background:rgba(22,163,74,.08); border-color:rgba(22,163,74,.25);
+      }
+      body.light-mode .dh-panel-inner { background:rgba(245,248,250,.98); border-color:rgba(0,0,0,.1); }
+      body.light-mode .dh-panel-inner a { color:#3d5266; background:rgba(0,0,0,.02); border-color:rgba(0,0,0,.06); }
+      body.light-mode .dh-panel-inner a:hover, body.light-mode .dh-panel-inner a.dh-active {
+        color:#16a34a; background:rgba(22,163,74,.1); border-color:rgba(22,163,74,.3);
+      }
+      body.light-mode .dh-drawer-group-toggle { color:#3d5266; }
+      body.light-mode .dh-drawer-sub a { color:#3d5266; }
+      body.light-mode .dh-drawer-sub a:hover, body.light-mode .dh-drawer-sub a.dh-active { color:#16a34a; background:rgba(22,163,74,.08); }
+    `;
+    document.head.appendChild(css);
+  }
+
+  /* ── Build desktop nav ── */
+  desktopNav.innerHTML = NAV_GROUPS.map(entry => {
+    if (entry.type === 'link') {
+      const active = isActiveHref(entry.href) ? ' dh-active' : '';
+      return `<li class="dh-item"><a href="${entry.href}" class="${active.trim()}">${entry.label}</a></li>`;
+    }
+    /* group with dropdown panel */
+    const groupActive = entry.items.some(i => isActiveHref(i.href)) ? ' dh-active' : '';
+    const panelLinks = entry.items.map(i => {
+      const active = isActiveHref(i.href) ? ' dh-active' : '';
+      return `<a href="${i.href}" class="${active.trim()}">
+        <span class="dh-panel-icon">${i.icon}</span>
+        <span>
+          <span class="dh-panel-title">${i.label}</span>
+          <span class="dh-panel-desc">${i.desc}</span>
+        </span>
+      </a>`;
+    }).join('');
+    return `<li class="dh-item">
+      <span class="dh-group-label${groupActive}" tabindex="0">${entry.icon} ${entry.label} <span class="dh-caret">▾</span></span>
+      <div class="dh-panel"><div class="dh-panel-inner">${panelLinks}</div></div>
+    </li>`;
+  }).join('');
+
+  /* Click-to-toggle fallback for touch devices (hover doesn't exist) */
+  desktopNav.querySelectorAll('.dh-group-label').forEach(label => {
+    label.addEventListener('click', (e) => {
+      const item = label.closest('.dh-item');
+      const wasOpen = item.classList.contains('dh-force-open');
+      desktopNav.querySelectorAll('.dh-item.dh-force-open').forEach(i => i.classList.remove('dh-force-open'));
+      if (!wasOpen) item.classList.add('dh-force-open');
+      e.stopPropagation();
+    });
+  });
+  document.addEventListener('click', () => {
+    desktopNav.querySelectorAll('.dh-item.dh-force-open').forEach(i => i.classList.remove('dh-force-open'));
+  });
+
+  /* ── Build mobile drawer (accordion) ── */
+  drawerNav.innerHTML = NAV_GROUPS.map((entry, gi) => {
+    if (entry.type === 'link') {
+      const active = isActiveHref(entry.href) ? ' dh-active' : '';
+      return `<li><a href="${entry.href}" class="${active.trim()}">${entry.icon} ${entry.label}</a></li>`;
+    }
+    const subId = `dh-grp-${gi}`;
+    const groupActive = entry.items.some(i => isActiveHref(i.href));
+    const subLinks = entry.items.map(i => {
+      const active = isActiveHref(i.href) ? ' dh-active' : '';
+      return `<a href="${i.href}" class="${active.trim()}">${i.icon} ${i.label}</a>`;
+    }).join('');
+    return `<li class="dh-drawer-group">
+      <button type="button" class="dh-drawer-group-toggle${groupActive ? ' dh-active' : ''}" data-target="${subId}">
+        ${entry.icon} ${entry.label} <span class="dh-drawer-caret">▾</span>
+      </button>
+      <div class="dh-drawer-sub${groupActive ? ' dh-open' : ''}" id="${subId}">${subLinks}</div>
+    </li>`;
+  }).join('');
+
+  /* Accordion toggle behaviour */
+  drawerNav.querySelectorAll('.dh-drawer-group-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const sub = document.getElementById(btn.dataset.target);
+      const isOpen = sub.classList.contains('dh-open');
+      btn.classList.toggle('dh-open', !isOpen);
+      sub.classList.toggle('dh-open', !isOpen);
+    });
+  });
+
 })();
