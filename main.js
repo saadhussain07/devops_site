@@ -479,7 +479,7 @@ window.__DH_MAIN_LOADED__ = true;
     burger.classList.add('dh-open');
     drawer.classList.add('dh-open');
     burger.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
+    /* keep body scrollable so content is visible behind the partial drawer */
   }
 
   function closeMobile() {
@@ -487,7 +487,6 @@ window.__DH_MAIN_LOADED__ = true;
     burger.classList.remove('dh-open');
     drawer.classList.remove('dh-open');
     burger.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
   }
 
   if (burger) {

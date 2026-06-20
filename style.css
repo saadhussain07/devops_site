@@ -1608,6 +1608,22 @@ body.dark-mode .tl-vault { color: #ffd814; border-color: rgba(255,216,20,0.35); 
   #dh-burger.dh-open ~ #dh-links { display: flex; }
   #dh-inner { position: relative; flex-wrap: nowrap; }
 
+  /* Drawer: cap height to 60% of screen so page content is always visible below */
+  #dh-drawer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.38s cubic-bezier(0.4,0,0.2,1);
+  }
+  #dh-drawer.dh-open {
+    max-height: 60vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(15,118,110,.4) transparent;
+  }
+  #dh-drawer.dh-open::-webkit-scrollbar { width: 4px; }
+  #dh-drawer.dh-open::-webkit-scrollbar-track { background: transparent; }
+  #dh-drawer.dh-open::-webkit-scrollbar-thumb { background: rgba(15,118,110,.4); border-radius: 2px; }
+
   .hero { padding: 3rem 0; min-height: auto; }
   .hero-stats { grid-template-columns: 1fr 1fr; gap: 1rem; }
 
