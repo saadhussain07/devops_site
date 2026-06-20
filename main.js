@@ -563,6 +563,7 @@ window.__DH_MAIN_LOADED__ = true;
     { type: 'group', label: 'Resources', icon: '📚', items: [
       { href: 'search.html',      icon: '🔍', label: 'Search',      desc: 'Find anything instantly' },
       { href: 'cheatsheets.html', icon: '📋', label: 'Cheatsheets', desc: '120+ copy-paste commands' },
+      { href: 'resources.html',   icon: '⭐', label: 'Resources',   desc: 'Curated learning list' },
       { href: 'glossary.html',    icon: '📖', label: 'Glossary',    desc: '100+ DevOps terms A–Z' },
     ]},
 

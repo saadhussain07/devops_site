@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Curated DevOps learning resources — YouTube channels, certifications, GitHub repos, and a personal learning path by Saad Hussain.">
+  <meta name="keywords" content="DevOps resources, learn DevOps, DevOps YouTube, DevOps certifications, DevOps roadmap">
+  <meta name="author" content="DevOps Hub">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Curated DevOps Resources — DevOps Hub">
+  <meta property="og:description" content="Everything I personally used to learn DevOps — from zero to building production systems.">
+  <meta property="og:url" content="https://rocketdevops.vercel.app/resources.html">
+  <title>Curated Resources — DevOps Hub</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── Resources page ────────────────────────────────────── */
+
+    /* Accent vars (mirrors roadmap.html) */
+    :root {
+      --accent-green:  #16a34a;
+      --accent-cyan:   #0891b2;
+      --accent-orange: #ea580c;
+      --accent-purple: #7c3aed;
+    }
+    body.dark-mode {
+      --accent-green:  #2dff7a;
+      --accent-cyan:   #00e5ff;
+      --accent-orange: #ff5c1a;
+      --accent-purple: #8b5cf6;
+    }
+
+    /* ── Hero ── */
+    .res-hero {
+      padding: 4rem 0 3rem;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .res-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 120% at 50% 0%,
+        rgba(15,118,110,0.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .res-hero-inner {
+      position: relative;
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .res-hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+    .res-hero h1 span { color: var(--primary-light); }
+    .res-hero p {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .res-hero-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 1.75rem;
+      flex-wrap: wrap;
+    }
+    .res-hero-meta a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--accent-green);
+      text-decoration: none;
+      padding: 0.4rem 0.9rem;
+      border: 1px solid rgba(45,255,122,0.3);
+      border-radius: var(--radius);
+      transition: all var(--transition);
+    }
+    .res-hero-meta a:hover {
+      background: rgba(45,255,122,0.08);
+      border-color: rgba(45,255,122,0.6);
+    }
+
+    /* ── Section header ── */
+    .res-section { padding: 4rem 0; }
+    .res-section + .res-section { padding-top: 0; }
+    .res-section-label {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.75rem;
+    }
+    .res-section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .res-section-label span {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .res-section-label .lbl-icon {
+      font-size: 1rem;
+    }
+    .res-section h2 {
+      font-size: clamp(1.35rem, 3vw, 1.8rem);
+      margin-bottom: 0.4rem;
+    }
+    .res-section-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      max-width: 600px;
+    }
+
+    /* ── GitHub featured card ── */
+    .github-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .github-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-green), var(--primary-light));
+    }
+    .github-card-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .github-avatar {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      border: 2px solid rgba(45,255,122,0.3);
+    }
+    .github-card-header h3 {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--text-bright);
+      margin-bottom: 0.15rem;
+    }
+    .github-card-header p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .github-card-header a {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--accent-green);
+      text-decoration: none;
+      padding: 0.45rem 1rem;
+      border: 1px solid rgba(45,255,122,0.35);
+      border-radius: var(--radius);
+      white-space: nowrap;
+      transition: all var(--transition);
+      flex-shrink: 0;
+    }
+    .github-card-header a:hover {
+      background: rgba(45,255,122,0.1);
+      border-color: rgba(45,255,122,0.6);
+    }
+    .github-order-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.85rem;
+    }
+    .repo-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 0.75rem;
+    }
+    .repo-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: all var(--transition);
+      position: relative;
+    }
+    .repo-item:hover {
+      border-color: rgba(45,255,122,0.4);
+      background: rgba(45,255,122,0.04);
+      transform: translateY(-2px);
+    }
+    .repo-num {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--accent-green);
+      background: rgba(45,255,122,0.1);
+      border: 1px solid rgba(45,255,122,0.2);
+      border-radius: 3px;
+      padding: 0.1rem 0.4rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .repo-info { flex: 1; min-width: 0; }
+    .repo-name {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-bright);
+      display: block;
+      margin-bottom: 0.2rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .repo-desc {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* ── YouTube grid ── */
+    .yt-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.1rem;
+    }
+    .yt-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      transition: all var(--transition);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .yt-card:hover {
+      border-color: rgba(255,92,26,0.35);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+    }
+    .yt-icon {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: rgba(255,92,26,0.12);
+      border: 1px solid rgba(255,92,26,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .yt-card h3 {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-bright);
+    }
+    .yt-card p {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      flex: 1;
+    }
+    .yt-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      background: rgba(249,115,22,0.1);
+      color: var(--accent-orange);
+      border: 1px solid rgba(249,115,22,0.25);
+    }
+
+    /* ── Certifications grid ── */
+    .cert-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1.1rem;
+    }
+    .cert-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.4rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .cert-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .cert-card:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+    }
+    .cert-card:hover::after { opacity: 1; }
+    .cert-badge {
+      width: 40px; height: 40px;
+      border-radius: var(--radius);
+      background: rgba(139,92,246,0.12);
+      border: 1px solid rgba(139,92,246,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    .cert-card h3 {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-bright);
+      line-height: 1.4;
+    }
+    .cert-issuer {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .cert-issuer::before {
+      content: '⬡';
+      color: var(--accent-purple);
+      font-size: 0.65rem;
+    }
+    .cert-link {
+      margin-top: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--accent-cyan);
+      text-decoration: none;
+      padding: 0.35rem 0.75rem;
+      border: 1px solid rgba(0,229,255,0.25);
+      border-radius: var(--radius);
+      width: fit-content;
+      transition: all var(--transition);
+    }
+    .cert-link:hover {
+      background: rgba(0,229,255,0.08);
+      border-color: rgba(0,229,255,0.5);
+    }
+
+    /* ── Learning path timeline ── */
+    .lp-wrap {
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(45,255,122,0.3) transparent;
+    }
+    .lp-wrap::-webkit-scrollbar { height: 4px; }
+    .lp-wrap::-webkit-scrollbar-track { background: transparent; }
+    .lp-wrap::-webkit-scrollbar-thumb { background: rgba(45,255,122,0.3); border-radius: 2px; }
+    .lp-track {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      min-width: max-content;
+      padding: 1rem 0 0.5rem;
+    }
+    .lp-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .lp-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 18px;
+      left: calc(50% + 28px);
+      width: calc(100% - 20px);
+      height: 2px;
+      background: linear-gradient(90deg, rgba(45,255,122,0.5), rgba(45,255,122,0.15));
+    }
+    .lp-node {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 2px solid rgba(45,255,122,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      margin-bottom: 0.6rem;
+      position: relative;
+      z-index: 1;
+      transition: all var(--transition);
+      flex-shrink: 0;
+    }
+    .lp-node.current {
+      border-color: var(--accent-orange);
+      background: rgba(255,92,26,0.1);
+      box-shadow: 0 0 0 4px rgba(255,92,26,0.15);
+      animation: pulse-node 2s ease-in-out infinite;
+    }
+    @keyframes pulse-node {
+      0%, 100% { box-shadow: 0 0 0 4px rgba(255,92,26,0.15); }
+      50%       { box-shadow: 0 0 0 8px rgba(255,92,26,0.08); }
+    }
+    .lp-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--text-secondary);
+      text-align: center;
+      max-width: 72px;
+      line-height: 1.35;
+    }
+    .lp-label.current { color: var(--accent-orange); }
+    .lp-connector { width: 56px; height: 2px; flex-shrink: 0; margin-top: 18px; }
+
+    /* ── CTA card ── */
+    .res-cta {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .res-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 100% at 50% 0%,
+        rgba(15,118,110,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .res-cta h2 {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      margin-bottom: 0.6rem;
+      position: relative;
+    }
+    .res-cta p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 1.75rem;
+      position: relative;
+    }
+    .res-cta-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .res-hero { padding: 3rem 0 2rem; }
+      .github-card { padding: 1.25rem; }
+      .github-card-header { flex-wrap: wrap; gap: 0.75rem; }
+      .github-card-header a { margin-left: 0; }
+      .repo-list { grid-template-columns: 1fr; }
+      .yt-grid { grid-template-columns: 1fr 1fr; }
+      .cert-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .yt-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav id="dh-nav" aria-label="Main navigation">
+  <div id="dh-progress"></div>
+  <div id="dh-inner">
+    <a href="index.html" id="dh-logo">
+      <span id="dh-prompt">&gt;</span> DevOpsHub
+    </a>
+    <ul id="dh-links"></ul>
+    <div id="dh-controls">
+      <button id="dh-theme-btn" aria-label="Toggle theme">🌙</button>
+      <button id="dh-burger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div id="dh-drawer"><ul></ul></div>
+<!-- ═══ END NAVBAR ═══ -->
+
+
+<!-- ─── Hero ─────────────────────────────────────────────── -->
+<div class="res-hero">
+  <div class="container">
+    <div class="res-hero-inner">
+      <span class="tag">// personal curation</span>
+      <h1 style="margin-top:0.75rem;">Curated <span>Resources</span></h1>
+      <p>Everything I personally used to learn DevOps — from zero to building production systems. One link to share with every fresher who DMs me.</p>
+      <div class="res-hero-meta">
+        <a href="https://github.com/saadhussain07" target="_blank" rel="noopener">⌥ github.com/saadhussain07</a>
+        <a href="https://linkedin.com/in/saadhussain07" target="_blank" rel="noopener">⎆ LinkedIn</a>
+        <a href="roadmap.html">◉ View Roadmap</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ─── Start Here: GitHub ──────────────────────────────── -->
+<section class="res-section section">
+  <div class="container">
+
+    <div class="res-section-label">
+      <span class="lbl-icon">⌥</span>
+      <span>// 01 — start here</span>
+    </div>
+    <h2>My GitHub — <span class="text-green">Follow This Order</span></h2>
+    <p class="res-section-desc">These repos are my personal learning lab. Work through them in sequence — each one builds on the last.</p>
+
+    <div class="github-card">
+      <div class="github-card-header">
+        <div class="github-avatar">👨‍💻</div>
+        <div>
+          <h3>saadhussain07</h3>
+          <p>DevOps Engineer in progress — all notes, configs, and practice projects are public</p>
+        </div>
+        <a href="https://github.com/saadhussain07" target="_blank" rel="noopener">↗ Open GitHub</a>
+      </div>
+
+      <div class="github-order-label">// recommended exploration order</div>
+      <div class="repo-list">
+
+        <a class="repo-item" href="https://github.com/saadhussain07/My_DevOps_Journey" target="_blank" rel="noopener">
+          <span class="repo-num">01</span>
+          <div class="repo-info">
+            <span class="repo-name">My_DevOps_Journey</span>
+            <span class="repo-desc">Full roadmap, structured notes, and study plan — start here to understand the big picture</span>
+          </div>
+        </a>
+
+        <a class="repo-item" href="https://github.com/saadhussain07/devops-linux" target="_blank" rel="noopener">
+          <span class="repo-num">02</span>
+          <div class="repo-info">
+            <span class="repo-name">devops-linux</span>
+            <span class="repo-desc">Bash scripting basics — the foundation everything else sits on</span>
+          </div>
+        </a>
+
+        <a class="repo-item" href="https://github.com/saadhussain07/devops-git-github-gitlab" target="_blank" rel="noopener">
+          <span class="repo-num">03</span>
+          <div class="repo-info">
+            <span class="repo-name">devops-git-github-gitlab</span>
+            <span class="repo-desc">Git fundamentals — branching, merging, rebasing, and remote workflows</span>
+          </div>
+        </a>
+
+        <a class="repo-item" href="https://github.com/saadhussain07/k8s-practice-manifests" target="_blank" rel="noopener">
+          <span class="repo-num">04</span>
+          <div class="repo-info">
+            <span class="repo-name">k8s-practice-manifests</span>
+            <span class="repo-desc">Hands-on Kubernetes — Deployments, Services, ConfigMaps, and more</span>
+          </div>
+        </a>
+
+        <a class="repo-item" href="https://github.com/saadhussain07/k8s-monitoring-stack" target="_blank" rel="noopener">
+          <span class="repo-num">05</span>
+          <div class="repo-info">
+            <span class="repo-name">k8s-monitoring-stack</span>
+            <span class="repo-desc">Full Prometheus + Grafana + Loki observability stack on Kubernetes</span>
+          </div>
+        </a>
+
+        <a class="repo-item" href="https://github.com/saadhussain07/terraform-aws-infra" target="_blank" rel="noopener">
+          <span class="repo-num">06</span>
+          <div class="repo-info">
+            <span class="repo-name">terraform-aws-infra</span>
+            <span class="repo-desc">Infrastructure as Code on AWS — VPC, EC2, S3, and beyond with Terraform</span>
+          </div>
+        </a>
+
+        <a class="repo-item" href="https://github.com/saadhussain07/ansible-playbooks" target="_blank" rel="noopener">
+          <span class="repo-num">06b</span>
+          <div class="repo-info">
+            <span class="repo-name">ansible-playbooks</span>
+            <span class="repo-desc">Configuration management playbooks — tackle alongside Terraform</span>
+          </div>
+        </a>
+
+        <a class="repo-item" href="https://github.com/saadhussain07/gitlab-cicd-projects" target="_blank" rel="noopener">
+          <span class="repo-num">07</span>
+          <div class="repo-info">
+            <span class="repo-name">gitlab-cicd-projects</span>
+            <span class="repo-desc">Real CI/CD pipelines on self-hosted GitLab — put everything together here</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ─── YouTube Channels ─────────────────────────────────── -->
+<section class="res-section section section--alt">
+  <div class="container">
+
+    <div class="res-section-label">
+      <span class="lbl-icon">▶</span>
+      <span>// 02 — free learning</span>
+    </div>
+    <h2>YouTube Channels <span class="text-green">I Recommend</span></h2>
+    <p class="res-section-desc">All free, all high quality. These are the channels that actually helped me understand concepts rather than just memorise commands.</p>
+
+    <div class="yt-grid">
+
+      <div class="yt-card">
+        <div class="yt-icon">▶</div>
+        <h3>TechWorld with Nana</h3>
+        <p>Best channel for Docker, Kubernetes, and full DevOps bootcamp. Nana explains everything step by step with real-world context.</p>
+        <span class="yt-tag">K8s · Docker · CI/CD</span>
+      </div>
+
+      <div class="yt-card">
+        <div class="yt-icon">▶</div>
+        <h3>KodeKloud</h3>
+        <p>Hands-on labs alongside videos. The best way to learn Kubernetes, CKA prep, and Terraform — you actually type commands while learning.</p>
+        <span class="yt-tag">CKA · Terraform · Linux</span>
+      </div>
+
+      <div class="yt-card">
+        <div class="yt-icon">▶</div>
+        <h3>NetworkChuck</h3>
+        <p>Makes Linux, networking, and DevOps concepts exciting and approachable. Great for beginners getting comfortable with the terminal.</p>
+        <span class="yt-tag">Linux · Networking · Cloud</span>
+      </div>
+
+      <div class="yt-card">
+        <div class="yt-icon">▶</div>
+        <h3>Abhishek.Veeramalla</h3>
+        <p>Practical DevOps from an industry engineer. Real projects, real pipelines, and honest advice on what actually matters on the job.</p>
+        <span class="yt-tag">Jenkins · AWS · GitOps</span>
+      </div>
+
+      <div class="yt-card">
+        <div class="yt-icon">▶</div>
+        <h3>Traversy Media</h3>
+        <p>Web fundamentals and deployment workflows. Useful when you need to understand what developers are building before you deploy it.</p>
+        <span class="yt-tag">Web · Deployment · Git</span>
+      </div>
+
+      <div class="yt-card">
+        <div class="yt-icon">▶</div>
+        <h3>Fireship</h3>
+        <p>Lightning-fast concept breakdowns. "X in 100 seconds" videos are perfect for getting a mental model before diving deeper elsewhere.</p>
+        <span class="yt-tag">Concepts · Cloud · Tools</span>
+      </div>
+
+      <div class="yt-card">
+        <div class="yt-icon">▶</div>
+        <h3>Anton Putra</h3>
+        <p>Deep dives into Kubernetes, Prometheus, Grafana, and GitOps. Excellent production-grade examples with full config files shared publicly.</p>
+        <span class="yt-tag">Observability · GitOps · EKS</span>
+      </div>
+
+      <div class="yt-card">
+        <div class="yt-icon">▶</div>
+        <h3>That DevOps Guy</h3>
+        <p>Honest, practical DevOps content. Great for Helm, ArgoCD, GitOps patterns, and the real-world nuances that tutorials skip over.</p>
+        <span class="yt-tag">ArgoCD · Helm · GitOps</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── Certifications ───────────────────────────────────── -->
+<section class="res-section section">
+  <div class="container">
+
+    <div class="res-section-label">
+      <span class="lbl-icon">🏅</span>
+      <span>// 03 — credentials</span>
+    </div>
+    <h2>Certifications <span class="text-green">I Completed</span></h2>
+    <p class="res-section-desc">Not chasing certs for the sake of it — these are the ones that actually taught me something practical.</p>
+
+    <div class="cert-grid">
+
+      <div class="cert-card">
+        <div class="cert-badge">⚙</div>
+        <h3>DevOps Engineer</h3>
+        <div class="cert-issuer">Innovista</div>
+        <a class="cert-link" href="#" target="_blank" rel="noopener">↗ View Credential</a>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-badge">🐧</div>
+        <h3>Introduction to Linux (LFS101)</h3>
+        <div class="cert-issuer">The Linux Foundation</div>
+        <a class="cert-link" href="#" target="_blank" rel="noopener">↗ View Credential</a>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-badge">☁</div>
+        <h3>AWS Basics</h3>
+        <div class="cert-issuer">KodeKloud</div>
+        <a class="cert-link" href="#" target="_blank" rel="noopener">↗ View Credential</a>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-badge">🔷</div>
+        <h3>Building Cloud Native and Multicloud Applications</h3>
+        <div class="cert-issuer">Cognitive Class (IBM)</div>
+        <a class="cert-link" href="#" target="_blank" rel="noopener">↗ View Credential</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── Learning Path ────────────────────────────────────── -->
+<section class="res-section section section--alt">
+  <div class="container">
+
+    <div class="res-section-label">
+      <span class="lbl-icon">↺</span>
+      <span>// 04 — my path</span>
+    </div>
+    <h2>How I Learned — <span class="text-green">Step by Step</span></h2>
+    <p class="res-section-desc">The order that worked for me. Each step builds on the previous one — don't skip the foundations.</p>
+
+    <div class="lp-wrap">
+      <div class="lp-track">
+
+        <div class="lp-step">
+          <div class="lp-node">🐧</div>
+          <div class="lp-label">Linux &amp;<br>Git</div>
+        </div>
+        <div class="lp-connector"></div>
+
+        <div class="lp-step">
+          <div class="lp-node">🐳</div>
+          <div class="lp-label">Docker</div>
+        </div>
+        <div class="lp-connector"></div>
+
+        <div class="lp-step">
+          <div class="lp-node">☸</div>
+          <div class="lp-label">Kubernetes</div>
+        </div>
+        <div class="lp-connector"></div>
+
+        <div class="lp-step">
+          <div class="lp-node">⚙</div>
+          <div class="lp-label">CI/CD<br>Jenkins/GitLab</div>
+        </div>
+        <div class="lp-connector"></div>
+
+        <div class="lp-step">
+          <div class="lp-node">☁</div>
+          <div class="lp-label">Cloud<br>AWS</div>
+        </div>
+        <div class="lp-connector"></div>
+
+        <div class="lp-step">
+          <div class="lp-node">🏗</div>
+          <div class="lp-label">IaC<br>Terraform &amp; Ansible</div>
+        </div>
+        <div class="lp-connector"></div>
+
+        <div class="lp-step">
+          <div class="lp-node">🔄</div>
+          <div class="lp-label">GitOps<br>ArgoCD</div>
+        </div>
+        <div class="lp-connector"></div>
+
+        <div class="lp-step">
+          <div class="lp-node">📊</div>
+          <div class="lp-label">Observability<br>Prom/Grafana</div>
+        </div>
+        <div class="lp-connector"></div>
+
+        <div class="lp-step">
+          <div class="lp-node current">🤖</div>
+          <div class="lp-label current">AIOps<br>← current</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ─── CTA ─────────────────────────────────────────────── -->
+<section class="res-section section" style="padding-bottom:5rem;">
+  <div class="container">
+
+    <div class="res-cta">
+      <h2>Have Questions? <span class="text-green">Reach Out.</span></h2>
+      <p>If something's unclear, or you want advice on where to start given your background — just ask. I reply to every message.</p>
+      <div class="res-cta-btns">
+        <a href="contact.html" class="btn btn-primary">✉ Contact Me</a>
+        <a href="https://linkedin.com/in/saadhussain07" target="_blank" rel="noopener" class="btn btn-secondary">⎆ LinkedIn</a>
+        <a href="roadmap.html" class="btn btn-ghost">◉ View Roadmap →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ─── Footer ──────────────────────────────────────────── -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">DevOpsHub</div>
+        <p>A comprehensive resource for DevOps engineers, platform teams, and anyone building modern software delivery pipelines.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Pages</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About DevOps</a></li>
+          <li><a href="tools.html">Tools</a></li>
+          <li><a href="concepts.html">Concepts</a></li>
+          <li><a href="workflow.html">Workflow</a></li>
+          <li><a href="roadmap.html">Roadmap</a></li>
+          <li><a href="resources.html">Resources</a></li>
+          <li><a href="search.html">Search</a></li>
+          <li><a href="privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Concepts</h4>
+        <ul class="footer-links">
+          <li><a href="concepts.html">CI/CD Pipelines</a></li>
+          <li><a href="concepts.html">Infrastructure as Code</a></li>
+          <li><a href="concepts.html">Microservices</a></li>
+          <li><a href="concepts.html">Monitoring</a></li>
+          <li><a href="concepts.html">Automation</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Tools</h4>
+        <ul class="footer-links">
+          <li><a href="tools.html">Docker</a></li>
+          <li><a href="tools.html">Kubernetes</a></li>
+          <li><a href="tools.html">Jenkins</a></li>
+          <li><a href="tools.html">Terraform</a></li>
+          <li><a href="tools.html">Ansible</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 DevOpsHub. Powered by HTML5, CSS3 &amp; Vanilla JS.</p>
+      <div class="footer-status">
+        <span class="status-dot"></span>
+        All systems operational
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js" defer></script>
+</body>
+</html>
