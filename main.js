@@ -14,6 +14,15 @@
    10. Nav hide/show on scroll direction
    ============================================================ */
 
+/* ── Guard: prevent double-execution if this script is ever
+   accidentally included twice on a page (old nav.js leftover,
+   duplicate <script> tag, etc). This is what was breaking the
+   theme toggle — two click listeners fired on one click and
+   cancelled each other out. This guard makes it permanent —
+   no matter how many times this file loads, it only runs once. */
+if (!window.__DH_MAIN_LOADED__) {
+window.__DH_MAIN_LOADED__ = true;
+
 /* ── 1. Scroll Progress Bar ───────────────────────────────── */
 (function initScrollProgress() {
   const bar = document.createElement('div');
@@ -759,3 +768,5 @@
   });
 
 })();
+
+} // end of __DH_MAIN_LOADED__ guard
