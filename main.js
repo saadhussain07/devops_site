@@ -508,19 +508,22 @@ window.__DH_MAIN_LOADED__ = true;
   /* ── Theme toggle ── */
   const THEME_KEY = 'devopshub_theme';
 
-  function applyTheme(light) {
-    document.body.classList.toggle('light-mode', light);
-    if (themeBtn) themeBtn.textContent = light ? '☀️' : '🌙';
+  function applyTheme(isDark) {
+    document.body.classList.toggle('dark-mode', isDark);
+    document.body.classList.toggle('light-mode', !isDark);
+    if (themeBtn) themeBtn.textContent = isDark ? '☀️' : '🌙';
   }
 
-  /* Apply saved on load */
-  applyTheme(localStorage.getItem(THEME_KEY) === 'light');
+  /* Apply saved on load — default is dark */
+  const savedTheme = localStorage.getItem(THEME_KEY);
+  applyTheme(savedTheme !== 'light');
 
   if (themeBtn) {
     themeBtn.addEventListener('click', () => {
-      const isLight = document.body.classList.toggle('light-mode');
-      themeBtn.textContent = isLight ? '☀️' : '🌙';
-      localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark');
+      const isDark = document.body.classList.toggle('dark-mode');
+      document.body.classList.toggle('light-mode', !isDark);
+      themeBtn.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
       /* Spin effect */
       themeBtn.style.transition = 'transform 0.4s ease';
       themeBtn.style.transform  = 'rotate(360deg)';
@@ -587,14 +590,21 @@ window.__DH_MAIN_LOADED__ = true;
         display:flex; align-items:center; gap:.3rem;
         padding:.38rem .6rem; font-family:'Courier New',monospace;
         font-size:.7rem; letter-spacing:.07em; text-transform:uppercase;
-        color:#7a9e92; text-decoration:none; border-radius:5px;
+        color:#3d5266; text-decoration:none; border-radius:5px;
         border:1px solid transparent; white-space:nowrap; cursor:pointer;
         transition:color .2s,background .2s,border-color .2s,transform .18s;
         user-select:none;
       }
+      body.dark-mode .dh-item > a, body.dark-mode .dh-group-label { color:#7a9e92; }
       .dh-item > a:hover, .dh-item:hover > a,
       .dh-item:hover .dh-group-label, .dh-item.dh-force-open .dh-group-label,
       .dh-group-label.dh-active, .dh-item > a.dh-active {
+        color:#16a34a; background:rgba(22,163,74,.08);
+        border-color:rgba(22,163,74,.25); transform:translateY(-1px);
+      }
+      body.dark-mode .dh-item > a:hover, body.dark-mode .dh-item:hover > a,
+      body.dark-mode .dh-item:hover .dh-group-label, body.dark-mode .dh-item.dh-force-open .dh-group-label,
+      body.dark-mode .dh-group-label.dh-active, body.dark-mode .dh-item > a.dh-active {
         color:#2dff7a; background:rgba(45,255,122,.09);
         border-color:rgba(45,255,122,.22); transform:translateY(-1px);
       }
@@ -620,36 +630,58 @@ window.__DH_MAIN_LOADED__ = true;
         min-width:420px; max-width:580px;
         max-height:min(60vh, 420px);
         overflow-y:auto;
-        background:rgba(8,14,16,.98); border:1px solid rgba(45,255,122,.18);
+        background:rgba(245,248,250,.98); border:1px solid rgba(0,0,0,.1);
         border-radius:10px; padding:.6rem;
         backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+        box-shadow:0 24px 60px rgba(0,0,0,.15);
+        scrollbar-width:thin; scrollbar-color:rgba(22,163,74,.35) transparent;
+      }
+      body.dark-mode .dh-panel-inner {
+        background:rgba(8,14,16,.98); border-color:rgba(45,255,122,.18);
         box-shadow:0 24px 60px rgba(0,0,0,.55);
-        scrollbar-width:thin; scrollbar-color:rgba(45,255,122,.35) transparent;
+        scrollbar-color:rgba(45,255,122,.35) transparent;
       }
       .dh-panel-inner::-webkit-scrollbar { width:6px; }
       .dh-panel-inner::-webkit-scrollbar-track { background:transparent; }
       .dh-panel-inner::-webkit-scrollbar-thumb {
-        background:rgba(45,255,122,.35); border-radius:3px;
+        background:rgba(22,163,74,.35); border-radius:3px;
       }
-      .dh-panel-inner::-webkit-scrollbar-thumb:hover { background:rgba(45,255,122,.6); }
+      body.dark-mode .dh-panel-inner::-webkit-scrollbar-thumb { background:rgba(45,255,122,.35); }
+      .dh-panel-inner::-webkit-scrollbar-thumb:hover { background:rgba(22,163,74,.6); }
+      body.dark-mode .dh-panel-inner::-webkit-scrollbar-thumb:hover { background:rgba(45,255,122,.6); }
 
       /* Full button-style items */
       .dh-panel-inner a {
         display:flex; gap:.6rem; align-items:flex-start;
         padding:.7rem .75rem;
         border-radius:8px;
-        border:1px solid rgba(255,255,255,.07);
-        background:rgba(255,255,255,.025);
-        text-decoration:none; color:#cfe6dd;
+        border:1px solid rgba(0,0,0,.06);
+        background:rgba(0,0,0,.02);
+        text-decoration:none; color:#3d5266;
         transition:background .18s,border-color .18s,color .18s,transform .15s;
       }
+      body.dark-mode .dh-panel-inner a {
+        border-color:rgba(255,255,255,.07);
+        background:rgba(255,255,255,.025);
+        color:#cfe6dd;
+      }
       .dh-panel-inner a:hover {
+        background:rgba(22,163,74,.1);
+        border-color:rgba(22,163,74,.3);
+        color:#16a34a;
+        transform:translateY(-2px);
+      }
+      body.dark-mode .dh-panel-inner a:hover {
         background:rgba(45,255,122,.13);
         border-color:rgba(45,255,122,.4);
         color:#2dff7a;
-        transform:translateY(-2px);
       }
       .dh-panel-inner a.dh-active {
+        background:rgba(22,163,74,.1);
+        border-color:rgba(22,163,74,.32);
+        color:#16a34a;
+      }
+      body.dark-mode .dh-panel-inner a.dh-active {
         background:rgba(45,255,122,.1);
         border-color:rgba(45,255,122,.32);
         color:#2dff7a;
@@ -657,44 +689,48 @@ window.__DH_MAIN_LOADED__ = true;
       .dh-panel-icon { font-size:1.05rem; margin-top:1px; flex-shrink:0; }
       .dh-panel-title { display:block; font-family:'Courier New',monospace; font-size:.74rem; }
       .dh-panel-desc  { display:block; font-size:.64rem; color:#5f8478; margin-top:2px; }
+      body.dark-mode .dh-panel-desc { color:#5f8478; }
 
       /* Mobile drawer accordion */
       .dh-drawer-group-toggle {
         display:flex; justify-content:space-between; align-items:center;
         width:100%; background:none; border:1px solid transparent; cursor:pointer;
         padding:.65rem .9rem; font-family:'Courier New',monospace; font-size:.82rem;
-        letter-spacing:.08em; text-transform:uppercase; color:#7a9e92;
+        letter-spacing:.08em; text-transform:uppercase; color:#3d5266;
         border-radius:6px; transition:all .2s;
       }
-      .dh-drawer-group-toggle:hover { color:#2dff7a; background:rgba(45,255,122,.07); }
+      body.dark-mode .dh-drawer-group-toggle { color:#7a9e92; }
+      .dh-drawer-group-toggle:hover { color:#16a34a; background:rgba(22,163,74,.07); }
+      body.dark-mode .dh-drawer-group-toggle:hover { color:#2dff7a; background:rgba(45,255,122,.07); }
       .dh-drawer-caret { font-size:.65rem; transition:transform .3s ease; }
       .dh-drawer-group-toggle.dh-open .dh-drawer-caret { transform:rotate(180deg); }
       .dh-drawer-sub {
         max-height:0; overflow:hidden; transition:max-height .35s ease;
         padding-left:.5rem;
       }
-      .dh-drawer-sub.dh-open { max-height:500px; }
+      .dh-drawer-sub.dh-open {
+        max-height:55vh;
+        overflow-y:auto;
+        scrollbar-width:thin;
+        scrollbar-color:rgba(45,255,122,.35) transparent;
+      }
+      .dh-drawer-sub.dh-open::-webkit-scrollbar { width:4px; }
+      .dh-drawer-sub.dh-open::-webkit-scrollbar-track { background:transparent; }
+      .dh-drawer-sub.dh-open::-webkit-scrollbar-thumb {
+        background:rgba(45,255,122,.35); border-radius:2px;
+      }
+      .dh-drawer-sub.dh-open::-webkit-scrollbar-thumb:hover { background:rgba(45,255,122,.6); }
       .dh-drawer-sub a {
-        display:block; padding:.5rem .9rem; font-size:.78rem; color:#7a9e92;
+        display:block; padding:.5rem .9rem; font-size:.78rem; color:#3d5266;
         text-decoration:none; border-radius:6px; transition:all .2s;
       }
+      body.dark-mode .dh-drawer-sub a { color:#7a9e92; }
       .dh-drawer-sub a:hover, .dh-drawer-sub a.dh-active {
-        color:#2dff7a; background:rgba(45,255,122,.08); padding-left:1.1rem;
+        color:#16a34a; background:rgba(22,163,74,.08); padding-left:1.1rem;
       }
-
-      body.light-mode .dh-item > a, body.light-mode .dh-group-label { color:#3d5266; }
-      body.light-mode .dh-item:hover > a, body.light-mode .dh-item:hover .dh-group-label,
-      body.light-mode .dh-group-label.dh-active, body.light-mode .dh-item > a.dh-active {
-        color:#16a34a; background:rgba(22,163,74,.08); border-color:rgba(22,163,74,.25);
+      body.dark-mode .dh-drawer-sub a:hover, body.dark-mode .dh-drawer-sub a.dh-active {
+        color:#2dff7a; background:rgba(45,255,122,.08);
       }
-      body.light-mode .dh-panel-inner { background:rgba(245,248,250,.98); border-color:rgba(0,0,0,.1); }
-      body.light-mode .dh-panel-inner a { color:#3d5266; background:rgba(0,0,0,.02); border-color:rgba(0,0,0,.06); }
-      body.light-mode .dh-panel-inner a:hover, body.light-mode .dh-panel-inner a.dh-active {
-        color:#16a34a; background:rgba(22,163,74,.1); border-color:rgba(22,163,74,.3);
-      }
-      body.light-mode .dh-drawer-group-toggle { color:#3d5266; }
-      body.light-mode .dh-drawer-sub a { color:#3d5266; }
-      body.light-mode .dh-drawer-sub a:hover, body.light-mode .dh-drawer-sub a.dh-active { color:#16a34a; background:rgba(22,163,74,.08); }
     `;
     document.head.appendChild(css);
   }
