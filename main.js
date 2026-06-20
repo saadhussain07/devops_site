@@ -279,7 +279,7 @@ window.__DH_MAIN_LOADED__ = true;
       });
 
       if (res.ok) {
-        setFeedback('success', 'Message sent! We\'ll reply within 24 hours. 🚀');
+        showThankYou(form);
         form.reset();
       } else {
         const data = await res.json().catch(() => ({}));
@@ -289,7 +289,7 @@ window.__DH_MAIN_LOADED__ = true;
       /* In demo mode (no real endpoint) we still show success.
          In production remove the demo block and show the real error. */
       if (err.message.includes('Failed to fetch') || err.message.includes('YOUR_FORM_ID')) {
-        setFeedback('success', 'Message received! We\'ll be in touch soon. 🚀 <br><small style="opacity:.6">(Demo mode — connect Formspree for real delivery)</small>');
+        showThankYou(form);
         form.reset();
       } else {
         setFeedback('error', `Something went wrong: ${err.message}. Please try again or email hello@devopshub.io`);
@@ -300,6 +300,72 @@ window.__DH_MAIN_LOADED__ = true;
       btn.style.opacity = '';
     }
   });
+
+  /* ── Thank-you panel (shown after successful submit) ── */
+  function showThankYou(formEl) {
+    const panel = document.createElement('div');
+    panel.id = 'thankyou-panel';
+    Object.assign(panel.style, {
+      background:   'rgba(45,255,122,0.06)',
+      border:       '1px solid rgba(45,255,122,0.35)',
+      borderRadius: '10px',
+      padding:      '2rem 1.5rem',
+      textAlign:    'center',
+      fontFamily:   '"Courier New", monospace',
+      color:        '#e2e8f0',
+      lineHeight:   '1.6',
+    });
+
+    panel.innerHTML = `
+      <div style="font-size:2.8rem;margin-bottom:.5rem;">✅</div>
+      <h3 style="margin:0 0 .4rem;font-size:1.25rem;color:#2dff7a;">Thanks, your request is in!</h3>
+      <p style="margin:0 0 1.5rem;font-size:.9rem;opacity:.75;">We appreciate you reaching out. What would you like to do next?</p>
+
+      <a href="https://calendly.com" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:.5rem;background:#2dff7a;color:#0a0f1e;
+                font-weight:700;padding:.75rem 1.6rem;border-radius:6px;text-decoration:none;
+                font-size:.95rem;margin-bottom:1.75rem;">
+        📅 Book a demo now &nbsp;→
+      </a>
+
+      <p style="font-size:.8rem;opacity:.6;margin:0 0 1rem;">While you wait, you might find this helpful:</p>
+
+      <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem;">
+        <a href="/resources.html" target="_blank" rel="noopener" style="flex:1;min-width:110px;max-width:150px;
+           background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;
+           padding:.9rem .75rem;text-decoration:none;color:#e2e8f0;font-size:.8rem;">
+          <div style="font-size:1.4rem;margin-bottom:.4rem;">📄</div>
+          <strong>Case Studies</strong>
+          <p style="margin:.3rem 0 .5rem;opacity:.65;font-size:.75rem;">See how we help teams like yours.</p>
+          <span style="color:#2dff7a;">→</span>
+        </a>
+        <a href="/concepts.html" target="_blank" rel="noopener" style="flex:1;min-width:110px;max-width:150px;
+           background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;
+           padding:.9rem .75rem;text-decoration:none;color:#e2e8f0;font-size:.8rem;">
+          <div style="font-size:1.4rem;margin-bottom:.4rem;">📖</div>
+          <strong>Product Docs</strong>
+          <p style="margin:.3rem 0 .5rem;opacity:.65;font-size:.75rem;">Explore guides and best practices.</p>
+          <span style="color:#2dff7a;">→</span>
+        </a>
+        <a href="/blog.html" target="_blank" rel="noopener" style="flex:1;min-width:110px;max-width:150px;
+           background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;
+           padding:.9rem .75rem;text-decoration:none;color:#e2e8f0;font-size:.8rem;">
+          <div style="font-size:1.4rem;margin-bottom:.4rem;">👥</div>
+          <strong>Community</strong>
+          <p style="margin:.3rem 0 .5rem;opacity:.65;font-size:.75rem;">Join the conversation with other users.</p>
+          <span style="color:#2dff7a;">→</span>
+        </a>
+      </div>
+
+      <p style="font-size:.8rem;opacity:.6;margin:0;">
+        Need help now? Visit our <a href="/glossary.html" style="color:#2dff7a;text-decoration:underline;">Help Center</a> →
+      </p>
+    `;
+
+    formEl.style.display = 'none';
+    formEl.parentNode.insertBefore(panel, formEl.nextSibling);
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
 
   /* ── Live field validation ── */
   form.querySelectorAll('input, textarea').forEach(f => {
