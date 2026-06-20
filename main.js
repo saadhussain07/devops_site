@@ -270,7 +270,7 @@ window.__DH_MAIN_LOADED__ = true;
          1. Go to https://formspree.io/
          2. Create a free form → copy the endpoint
          3. Replace 'YOUR_FORM_ID' below                           */
-      const ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+      const ENDPOINT = 'https://formspree.io/f/meewywkl';
 
       const res = await fetch(ENDPOINT, {
         method:  'POST',
