@@ -267,6 +267,22 @@
       transform: translateY(-3px);
       box-shadow: 0 12px 32px rgba(0,0,0,0.2);
     }
+    .yt-card.featured {
+      border-color: rgba(45,255,122,0.3);
+      background: linear-gradient(135deg, var(--bg-card) 0%, rgba(45,255,122,0.03) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .yt-card.featured::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+    }
+    .yt-card.featured:hover {
+      border-color: rgba(45,255,122,0.55);
+    }
     .yt-icon {
       width: 44px; height: 44px;
       border-radius: 50%;
@@ -277,6 +293,10 @@
       justify-content: center;
       font-size: 1.2rem;
       flex-shrink: 0;
+    }
+    .yt-icon.green {
+      background: rgba(45,255,122,0.1);
+      border-color: rgba(45,255,122,0.25);
     }
     .yt-card h3 {
       font-family: var(--font-mono);
@@ -300,6 +320,23 @@
       background: rgba(249,115,22,0.1);
       color: var(--accent-orange);
       border: 1px solid rgba(249,115,22,0.25);
+    }
+    .yt-tag.green {
+      background: rgba(45,255,122,0.08);
+      color: var(--accent-green);
+      border-color: rgba(45,255,122,0.25);
+    }
+    .yt-featured-badge {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-green);
+      background: rgba(45,255,122,0.08);
+      border: 1px solid rgba(45,255,122,0.2);
+      border-radius: 3px;
+      padding: 0.15rem 0.5rem;
+      width: fit-content;
     }
 
     /* ── Certifications grid ── */
@@ -657,11 +694,13 @@
         <span class="yt-tag">K8s · Docker · CI/CD</span>
       </div>
 
-      <div class="yt-card">
-        <div class="yt-icon">▶</div>
-        <h3>KodeKloud</h3>
-        <p>Hands-on labs alongside videos. The best way to learn Kubernetes, CKA prep, and Terraform — you actually type commands while learning.</p>
-        <span class="yt-tag">CKA · Terraform · Linux</span>
+      <!-- CKA & Kubernetes: Piyush Sachdeva — 40 Days of CKA -->
+      <div class="yt-card featured">
+        <div class="yt-featured-badge">★ CKA &amp; K8s pick</div>
+        <div class="yt-icon green">☸</div>
+        <h3>Piyush Sachdeva — 40 Days of CKA</h3>
+        <p>The best free CKA prep on YouTube. Piyush's "40 Days of CKA" series covers every exam domain hands-on — from cluster setup to troubleshooting — in a structured, day-by-day format that actually sticks.</p>
+        <span class="yt-tag green">CKA · K8s · Exam Prep</span>
       </div>
 
       <div class="yt-card">
@@ -785,7 +824,7 @@
 
         <div class="lp-step">
           <div class="lp-node">☸</div>
-          <div class="lp-label">Kubernetes</div>
+          <div class="lp-label">K8s &amp; CKA<br>Piyush 40-day</div>
         </div>
         <div class="lp-connector"></div>
 
