@@ -478,6 +478,8 @@
       <button class="sf-chip" data-cat="workflow">Workflow</button>
       <button class="sf-chip" data-cat="roadmap">Roadmap</button>
       <button class="sf-chip" data-cat="projects">Projects</button>
+      <button class="sf-chip" data-cat="interview">Interview</button>
+      <button class="sf-chip" data-cat="troubleshooting">Troubleshooting</button>
       <button class="sf-chip" data-cat="blog">Blog</button>
       <button class="sf-chip" data-cat="quiz">Quiz</button>
     </div>
@@ -741,6 +743,18 @@ const INDEX = [
   { page:'projects', badge:'badge-roadmap', url:'projects.html#gitops-argocd', cat:'projects',
     title:'Project: GitOps Delivery with Argo CD',
     body:'Argo CD Application app of apps ApplicationSet automated sync prune selfHeal drift gitops repo image tag bump promotion pull request Argo Rollouts canary.' },
+
+  /* ── INTERVIEW PREP ──────────────────────────────────────── */
+  { page:'interview', badge:'badge-quiz', url:'interview.html', cat:'interview',
+    title:'DevOps Interview Questions & Answers',
+    body:'60 interview questions model answers Linux process thread permissions load average networking DNS TCP UDP CIDR load balancer Git rebase merge Docker CMD ENTRYPOINT namespaces cgroups Kubernetes control plane probes requests limits HPA RBAC CI/CD OIDC blue green canary Terraform state drift for_each AWS VPC NAT IAM cost SLO SLI error budget RED USE incident postmortem DevSecOps SAST DAST SBOM STAR behavioural.' },
+  { page:'interview', badge:'badge-quiz', url:'interview.html#kubernetes', cat:'interview',
+    title:'Kubernetes Interview Questions',
+    body:'Control plane etcd scheduler kubelet Deployment StatefulSet DaemonSet Service ClusterIP NodePort LoadBalancer Ingress Gateway API liveness readiness startup probe QoS rolling update rollback HPA security RBAC Pod Security NetworkPolicy.' },
+  /* ── TROUBLESHOOTING ─────────────────────────────────────── */
+  { page:'troubleshooting', badge:'badge-workflow', url:'troubleshooting.html', cat:'troubleshooting',
+    title:'Troubleshooting Playbooks — Kubernetes Docker Terraform CI Linux',
+    body:'CrashLoopBackOff ImagePullBackOff ErrImagePull Pending pod OOMKilled exit code 137 Service no endpoints 503 CreateContainerConfigError Node NotReady PVC Pending container exits immediately no space left on device port already allocated permission denied volume Terraform state lock already exists import drift works locally fails in CI flaky tests GHCR 403 denied push high CPU disk full connection refused timed out DNS NXDOMAIN SERVFAIL TLS x509 certificate expired unknown authority.' },
 
   /* ── QUIZ ──────────────────────────────────────────────── */
   { page:'quiz', badge:'badge-quiz', url:'quiz.html', cat:'quiz',

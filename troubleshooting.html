@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="23 troubleshooting playbooks for CrashLoopBackOff, ImagePullBackOff, OOMKilled, Pending pods, Terraform state lock, CI failures, disk full, DNS and TLS x509 errors, with diagnosis commands and fixes.">
+  <meta name="keywords" content="CrashLoopBackOff fix, ImagePullBackOff, OOMKilled, Kubernetes troubleshooting, Terraform state lock, docker no space left on device, x509 certificate error">
+  <meta name="author" content="DevOps Hub">
+  <meta name="robots" content="index, follow">
+  <title>DevOps Troubleshooting Playbooks: Kubernetes, Docker, Terraform · DevOps Hub</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .qa-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+    .qa-search {
+      flex: 1 1 280px;
+      max-width: 420px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.65rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-primary);
+      outline: none;
+    }
+    .qa-search:focus { border-color: var(--accent-green); }
+    .qa-chips { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 2rem; }
+    .qa-chip {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 0.4rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .qa-chip:hover { border-color: var(--accent-green); color: var(--accent-green); }
+    .qa-chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .qa-count { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); }
+
+    .qa-group { margin-bottom: 2.5rem; scroll-margin-top: 80px; }
+    .qa-group h2 {
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .qa-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      margin-bottom: 0.65rem;
+      overflow: hidden;
+      transition: border-color var(--transition);
+    }
+    .qa-item:hover { border-color: var(--border-strong); }
+    .qa-item[open] { border-color: var(--accent-green); }
+    .qa-item summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 1rem 1.25rem;
+      display: flex;
+      gap: 0.85rem;
+      align-items: flex-start;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+    .qa-item summary::-webkit-details-marker { display: none; }
+    .qa-item summary::after {
+      content: '+';
+      margin-left: auto;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      padding-left: 0.5rem;
+    }
+    .qa-item[open] summary::after { content: '−'; }
+    .qa-lvl {
+      flex-shrink: 0;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      border: 1px solid;
+      margin-top: 0.15rem;
+    }
+    .qa-lvl.B { color: var(--accent-green); }
+    .qa-lvl.I { color: var(--accent-cyan); }
+    .qa-lvl.A { color: var(--accent-orange); }
+    .qa-answer { padding: 0 1.25rem 1.15rem; border-top: 1px dashed var(--border); padding-top: 1rem; }
+    .qa-answer p { font-size: 0.93rem; line-height: 1.75; margin-bottom: 0.7rem; }
+    .qa-answer p:last-child { margin-bottom: 0; }
+    .qa-answer ul, .qa-answer ol { padding-left: 1.3rem; display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 0.7rem; }
+    .qa-answer li { font-size: 0.92rem; line-height: 1.65; color: var(--text-secondary); }
+    .qa-answer strong { color: var(--text-primary); }
+    .qa-answer code {
+      font-family: var(--font-mono);
+      font-size: 0.82em;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.05rem 0.35rem;
+      color: var(--accent-green);
+    }
+    .qa-answer pre {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.9rem 1rem;
+      overflow-x: auto;
+      margin: 0.5rem 0 0.9rem;
+    }
+    .qa-answer pre code { background: none; border: none; padding: 0; font-size: 0.8rem; line-height: 1.65; color: var(--terminal-text); white-space: pre; }
+    .qa-empty { display: none; text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem 0; }
+    .tb-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem !important;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-green);
+      margin: 1rem 0 0.35rem !important;
+    }
+    .qa-answer .tb-label:first-child { margin-top: 0 !important; }
+    .tb-table { overflow-x: auto; margin-bottom: 0.5rem; }
+    .tb-table table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .tb-table th, .tb-table td { border: 1px solid var(--border); padding: 0.55rem 0.75rem; text-align: left; vertical-align: top; line-height: 1.55; }
+    .tb-table th { background: var(--bg-surface); font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-primary); }
+    .tb-table td { color: var(--text-secondary); }
+    .tb-table td:first-child { width: 48%; }
+    .tb-method { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0.75rem; margin-bottom: 2rem; }
+    .tb-step { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 0.9rem 1rem; }
+    .tb-step b { display: block; font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-green); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.3rem; }
+    .tb-step span { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; }
+  </style>
+  <link rel="canonical" href="https://rocketdevops.vercel.app/troubleshooting.html">
+  <meta property="og:title" content="DevOps Troubleshooting Playbooks: Kubernetes, Docker, Terraform · DevOps Hub">
+  <meta property="og:description" content="23 troubleshooting playbooks for CrashLoopBackOff, ImagePullBackOff, OOMKilled, Pending pods, Terraform state lock, CI failures, disk full, DNS and TLS x509 errors, with diagnosis commands and fixes.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://rocketdevops.vercel.app/troubleshooting.html">
+  <meta property="og:site_name" content="DevOps Hub">
+  <meta property="og:image" content="https://rocketdevops.vercel.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+<!-- ═══ NAVBAR ═══ -->
+<nav id="dh-nav" aria-label="Main navigation">
+  <div id="dh-progress"></div>
+  <div id="dh-inner">
+    <a href="index.html" id="dh-logo">
+      <span id="dh-prompt">&gt;</span> DevOpsHub
+    </a>
+    <ul id="dh-links"></ul>
+    <div id="dh-controls">
+      <button id="dh-theme-btn" aria-label="Toggle theme">🌙</button>
+      <button id="dh-burger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div id="dh-drawer">
+  <ul></ul>
+</div>
+<!-- ═══ END NAVBAR ═══ -->
+
+<header class="page-header">
+  <div class="container">
+    <span class="tag">// on-call survival kit</span>
+    <h1>Troubleshooting <span class="text-green">Playbooks</span></h1>
+    <p>23 of the most common production failures in Kubernetes, Docker, Terraform, CI/CD and Linux, each with copy-paste diagnosis commands, likely causes and fixes.</p>
+  </div>
+</header>
+
+<section class="section" style="padding-top:2rem;">
+  <div class="container" style="max-width:960px;">
+
+    <div class="tb-method">
+      <div class="tb-step"><b>1 · Stabilise</b><span>Mitigate user impact first: roll back, fail over or scale.</span></div>
+      <div class="tb-step"><b>2 · Observe</b><span>Read events, logs and metrics before touching anything.</span></div>
+      <div class="tb-step"><b>3 · Hypothesise</b><span>What changed? Form one theory and test it.</span></div>
+      <div class="tb-step"><b>4 · Fix</b><span>Change one thing at a time and verify.</span></div>
+      <div class="tb-step"><b>5 · Prevent</b><span>Add the alert, test or guardrail that would have caught it.</span></div>
+    </div>
+
+    <div class="qa-toolbar">
+      <input type="search" id="qa-search" class="qa-search" placeholder="Search… e.g. 137, x509, lock, Pending" autocomplete="off" aria-label="Search playbooks">
+      <div style="display:flex;gap:0.75rem;align-items:center;">
+        <span class="qa-count" id="qa-count"></span>
+        <button class="btn btn-ghost" id="qa-expand" style="font-size:0.75rem;padding:0.45rem 0.9rem;">⊞ Expand all</button>
+      </div>
+    </div>
+    <div class="qa-chips" role="group" aria-label="Filter by area"><button class="qa-chip active" data-filter-cat="all">All</button><button class="qa-chip" data-filter-cat="kubernetes">☸️ Kubernetes</button><button class="qa-chip" data-filter-cat="docker">🐳 Docker</button><button class="qa-chip" data-filter-cat="terraform">🏗️ Terraform</button><button class="qa-chip" data-filter-cat="cicd">🔁 CI/CD</button><button class="qa-chip" data-filter-cat="linux">🐧 Linux &amp; Network</button></div>
+
+    <section class="qa-group" id="kubernetes">
+      <h2><span>☸️</span> Kubernetes <span class="qa-count">(8)</span></h2>
+      <details class="qa-item" id="crashloopbackoff" data-cat="kubernetes" data-lvl="all">
+        <summary><span class="qa-lvl I">Kubernetes</span><span>CrashLoopBackOff</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p>Pod status shows <code>CrashLoopBackOff</code> and the RESTARTS count keeps climbing.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code>kubectl get pod &lt;pod&gt; -o wide
+kubectl describe pod &lt;pod&gt;              # Last State, Exit Code, Events
+kubectl logs &lt;pod&gt; --previous           # logs from the crashed container
+kubectl get pod &lt;pod&gt; -o jsonpath=&#x27;{.status.containerStatuses[0].lastState}&#x27;</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>App exits on startup (exit code 1): bad config, missing env var or secret, can't reach a dependency</td><td>Read <code>logs --previous</code>, fix the config or Secret, and make the app retry its dependencies instead of exiting.</td></tr>
+<tr><td>Exit code 137 / reason OOMKilled</td><td>See <a href="#oomkilled">OOMKilled</a>: raise the memory limit or fix the leak.</td></tr>
+<tr><td>Liveness probe fails (Events show "Liveness probe failed")</td><td>Wrong path or port, or it fires before the app is up. Add a <code>startupProbe</code> or raise <code>initialDelaySeconds</code>.</td></tr>
+<tr><td>Command finishes immediately (exit code 0)</td><td>The main process must stay in the foreground. Fix <code>command</code>/<code>args</code> or the image's CMD.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Validate config at startup with clear error messages, use startup probes for slow apps, and keep liveness probes free of external dependencies.</p>
+        </div>
+      </details>
+      <details class="qa-item" id="imagepullbackoff-errimagepull" data-cat="kubernetes" data-lvl="all">
+        <summary><span class="qa-lvl I">Kubernetes</span><span>ImagePullBackOff / ErrImagePull</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p>Pod stuck in <code>ImagePullBackOff</code> or <code>ErrImagePull</code>; containers never start.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code>kubectl describe pod &lt;pod&gt; | sed -n &#x27;/Events/,$p&#x27;
+# look for: &quot;not found&quot;, &quot;unauthorized&quot;, &quot;manifest unknown&quot;, &quot;i/o timeout&quot;
+kubectl get pod &lt;pod&gt; -o jsonpath=&#x27;{.spec.containers[*].image}&#x27;</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Typo in the image name or tag, or the tag was never pushed</td><td>Check the exact reference with <code>docker manifest inspect &lt;image&gt;</code>; fix the tag in your manifest or values.</td></tr>
+<tr><td>Private registry without credentials ("unauthorized")</td><td>Create a <code>docker-registry</code> Secret and reference it in <code>imagePullSecrets</code>, or grant the node role pull access (ECR).</td></tr>
+<tr><td>Architecture mismatch ("no matching manifest for linux/arm64")</td><td>Build multi-arch with <code>docker buildx build --platform linux/amd64,linux/arm64</code>.</td></tr>
+<tr><td>Nodes can't reach the registry (timeout)</td><td>Check NAT, egress firewalls, proxy settings, or VPC endpoints for ECR.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Tag images with immutable commit SHAs, never <code>latest</code>, and have CI verify the image exists before deploying.</p>
+        </div>
+      </details>
+      <details class="qa-item" id="pod-stuck-in-pending" data-cat="kubernetes" data-lvl="all">
+        <summary><span class="qa-lvl I">Kubernetes</span><span>Pod stuck in Pending</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p>Pod stays <code>Pending</code> and is never scheduled to a node.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code>kubectl describe pod &lt;pod&gt;        # Events: &quot;0/3 nodes are available: ...&quot;
+kubectl get nodes
+kubectl describe node &lt;node&gt; | sed -n &#x27;/Allocated resources/,/Events/p&#x27;
+kubectl get pvc</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Insufficient cpu/memory: requests exceed free capacity on every node</td><td>Lower the requests, add nodes, or enable a Cluster Autoscaler or Karpenter.</td></tr>
+<tr><td>Taints with no matching tolerations, or a nodeSelector/affinity nothing matches</td><td>Fix the selector, or add a toleration. Check with <code>kubectl get nodes --show-labels</code>.</td></tr>
+<tr><td>Unbound PersistentVolumeClaim</td><td>See <a href="#pvc-pending">PVC Pending</a>.</td></tr>
+<tr><td>ResourceQuota exceeded in the namespace</td><td><code>kubectl describe quota -n &lt;ns&gt;</code>, then raise the quota or reduce usage.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Set realistic requests from observed usage, and alert on unschedulable pods (<code>kube_pod_status_phase{phase="Pending"}</code>).</p>
+        </div>
+      </details>
+      <details class="qa-item" id="oomkilled" data-cat="kubernetes" data-lvl="all">
+        <summary><span class="qa-lvl I">Kubernetes</span><span>OOMKilled</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p>Container restarts with <code>Reason: OOMKilled</code> and exit code <code>137</code>.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code>kubectl describe pod &lt;pod&gt; | grep -A5 &#x27;Last State&#x27;
+kubectl top pod &lt;pod&gt; --containers
+# Prometheus: container_memory_working_set_bytes vs the limit</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Memory limit is lower than what the app actually needs</td><td>Raise <code>resources.limits.memory</code> based on observed peak plus headroom.</td></tr>
+<tr><td>Runtime not container-aware (e.g. JVM heap sized from host RAM)</td><td>Use <code>-XX:MaxRAMPercentage=75</code> for Java, or set <code>GOMEMLIMIT</code> for Go, so the runtime respects the limit.</td></tr>
+<tr><td>Memory leak: usage climbs steadily until the kill</td><td>Profile the app (heap dumps, pprof) and fix it. Restarting only hides the problem.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Alert when working-set memory exceeds 90% of the limit, and load-test new releases.</p>
+        </div>
+      </details>
+      <details class="qa-item" id="service-returns-503-has-no-endpoints" data-cat="kubernetes" data-lvl="all">
+        <summary><span class="qa-lvl I">Kubernetes</span><span>Service returns 503 / has no endpoints</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p>Ingress returns 502/503, or <code>curl</code> to the Service times out, while the pods look Running.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code>kubectl get endpointslices -l kubernetes.io/service-name=&lt;svc&gt;
+kubectl get svc &lt;svc&gt; -o yaml | grep -A3 selector
+kubectl get pods --show-labels
+kubectl get pods   # READY column, e.g. 0/1 means readiness is failing</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Service selector doesn't match the pod labels</td><td>Make <code>spec.selector</code> match the pod template labels exactly.</td></tr>
+<tr><td>Pods not Ready (failing readiness probe)</td><td><code>kubectl describe pod</code> shows the probe error. Fix the endpoint or the timing.</td></tr>
+<tr><td><code>targetPort</code> doesn't match the port the container listens on</td><td>Align <code>targetPort</code> with <code>containerPort</code> and the app's actual listen port.</td></tr>
+<tr><td>App listens on 127.0.0.1 inside the container</td><td>Bind to <code>0.0.0.0</code>.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Use named ports, add a smoke test after each deploy, and alert on Services with zero ready endpoints.</p>
+        </div>
+      </details>
+      <details class="qa-item" id="createcontainerconfigerror" data-cat="kubernetes" data-lvl="all">
+        <summary><span class="qa-lvl I">Kubernetes</span><span>CreateContainerConfigError</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p>Pod shows <code>CreateContainerConfigError</code> and never starts.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code>kubectl describe pod &lt;pod&gt;   # e.g. secret &quot;db-creds&quot; not found
+kubectl get secret,configmap -n &lt;ns&gt;</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Referenced Secret or ConfigMap doesn't exist in this namespace</td><td>Create it in the <em>same</em> namespace, or fix the name.</td></tr>
+<tr><td>Referenced key missing from the Secret or ConfigMap</td><td>Check the keys with <code>kubectl get secret x -o jsonpath='{.data}'</code>.</td></tr>
+<tr><td><code>runAsNonRoot: true</code> but the image runs as root</td><td>Set <code>USER 10001</code> in the Dockerfile, or set <code>runAsUser</code>.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Deploy Secrets (via External Secrets) before the apps that use them, and use Helm or Kustomize so the names stay consistent.</p>
+        </div>
+      </details>
+      <details class="qa-item" id="node-notready" data-cat="kubernetes" data-lvl="all">
+        <summary><span class="qa-lvl I">Kubernetes</span><span>Node NotReady</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p><code>kubectl get nodes</code> shows a node as <code>NotReady</code>; its pods get evicted or rescheduled.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code>kubectl describe node &lt;node&gt;   # Conditions: MemoryPressure, DiskPressure, PIDPressure
+# on the node:
+systemctl status kubelet containerd
+journalctl -u kubelet --since &quot;30 min ago&quot;
+df -h; free -m</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Disk or memory pressure</td><td>Clean up images and logs (<code>crictl rmi --prune</code>), and tune kubelet eviction thresholds.</td></tr>
+<tr><td>kubelet or container runtime crashed</td><td>Restart it and read the journal logs for the cause (certificates, config, OOM).</td></tr>
+<tr><td>Network/CNI failure, or the node can't reach the API server</td><td>Check the CNI pods on that node, security groups and routes.</td></tr>
+<tr><td>Expired kubelet certificates</td><td>Enable certificate rotation; on self-managed clusters renew with <code>kubeadm certs</code>.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Use managed node groups with auto-repair, alert on node conditions, and keep reserved resources for system daemons.</p>
+        </div>
+      </details>
+      <details class="qa-item" id="pvc-pending" data-cat="kubernetes" data-lvl="all">
+        <summary><span class="qa-lvl I">Kubernetes</span><span>PVC Pending</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p>PersistentVolumeClaim stays <code>Pending</code> and its pod is stuck.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code>kubectl describe pvc &lt;pvc&gt;
+kubectl get storageclass
+kubectl get pods -n kube-system | grep -i csi</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>No default StorageClass, or the name is wrong</td><td>Set <code>storageClassName</code>, or mark a default class.</td></tr>
+<tr><td><code>WaitForFirstConsumer</code> binding (this is normal)</td><td>It binds once a pod that uses it is scheduled. Check the pod instead.</td></tr>
+<tr><td>CSI driver not installed or lacking cloud permissions (e.g. EBS CSI on EKS)</td><td>Install the driver add-on and give it an IAM role (IRSA or Pod Identity).</td></tr>
+<tr><td>Volume zone doesn't match the node's zone</td><td>Use topology-aware StorageClasses and pin StatefulSets to zones.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Install storage drivers through IaC, and test a PVC in every new cluster.</p>
+        </div>
+      </details>
+    </section>
+    <section class="qa-group" id="docker">
+      <h2><span>🐳</span> Docker <span class="qa-count">(4)</span></h2>
+      <details class="qa-item" id="container-exits-immediately" data-cat="docker" data-lvl="all">
+        <summary><span class="qa-lvl I">Docker</span><span>Container exits immediately</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p><code>docker run -d</code> returns, but <code>docker ps</code> shows nothing; <code>docker ps -a</code> shows <code>Exited (0)</code> or <code>(1)</code>.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code>docker ps -a
+docker logs &lt;container&gt;
+docker inspect &lt;container&gt; --format &#x27;{{.State.ExitCode}} {{.State.Error}}&#x27;
+docker run -it --entrypoint sh &lt;image&gt;   # poke around inside</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>The main process ends (a script finishes, or a daemon forks into the background)</td><td>Run the process in the foreground (e.g. <code>nginx -g 'daemon off;'</code>).</td></tr>
+<tr><td>App crashes because of missing env vars, files or config</td><td>Read the logs, then pass <code>-e</code>/<code>--env-file</code> or mount the config.</td></tr>
+<tr><td>Wrong CMD/ENTRYPOINT, or shell form vs exec form problems</td><td>Use the exec form <code>["node","server.js"]</code>.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Add a <code>HEALTHCHECK</code>, and log a clear message before exiting on bad config.</p>
+        </div>
+      </details>
+      <details class="qa-item" id="no-space-left-on-device" data-cat="docker" data-lvl="all">
+        <summary><span class="qa-lvl I">Docker</span><span>No space left on device</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p>Builds or containers fail with <code>no space left on device</code>.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code>docker system df
+df -h /var/lib/docker
+docker system prune            # stopped containers, dangling images, unused networks
+docker builder prune           # build cache
+docker image prune -a          # ALL unused images (be careful)</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Old images and build cache piling up (common on CI runners)</td><td>Prune on a schedule, e.g. <code>docker system prune -af --filter "until=72h"</code>.</td></tr>
+<tr><td>Huge container logs (json-file driver with no rotation)</td><td>Set <code>log-opts</code> <code>max-size</code>/<code>max-file</code> in <code>daemon.json</code>.</td></tr>
+<tr><td>Orphaned volumes</td><td><code>docker volume ls -f dangling=true</code>, then <code>docker volume prune</code>.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Configure log rotation, alert on disk usage, and put <code>/var/lib/docker</code> on its own volume.</p>
+        </div>
+      </details>
+      <details class="qa-item" id="port-is-already-allocated" data-cat="docker" data-lvl="all">
+        <summary><span class="qa-lvl I">Docker</span><span>Port is already allocated</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p><code>Bind for 0.0.0.0:8080 failed: port is already allocated</code>.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code>docker ps --format &#x27;{{.Names}} {{.Ports}}&#x27; | grep 8080
+sudo ss -tlnp | grep :8080</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Another container is publishing the same host port</td><td>Stop it, or map a different port: <code>-p 8081:8080</code>.</td></tr>
+<tr><td>A host process is already listening on the port</td><td>Stop that service or choose another port.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Use Compose project names and avoid hard-coding host ports in shared environments.</p>
+        </div>
+      </details>
+      <details class="qa-item" id="permission-denied-on-a-mounted-volume" data-cat="docker" data-lvl="all">
+        <summary><span class="qa-lvl I">Docker</span><span>Permission denied on a mounted volume</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p>The app can't write to a bind-mounted directory: <code>EACCES</code> or <code>permission denied</code>.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code>docker exec &lt;c&gt; id
+docker exec &lt;c&gt; ls -ln /data
+ls -ln ./data   # on the host</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Container user's UID doesn't own the host directory</td><td><code>chown</code> the host directory to the container UID, or run with <code>--user $(id -u):$(id -g)</code>.</td></tr>
+<tr><td>SELinux blocks the mount (Fedora/RHEL)</td><td>Add <code>:z</code> or <code>:Z</code> to the volume flag.</td></tr>
+<tr><td>Read-only mount</td><td>Remove <code>:ro</code> if writes are actually intended.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Use named volumes for app data and create directories with the right owner in the Dockerfile.</p>
+        </div>
+      </details>
+    </section>
+    <section class="qa-group" id="terraform">
+      <h2><span>🏗️</span> Terraform <span class="qa-count">(3)</span></h2>
+      <details class="qa-item" id="error-acquiring-the-state-lock" data-cat="terraform" data-lvl="all">
+        <summary><span class="qa-lvl I">Terraform</span><span>Error acquiring the state lock</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p><code>Error: Error acquiring the state lock</code> with a lock ID, who holds it and when.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code># Is someone (or a CI job) actually running?
+# Check the lock info printed in the error: Who / Created / Operation
+terraform force-unlock &lt;LOCK_ID&gt;   # only when you&#x27;re SURE nothing is running</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Another apply or plan is genuinely running</td><td>Wait for it to finish. Do not unlock.</td></tr>
+<tr><td>A previous run crashed or was cancelled and left a stale lock</td><td>Confirm nothing is running, then run <code>terraform force-unlock &lt;ID&gt;</code>.</td></tr>
+<tr><td>CI jobs running concurrently on the same state</td><td>Serialise them with CI concurrency groups per state.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Run applies only from CI, with a concurrency limit of one per state file.</p>
+        </div>
+      </details>
+      <details class="qa-item" id="resource-already-exists" data-cat="terraform" data-lvl="all">
+        <summary><span class="qa-lvl I">Terraform</span><span>Resource already exists</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p>Apply fails with "already exists" (e.g. <code>BucketAlreadyOwnedByYou</code> or <code>EntityAlreadyExists</code>).</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code>terraform state list | grep &lt;name&gt;
+# Terraform 1.5+: declarative import
+# import { to = aws_s3_bucket.logs  id = &quot;my-logs-bucket&quot; }
+terraform plan -generate-config-out=generated.tf</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>The resource was created manually or by another stack</td><td>Bring it under management with an <code>import</code> block, then plan until there are no changes.</td></tr>
+<tr><td>State was lost or someone ran <code>state rm</code></td><td>Re-import it. Restore state from the versioned S3 bucket if needed.</td></tr>
+<tr><td>Two configurations manage the same resource</td><td>Pick one owner; remove it from the other with a <code>removed</code> block or <code>state rm</code>.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Make all changes through code, enable state bucket versioning, and use unique naming with environment prefixes.</p>
+        </div>
+      </details>
+      <details class="qa-item" id="plan-shows-changes-nobody-made-drift" data-cat="terraform" data-lvl="all">
+        <summary><span class="qa-lvl I">Terraform</span><span>Plan shows changes nobody made (drift)</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p><code>terraform plan</code> wants to modify or replace resources even though the code didn't change.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code>terraform plan -refresh-only     # see what changed outside Terraform
+terraform plan -out=tf.plan &amp;&amp; terraform show tf.plan</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Someone changed it in the console</td><td>Either codify the change or let apply revert it. Find out who in CloudTrail.</td></tr>
+<tr><td>Provider upgrade changed defaults</td><td>Pin provider versions, and read changelogs before bumping them.</td></tr>
+<tr><td>Attributes managed by something else (autoscaling, tags added by tooling)</td><td>Use <code>lifecycle { ignore_changes = [...] }</code> for those attributes only.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Run a scheduled drift-detection plan, give people read-only console access, and use policy guardrails.</p>
+        </div>
+      </details>
+    </section>
+    <section class="qa-group" id="cicd">
+      <h2><span>🔁</span> CI/CD <span class="qa-count">(3)</span></h2>
+      <details class="qa-item" id="works-locally-fails-in-ci" data-cat="cicd" data-lvl="all">
+        <summary><span class="qa-lvl I">CI/CD</span><span>Works locally, fails in CI</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p>Tests or builds pass on your laptop but fail in the pipeline.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code># Reproduce CI exactly:
+docker run --rm -it -v &quot;$PWD&quot;:/w -w /w &lt;same-image-as-ci&gt; bash
+# compare: tool versions, env vars, OS/arch, timezone, locale
+env | sort &gt; ci-env.txt   # print in CI too, then diff</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Different tool or runtime versions</td><td>Pin versions (<code>.nvmrc</code>, <code>.tool-versions</code>, lockfiles) and use <code>npm ci</code>, not <code>npm install</code>.</td></tr>
+<tr><td>Files that exist locally but aren't committed (.env, generated code)</td><td>Run <code>git status --ignored</code>; commit what's needed, or generate it in CI.</td></tr>
+<tr><td>Case-sensitive filesystem in CI (Linux) vs macOS/Windows</td><td>Fix import paths so the case matches the filenames exactly.</td></tr>
+<tr><td>Missing secrets or variables in CI, or secrets not available to fork PRs</td><td>Add them at the repo or environment level; design PR checks that don't need secrets.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Run builds in containers locally and in CI, and commit lockfiles.</p>
+        </div>
+      </details>
+      <details class="qa-item" id="flaky-tests" data-cat="cicd" data-lvl="all">
+        <summary><span class="qa-lvl I">CI/CD</span><span>Flaky tests</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p>The same commit passes and fails randomly.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code># Re-run the suspect test many times
+for i in $(seq 1 50); do npm test -- -t &quot;name&quot; || break; done
+# look for: sleeps, shared state, test order, time, network</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Timing assumptions (<code>sleep</code>, race conditions)</td><td>Wait on conditions (poll or await events), not fixed delays.</td></tr>
+<tr><td>Shared state between tests (DB rows, globals, files)</td><td>Isolate: a fresh fixture per test, unique names, transactions rolled back.</td></tr>
+<tr><td>Real network or external services</td><td>Mock them, or use test containers.</td></tr>
+<tr><td>Dependence on test order</td><td>Run with a random order to expose it, then fix the hidden dependency.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Track flaky rates, quarantine with an owner and a deadline (never silently skip), and fix the root cause.</p>
+        </div>
+      </details>
+      <details class="qa-item" id="403-denied-when-pushing-an-image" data-cat="cicd" data-lvl="all">
+        <summary><span class="qa-lvl I">CI/CD</span><span>403 / denied when pushing an image</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p><code>denied: permission_denied</code>, <code>403 Forbidden</code> or <code>unauthorized</code> on <code>docker push</code>.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code># GitHub Actions + GHCR: does the job have package write permission?
+#   permissions:
+#     packages: write
+docker login ghcr.io -u $GITHUB_ACTOR --password-stdin &lt;&lt;&lt; &quot;$GITHUB_TOKEN&quot;
+# image name must be lowercase: ghcr.io/owner/repo</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Workflow <code>permissions</code> don't include <code>packages: write</code></td><td>Add it at the job or workflow level.</td></tr>
+<tr><td>Image name has uppercase letters</td><td>Lowercase it, e.g. <code>${GITHUB_REPOSITORY,,}</code> in Bash.</td></tr>
+<tr><td>The package belongs to another repo or org without access</td><td>Grant the repo access in the package settings.</td></tr>
+<tr><td>Expired or wrong token (Docker Hub, ECR login expires after 12h)</td><td>Refresh the login on every run; prefer OIDC roles for ECR.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Use OIDC and short-lived tokens, and set least-privilege <code>permissions:</code> on every workflow.</p>
+        </div>
+      </details>
+    </section>
+    <section class="qa-group" id="linux">
+      <h2><span>🐧</span> Linux &amp; Network <span class="qa-count">(5)</span></h2>
+      <details class="qa-item" id="high-cpu-usage" data-cat="linux" data-lvl="all">
+        <summary><span class="qa-lvl I">Linux &amp; Network</span><span>High CPU usage</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p>Load is high, the app is slow, and alerts fire for CPU above 90%.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code>uptime                         # load vs number of cores (nproc)
+top -o %CPU                    # or htop
+pidstat 1 5                    # per-process over time
+vmstat 1 5                     # us/sy/wa/st columns
+perf top -p &lt;pid&gt;              # hot functions</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>One runaway process (busy loop, regex, GC thrash)</td><td>Profile it (<code>perf</code>, language profiler), fix it, or restart as a stopgap.</td></tr>
+<tr><td>High <code>wa</code> (iowait), not CPU-bound at all</td><td>It's disk I/O. Use <code>iostat -x 1</code> and <code>iotop</code>.</td></tr>
+<tr><td>High <code>st</code> (steal) on a VM</td><td>Noisy neighbour or burstable credits exhausted (AWS t-series). Move to a larger or non-burstable instance.</td></tr>
+<tr><td>Real demand growth</td><td>Scale out or optimise the hot path.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Alert on saturation trends, keep CPU profiling available in production, and load-test before launches.</p>
+        </div>
+      </details>
+      <details class="qa-item" id="disk-full" data-cat="linux" data-lvl="all">
+        <summary><span class="qa-lvl I">Linux &amp; Network</span><span>Disk full</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p>Writes fail with <code>No space left on device</code>.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code>df -h                          # which filesystem?
+df -i                          # inodes exhausted?
+sudo du -xh / --max-depth=2 2&gt;/dev/null | sort -h | tail -20
+sudo lsof +L1                  # deleted files still held open
+journalctl --disk-usage</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Logs growing without rotation</td><td>Configure logrotate, and cap journald with <code>SystemMaxUse=</code>.</td></tr>
+<tr><td>Deleted file still held open by a process</td><td>Restart the process, or truncate via <code>/proc/&lt;pid&gt;/fd/&lt;n&gt;</code>.</td></tr>
+<tr><td>Inodes exhausted by millions of tiny files</td><td>Find the directory with <code>find / -xdev -type d -size +1M</code> and clean up (sessions, caches).</td></tr>
+<tr><td>Docker or containerd data</td><td>See <a href="#no-space-left-on-device">Docker: No space left</a>.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Alert at 80% for space <em>and</em> inodes, and rotate logs everywhere.</p>
+        </div>
+      </details>
+      <details class="qa-item" id="connection-refused-vs-connection-timed-out" data-cat="linux" data-lvl="all">
+        <summary><span class="qa-lvl I">Linux &amp; Network</span><span>Connection refused vs connection timed out</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p>Clients can't connect to a service.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code>nc -zv &lt;host&gt; &lt;port&gt;
+curl -v http://&lt;host&gt;:&lt;port&gt;/health
+sudo ss -tlnp | grep &lt;port&gt;       # on the server
+sudo iptables -L -n | head        # or nft list ruleset</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td><strong>Refused</strong>: the host is reachable but nothing is listening (or it's bound to 127.0.0.1)</td><td>Start the service, or bind it to <code>0.0.0.0</code> or the right interface.</td></tr>
+<tr><td><strong>Timed out</strong>: packets are dropped (security group, NACL, firewall or routing)</td><td>Check firewall rules along the path, and whether the source IP is allowed.</td></tr>
+<tr><td>Connection reset: the peer closed it (TLS mismatch, proxy, app crash)</td><td>Check the app and proxy logs, and the protocol (HTTP vs HTTPS).</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Use health checks and synthetic probes, and keep firewall rules in code.</p>
+        </div>
+      </details>
+      <details class="qa-item" id="dns-resolution-failures" data-cat="linux" data-lvl="all">
+        <summary><span class="qa-lvl I">Linux &amp; Network</span><span>DNS resolution failures</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p><code>Could not resolve host</code>, <code>NXDOMAIN</code> or intermittent <code>SERVFAIL</code>.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code>dig +short &lt;name&gt;
+dig &lt;name&gt; @8.8.8.8          # compare with a public resolver
+cat /etc/resolv.conf
+# in Kubernetes:
+kubectl run -it --rm dnsutils --image=registry.k8s.io/e2e-test-images/agnhost:2.39 -- nslookup &lt;svc&gt;.&lt;ns&gt;.svc.cluster.local
+kubectl -n kube-system logs -l k8s-app=kube-dns</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Record missing or wrong (typo, wrong zone, not propagated)</td><td>Fix the record; remember resolvers cache it for the old TTL.</td></tr>
+<tr><td>Wrong resolver in <code>/etc/resolv.conf</code></td><td>Fix the DHCP or systemd-resolved configuration.</td></tr>
+<tr><td>Kubernetes: wrong namespace in a short name, or CoreDNS overloaded</td><td>Use <code>svc.namespace</code>, scale CoreDNS, and consider NodeLocal DNSCache.</td></tr>
+<tr><td><code>ndots:5</code> causing slow lookups for external names</td><td>Use fully qualified names with a trailing dot, or tune <code>dnsConfig</code>.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Monitor DNS latency and error rates, and lower TTLs before migrations.</p>
+        </div>
+      </details>
+      <details class="qa-item" id="tls-x509-certificate-errors" data-cat="linux" data-lvl="all">
+        <summary><span class="qa-lvl I">Linux &amp; Network</span><span>TLS: x509 certificate errors</span></summary>
+        <div class="qa-answer">
+          <p class="tb-label">Symptom</p>
+          <p><code>x509: certificate has expired</code>, <code>certificate signed by unknown authority</code> or <code>certificate is valid for X, not Y</code>.</p>
+          <p class="tb-label">Diagnose</p>
+          <pre><code>openssl s_client -connect &lt;host&gt;:443 -servername &lt;host&gt; &lt;/dev/null 2&gt;/dev/null \
+  | openssl x509 -noout -subject -issuer -dates -ext subjectAltName
+curl -vI https://&lt;host&gt;</code></pre>
+          <p class="tb-label">Likely causes &amp; fixes</p>
+          <div class="tb-table"><table><thead><tr><th>Cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>Certificate expired</td><td>Renew it; automate with cert-manager, ACM or certbot timers.</td></tr>
+<tr><td>Incomplete chain (server doesn't send the intermediate)</td><td>Serve the full chain (<code>fullchain.pem</code>).</td></tr>
+<tr><td>Private or internal CA not trusted by the client</td><td>Add the CA to the trust store (the image's <code>ca-certificates</code>, or a mounted bundle). Never use <code>--insecure</code> in production.</td></tr>
+<tr><td>Hostname not in the SAN list</td><td>Reissue with the correct SANs, or use the right hostname. SNI matters behind shared IPs.</td></tr>
+          </tbody></table></div>
+          <p class="tb-label">Prevent it</p>
+          <p>Automate renewal and alert on expiry 21 days ahead (e.g. the blackbox exporter's <code>probe_ssl_earliest_cert_expiry</code>).</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="qa-empty" id="qa-empty">No playbooks match. Try an error message keyword.</p>
+
+    <div class="card" style="margin-top:1rem;">
+      <h3 style="font-size:1rem;margin-bottom:0.5rem;">Practise before it's real</h3>
+      <p style="font-size:0.92rem;margin:0;">Break things on purpose in your <a href="projects.html#k8s-helm">Kubernetes lab</a>: a wrong image tag, a tiny memory limit, a bad selector. Then use these playbooks to fix them. You'll find the commands on the <a href="cheatsheets.html">Cheatsheets</a> page, and these scenarios come up often in <a href="interview.html">interviews</a>.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">DevOpsHub</div>
+        <p>Copy-paste troubleshooting playbooks for on-call DevOps engineers.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <ul class="footer-links">
+          <li><a href="roadmap.html">Roadmap</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="concepts.html">Concepts</a></li>
+          <li><a href="tools.html">Tools</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Practice</h4>
+        <ul class="footer-links">
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="interview.html">Interview Prep</a></li>
+          <li><a href="troubleshooting.html">Troubleshooting</a></li>
+          <li><a href="quiz.html">Quiz</a></li>
+          <li><a href="cheatsheets.html">Cheatsheets</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>More</h4>
+        <ul class="footer-links">
+          <li><a href="glossary.html">Glossary</a></li>
+          <li><a href="resources.html">Resources</a></li>
+          <li><a href="search.html">Search</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 DevOpsHub. Powered by HTML5, CSS3 &amp; Vanilla JS.</p>
+      <div class="footer-status"><span class="status-dot"></span>All systems operational</div>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js" defer></script>
+<script>
+'use strict';
+const items  = [...document.querySelectorAll('.qa-item')];
+const groups = [...document.querySelectorAll('.qa-group')];
+const search = document.getElementById('qa-search');
+const count  = document.getElementById('qa-count');
+let cat = 'all', lvl = 'all';
+
+function apply() {
+  const q = search.value.toLowerCase().trim();
+  let shown = 0;
+  items.forEach(it => {
+    const ok = (cat === 'all' || it.dataset.cat === cat) &&
+               (lvl === 'all' || it.dataset.lvl === lvl) &&
+               (!q || it.textContent.toLowerCase().includes(q));
+    it.style.display = ok ? '' : 'none';
+    if (ok) shown++;
+    if (q && ok) it.open = true;
+  });
+  groups.forEach(g => {
+    g.style.display = [...g.querySelectorAll('.qa-item')].some(i => i.style.display !== 'none') ? '' : 'none';
+  });
+  count.textContent = `${shown} of ${items.length} shown`;
+  document.getElementById('qa-empty').style.display = shown ? 'none' : 'block';
+}
+
+document.querySelectorAll('[data-filter-cat]').forEach(ch => ch.addEventListener('click', () => {
+  document.querySelectorAll('[data-filter-cat]').forEach(c => c.classList.remove('active'));
+  ch.classList.add('active'); cat = ch.dataset.filterCat; apply();
+}));
+document.querySelectorAll('[data-filter-lvl]').forEach(ch => ch.addEventListener('click', () => {
+  document.querySelectorAll('[data-filter-lvl]').forEach(c => c.classList.remove('active'));
+  ch.classList.add('active'); lvl = ch.dataset.filterLvl; apply();
+}));
+search.addEventListener('input', apply);
+
+document.getElementById('qa-expand')?.addEventListener('click', e => {
+  const open = e.target.dataset.open !== '1';
+  items.forEach(i => { if (i.style.display !== 'none') i.open = open; });
+  e.target.dataset.open = open ? '1' : '0';
+  e.target.textContent = open ? '⊟ Collapse all' : '⊞ Expand all';
+});
+
+function openFromHash() {
+  const t = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  if (t && t.tagName === 'DETAILS') { t.open = true; t.scrollIntoView({ block: 'start' }); }
+}
+window.addEventListener('hashchange', openFromHash);
+apply();
+openFromHash();
+</script>
+</body>
+</html>

@@ -632,6 +632,8 @@ window.__DH_MAIN_LOADED__ = true;
       { href: 'cheatsheets.html', icon: '📋', label: 'Cheatsheets', desc: '120+ copy-paste commands' },
       { href: 'resources.html',   icon: '⭐', label: 'Resources',   desc: 'Curated learning list' },
       { href: 'glossary.html',    icon: '📖', label: 'Glossary',    desc: '100+ DevOps terms A–Z' },
+      { href: 'interview.html',   icon: '🎤', label: 'Interview Prep', desc: '60 Q&As with answers' },
+      { href: 'troubleshooting.html', icon: '🚑', label: 'Troubleshooting', desc: 'Fix common failures' },
     ]},
 
     { type: 'link', href: 'contact.html', label: 'Contact', icon: '✉' },

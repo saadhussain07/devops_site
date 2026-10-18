@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="60 DevOps interview questions with model answers: Linux, networking, Git, Docker, Kubernetes, CI/CD, Terraform, AWS, monitoring/SRE, DevSecOps and scenario questions.">
+  <meta name="keywords" content="DevOps interview questions, Kubernetes interview questions, Docker interview questions, Terraform interview questions, SRE interview, AWS interview questions">
+  <meta name="author" content="DevOps Hub">
+  <meta name="robots" content="index, follow">
+  <title>DevOps Interview Questions &amp; Answers (2026) · DevOps Hub</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .qa-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+    .qa-search {
+      flex: 1 1 280px;
+      max-width: 420px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.65rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-primary);
+      outline: none;
+    }
+    .qa-search:focus { border-color: var(--accent-green); }
+    .qa-chips { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 2rem; }
+    .qa-chip {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 0.4rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .qa-chip:hover { border-color: var(--accent-green); color: var(--accent-green); }
+    .qa-chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .qa-count { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); }
+
+    .qa-group { margin-bottom: 2.5rem; scroll-margin-top: 80px; }
+    .qa-group h2 {
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .qa-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      margin-bottom: 0.65rem;
+      overflow: hidden;
+      transition: border-color var(--transition);
+    }
+    .qa-item:hover { border-color: var(--border-strong); }
+    .qa-item[open] { border-color: var(--accent-green); }
+    .qa-item summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 1rem 1.25rem;
+      display: flex;
+      gap: 0.85rem;
+      align-items: flex-start;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+    .qa-item summary::-webkit-details-marker { display: none; }
+    .qa-item summary::after {
+      content: '+';
+      margin-left: auto;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      padding-left: 0.5rem;
+    }
+    .qa-item[open] summary::after { content: '−'; }
+    .qa-lvl {
+      flex-shrink: 0;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      border: 1px solid;
+      margin-top: 0.15rem;
+    }
+    .qa-lvl.B { color: var(--accent-green); }
+    .qa-lvl.I { color: var(--accent-cyan); }
+    .qa-lvl.A { color: var(--accent-orange); }
+    .qa-answer { padding: 0 1.25rem 1.15rem; border-top: 1px dashed var(--border); padding-top: 1rem; }
+    .qa-answer p { font-size: 0.93rem; line-height: 1.75; margin-bottom: 0.7rem; }
+    .qa-answer p:last-child { margin-bottom: 0; }
+    .qa-answer ul, .qa-answer ol { padding-left: 1.3rem; display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 0.7rem; }
+    .qa-answer li { font-size: 0.92rem; line-height: 1.65; color: var(--text-secondary); }
+    .qa-answer strong { color: var(--text-primary); }
+    .qa-answer code {
+      font-family: var(--font-mono);
+      font-size: 0.82em;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.05rem 0.35rem;
+      color: var(--accent-green);
+    }
+    .qa-answer pre {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.9rem 1rem;
+      overflow-x: auto;
+      margin: 0.5rem 0 0.9rem;
+    }
+    .qa-answer pre code { background: none; border: none; padding: 0; font-size: 0.8rem; line-height: 1.65; color: var(--terminal-text); white-space: pre; }
+    .qa-empty { display: none; text-align: center; color: var(--text-muted); font-family: var(--font-mono); padding: 2rem 0; }
+  </style>
+  <link rel="canonical" href="https://rocketdevops.vercel.app/interview.html">
+  <meta property="og:title" content="DevOps Interview Questions &amp; Answers (2026) · DevOps Hub">
+  <meta property="og:description" content="60 DevOps interview questions with model answers: Linux, networking, Git, Docker, Kubernetes, CI/CD, Terraform, AWS, monitoring/SRE, DevSecOps and scenario questions.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://rocketdevops.vercel.app/interview.html">
+  <meta property="og:site_name" content="DevOps Hub">
+  <meta property="og:image" content="https://rocketdevops.vercel.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+<!-- ═══ NAVBAR ═══ -->
+<nav id="dh-nav" aria-label="Main navigation">
+  <div id="dh-progress"></div>
+  <div id="dh-inner">
+    <a href="index.html" id="dh-logo">
+      <span id="dh-prompt">&gt;</span> DevOpsHub
+    </a>
+    <ul id="dh-links"></ul>
+    <div id="dh-controls">
+      <button id="dh-theme-btn" aria-label="Toggle theme">🌙</button>
+      <button id="dh-burger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div id="dh-drawer">
+  <ul></ul>
+</div>
+<!-- ═══ END NAVBAR ═══ -->
+
+<header class="page-header">
+  <div class="container">
+    <span class="tag">// get hired</span>
+    <h1>DevOps <span class="text-green">Interview Prep</span></h1>
+    <p>60 real interview questions with concise model answers, from Linux basics to Kubernetes internals and incident scenarios.</p>
+  </div>
+</header>
+
+<section class="section" style="padding-top:2rem;">
+  <div class="container" style="max-width:960px;">
+
+    <div class="card" style="margin-bottom:2rem;">
+      <h3 style="font-size:1rem;margin-bottom:0.5rem;">How to use this page</h3>
+      <p style="font-size:0.92rem;margin:0;">Read the question and answer it <strong>out loud</strong> before expanding the model answer. Interviewers care about your reasoning and trade-offs, not memorised wording. For scenario questions, talk through how you would <em>investigate</em> before you jump to a fix.</p>
+    </div>
+
+    <div class="qa-toolbar">
+      <input type="search" id="qa-search" class="qa-search" placeholder="Search questions… e.g. probe, OIDC, rebase" autocomplete="off" aria-label="Search questions">
+      <div style="display:flex;gap:0.75rem;align-items:center;">
+        <span class="qa-count" id="qa-count"></span>
+        <button class="btn btn-ghost" id="qa-expand" style="font-size:0.75rem;padding:0.45rem 0.9rem;">⊞ Expand all</button>
+      </div>
+    </div>
+    <div class="qa-chips" role="group" aria-label="Filter by topic"><button class="qa-chip active" data-filter-cat="all">All topics</button><button class="qa-chip" data-filter-cat="linux">🐧 Linux &amp; Shell</button><button class="qa-chip" data-filter-cat="networking">🌐 Networking</button><button class="qa-chip" data-filter-cat="git">🌿 Git</button><button class="qa-chip" data-filter-cat="docker">🐳 Docker &amp; Containers</button><button class="qa-chip" data-filter-cat="kubernetes">☸️ Kubernetes</button><button class="qa-chip" data-filter-cat="cicd">🔁 CI/CD</button><button class="qa-chip" data-filter-cat="iac">🏗️ Terraform &amp; IaC</button><button class="qa-chip" data-filter-cat="cloud">☁️ Cloud &amp; AWS</button><button class="qa-chip" data-filter-cat="observability">📊 Monitoring &amp; SRE</button><button class="qa-chip" data-filter-cat="security">🛡️ DevSecOps</button><button class="qa-chip" data-filter-cat="scenario">🧠 Scenarios &amp; Behavioural</button></div>
+    <div class="qa-chips" role="group" aria-label="Filter by level" style="margin-top:-1.25rem;"><button class="qa-chip active" data-filter-lvl="all">All levels</button><button class="qa-chip" data-filter-lvl="B">Beginner</button><button class="qa-chip" data-filter-lvl="I">Intermediate</button><button class="qa-chip" data-filter-lvl="A">Advanced</button></div>
+
+    <section class="qa-group" id="linux">
+      <h2><span>🐧</span> Linux &amp; Shell <span class="qa-count">(7)</span></h2>
+      <details class="qa-item" id="what-is-the-difference-between-a-process-and-a-thread" data-cat="linux" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>What is the difference between a process and a thread?</span></summary>
+        <div class="qa-answer"><p>A <strong>process</strong> is a running program with its own memory space, file descriptors and PID. A <strong>thread</strong> is a unit of execution <em>inside</em> a process; threads share the process's memory and resources, so they are cheaper to create but need synchronisation. On Linux both are scheduled as tasks, and threads are created with <code>clone()</code> sharing the address space.</p></div>
+      </details>
+      <details class="qa-item" id="how-do-linux-file-permissions-work-what-does-chmod-750-mean" data-cat="linux" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>How do Linux file permissions work? What does chmod 750 mean?</span></summary>
+        <div class="qa-answer"><p>Each file has read (4), write (2) and execute (1) bits for <strong>owner</strong>, <strong>group</strong> and <strong>others</strong>. <code>750</code> = owner <code>rwx</code> (7), group <code>r-x</code> (5), others nothing (0). On directories, <code>x</code> means you can enter it and <code>r</code> means you can list it.</p></div>
+      </details>
+      <details class="qa-item" id="what-does-load-average-mean-in-the-output-of-uptime" data-cat="linux" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>What does load average mean in the output of uptime?</span></summary>
+        <div class="qa-answer"><p>The average number of tasks running or waiting (runnable or in uninterruptible I/O wait) over 1, 5 and 15 minutes. Compare it to the CPU count: a load of 4 on a 4-core box means fully busy; 8 means work is queuing. A high load with low CPU usage usually points to I/O wait.</p></div>
+      </details>
+      <details class="qa-item" id="a-disk-is-full-but-du-shows-much-less-usage-than-df-why" data-cat="linux" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>A disk is full but du shows much less usage than df. Why?</span></summary>
+        <div class="qa-answer"><p>Usually a process still holds a <strong>deleted file</strong> open. The space is not freed until the file descriptor closes. Find it with <code>lsof +L1</code> (or <code>lsof | grep deleted</code>), then restart the process or truncate it via <code>/proc/&lt;pid&gt;/fd/&lt;n&gt;</code>. Other causes: files hidden under a mount point, or reserved blocks on ext4.</p></div>
+      </details>
+      <details class="qa-item" id="what-is-the-difference-between-a-hard-link-and-a-symbolic-li" data-cat="linux" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>What is the difference between a hard link and a symbolic link?</span></summary>
+        <div class="qa-answer"><p>A <strong>hard link</strong> is another directory entry pointing to the same inode; deleting the original name does not remove the data, and it cannot cross filesystems or point to directories. A <strong>symlink</strong> is a separate file containing a path; it can cross filesystems but breaks if the target is moved or deleted.</p></div>
+      </details>
+      <details class="qa-item" id="what-does-set-euo-pipefail-do-in-a-bash-script" data-cat="linux" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>What does set -euo pipefail do in a Bash script?</span></summary>
+        <div class="qa-answer"><ul><li><code>-e</code> exits on any command that fails</li><li><code>-u</code> treats unset variables as errors</li><li><code>-o pipefail</code> makes a pipeline fail if <em>any</em> command in it fails, not just the last</li></ul><p>Together they stop scripts from silently continuing after an error, which is critical in CI and automation.</p></div>
+      </details>
+      <details class="qa-item" id="walk-me-through-what-happens-when-you-type-a-command-and-pre" data-cat="linux" data-lvl="A">
+        <summary><span class="qa-lvl A">Advanced</span><span>Walk me through what happens when you type a command and press Enter.</span></summary>
+        <div class="qa-answer"><p>The shell parses the line (expansions, quoting, redirections), checks for builtins/aliases/functions, then searches <code>$PATH</code>. It calls <code>fork()</code> to create a child, the child sets up redirections and calls <code>execve()</code> to replace itself with the program, and the kernel loads the ELF binary (and dynamic linker). The parent <code>wait()</code>s for the exit status, available as <code>$?</code>.</p></div>
+      </details>
+    </section>
+    <section class="qa-group" id="networking">
+      <h2><span>🌐</span> Networking <span class="qa-count">(6)</span></h2>
+      <details class="qa-item" id="what-happens-when-you-type-a-url-into-a-browser" data-cat="networking" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>What happens when you type a URL into a browser?</span></summary>
+        <div class="qa-answer"><ol><li><strong>DNS</strong> resolves the hostname to an IP (browser cache → OS → resolver → root → TLD → authoritative).</li><li><strong>TCP</strong> 3-way handshake (SYN, SYN-ACK, ACK) to port 443.</li><li><strong>TLS</strong> handshake: certificate verification and key exchange.</li><li>The browser sends an <strong>HTTP</strong> request; load balancers/proxies route it to a server.</li><li>The response is rendered and further resources are fetched.</li></ol></div>
+      </details>
+      <details class="qa-item" id="what-is-the-difference-between-tcp-and-udp" data-cat="networking" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>What is the difference between TCP and UDP?</span></summary>
+        <div class="qa-answer"><p><strong>TCP</strong> is connection-oriented, reliable and ordered, with retransmission and congestion control (HTTP/1.1–2, SSH, databases). <strong>UDP</strong> is connectionless with no delivery guarantee, so it is lower latency (DNS, video, gaming, and QUIC/HTTP/3, which builds reliability on top of UDP).</p></div>
+      </details>
+      <details class="qa-item" id="what-does-10-0-0-0-16-mean-and-how-many-addresses-does-it-co" data-cat="networking" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>What does 10.0.0.0/16 mean, and how many addresses does it contain?</span></summary>
+        <div class="qa-answer"><p>CIDR notation: the first 16 bits are the network, leaving 16 bits for hosts, so 2<sup>16</sup> = <strong>65,536</strong> addresses (10.0.0.0–10.0.255.255). A /24 has 256. In AWS, 5 addresses per subnet are reserved.</p></div>
+      </details>
+      <details class="qa-item" id="what-is-the-difference-between-an-l4-and-an-l7-load-balancer" data-cat="networking" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>What is the difference between an L4 and an L7 load balancer?</span></summary>
+        <div class="qa-answer"><p>An <strong>L4</strong> load balancer routes by IP and port (TCP/UDP) without looking at content. It is fast and protocol-agnostic (AWS NLB). An <strong>L7</strong> load balancer understands HTTP, so it can route by host, path or header, terminate TLS, and do retries and sticky sessions (AWS ALB, Nginx, Envoy).</p></div>
+      </details>
+      <details class="qa-item" id="explain-the-main-dns-record-types-you-use-day-to-day" data-cat="networking" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>Explain the main DNS record types you use day to day.</span></summary>
+        <div class="qa-answer"><ul><li><code>A</code>/<code>AAAA</code>: name to IPv4/IPv6</li><li><code>CNAME</code>: alias to another name (not allowed at the zone apex)</li><li><code>MX</code>: mail servers</li><li><code>TXT</code>: verification, SPF, DKIM</li><li><code>NS</code>: delegates a zone</li><li><code>SRV</code>: service host and port</li></ul><p>Remember TTLs: lower them <em>before</em> a migration so changes propagate quickly.</p></div>
+      </details>
+      <details class="qa-item" id="a-service-can-t-reach-another-service-how-do-you-troubleshoo" data-cat="networking" data-lvl="A">
+        <summary><span class="qa-lvl A">Advanced</span><span>A service can&#x27;t reach another service. How do you troubleshoot it, layer by layer?</span></summary>
+        <div class="qa-answer"><ol><li><strong>DNS:</strong> <code>dig</code>/<code>nslookup</code> the name. Does it resolve to the expected IP?</li><li><strong>Routing:</strong> <code>ip route</code>, <code>traceroute</code>/<code>mtr</code>.</li><li><strong>Port:</strong> <code>nc -zv host port</code> or <code>curl -v</code>. A timeout usually means a firewall or security group; "connection refused" means nothing is listening.</li><li><strong>Listener:</strong> <code>ss -tlnp</code> on the target. Is it bound to <code>0.0.0.0</code> or only <code>127.0.0.1</code>?</li><li><strong>TLS/app:</strong> <code>openssl s_client</code>, then check the application logs.</li></ol></div>
+      </details>
+    </section>
+    <section class="qa-group" id="git">
+      <h2><span>🌿</span> Git <span class="qa-count">(4)</span></h2>
+      <details class="qa-item" id="what-is-the-difference-between-git-merge-and-git-rebase" data-cat="git" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>What is the difference between git merge and git rebase?</span></summary>
+        <div class="qa-answer"><p><strong>Merge</strong> joins histories with a merge commit and preserves exactly what happened. <strong>Rebase</strong> replays your commits on top of another branch, giving a linear history but rewriting commit IDs. Rule of thumb: rebase your own local work, never rebase commits others have already pulled.</p></div>
+      </details>
+      <details class="qa-item" id="what-is-the-difference-between-git-fetch-and-git-pull" data-cat="git" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>What is the difference between git fetch and git pull?</span></summary>
+        <div class="qa-answer"><p><code>git fetch</code> downloads new commits and updates remote-tracking branches without touching your working branch. <code>git pull</code> is <code>fetch</code> followed by <code>merge</code> (or <code>rebase</code> with <code>--rebase</code>) into your current branch.</p></div>
+      </details>
+      <details class="qa-item" id="you-committed-a-secret-to-git-what-do-you-do" data-cat="git" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>You committed a secret to Git. What do you do?</span></summary>
+        <div class="qa-answer"><ol><li><strong>Revoke/rotate the secret immediately.</strong> Assume it is compromised the moment it was pushed.</li><li>Remove it from history with <code>git filter-repo</code> or BFG, force-push, and ask collaborators to re-clone.</li><li>Prevent recurrence: secret scanning (gitleaks, GitHub push protection), pre-commit hooks, and a secrets manager.</li></ol></div>
+      </details>
+      <details class="qa-item" id="compare-trunk-based-development-with-gitflow" data-cat="git" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>Compare trunk-based development with GitFlow.</span></summary>
+        <div class="qa-answer"><p><strong>Trunk-based:</strong> short-lived branches (hours to a day) merged to <code>main</code> frequently, with feature flags hiding unfinished work. It enables continuous delivery and is what DORA research associates with high performance. <strong>GitFlow:</strong> long-lived <code>develop</code>, release and hotfix branches. It suits scheduled, versioned releases but adds merge overhead.</p></div>
+      </details>
+    </section>
+    <section class="qa-group" id="docker">
+      <h2><span>🐳</span> Docker &amp; Containers <span class="qa-count">(6)</span></h2>
+      <details class="qa-item" id="what-is-the-difference-between-a-container-and-a-virtual-mac" data-cat="docker" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>What is the difference between a container and a virtual machine?</span></summary>
+        <div class="qa-answer"><p>A VM virtualises hardware and runs a full guest OS with its own kernel on a hypervisor. A container is an isolated process that <strong>shares the host kernel</strong>, isolated with namespaces and limited with cgroups. Containers start in milliseconds and are much smaller; VMs give stronger isolation.</p></div>
+      </details>
+      <details class="qa-item" id="what-is-the-difference-between-cmd-and-entrypoint" data-cat="docker" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>What is the difference between CMD and ENTRYPOINT?</span></summary>
+        <div class="qa-answer"><p><code>ENTRYPOINT</code> defines the executable that always runs; <code>CMD</code> supplies default arguments (or the default command if there is no entrypoint). Arguments to <code>docker run image ...</code> replace <code>CMD</code> but are appended to <code>ENTRYPOINT</code>. Use the exec (JSON array) form so the process is PID 1 and receives signals.</p></div>
+      </details>
+      <details class="qa-item" id="copy-vs-add" data-cat="docker" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>COPY vs ADD?</span></summary>
+        <div class="qa-answer"><p>Both copy files into the image. <code>ADD</code> can also fetch URLs and auto-extract local tar archives, which is surprising behaviour. Prefer <code>COPY</code> unless you specifically need tar extraction.</p></div>
+      </details>
+      <details class="qa-item" id="how-do-you-make-docker-images-smaller-and-builds-faster" data-cat="docker" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>How do you make Docker images smaller and builds faster?</span></summary>
+        <div class="qa-answer"><ul><li><strong>Multi-stage builds</strong>: compile in one stage, copy only artifacts into a slim runtime image</li><li>Minimal bases: <code>-slim</code>, <code>alpine</code> or distroless</li><li><strong>Order layers</strong> by change frequency: copy dependency manifests and install <em>before</em> copying source</li><li>A <code>.dockerignore</code> to keep <code>.git</code> and <code>node_modules</code> out of the context</li><li>Combine and clean up in the same <code>RUN</code> (e.g. remove apt lists)</li><li>BuildKit cache mounts for package managers</li></ul></div>
+      </details>
+      <details class="qa-item" id="how-do-namespaces-and-cgroups-make-containers-work" data-cat="docker" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>How do namespaces and cgroups make containers work?</span></summary>
+        <div class="qa-answer"><p><strong>Namespaces</strong> isolate what a process can <em>see</em>: PID, network, mount, UTS (hostname), IPC and user. <strong>cgroups</strong> limit what it can <em>use</em>: CPU, memory, I/O and PIDs. A container is just a process with its own namespaces, cgroup limits and a layered root filesystem (OverlayFS).</p></div>
+      </details>
+      <details class="qa-item" id="how-do-you-secure-containers-in-production" data-cat="docker" data-lvl="A">
+        <summary><span class="qa-lvl A">Advanced</span><span>How do you secure containers in production?</span></summary>
+        <div class="qa-answer"><ul><li>Run as <strong>non-root</strong>, with a read-only root filesystem, and drop all capabilities except those needed</li><li>Minimal or distroless base images, rebuilt regularly</li><li>Scan images (Trivy, Grype) in CI and block on critical CVEs</li><li>Sign images (Cosign) and verify signatures at admission</li><li>No secrets in images or env baked at build time; mount them at runtime</li><li>Seccomp/AppArmor profiles, and never <code>--privileged</code> or mounting the Docker socket</li></ul></div>
+      </details>
+    </section>
+    <section class="qa-group" id="kubernetes">
+      <h2><span>☸️</span> Kubernetes <span class="qa-count">(8)</span></h2>
+      <details class="qa-item" id="explain-the-kubernetes-control-plane-components" data-cat="kubernetes" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>Explain the Kubernetes control plane components.</span></summary>
+        <div class="qa-answer"><ul><li><strong>kube-apiserver</strong>: the front door; every component talks to it</li><li><strong>etcd</strong>: consistent key-value store holding all cluster state</li><li><strong>kube-scheduler</strong>: assigns pending Pods to nodes based on resources, affinity and taints</li><li><strong>kube-controller-manager</strong>: runs control loops (Deployments, ReplicaSets, Nodes) that drive actual state to desired state</li><li><strong>cloud-controller-manager</strong>: integrates load balancers and volumes with the cloud</li></ul><p>On each node: <strong>kubelet</strong>, <strong>kube-proxy</strong> (or an eBPF CNI replacement) and a container runtime (containerd).</p></div>
+      </details>
+      <details class="qa-item" id="what-is-the-difference-between-a-deployment-a-statefulset-an" data-cat="kubernetes" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>What is the difference between a Deployment, a StatefulSet and a DaemonSet?</span></summary>
+        <div class="qa-answer"><ul><li><strong>Deployment</strong>: interchangeable stateless replicas with rolling updates</li><li><strong>StatefulSet</strong>: stable identities (<code>db-0</code>, <code>db-1</code>), per-replica persistent volumes, ordered rollout; for databases and brokers</li><li><strong>DaemonSet</strong>: one Pod per node; for log shippers, node exporters and CNI agents</li></ul></div>
+      </details>
+      <details class="qa-item" id="what-are-the-service-types" data-cat="kubernetes" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>What are the Service types?</span></summary>
+        <div class="qa-answer"><ul><li><code>ClusterIP</code> (default): a stable virtual IP inside the cluster</li><li><code>NodePort</code>: exposes a port on every node</li><li><code>LoadBalancer</code>: provisions a cloud load balancer</li><li><code>ExternalName</code>: a DNS CNAME to an external name</li></ul><p>For HTTP routing to many services, use an <strong>Ingress</strong> or the newer <strong>Gateway API</strong> in front of ClusterIP services.</p></div>
+      </details>
+      <details class="qa-item" id="what-is-the-difference-between-liveness-readiness-and-startu" data-cat="kubernetes" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>What is the difference between liveness, readiness and startup probes?</span></summary>
+        <div class="qa-answer"><ul><li><strong>Readiness</strong>: is the Pod ready for traffic? Failing removes it from Service endpoints but does not restart it.</li><li><strong>Liveness</strong>: is the process healthy? Failing <em>restarts</em> the container.</li><li><strong>Startup</strong>: disables the other probes until a slow app has started.</li></ul><p>A common mistake is a liveness probe that checks dependencies (like the DB), which restarts every Pod when the database blips.</p></div>
+      </details>
+      <details class="qa-item" id="how-do-resource-requests-and-limits-work-and-what-is-qos" data-cat="kubernetes" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>How do resource requests and limits work, and what is QoS?</span></summary>
+        <div class="qa-answer"><p><strong>Requests</strong> are what the scheduler reserves; <strong>limits</strong> are the cap. Exceeding the memory limit gets the container OOMKilled; exceeding the CPU limit gets it throttled. QoS classes: <strong>Guaranteed</strong> (requests = limits), <strong>Burstable</strong> and <strong>BestEffort</strong> (none set). Under node memory pressure, BestEffort Pods are evicted first.</p></div>
+      </details>
+      <details class="qa-item" id="how-does-a-rolling-update-work-and-how-do-you-roll-back" data-cat="kubernetes" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>How does a rolling update work and how do you roll back?</span></summary>
+        <div class="qa-answer"><p>The Deployment creates a new ReplicaSet and scales it up while scaling the old one down, governed by <code>maxSurge</code> and <code>maxUnavailable</code>. Readiness probes gate progress. Roll back with <code>kubectl rollout undo deployment/app</code> (or <code>--to-revision</code>); in GitOps, revert the commit instead.</p></div>
+      </details>
+      <details class="qa-item" id="how-does-horizontal-pod-autoscaling-work-and-what-are-its-pi" data-cat="kubernetes" data-lvl="A">
+        <summary><span class="qa-lvl A">Advanced</span><span>How does Horizontal Pod Autoscaling work, and what are its pitfalls?</span></summary>
+        <div class="qa-answer"><p>The HPA controller periodically reads metrics (CPU/memory from metrics-server, or custom/external metrics) and computes <code>desired = ceil(current × currentMetric / target)</code>. Pitfalls: no CPU <em>requests</em> set (utilisation can't be computed), scaling on CPU for I/O-bound apps, slow startup causing flapping, and no node capacity, which needs a Cluster Autoscaler or Karpenter.</p></div>
+      </details>
+      <details class="qa-item" id="how-do-you-secure-a-kubernetes-cluster" data-cat="kubernetes" data-lvl="A">
+        <summary><span class="qa-lvl A">Advanced</span><span>How do you secure a Kubernetes cluster?</span></summary>
+        <div class="qa-answer"><ul><li><strong>RBAC</strong> with least privilege; no cluster-admin for apps; separate service accounts</li><li><strong>Pod Security Admission</strong> (restricted profile), plus policy engines like Kyverno or OPA Gatekeeper</li><li><strong>NetworkPolicies</strong> with default deny</li><li>Secrets encrypted at rest; External Secrets or a CSI driver for a real secrets manager</li><li>Private API endpoint, audit logging, image signing and verification, and regular upgrades</li></ul></div>
+      </details>
+    </section>
+    <section class="qa-group" id="cicd">
+      <h2><span>🔁</span> CI/CD <span class="qa-count">(4)</span></h2>
+      <details class="qa-item" id="what-is-the-difference-between-continuous-integration-contin" data-cat="cicd" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>What is the difference between continuous integration, continuous delivery and continuous deployment?</span></summary>
+        <div class="qa-answer"><p><strong>CI:</strong> every change is merged frequently and automatically built and tested. <strong>Continuous delivery:</strong> every change that passes is <em>releasable</em>, with deployment to production behind a manual approval. <strong>Continuous deployment:</strong> every change that passes goes to production automatically.</p></div>
+      </details>
+      <details class="qa-item" id="what-makes-a-good-ci-cd-pipeline" data-cat="cicd" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>What makes a good CI/CD pipeline?</span></summary>
+        <div class="qa-answer"><ul><li>Fast feedback: run lint and unit tests first, parallelise, cache dependencies</li><li><strong>Build once, promote the same artifact</strong> through environments</li><li>Security gates: SAST, dependency and image scanning, secrets detection</li><li>Pipeline as code, versioned with the app</li><li>Short-lived credentials (OIDC) instead of stored keys</li><li>Easy, tested rollback</li></ul></div>
+      </details>
+      <details class="qa-item" id="compare-blue-green-canary-and-rolling-deployments" data-cat="cicd" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>Compare blue-green, canary and rolling deployments.</span></summary>
+        <div class="qa-answer"><ul><li><strong>Rolling:</strong> replace instances gradually. Cheap, but both versions serve simultaneously.</li><li><strong>Blue-green:</strong> two full environments with an instant traffic switch and instant rollback; doubles the cost during the cutover.</li><li><strong>Canary:</strong> send a small percentage of traffic to the new version, watch metrics, then increase. Lowest blast radius; needs good observability (Argo Rollouts, Flagger).</li></ul></div>
+      </details>
+      <details class="qa-item" id="how-do-you-authenticate-ci-to-a-cloud-provider-without-stori" data-cat="cicd" data-lvl="A">
+        <summary><span class="qa-lvl A">Advanced</span><span>How do you authenticate CI to a cloud provider without storing long-lived keys?</span></summary>
+        <div class="qa-answer"><p>Use <strong>OIDC federation</strong>. The CI platform (e.g. GitHub Actions) issues a signed short-lived JWT for the job; the cloud (AWS IAM, GCP Workload Identity, Azure) trusts that issuer and exchanges the token for temporary credentials scoped to a role. Restrict the trust policy by repo, branch or environment (the <code>sub</code> claim).</p></div>
+      </details>
+    </section>
+    <section class="qa-group" id="iac">
+      <h2><span>🏗️</span> Terraform &amp; IaC <span class="qa-count">(6)</span></h2>
+      <details class="qa-item" id="what-is-terraform-state-and-why-does-it-matter" data-cat="iac" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>What is Terraform state and why does it matter?</span></summary>
+        <div class="qa-answer"><p>State maps your configuration to real resource IDs and stores attributes, so Terraform can compute diffs. Teams store it <strong>remotely</strong> (S3, Terraform Cloud, GCS) with <strong>locking</strong> so two applies don't collide. It can contain secrets, so encrypt it and restrict access.</p></div>
+      </details>
+      <details class="qa-item" id="what-is-the-difference-between-terraform-plan-and-terraform-" data-cat="iac" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>What is the difference between terraform plan and terraform apply?</span></summary>
+        <div class="qa-answer"><p><code>plan</code> refreshes state, compares it to the configuration and shows what would change without changing anything. <code>apply</code> executes the changes (it plans again unless you pass a saved plan file). In CI, save the plan with <code>-out</code> and apply exactly that file after review.</p></div>
+      </details>
+      <details class="qa-item" id="what-is-configuration-drift-and-how-do-you-handle-it" data-cat="iac" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>What is configuration drift and how do you handle it?</span></summary>
+        <div class="qa-answer"><p>Drift is when real infrastructure no longer matches code, usually because of manual console changes. Detect it with scheduled <code>terraform plan</code> (a non-empty plan means drift). Then either codify the change or let apply revert it. Prevent it with read-only console access and policy.</p></div>
+      </details>
+      <details class="qa-item" id="count-vs-for-each" data-cat="iac" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>count vs for_each?</span></summary>
+        <div class="qa-answer"><p><code>count</code> creates indexed copies (<code>[0]</code>, <code>[1]</code>). Removing an item from the middle shifts indices and causes unwanted destroy/recreate. <code>for_each</code> keys instances by map keys or set values, so additions and removals only affect that item. Prefer <code>for_each</code> for anything with identity.</p></div>
+      </details>
+      <details class="qa-item" id="how-would-you-structure-terraform-for-multiple-environments-" data-cat="iac" data-lvl="A">
+        <summary><span class="qa-lvl A">Advanced</span><span>How would you structure Terraform for multiple environments and teams?</span></summary>
+        <div class="qa-answer"><ul><li>Reusable, versioned <strong>modules</strong> (network, cluster, database)</li><li>Separate root configurations and <strong>separate state</strong> per environment and component, to keep the blast radius small</li><li>Remote state with locking; pin provider and module versions</li><li>Plan on PR, apply on merge, with policy as code (OPA/Conftest, Sentinel, Checkov)</li><li>Tools like Terragrunt, or Terraform Stacks, to reduce duplication</li></ul></div>
+      </details>
+      <details class="qa-item" id="terraform-vs-ansible-when-would-you-use-each" data-cat="iac" data-lvl="A">
+        <summary><span class="qa-lvl A">Advanced</span><span>Terraform vs Ansible: when would you use each?</span></summary>
+        <div class="qa-answer"><p><strong>Terraform</strong> is declarative and state-based, best for <em>provisioning</em> cloud resources and their lifecycle. <strong>Ansible</strong> is procedural, agentless over SSH, best for <em>configuring</em> machines (packages, files, services) and orchestration. Common pattern: Terraform creates VMs, Ansible configures them, though with immutable images (Packer) and containers, config management shrinks.</p></div>
+      </details>
+    </section>
+    <section class="qa-group" id="cloud">
+      <h2><span>☁️</span> Cloud &amp; AWS <span class="qa-count">(5)</span></h2>
+      <details class="qa-item" id="explain-regions-availability-zones-and-why-they-matter" data-cat="cloud" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>Explain regions, availability zones and why they matter.</span></summary>
+        <div class="qa-answer"><p>A <strong>region</strong> is a geographic area; an <strong>AZ</strong> is one or more isolated data centres within it, with independent power and networking. Spread workloads across at least 2–3 AZs for high availability; use multiple regions for disaster recovery or latency.</p></div>
+      </details>
+      <details class="qa-item" id="security-group-vs-network-acl-in-aws" data-cat="cloud" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>Security group vs network ACL in AWS?</span></summary>
+        <div class="qa-answer"><p><strong>Security groups</strong> are stateful (return traffic is allowed automatically), allow-only, and attach to ENIs/instances. <strong>NACLs</strong> are stateless (rules needed in both directions), support allow and deny, are evaluated in order, and apply to whole subnets.</p></div>
+      </details>
+      <details class="qa-item" id="how-does-a-private-subnet-reach-the-internet" data-cat="cloud" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>How does a private subnet reach the internet?</span></summary>
+        <div class="qa-answer"><p>Through a <strong>NAT gateway</strong> in a public subnet (which routes to an Internet Gateway). The private route table sends <code>0.0.0.0/0</code> to the NAT, allowing outbound-only access. For AWS services, use <strong>VPC endpoints</strong> instead to save NAT data-processing cost and keep traffic private.</p></div>
+      </details>
+      <details class="qa-item" id="what-is-iam-least-privilege-and-how-do-you-apply-it" data-cat="cloud" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>What is IAM least privilege, and how do you apply it?</span></summary>
+        <div class="qa-answer"><p>Grant only the actions on the resources that are needed. Use roles (not users with keys) for workloads, scope policies by resource ARN and conditions, use IAM Access Analyzer to generate policies from actual usage, and add permission boundaries or SCPs as guardrails.</p></div>
+      </details>
+      <details class="qa-item" id="how-would-you-reduce-a-large-aws-bill" data-cat="cloud" data-lvl="A">
+        <summary><span class="qa-lvl A">Advanced</span><span>How would you reduce a large AWS bill?</span></summary>
+        <div class="qa-answer"><ul><li><strong>Visibility first:</strong> Cost Explorer, cost allocation tags, per-team showback</li><li><strong>Right-size</strong> over-provisioned instances (Compute Optimizer); move to Graviton</li><li><strong>Commitments:</strong> Savings Plans or Reserved Instances for the steady baseline; Spot for stateless or batch work</li><li>Kill idle resources: unattached volumes, old snapshots, idle load balancers, dev environments overnight</li><li>Storage lifecycle policies; cut NAT and data-transfer costs with VPC endpoints</li></ul></div>
+      </details>
+    </section>
+    <section class="qa-group" id="observability">
+      <h2><span>📊</span> Monitoring &amp; SRE <span class="qa-count">(5)</span></h2>
+      <details class="qa-item" id="what-is-the-difference-between-monitoring-and-observability" data-cat="observability" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>What is the difference between monitoring and observability?</span></summary>
+        <div class="qa-answer"><p>Monitoring tells you <em>whether</em> known things are broken, using predefined dashboards and alerts. Observability lets you ask <em>new</em> questions about <em>why</em>, using rich telemetry: <strong>metrics, logs and traces</strong> (and profiles), ideally correlated via OpenTelemetry.</p></div>
+      </details>
+      <details class="qa-item" id="what-are-slis-slos-and-slas" data-cat="observability" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>What are SLIs, SLOs and SLAs?</span></summary>
+        <div class="qa-answer"><p><strong>SLI:</strong> a measured indicator (e.g. % of requests under 300 ms). <strong>SLO:</strong> an internal target for it (99.9% over 30 days). <strong>SLA:</strong> a contract with customers, with penalties, which is set looser than the SLO. The gap between 100% and the SLO is the <strong>error budget</strong>.</p></div>
+      </details>
+      <details class="qa-item" id="what-are-the-red-and-use-methods" data-cat="observability" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>What are the RED and USE methods?</span></summary>
+        <div class="qa-answer"><p><strong>RED</strong> (for services): <strong>R</strong>ate, <strong>E</strong>rrors and <strong>D</strong>uration of requests. <strong>USE</strong> (for resources): <strong>U</strong>tilisation, <strong>S</strong>aturation and <strong>E</strong>rrors of CPU, memory, disk and network. Google's four golden signals combine both: latency, traffic, errors and saturation.</p></div>
+      </details>
+      <details class="qa-item" id="how-do-you-avoid-alert-fatigue" data-cat="observability" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>How do you avoid alert fatigue?</span></summary>
+        <div class="qa-answer"><ul><li>Alert on <strong>symptoms users feel</strong> (SLO burn rate), not every cause (CPU 80%)</li><li>Every page must be actionable, urgent and have a runbook</li><li>Route non-urgent issues to tickets, not pages</li><li>Use multi-window burn-rate alerts to cut flapping</li><li>Review alerts after incidents and delete noisy ones</li></ul></div>
+      </details>
+      <details class="qa-item" id="walk-me-through-how-you-would-run-an-incident" data-cat="observability" data-lvl="A">
+        <summary><span class="qa-lvl A">Advanced</span><span>Walk me through how you would run an incident.</span></summary>
+        <div class="qa-answer"><ol><li><strong>Declare</strong> it and assign roles: incident commander, communications, operations.</li><li><strong>Mitigate first:</strong> roll back, fail over, scale or shed load. Root cause can wait.</li><li><strong>Communicate</strong> on a regular cadence to stakeholders and the status page.</li><li><strong>Resolve</strong>, then hold a <strong>blameless postmortem</strong>: timeline, impact, contributing factors and action items with owners.</li></ol></div>
+      </details>
+    </section>
+    <section class="qa-group" id="security">
+      <h2><span>🛡️</span> DevSecOps <span class="qa-count">(4)</span></h2>
+      <details class="qa-item" id="what-does-shift-left-mean-in-security" data-cat="security" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>What does &quot;shift left&quot; mean in security?</span></summary>
+        <div class="qa-answer"><p>Moving security checks earlier in the lifecycle, into the IDE, pre-commit and pull request pipelines, so issues are caught when they are cheapest to fix. Examples: SAST, dependency scanning, IaC scanning and secret detection on every PR.</p></div>
+      </details>
+      <details class="qa-item" id="sast-vs-dast-vs-sca" data-cat="security" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>SAST vs DAST vs SCA?</span></summary>
+        <div class="qa-answer"><ul><li><strong>SAST</strong>: analyses source code without running it (Semgrep, CodeQL)</li><li><strong>DAST</strong>: attacks the running application from outside (OWASP ZAP)</li><li><strong>SCA</strong>: finds known-vulnerable third-party dependencies and licence issues (Dependabot, Snyk, Trivy)</li></ul></div>
+      </details>
+      <details class="qa-item" id="how-do-you-manage-secrets-for-applications" data-cat="security" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>How do you manage secrets for applications?</span></summary>
+        <div class="qa-answer"><p>Store them in a dedicated secrets manager (Vault, AWS Secrets Manager, GCP Secret Manager). Inject them at runtime via short-lived credentials, the Kubernetes External Secrets Operator or a CSI driver. Never commit them or bake them into images. Rotate automatically, audit access, and prefer dynamic secrets where possible.</p></div>
+      </details>
+      <details class="qa-item" id="what-is-software-supply-chain-security-and-what-is-an-sbom" data-cat="security" data-lvl="A">
+        <summary><span class="qa-lvl A">Advanced</span><span>What is software supply chain security, and what is an SBOM?</span></summary>
+        <div class="qa-answer"><p>It means protecting everything that goes into your software: dependencies, build systems and artifacts. Key practices: pinned dependencies, isolated reproducible builds, <strong>signed artifacts</strong> (Sigstore/Cosign), provenance attestations (SLSA) and admission policies that verify signatures. An <strong>SBOM</strong> (SPDX or CycloneDX) lists every component in an artifact, so you can instantly answer "are we affected by this CVE?"</p></div>
+      </details>
+    </section>
+    <section class="qa-group" id="scenario">
+      <h2><span>🧠</span> Scenarios &amp; Behavioural <span class="qa-count">(5)</span></h2>
+      <details class="qa-item" id="production-latency-doubled-after-a-deploy-what-do-you-do" data-cat="scenario" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>Production latency doubled after a deploy. What do you do?</span></summary>
+        <div class="qa-answer"><ol><li><strong>Mitigate:</strong> if the timing clearly matches the deploy, roll back first and investigate after.</li><li>Confirm with dashboards: which endpoints, which percentiles, all instances or some?</li><li>Diff the release: code, config, dependency versions, resource limits.</li><li>Use traces to find the slow span (database query, downstream call, lock).</li><li>Fix, add a test or alert that would have caught it, and write it up.</li></ol></div>
+      </details>
+      <details class="qa-item" id="your-ci-pipeline-takes-40-minutes-how-would-you-speed-it-up" data-cat="scenario" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>Your CI pipeline takes 40 minutes. How would you speed it up?</span></summary>
+        <div class="qa-answer"><ul><li>Measure each stage first, and fix the biggest one</li><li>Cache dependencies and Docker layers; use BuildKit and remote cache</li><li>Parallelise and shard tests; run only affected tests in monorepos</li><li>Run fast checks first so failures surface in minutes</li><li>Bigger or self-hosted runners for heavy jobs; remove redundant steps</li><li>Move slow end-to-end suites to post-merge or nightly with clear ownership</li></ul></div>
+      </details>
+      <details class="qa-item" id="tell-me-about-a-time-you-automated-something-manual" data-cat="scenario" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>Tell me about a time you automated something manual.</span></summary>
+        <div class="qa-answer"><p>Use the <strong>STAR</strong> format: <strong>S</strong>ituation, <strong>T</strong>ask, <strong>A</strong>ction, <strong>R</strong>esult. Quantify the result ("cut release time from 2 hours to 10 minutes", "removed 5 hours of toil per week"). If you lack work experience, use one of your <a href="projects.html">portfolio projects</a>: what was hard, what you'd do differently.</p></div>
+      </details>
+      <details class="qa-item" id="tell-me-about-an-outage-you-caused-or-handled" data-cat="scenario" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>Tell me about an outage you caused or handled.</span></summary>
+        <div class="qa-answer"><p>Interviewers want ownership and learning, not perfection. Describe the impact, how you detected and mitigated it, the root cause, and the <strong>systemic fix</strong> (a test, alert, guardrail or process change). Keep it blameless, even about yourself.</p></div>
+      </details>
+      <details class="qa-item" id="why-devops-why-this-role" data-cat="scenario" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>Why DevOps? Why this role?</span></summary>
+        <div class="qa-answer"><p>Connect your motivation to outcomes: faster, safer delivery, and reducing toil for developers. Mention something specific about the company's stack or engineering blog, and one concrete thing you've built that shows you enjoy this work.</p></div>
+      </details>
+    </section>
+
+    <p class="qa-empty" id="qa-empty">No questions match. Try another search term.</p>
+
+    <div class="card" style="margin-top:1rem;">
+      <h3 style="font-size:1rem;margin-bottom:0.5rem;">Next steps</h3>
+      <p style="font-size:0.92rem;margin:0;">Back every answer with something you've built: work through the <a href="projects.html">hands-on projects</a>, practise the <a href="troubleshooting.html">troubleshooting playbooks</a>, then test yourself with the <a href="quiz.html">quiz</a>.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">DevOpsHub</div>
+        <p>Interview questions and model answers for DevOps, SRE and platform engineering roles.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <ul class="footer-links">
+          <li><a href="roadmap.html">Roadmap</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="concepts.html">Concepts</a></li>
+          <li><a href="tools.html">Tools</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Practice</h4>
+        <ul class="footer-links">
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="interview.html">Interview Prep</a></li>
+          <li><a href="troubleshooting.html">Troubleshooting</a></li>
+          <li><a href="quiz.html">Quiz</a></li>
+          <li><a href="cheatsheets.html">Cheatsheets</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>More</h4>
+        <ul class="footer-links">
+          <li><a href="glossary.html">Glossary</a></li>
+          <li><a href="resources.html">Resources</a></li>
+          <li><a href="search.html">Search</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 DevOpsHub. Powered by HTML5, CSS3 &amp; Vanilla JS.</p>
+      <div class="footer-status"><span class="status-dot"></span>All systems operational</div>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js" defer></script>
+<script>
+'use strict';
+const items  = [...document.querySelectorAll('.qa-item')];
+const groups = [...document.querySelectorAll('.qa-group')];
+const search = document.getElementById('qa-search');
+const count  = document.getElementById('qa-count');
+let cat = 'all', lvl = 'all';
+
+function apply() {
+  const q = search.value.toLowerCase().trim();
+  let shown = 0;
+  items.forEach(it => {
+    const ok = (cat === 'all' || it.dataset.cat === cat) &&
+               (lvl === 'all' || it.dataset.lvl === lvl) &&
+               (!q || it.textContent.toLowerCase().includes(q));
+    it.style.display = ok ? '' : 'none';
+    if (ok) shown++;
+    if (q && ok) it.open = true;
+  });
+  groups.forEach(g => {
+    g.style.display = [...g.querySelectorAll('.qa-item')].some(i => i.style.display !== 'none') ? '' : 'none';
+  });
+  count.textContent = `${shown} of ${items.length} shown`;
+  document.getElementById('qa-empty').style.display = shown ? 'none' : 'block';
+}
+
+document.querySelectorAll('[data-filter-cat]').forEach(ch => ch.addEventListener('click', () => {
+  document.querySelectorAll('[data-filter-cat]').forEach(c => c.classList.remove('active'));
+  ch.classList.add('active'); cat = ch.dataset.filterCat; apply();
+}));
+document.querySelectorAll('[data-filter-lvl]').forEach(ch => ch.addEventListener('click', () => {
+  document.querySelectorAll('[data-filter-lvl]').forEach(c => c.classList.remove('active'));
+  ch.classList.add('active'); lvl = ch.dataset.filterLvl; apply();
+}));
+search.addEventListener('input', apply);
+
+document.getElementById('qa-expand')?.addEventListener('click', e => {
+  const open = e.target.dataset.open !== '1';
+  items.forEach(i => { if (i.style.display !== 'none') i.open = open; });
+  e.target.dataset.open = open ? '1' : '0';
+  e.target.textContent = open ? '⊟ Collapse all' : '⊞ Expand all';
+});
+
+function openFromHash() {
+  const t = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  if (t && t.tagName === 'DETAILS') { t.open = true; t.scrollIntoView({ block: 'start' }); }
+}
+window.addEventListener('hashchange', openFromHash);
+apply();
+openFromHash();
+</script>
+</body>
+</html>
