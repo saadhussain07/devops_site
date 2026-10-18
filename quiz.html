@@ -315,6 +315,30 @@
     .option-btn.wrong   .option-key { background: var(--accent-orange); color: var(--bg-void); border-color: var(--accent-orange); }
 
     /* Explanation box */
+    /* ── Certificate ─────────────────────────────────────── */
+    .cert-box {
+      max-width: 640px;
+      margin: 2rem auto 0;
+      text-align: center;
+      background: var(--bg-card);
+      border: 1px solid var(--accent-green);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+    }
+    .cert-box h3 { margin-bottom: 0.4rem; }
+    .cert-box p { font-size: 0.9rem; margin-bottom: 1rem; }
+    .cert-form { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; }
+    .cert-input {
+      flex: 1 1 220px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.65rem 0.9rem;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+    }
+    .cert-input:focus { outline: none; border-color: var(--accent-green); }
+
     .explanation-box {
       margin: 1rem 1.5rem 1.5rem;
       background: var(--bg-surface);
@@ -718,6 +742,18 @@
         <button class="btn btn-primary" id="retry-btn">Retry Quiz 🔄</button>
         <a href="roadmap.html" class="btn btn-secondary">View Roadmap →</a>
         <a href="concepts.html" class="btn btn-ghost">Study Concepts</a>
+      </div>
+
+      <!-- Certificate (shown on a passing score) -->
+      <div class="cert-box" id="cert-box" hidden>
+        <h3>🎓 You passed! Get your certificate</h3>
+        <p>Enter your name to download a certificate image you can share on LinkedIn or add to your portfolio.</p>
+        <div class="cert-form">
+          <input type="text" id="cert-name" class="cert-input" maxlength="48" placeholder="Your full name" aria-label="Your name for the certificate">
+          <button type="button" class="btn btn-primary" id="cert-download">⬇ Download PNG</button>
+          <a class="btn btn-ghost" id="cert-share" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frocketdevops.vercel.app%2Fquiz.html" target="_blank" rel="noopener">Share on LinkedIn</a>
+        </div>
+        <canvas id="cert-canvas" width="1600" height="1130" hidden></canvas>
       </div>
 
       <!-- Review list -->
@@ -1735,11 +1771,102 @@ function timeExpired() {
   nextBtn.textContent   = currentIdx < questions.length - 1 ? 'Next Question →' : 'See Results →';
 }
 
+/* ── Certificate ────────────────────────────────────────── */
+const PASS_MARK = 70;
+let lastResult = null;
+
+function topicLabel() {
+  const btn = document.querySelector(`.cat-btn[data-cat="${selectedCat}"]`);
+  return btn ? btn.textContent.trim() : 'All Topics';
+}
+
+function drawCertificate(name) {
+  const c = document.getElementById('cert-canvas');
+  const x = c.getContext('2d');
+  const W = c.width, H = c.height;
+
+  x.fillStyle = '#0b1416';
+  x.fillRect(0, 0, W, H);
+  x.strokeStyle = 'rgba(20,184,166,0.10)';
+  x.lineWidth = 1;
+  for (let i = 0; i < W; i += 40) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i, H); x.stroke(); }
+  for (let j = 0; j < H; j += 40) { x.beginPath(); x.moveTo(0, j); x.lineTo(W, j); x.stroke(); }
+  x.strokeStyle = '#14b8a6';
+  x.lineWidth = 6;
+  x.strokeRect(40, 40, W - 80, H - 80);
+  x.lineWidth = 1.5;
+  x.strokeRect(60, 60, W - 120, H - 120);
+
+  x.textAlign = 'center';
+  x.fillStyle = '#14b8a6';
+  x.font = 'bold 40px "Courier New", monospace';
+  x.fillText('> DevOpsHub', W / 2, 170);
+
+  x.fillStyle = '#9ca3af';
+  x.font = '28px "Courier New", monospace';
+  x.fillText('CERTIFICATE OF ACHIEVEMENT', W / 2, 250);
+
+  x.fillStyle = '#d1d5db';
+  x.font = 'italic 32px Georgia, serif';
+  x.fillText('This certifies that', W / 2, 360);
+
+  x.fillStyle = '#ffffff';
+  x.font = 'bold 76px Georgia, serif';
+  x.fillText(name, W / 2, 470, W - 240);
+  x.strokeStyle = '#14b8a6';
+  x.lineWidth = 2;
+  x.beginPath(); x.moveTo(W / 2 - 420, 500); x.lineTo(W / 2 + 420, 500); x.stroke();
+
+  x.fillStyle = '#d1d5db';
+  x.font = '32px Georgia, serif';
+  x.fillText('passed the DevOps Hub knowledge quiz', W / 2, 580);
+  x.fillText(`Topic: ${lastResult.topic}`, W / 2, 630);
+
+  x.fillStyle = '#2dff7a';
+  x.font = 'bold 64px "Courier New", monospace';
+  x.fillText(`${lastResult.pct}%  ·  ${lastResult.correct}/${lastResult.total}`, W / 2, 750);
+
+  x.fillStyle = '#9ca3af';
+  x.font = '26px "Courier New", monospace';
+  x.fillText(lastResult.date, W / 2 - 360, 930);
+  x.fillText('rocketdevops.vercel.app/quiz.html', W / 2 + 260, 930);
+  x.font = '20px "Courier New", monospace';
+  x.fillStyle = '#6b7280';
+  x.fillText('DATE', W / 2 - 360, 965);
+  x.fillText('TAKE THE QUIZ', W / 2 + 260, 965);
+
+  return c;
+}
+
+document.getElementById('cert-download').addEventListener('click', () => {
+  const input = document.getElementById('cert-name');
+  const name = input.value.trim();
+  if (!name) { input.focus(); input.style.borderColor = 'var(--accent-orange)'; return; }
+  input.style.borderColor = '';
+  const canvas = drawCertificate(name);
+  const a = document.createElement('a');
+  a.download = `devopshub-certificate-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.png`;
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+});
+
+function offerCertificate(pct) {
+  lastResult = {
+    pct,
+    correct: score,
+    total: questions.length,
+    topic: topicLabel(),
+    date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
+  };
+  document.getElementById('cert-box').hidden = !(pct >= PASS_MARK && questions.length >= 10);
+}
+
 function showResults() {
   quizArena.style.display     = 'none';
   resultsScreen.style.display = 'block';
 
   const pct     = Math.round((score / questions.length) * 100);
+  offerCertificate(pct);
   const avgTime = timeTaken.length ? Math.round(timeTaken.reduce((a,b)=>a+b,0)/timeTaken.length) : 0;
 
   // Score ring animation

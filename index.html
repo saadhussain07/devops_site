@@ -7,6 +7,58 @@
   <title>DevOps Hub — Home</title>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <style>
+    /* ── Start Here paths ─────────────────────────────────── */
+    .sh-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-bottom: 1.75rem; }
+    .sh-tab {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      padding: 0.6rem 1.1rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .sh-tab:hover { border-color: var(--accent-green); color: var(--accent-green); }
+    .sh-tab.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .sh-intro { text-align: center; max-width: 560px; margin: 0 auto 1.5rem; }
+    .sh-steps {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 0.85rem;
+    }
+    .sh-steps a {
+      display: flex;
+      gap: 0.85rem;
+      align-items: flex-start;
+      height: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.1rem;
+      text-decoration: none;
+      transition: all var(--transition);
+    }
+    .sh-steps a:hover { border-color: var(--accent-green); transform: translateY(-2px); }
+    .sh-step-num {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--accent-green);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.25rem 0.45rem;
+      flex-shrink: 0;
+    }
+    .sh-steps strong { display: block; color: var(--text-primary); font-size: 0.95rem; margin-bottom: 0.15rem; }
+    .sh-steps small { color: var(--text-secondary); font-size: 0.82rem; line-height: 1.45; }
+    .sh-also { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 1.25rem; margin-top: 2rem; }
+    .sh-also a { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary); text-decoration: none; }
+    .sh-also a:hover { color: var(--accent-green); }
+  </style>
   <link rel="canonical" href="https://rocketdevops.vercel.app/">
   <meta property="og:title" content="DevOps Hub — Home">
   <meta property="og:description" content="DevOps Hub — Learn DevOps culture, tools, and workflows for modern software delivery.">
@@ -80,8 +132,8 @@
       </p>
 
       <div class="hero-cta">
-        <a href="about.html" class="btn btn-primary">Explore DevOps</a>
-        <a href="workflow.html" class="btn btn-secondary">View Lifecycle</a>
+        <a href="#start-here" class="btn btn-primary">Start Learning →</a>
+        <a href="about.html" class="btn btn-secondary">What is DevOps?</a>
       </div>
 
       <div class="hero-stats">
@@ -175,6 +227,60 @@
     <div class="lc-arrow" style="color: var(--accent-green);">↺</div>
   </div>
 </div>
+
+<!-- ─── Start Here ──────────────────────────────────────────── -->
+<section class="section" id="start-here" aria-labelledby="start-heading">
+  <div class="container">
+    <div class="section-header">
+      <span class="tag">// start here</span>
+      <h2 id="start-heading">Pick Your <span class="text-green">Learning Path</span></h2>
+      <p>Not sure where to begin? Choose the path that matches your background and follow the steps in order.</p>
+    </div>
+    <div class="sh-tabs" role="tablist" aria-label="Learning paths"><button type="button" class="sh-tab active" role="tab" aria-selected="true" data-path="beginner">🌱 Complete beginner</button><button type="button" class="sh-tab" role="tab" aria-selected="false" data-path="developer">💻 Developer moving to DevOps</button><button type="button" class="sh-tab" role="tab" aria-selected="false" data-path="ops">🖥️ Sysadmin / Ops engineer</button></div>
+    <div class="sh-panels">
+      <div class="sh-panel" data-path="beginner" role="tabpanel">
+        <p class="sh-intro">No IT background yet? Build the foundations first, then add DevOps tools one at a time.</p>
+        <ol class="sh-steps">
+          <li><a href="about.html"><span class="sh-step-num">01</span><span><strong>What is DevOps?</strong><small>Culture, the lifecycle and why it matters</small></span></a></li>
+          <li><a href="blog-linux-for-devops.html"><span class="sh-step-num">02</span><span><strong>Linux & Bash</strong><small>The command line you will use every day</small></span></a></li>
+          <li><a href="blog-networking-fundamentals.html"><span class="sh-step-num">03</span><span><strong>Networking basics</strong><small>IPs, DNS, HTTP and TLS</small></span></a></li>
+          <li><a href="cheatsheets.html#git"><span class="sh-step-num">04</span><span><strong>Git</strong><small>Version control for everything</small></span></a></li>
+          <li><a href="blog-docker-guide.html"><span class="sh-step-num">05</span><span><strong>Docker</strong><small>Package apps as containers</small></span></a></li>
+          <li><a href="projects.html#linux-automation"><span class="sh-step-num">06</span><span><strong>First projects</strong><small>Build Projects 01–02 for your portfolio</small></span></a></li>
+        </ol>
+      </div>
+      <div class="sh-panel" data-path="developer" role="tabpanel" hidden>
+        <p class="sh-intro">You can code. Now learn to ship and run what you build.</p>
+        <ol class="sh-steps">
+          <li><a href="blog-docker-guide.html"><span class="sh-step-num">01</span><span><strong>Docker</strong><small>Containerise your own app</small></span></a></li>
+          <li><a href="blog-cicd-github-actions.html"><span class="sh-step-num">02</span><span><strong>CI/CD</strong><small>Automate test, build and release</small></span></a></li>
+          <li><a href="blog-k8s-beginners.html"><span class="sh-step-num">03</span><span><strong>Kubernetes</strong><small>Run containers at scale</small></span></a></li>
+          <li><a href="blog-terraform-aws.html"><span class="sh-step-num">04</span><span><strong>Terraform & AWS</strong><small>Infrastructure as code</small></span></a></li>
+          <li><a href="blog-prometheus-grafana.html"><span class="sh-step-num">05</span><span><strong>Observability</strong><small>Metrics, logs and alerts</small></span></a></li>
+          <li><a href="projects.html#cicd-pipeline"><span class="sh-step-num">06</span><span><strong>Projects 03–06</strong><small>Prove it with a real pipeline</small></span></a></li>
+        </ol>
+      </div>
+      <div class="sh-panel" data-path="ops" role="tabpanel" hidden>
+        <p class="sh-intro">You know servers. Now automate them and move to cloud-native.</p>
+        <ol class="sh-steps">
+          <li><a href="blog-terraform-aws.html"><span class="sh-step-num">01</span><span><strong>Infrastructure as code</strong><small>Stop clicking in consoles</small></span></a></li>
+          <li><a href="blog-aws-core-services.html"><span class="sh-step-num">02</span><span><strong>AWS core services</strong><small>Map your skills to the cloud</small></span></a></li>
+          <li><a href="blog-k8s-beginners.html"><span class="sh-step-num">03</span><span><strong>Kubernetes</strong><small>The new operating system</small></span></a></li>
+          <li><a href="blog-gitops-argocd.html"><span class="sh-step-num">04</span><span><strong>GitOps</strong><small>Git-driven deployments</small></span></a></li>
+          <li><a href="blog-sre-fundamentals.html"><span class="sh-step-num">05</span><span><strong>SRE</strong><small>SLOs, error budgets and incidents</small></span></a></li>
+          <li><a href="projects.html#platform-capstone"><span class="sh-step-num">06</span><span><strong>Capstone</strong><small>A production-style platform</small></span></a></li>
+        </ol>
+      </div>
+    </div>
+    <div class="sh-also">
+      <a href="roadmap.html">◉ Full roadmap &amp; skill tracker</a>
+      <a href="projects.html">▣ 8 hands-on projects</a>
+      <a href="interview.html">🎤 Interview prep</a>
+      <a href="quiz.html">◆ Test yourself</a>
+      <a href="changelog.html">🆕 What's new</a>
+    </div>
+  </div>
+</section>
 
 <!-- ─── What is DevOps ──────────────────────────────────────── -->
 <section class="section" aria-labelledby="what-heading">
@@ -357,6 +463,29 @@
 </footer>
 
 <script src="main.js" defer></script>
+<script>
+'use strict';
+/* ── Start Here path tabs (choice remembered per browser) ── */
+(function initPaths() {
+  const tabs = document.querySelectorAll('.sh-tab');
+  const panels = document.querySelectorAll('.sh-panel');
+  function show(path) {
+    tabs.forEach(t => {
+      const on = t.dataset.path === path;
+      t.classList.toggle('active', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    panels.forEach(p => { p.hidden = p.dataset.path !== path; });
+  }
+  let saved = null;
+  try { saved = localStorage.getItem('dh-path'); } catch { /* storage unavailable */ }
+  if (saved && document.querySelector(`.sh-tab[data-path="${saved}"]`)) show(saved);
+  tabs.forEach(t => t.addEventListener('click', () => {
+    show(t.dataset.path);
+    try { localStorage.setItem('dh-path', t.dataset.path); } catch { /* storage unavailable */ }
+  }));
+})();
+</script>
 </body>
 </html>
 

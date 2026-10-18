@@ -27,9 +27,16 @@
 | 📚 [Concepts](https://rocketdevops.vercel.app/concepts.html) | CI/CD, IaC, Microservices, Monitoring, DevSecOps |
 | 🔄 [Workflow](https://rocketdevops.vercel.app/workflow.html) | Full DevOps lifecycle — Plan → Code → Deploy → Monitor |
 | 🗺️ [Roadmap](https://rocketdevops.vercel.app/roadmap.html) | Step-by-step DevOps learning roadmap |
-| 🧠 [Quiz](https://rocketdevops.vercel.app/quiz.html) | Test your DevOps knowledge |
-| ✍️ [Blog](https://rocketdevops.vercel.app/blog.html) | DevOps articles and insights |
+| 🧠 [Quiz](https://rocketdevops.vercel.app/quiz.html) | 103-question bank with explanations and a pass certificate |
+| ✍️ [Blog](https://rocketdevops.vercel.app/blog.html) | 13 in-depth tutorials, each on its own page, plus an RSS feed |
 | 🔍 [Search](https://rocketdevops.vercel.app/search.html) | Search across all content |
+| 🧪 [Projects](https://rocketdevops.vercel.app/projects.html) | 8 hands-on portfolio projects, beginner → advanced |
+| 🎤 [Interview Prep](https://rocketdevops.vercel.app/interview.html) | 60 interview questions with model answers |
+| 🚑 [Troubleshooting](https://rocketdevops.vercel.app/troubleshooting.html) | 23 playbooks for common production failures |
+| 📋 [Cheatsheets](https://rocketdevops.vercel.app/cheatsheets.html) | 200+ copy-paste commands across 14 tools |
+| 📖 [Glossary](https://rocketdevops.vercel.app/glossary.html) | DevOps terms A–Z |
+| 🧠 [AIOps](https://rocketdevops.vercel.app/aiops.html) | AI-powered operations research |
+| 🆕 [What's New](https://rocketdevops.vercel.app/changelog.html) | Changelog of site updates |
 | 📬 [Contact](https://rocketdevops.vercel.app/contact.html) | Get in touch |
 
 ---

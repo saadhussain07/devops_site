@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Changelog of new DevOps guides, projects, cheatsheets, quiz questions and features on DevOps Hub.">
+  <meta name="keywords" content="DevOps Hub changelog, what&#x27;s new, DevOps learning updates">
+  <meta name="author" content="DevOps Hub">
+  <meta name="robots" content="index, follow">
+  <title>What&#x27;s New · DevOps Hub</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .cl-list { max-width: 760px; margin: 0 auto; position: relative; }
+    .cl-entry { position: relative; padding: 0 0 2.5rem 2rem; border-left: 2px solid var(--border); }
+    .cl-entry:last-child { border-left-color: transparent; }
+    .cl-entry::before {
+      content: '';
+      position: absolute;
+      left: -7px; top: 0.35rem;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 0 4px var(--bg-base);
+    }
+    .cl-date { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.06em; }
+    .cl-entry h2 { font-size: 1.25rem; margin: 0.3rem 0 0.9rem; }
+    .cl-entry ul { padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .cl-entry li { color: var(--text-secondary); line-height: 1.6; font-size: 0.95rem; }
+    .cl-entry li strong { color: var(--text-primary); }
+    .cl-kind {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.1rem 0.4rem;
+      border-radius: 3px;
+      border: 1px solid;
+      margin-right: 0.4rem;
+      vertical-align: 1px;
+    }
+    .cl-kind.new { color: var(--accent-green); }
+    .cl-kind.improved { color: var(--accent-cyan); }
+    .cl-kind.fixed { color: var(--accent-orange); }
+  </style>
+  <link rel="canonical" href="https://rocketdevops.vercel.app/changelog.html">
+  <meta property="og:title" content="What&#x27;s New · DevOps Hub">
+  <meta property="og:description" content="Changelog of new DevOps guides, projects, cheatsheets, quiz questions and features on DevOps Hub.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://rocketdevops.vercel.app/changelog.html">
+  <meta property="og:site_name" content="DevOps Hub">
+  <meta property="og:image" content="https://rocketdevops.vercel.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+<!-- ═══ NAVBAR ═══ -->
+<nav id="dh-nav" aria-label="Main navigation">
+  <div id="dh-progress"></div>
+  <div id="dh-inner">
+    <a href="index.html" id="dh-logo">
+      <span id="dh-prompt">&gt;</span> DevOpsHub
+    </a>
+    <ul id="dh-links"></ul>
+    <div id="dh-controls">
+      <button id="dh-theme-btn" aria-label="Toggle theme">🌙</button>
+      <button id="dh-burger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div id="dh-drawer">
+  <ul></ul>
+</div>
+<!-- ═══ END NAVBAR ═══ -->
+
+<header class="page-header">
+  <div class="container">
+    <span class="tag">// changelog</span>
+    <h1>What's <span class="text-green">New</span></h1>
+    <p>New guides, projects and features added to DevOps Hub. Follow the <a href="feed.xml">RSS feed</a> to get new articles automatically.</p>
+  </div>
+</header>
+
+<section class="section" style="padding-top:3rem;">
+  <div class="container">
+  <div class="cl-list">
+    <article class="cl-entry">
+      <time class="cl-date" datetime="2026-10-18">18 Oct 2026</time>
+      <h2>Big learning-content update</h2>
+      <ul>
+        <li><span class="cl-kind new">new</span><strong><a href="projects.html">Projects &amp; Labs</a></strong>: 8 portfolio projects from Bash automation to an EKS platform capstone, with progress tracking.</li>
+        <li><span class="cl-kind new">new</span><strong><a href="interview.html">Interview Prep</a></strong>: 60 questions with model answers across 11 topics.</li>
+        <li><span class="cl-kind new">new</span><strong><a href="troubleshooting.html">Troubleshooting Playbooks</a></strong>: 23 common failures with diagnosis commands and fixes.</li>
+        <li><span class="cl-kind new">new</span>Six new articles: <a href="blog-linux-for-devops.html">Linux</a>, <a href="blog-networking-fundamentals.html">Networking</a>, <a href="blog-aws-core-services.html">AWS</a>, <a href="blog-gitops-argocd.html">GitOps with Argo CD</a>, <a href="blog-sre-fundamentals.html">SRE</a> and <a href="blog-ai-in-devops.html">AI in DevOps</a>.</li>
+        <li><span class="cl-kind new">new</span>Every blog article now has its own page and link, plus an <a href="feed.xml">RSS feed</a>.</li>
+        <li><span class="cl-kind new">new</span>A "Start Here" learning path chooser on the <a href="index.html#start-here">home page</a>, and a shareable certificate when you pass the <a href="quiz.html">quiz</a>.</li>
+        <li><span class="cl-kind improved">improved</span><a href="quiz.html">Quiz</a> question bank grown from 22 to 103, with Linux, Networking, Git and Cloud topics.</li>
+        <li><span class="cl-kind improved">improved</span><a href="cheatsheets.html">Cheatsheets</a>: AWS CLI, GitHub Actions, Bash, systemd, networking and Argo CD (211 commands).</li>
+        <li><span class="cl-kind improved">improved</span><a href="tools.html">Tools</a>: 21 more tools in 7 new sections, with working filters.</li>
+        <li><span class="cl-kind improved">improved</span><a href="roadmap.html">Roadmap</a> skill cards link to the matching guide, project, cheatsheet and interview questions.</li>
+        <li><span class="cl-kind improved">improved</span>The Kubernetes, GitHub Actions, Terraform, Prometheus and DevSecOps tutorials are expanded and updated.</li>
+        <li><span class="cl-kind fixed">fixed</span>Highlight colours missing on ten pages; outdated commands in several tutorials; link previews on LinkedIn and X now show an image.</li>
+      </ul>
+    </article>
+  </div>
+  </div>
+</section>
+
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">DevOpsHub</div>
+        <p>What's new on DevOps Hub.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <ul class="footer-links">
+          <li><a href="roadmap.html">Roadmap</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="concepts.html">Concepts</a></li>
+          <li><a href="tools.html">Tools</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Practice</h4>
+        <ul class="footer-links">
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="interview.html">Interview Prep</a></li>
+          <li><a href="troubleshooting.html">Troubleshooting</a></li>
+          <li><a href="quiz.html">Quiz</a></li>
+          <li><a href="cheatsheets.html">Cheatsheets</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>More</h4>
+        <ul class="footer-links">
+          <li><a href="glossary.html">Glossary</a></li>
+          <li><a href="resources.html">Resources</a></li>
+          <li><a href="search.html">Search</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 DevOpsHub. Powered by HTML5, CSS3 &amp; Vanilla JS.</p>
+      <div class="footer-status"><span class="status-dot"></span>All systems operational</div>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js" defer></script>
+</body>
+</html>

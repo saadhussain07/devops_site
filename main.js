@@ -634,6 +634,7 @@ window.__DH_MAIN_LOADED__ = true;
       { href: 'glossary.html',    icon: '📖', label: 'Glossary',    desc: '100+ DevOps terms A–Z' },
       { href: 'interview.html',   icon: '🎤', label: 'Interview Prep', desc: '60 Q&As with answers' },
       { href: 'troubleshooting.html', icon: '🚑', label: 'Troubleshooting', desc: 'Fix common failures' },
+      { href: 'changelog.html',   icon: '🆕', label: "What's New",  desc: 'Latest additions' },
     ]},
 
     { type: 'link', href: 'contact.html', label: 'Contact', icon: '✉' },
