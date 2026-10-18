@@ -48,7 +48,7 @@
       "image": "https://rocketdevops.vercel.app/og-image.png",
       "mainEntityOfPage": "https://rocketdevops.vercel.app/blog-devsecops-pipeline.html",
       "keywords": "DevSecOps, Security, Advanced",
-      "timeRequired": "PT2M",
+      "timeRequired": "PT3M",
       "proficiencyLevel": "Advanced"
     },
     {
@@ -110,7 +110,7 @@
       <span>🛡️ Security</span>
       <span>📅 <time datetime="2026-04-02">2 Apr 2026</time></span>
       <span>✎ Updated <time datetime="2026-10-18">18 Oct 2026</time></span>
-      <span>⏱ 2 min read</span>
+      <span>⏱ 3 min read</span>
       <span>📶 Advanced</span>
     </div>
     <div class="post-tags"><span class="post-tag">DevSecOps</span><span class="post-tag">Security</span><span class="post-tag">Advanced</span></div>
@@ -178,6 +178,69 @@ jobs:
   <p><strong>Golden rule:</strong> Set <code>exit-code: 1</code> on CRITICAL findings so the pipeline fails and blocks the merge. Security gates only work if they're enforced.</p>
 </div>
 
+<h2 id="scan-your-infrastructure-code-too">Scan your infrastructure code too</h2>
+<p>Misconfigured Terraform, Kubernetes manifests and Dockerfiles cause more cloud breaches than exotic exploits. Scan them in the same pipeline:</p>
+<pre><code>  iac-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Trivy config scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: config
+          scan-ref: .
+          severity: HIGH,CRITICAL
+          exit-code: 1</code></pre>
+<p>Typical findings: security groups open to <code>0.0.0.0/0</code>, unencrypted S3 buckets or EBS volumes, containers running as root, and missing resource limits.</p>
+
+<h2 id="generate-an-sbom-and-sign-your-images">Generate an SBOM and sign your images</h2>
+<p>A <strong>Software Bill of Materials</strong> lists every component in an image, so when the next big CVE lands you can answer "are we affected?" in seconds. <strong>Signing</strong> proves an image came from your pipeline and wasn't tampered with.</p>
+<pre><code>  sign:
+    needs: container-scan
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write          # keyless signing via OIDC
+      packages: write
+    steps:
+      - uses: sigstore/cosign-installer@v3
+      - uses: anchore/sbom-action@v0
+        with:
+          image: ghcr.io/you/app:${{ github.sha }}
+          format: spdx-json
+          output-file: sbom.spdx.json
+      - run: |
+          cosign sign --yes ghcr.io/you/app:${{ github.sha }}
+          cosign attest --yes --predicate sbom.spdx.json --type spdxjson ghcr.io/you/app:${{ github.sha }}</code></pre>
+<p>In the cluster, a policy engine such as <strong>Kyverno</strong> can reject any image that isn't signed by your pipeline.</p>
+
+<h2 id="keep-dependencies-patched-automatically">Keep dependencies patched automatically</h2>
+<pre><code># .github/dependabot.yml
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule: { interval: weekly }
+  - package-ecosystem: docker
+    directory: /
+    schedule: { interval: weekly }
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: { interval: weekly }</code></pre>
+
+<h2 id="make-it-stick">Make it stick</h2>
+<ul>
+  <li><strong>Start in report-only mode</strong>, fix the backlog, then switch the gates to blocking. Teams disable noisy gates that block everything on day one.</li>
+  <li><strong>Pin third-party actions</strong> to a version or a commit SHA, not <code>@master</code>.</li>
+  <li><strong>Give the workflow least-privilege <code>permissions:</code></strong> and use OIDC instead of long-lived cloud keys.</li>
+  <li><strong>Turn on GitHub secret scanning and push protection</strong> so secrets are blocked before they land.</li>
+</ul>
+
+<h2 id="next-steps">Next steps</h2>
+<ul>
+  <li>Add these gates to <a href="projects.html#cicd-pipeline">Project 03</a>, then enforce signatures in the <a href="projects.html#platform-capstone">capstone</a>.</li>
+  <li>Review the <a href="interview.html#security">DevSecOps interview questions</a>.</li>
+</ul>
+
       <div class="post-share">
         <span>Share:</span>
         <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frocketdevops.vercel.app%2Fblog-devsecops-pipeline.html" target="_blank" rel="noopener">LinkedIn</a>
@@ -194,8 +257,8 @@ jobs:
         <h2>Keep reading</h2>
         <div class="post-related-grid">
           <a href="blog-ai-in-devops.html"><span class="emoji">🤖</span><strong>AI in DevOps: Practical Uses, Agents and Guardrails</strong><small>AI &amp; AIOps · 5 min</small></a>
-          <a href="blog-sre-fundamentals.html"><span class="emoji">🧯</span><strong>SRE Fundamentals: SLOs, Error Budgets and Incident Response</strong><small>Culture · 5 min</small></a>
-          <a href="blog-gitops-argocd.html"><span class="emoji">🐙</span><strong>GitOps with Argo CD: Git as the Source of Truth for Kubernetes</strong><small>CI/CD · 4 min</small></a>
+          <a href="blog-sre-fundamentals.html"><span class="emoji">🧯</span><strong>SRE Fundamentals: SLOs, Error Budgets and Incident Response</strong><small>Culture · 6 min</small></a>
+          <a href="blog-gitops-argocd.html"><span class="emoji">🐙</span><strong>GitOps with Argo CD: Git as the Source of Truth for Kubernetes</strong><small>CI/CD · 6 min</small></a>
         </div>
       </section>
 
@@ -213,6 +276,11 @@ jobs:
       <ol>
         <li><a href="#four-layers-of-pipeline-security">Four Layers of Pipeline Security</a></li>
         <li><a href="#complete-security-pipeline">Complete Security Pipeline</a></li>
+        <li><a href="#scan-your-infrastructure-code-too">Scan your infrastructure code too</a></li>
+        <li><a href="#generate-an-sbom-and-sign-your-images">Generate an SBOM and sign your images</a></li>
+        <li><a href="#keep-dependencies-patched-automatically">Keep dependencies patched automatically</a></li>
+        <li><a href="#make-it-stick">Make it stick</a></li>
+        <li><a href="#next-steps">Next steps</a></li>
       </ol>
     </aside>
   </div>

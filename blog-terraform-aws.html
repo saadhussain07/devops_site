@@ -48,7 +48,7 @@
       "image": "https://rocketdevops.vercel.app/og-image.png",
       "mainEntityOfPage": "https://rocketdevops.vercel.app/blog-terraform-aws.html",
       "keywords": "Terraform, AWS, Intermediate",
-      "timeRequired": "PT2M",
+      "timeRequired": "PT4M",
       "proficiencyLevel": "Intermediate"
     },
     {
@@ -110,7 +110,7 @@
       <span>🏗️ IaC</span>
       <span>📅 <time datetime="2026-03-05">5 Mar 2026</time></span>
       <span>✎ Updated <time datetime="2026-10-18">18 Oct 2026</time></span>
-      <span>⏱ 2 min read</span>
+      <span>⏱ 4 min read</span>
       <span>📶 Intermediate</span>
     </div>
     <div class="post-tags"><span class="post-tag">Terraform</span><span class="post-tag">AWS</span><span class="post-tag">Intermediate</span></div>
@@ -201,6 +201,80 @@ terraform destroy</code></pre>
   <p><strong>Always review</strong> <code>terraform plan</code> output before applying. It shows exactly what will be created, modified, or destroyed.</p>
 </div>
 
+<h2 id="variables-and-outputs">Variables and outputs</h2>
+<pre><code># variables.tf
+variable "region" {
+  type    = string
+  default = "eu-west-1"
+}
+
+variable "instance_type" {
+  type        = string
+  default     = "t3.micro"
+  description = "EC2 size for the web server"
+}
+
+# outputs.tf
+output "instance_id" {
+  value = aws_instance.web.id
+}
+
+# terraform.tfvars
+region = "eu-west-1"</code></pre>
+
+<h2 id="remote-state-with-locking">Remote state with locking</h2>
+<p>By default, state lives in a local <code>terraform.tfstate</code> file. That breaks as soon as two people or a CI job are involved. Store it in S3 instead; Terraform 1.10+ can lock it natively, with no DynamoDB table needed:</p>
+<pre><code>terraform {
+  backend "s3" {
+    bucket       = "yourname-terraform-state"   # create once, with versioning on
+    key          = "dev/network/terraform.tfstate"
+    region       = "eu-west-1"
+    encrypt      = true
+    use_lockfile = true
+  }
+}</code></pre>
+<p>After adding a backend, run <code>terraform init -migrate-state</code> to move the existing state.</p>
+
+<h2 id="modules-write-once-reuse-everywhere">Modules: write once, reuse everywhere</h2>
+<pre><code>modules/
+└── web/
+    ├── main.tf       # resources
+    ├── variables.tf  # inputs
+    └── outputs.tf    # outputs
+
+# envs/dev/main.tf
+module "web" {
+  source        = "../../modules/web"
+  instance_type = "t3.micro"
+}
+
+# envs/prod/main.tf
+module "web" {
+  source        = "../../modules/web"
+  instance_type = "m7g.large"
+}</code></pre>
+<p>For common building blocks, the community modules (e.g. <code>terraform-aws-modules/vpc/aws</code>) are well tested. Pin their versions.</p>
+
+<h2 id="terraform-in-ci">Terraform in CI</h2>
+<pre><code>terraform fmt -check -recursive
+terraform init -input=false
+terraform validate
+terraform plan -input=false -out=tf.plan     # post this output on the PR
+# after review and merge:
+terraform apply -input=false tf.plan</code></pre>
+<p>Add <code>tflint</code> and a misconfiguration scanner (<code>trivy config</code> or <code>checkov</code>) to catch open security groups and unencrypted storage before they reach AWS.</p>
+
+<div class="article-callout warn">
+  <p><strong>Clean up:</strong> run <code>terraform destroy</code> when you finish experimenting, and set an AWS Budget alert. Forgotten NAT gateways and load balancers are the most common surprise bills.</p>
+</div>
+
+<h2 id="next-steps">Next steps</h2>
+<ul>
+  <li>Build a multi-AZ network and web tier in <a href="projects.html#terraform-aws">Project 04</a>.</li>
+  <li>Learn the services you're provisioning: <a href="blog-aws-core-services.html">AWS Core Services</a>.</li>
+  <li>When things go wrong: <a href="troubleshooting.html#terraform">Terraform troubleshooting playbooks</a>.</li>
+</ul>
+
       <div class="post-share">
         <span>Share:</span>
         <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frocketdevops.vercel.app%2Fblog-terraform-aws.html" target="_blank" rel="noopener">LinkedIn</a>
@@ -216,9 +290,9 @@ terraform destroy</code></pre>
       <section class="post-related" aria-label="Related articles">
         <h2>Keep reading</h2>
         <div class="post-related-grid">
-          <a href="blog-aws-core-services.html"><span class="emoji">☁️</span><strong>AWS Core Services for DevOps Engineers</strong><small>Cloud · 4 min</small></a>
+          <a href="blog-aws-core-services.html"><span class="emoji">☁️</span><strong>AWS Core Services for DevOps Engineers</strong><small>Cloud · 5 min</small></a>
           <a href="blog-ai-in-devops.html"><span class="emoji">🤖</span><strong>AI in DevOps: Practical Uses, Agents and Guardrails</strong><small>AI &amp; AIOps · 5 min</small></a>
-          <a href="blog-sre-fundamentals.html"><span class="emoji">🧯</span><strong>SRE Fundamentals: SLOs, Error Budgets and Incident Response</strong><small>Culture · 5 min</small></a>
+          <a href="blog-sre-fundamentals.html"><span class="emoji">🧯</span><strong>SRE Fundamentals: SLOs, Error Budgets and Incident Response</strong><small>Culture · 6 min</small></a>
         </div>
       </section>
 
@@ -238,6 +312,11 @@ terraform destroy</code></pre>
         <li><a href="#project-structure">Project Structure</a></li>
         <li><a href="#provision-a-vpc-ec2-instance">Provision a VPC + EC2 Instance</a></li>
         <li><a href="#the-terraform-workflow">The Terraform Workflow</a></li>
+        <li><a href="#variables-and-outputs">Variables and outputs</a></li>
+        <li><a href="#remote-state-with-locking">Remote state with locking</a></li>
+        <li><a href="#modules-write-once-reuse-everywhere">Modules: write once, reuse everywhere</a></li>
+        <li><a href="#terraform-in-ci">Terraform in CI</a></li>
+        <li><a href="#next-steps">Next steps</a></li>
       </ol>
     </aside>
   </div>

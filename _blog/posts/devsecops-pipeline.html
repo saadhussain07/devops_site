@@ -55,3 +55,66 @@ jobs:
 <div class="article-callout">
   <p><strong>Golden rule:</strong> Set <code>exit-code: 1</code> on CRITICAL findings so the pipeline fails and blocks the merge. Security gates only work if they're enforced.</p>
 </div>
+
+<h2>Scan your infrastructure code too</h2>
+<p>Misconfigured Terraform, Kubernetes manifests and Dockerfiles cause more cloud breaches than exotic exploits. Scan them in the same pipeline:</p>
+<pre><code>  iac-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Trivy config scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: config
+          scan-ref: .
+          severity: HIGH,CRITICAL
+          exit-code: 1</code></pre>
+<p>Typical findings: security groups open to <code>0.0.0.0/0</code>, unencrypted S3 buckets or EBS volumes, containers running as root, and missing resource limits.</p>
+
+<h2>Generate an SBOM and sign your images</h2>
+<p>A <strong>Software Bill of Materials</strong> lists every component in an image, so when the next big CVE lands you can answer "are we affected?" in seconds. <strong>Signing</strong> proves an image came from your pipeline and wasn't tampered with.</p>
+<pre><code>  sign:
+    needs: container-scan
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write          # keyless signing via OIDC
+      packages: write
+    steps:
+      - uses: sigstore/cosign-installer@v3
+      - uses: anchore/sbom-action@v0
+        with:
+          image: ghcr.io/you/app:${{ github.sha }}
+          format: spdx-json
+          output-file: sbom.spdx.json
+      - run: |
+          cosign sign --yes ghcr.io/you/app:${{ github.sha }}
+          cosign attest --yes --predicate sbom.spdx.json --type spdxjson ghcr.io/you/app:${{ github.sha }}</code></pre>
+<p>In the cluster, a policy engine such as <strong>Kyverno</strong> can reject any image that isn't signed by your pipeline.</p>
+
+<h2>Keep dependencies patched automatically</h2>
+<pre><code># .github/dependabot.yml
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule: { interval: weekly }
+  - package-ecosystem: docker
+    directory: /
+    schedule: { interval: weekly }
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: { interval: weekly }</code></pre>
+
+<h2>Make it stick</h2>
+<ul>
+  <li><strong>Start in report-only mode</strong>, fix the backlog, then switch the gates to blocking. Teams disable noisy gates that block everything on day one.</li>
+  <li><strong>Pin third-party actions</strong> to a version or a commit SHA, not <code>@master</code>.</li>
+  <li><strong>Give the workflow least-privilege <code>permissions:</code></strong> and use OIDC instead of long-lived cloud keys.</li>
+  <li><strong>Turn on GitHub secret scanning and push protection</strong> so secrets are blocked before they land.</li>
+</ul>
+
+<h2>Next steps</h2>
+<ul>
+  <li>Add these gates to <a href="projects.html#cicd-pipeline">Project 03</a>, then enforce signatures in the <a href="projects.html#platform-capstone">capstone</a>.</li>
+  <li>Review the <a href="interview.html#security">DevSecOps interview questions</a>.</li>
+</ul>

@@ -48,7 +48,7 @@
       "image": "https://rocketdevops.vercel.app/og-image.png",
       "mainEntityOfPage": "https://rocketdevops.vercel.app/blog-k8s-beginners.html",
       "keywords": "Kubernetes, Containers, Beginner",
-      "timeRequired": "PT2M",
+      "timeRequired": "PT5M",
       "proficiencyLevel": "Beginner"
     },
     {
@@ -110,7 +110,7 @@
       <span>⚙️ Kubernetes</span>
       <span>📅 <time datetime="2026-02-20">20 Feb 2026</time></span>
       <span>✎ Updated <time datetime="2026-10-18">18 Oct 2026</time></span>
-      <span>⏱ 2 min read</span>
+      <span>⏱ 5 min read</span>
       <span>📶 Beginner</span>
     </div>
     <div class="post-tags"><span class="post-tag">Kubernetes</span><span class="post-tag">Containers</span><span class="post-tag">Beginner</span></div>
@@ -209,6 +209,94 @@ kubectl rollout undo deployment/my-app</code></pre>
   <p><strong>Practice tip:</strong> Use <code>kind</code> or <code>minikube</code> to run a local Kubernetes cluster on your laptop for free. No cloud account needed.</p>
 </div>
 
+<h2 id="run-it-locally-with-kind">Run it locally with kind</h2>
+<pre><code># install kind (https://kind.sigs.k8s.io) and kubectl, then:
+kind create cluster --name lab
+kubectl cluster-info --context kind-lab
+kubectl get nodes
+
+# load a locally built image into the cluster (no registry needed)
+docker build -t myapp:1.0 .
+kind load docker-image myapp:1.0 --name lab</code></pre>
+
+<h2 id="namespaces">Namespaces</h2>
+<p>Namespaces split one cluster into virtual sub-clusters, such as per team or per environment. Most resources (Pods, Deployments, Services, Secrets) are namespaced; nodes and PersistentVolumes are not.</p>
+<pre><code>kubectl create namespace dev
+kubectl -n dev get all
+kubectl config set-context --current --namespace=dev   # change your default</code></pre>
+
+<h2 id="configuration-configmaps-and-secrets">Configuration: ConfigMaps and Secrets</h2>
+<p>Keep configuration out of the image so the same image runs in every environment.</p>
+<pre><code>apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-app-config
+data:
+  LOG_LEVEL: info
+  FEATURE_X: "true"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-app-secret
+type: Opaque
+stringData:
+  DATABASE_URL: postgres://app:change-me@db:5432/app</code></pre>
+<p>Use them in the Deployment's container spec:</p>
+<pre><code>        envFrom:
+        - configMapRef:
+            name: my-app-config
+        - secretRef:
+            name: my-app-secret</code></pre>
+<div class="article-callout warn">
+  <p><strong>Secrets are only base64-encoded, not encrypted.</strong> Don't commit them to Git. Use External Secrets, Sealed Secrets or SOPS (see <a href="blog-gitops-argocd.html">GitOps with Argo CD</a>).</p>
+</div>
+
+<h2 id="health-checks-readiness-and-liveness-probes">Health checks: readiness and liveness probes</h2>
+<pre><code>        readinessProbe:          # gate traffic until the app is ready
+          httpGet: { path: /ready, port: 8080 }
+          periodSeconds: 5
+        livenessProbe:           # restart the container if it hangs
+          httpGet: { path: /healthz, port: 8080 }
+          initialDelaySeconds: 10
+          periodSeconds: 10</code></pre>
+<p>Without a readiness probe, a rolling update sends traffic to pods before they can serve it. Keep the liveness probe simple: it should check the process itself, not the database.</p>
+
+<h2 id="exposing-http-with-an-ingress">Exposing HTTP with an Ingress</h2>
+<p>A Service of type <code>LoadBalancer</code> per app gets expensive. An <strong>Ingress</strong> routes many hostnames and paths through one load balancer, via an Ingress controller such as ingress-nginx or Traefik. The newer <strong>Gateway API</strong> is its successor and works the same way.</p>
+<pre><code>apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-app
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: app.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: my-app-service
+            port:
+              number: 80</code></pre>
+
+<h2 id="debugging-workflow">Debugging workflow</h2>
+<pre><code>kubectl get pods                          # STATUS and RESTARTS
+kubectl describe pod &lt;pod&gt;                # the Events section explains most failures
+kubectl logs &lt;pod&gt; --previous             # logs from the last crash
+kubectl get events --sort-by=.lastTimestamp
+kubectl port-forward svc/my-app-service 8080:80   # test a Service from your laptop</code></pre>
+<p>For specific errors, see the <a href="troubleshooting.html#kubernetes">Kubernetes troubleshooting playbooks</a>.</p>
+
+<h2 id="next-steps">Next steps</h2>
+<ul>
+  <li>Package your manifests as a Helm chart: <a href="projects.html#k8s-helm">Project 05</a>.</li>
+  <li>Deploy from Git automatically: <a href="blog-gitops-argocd.html">GitOps with Argo CD</a>.</li>
+  <li>Keep the <a href="cheatsheets.html#kubernetes">kubectl cheatsheet</a> handy.</li>
+</ul>
+
       <div class="post-share">
         <span>Share:</span>
         <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Frocketdevops.vercel.app%2Fblog-k8s-beginners.html" target="_blank" rel="noopener">LinkedIn</a>
@@ -224,8 +312,8 @@ kubectl rollout undo deployment/my-app</code></pre>
       <section class="post-related" aria-label="Related articles">
         <h2>Keep reading</h2>
         <div class="post-related-grid">
-          <a href="blog-docker-guide.html"><span class="emoji">🐳</span><strong>Docker for DevOps Engineers: A Complete Beginner's Guide</strong><small>Docker · 3 min</small></a>
-          <a href="blog-gitops-argocd.html"><span class="emoji">🐙</span><strong>GitOps with Argo CD: Git as the Source of Truth for Kubernetes</strong><small>CI/CD · 4 min</small></a>
+          <a href="blog-docker-guide.html"><span class="emoji">🐳</span><strong>Docker for DevOps Engineers: A Complete Beginner's Guide</strong><small>Docker · 4 min</small></a>
+          <a href="blog-gitops-argocd.html"><span class="emoji">🐙</span><strong>GitOps with Argo CD: Git as the Source of Truth for Kubernetes</strong><small>CI/CD · 6 min</small></a>
           <a href="blog-networking-fundamentals.html"><span class="emoji">🌐</span><strong>Networking Fundamentals for DevOps Engineers</strong><small>Networking · 5 min</small></a>
         </div>
       </section>
@@ -244,6 +332,13 @@ kubectl rollout undo deployment/my-app</code></pre>
       <ol>
         <li><a href="#core-objects">Core Objects</a></li>
         <li><a href="#essential-kubectl-commands">Essential kubectl Commands</a></li>
+        <li><a href="#run-it-locally-with-kind">Run it locally with kind</a></li>
+        <li><a href="#namespaces">Namespaces</a></li>
+        <li><a href="#configuration-configmaps-and-secrets">Configuration: ConfigMaps and Secrets</a></li>
+        <li><a href="#health-checks-readiness-and-liveness-probes">Health checks: readiness and liveness probes</a></li>
+        <li><a href="#exposing-http-with-an-ingress">Exposing HTTP with an Ingress</a></li>
+        <li><a href="#debugging-workflow">Debugging workflow</a></li>
+        <li><a href="#next-steps">Next steps</a></li>
       </ol>
     </aside>
   </div>

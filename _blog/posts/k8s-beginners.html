@@ -86,3 +86,91 @@ kubectl rollout undo deployment/my-app</code></pre>
 <div class="article-callout">
   <p><strong>Practice tip:</strong> Use <code>kind</code> or <code>minikube</code> to run a local Kubernetes cluster on your laptop for free. No cloud account needed.</p>
 </div>
+
+<h2>Run it locally with kind</h2>
+<pre><code># install kind (https://kind.sigs.k8s.io) and kubectl, then:
+kind create cluster --name lab
+kubectl cluster-info --context kind-lab
+kubectl get nodes
+
+# load a locally built image into the cluster (no registry needed)
+docker build -t myapp:1.0 .
+kind load docker-image myapp:1.0 --name lab</code></pre>
+
+<h2>Namespaces</h2>
+<p>Namespaces split one cluster into virtual sub-clusters, such as per team or per environment. Most resources (Pods, Deployments, Services, Secrets) are namespaced; nodes and PersistentVolumes are not.</p>
+<pre><code>kubectl create namespace dev
+kubectl -n dev get all
+kubectl config set-context --current --namespace=dev   # change your default</code></pre>
+
+<h2>Configuration: ConfigMaps and Secrets</h2>
+<p>Keep configuration out of the image so the same image runs in every environment.</p>
+<pre><code>apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-app-config
+data:
+  LOG_LEVEL: info
+  FEATURE_X: "true"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-app-secret
+type: Opaque
+stringData:
+  DATABASE_URL: postgres://app:change-me@db:5432/app</code></pre>
+<p>Use them in the Deployment's container spec:</p>
+<pre><code>        envFrom:
+        - configMapRef:
+            name: my-app-config
+        - secretRef:
+            name: my-app-secret</code></pre>
+<div class="article-callout warn">
+  <p><strong>Secrets are only base64-encoded, not encrypted.</strong> Don't commit them to Git. Use External Secrets, Sealed Secrets or SOPS (see <a href="blog-gitops-argocd.html">GitOps with Argo CD</a>).</p>
+</div>
+
+<h2>Health checks: readiness and liveness probes</h2>
+<pre><code>        readinessProbe:          # gate traffic until the app is ready
+          httpGet: { path: /ready, port: 8080 }
+          periodSeconds: 5
+        livenessProbe:           # restart the container if it hangs
+          httpGet: { path: /healthz, port: 8080 }
+          initialDelaySeconds: 10
+          periodSeconds: 10</code></pre>
+<p>Without a readiness probe, a rolling update sends traffic to pods before they can serve it. Keep the liveness probe simple: it should check the process itself, not the database.</p>
+
+<h2>Exposing HTTP with an Ingress</h2>
+<p>A Service of type <code>LoadBalancer</code> per app gets expensive. An <strong>Ingress</strong> routes many hostnames and paths through one load balancer, via an Ingress controller such as ingress-nginx or Traefik. The newer <strong>Gateway API</strong> is its successor and works the same way.</p>
+<pre><code>apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-app
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: app.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: my-app-service
+            port:
+              number: 80</code></pre>
+
+<h2>Debugging workflow</h2>
+<pre><code>kubectl get pods                          # STATUS and RESTARTS
+kubectl describe pod &lt;pod&gt;                # the Events section explains most failures
+kubectl logs &lt;pod&gt; --previous             # logs from the last crash
+kubectl get events --sort-by=.lastTimestamp
+kubectl port-forward svc/my-app-service 8080:80   # test a Service from your laptop</code></pre>
+<p>For specific errors, see the <a href="troubleshooting.html#kubernetes">Kubernetes troubleshooting playbooks</a>.</p>
+
+<h2>Next steps</h2>
+<ul>
+  <li>Package your manifests as a Helm chart: <a href="projects.html#k8s-helm">Project 05</a>.</li>
+  <li>Deploy from Git automatically: <a href="blog-gitops-argocd.html">GitOps with Argo CD</a>.</li>
+  <li>Keep the <a href="cheatsheets.html#kubernetes">kubectl cheatsheet</a> handy.</li>
+</ul>

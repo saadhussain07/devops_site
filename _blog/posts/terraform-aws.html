@@ -78,3 +78,77 @@ terraform destroy</code></pre>
 <div class="article-callout">
   <p><strong>Always review</strong> <code>terraform plan</code> output before applying. It shows exactly what will be created, modified, or destroyed.</p>
 </div>
+
+<h2>Variables and outputs</h2>
+<pre><code># variables.tf
+variable "region" {
+  type    = string
+  default = "eu-west-1"
+}
+
+variable "instance_type" {
+  type        = string
+  default     = "t3.micro"
+  description = "EC2 size for the web server"
+}
+
+# outputs.tf
+output "instance_id" {
+  value = aws_instance.web.id
+}
+
+# terraform.tfvars
+region = "eu-west-1"</code></pre>
+
+<h2>Remote state with locking</h2>
+<p>By default, state lives in a local <code>terraform.tfstate</code> file. That breaks as soon as two people or a CI job are involved. Store it in S3 instead; Terraform 1.10+ can lock it natively, with no DynamoDB table needed:</p>
+<pre><code>terraform {
+  backend "s3" {
+    bucket       = "yourname-terraform-state"   # create once, with versioning on
+    key          = "dev/network/terraform.tfstate"
+    region       = "eu-west-1"
+    encrypt      = true
+    use_lockfile = true
+  }
+}</code></pre>
+<p>After adding a backend, run <code>terraform init -migrate-state</code> to move the existing state.</p>
+
+<h2>Modules: write once, reuse everywhere</h2>
+<pre><code>modules/
+└── web/
+    ├── main.tf       # resources
+    ├── variables.tf  # inputs
+    └── outputs.tf    # outputs
+
+# envs/dev/main.tf
+module "web" {
+  source        = "../../modules/web"
+  instance_type = "t3.micro"
+}
+
+# envs/prod/main.tf
+module "web" {
+  source        = "../../modules/web"
+  instance_type = "m7g.large"
+}</code></pre>
+<p>For common building blocks, the community modules (e.g. <code>terraform-aws-modules/vpc/aws</code>) are well tested. Pin their versions.</p>
+
+<h2>Terraform in CI</h2>
+<pre><code>terraform fmt -check -recursive
+terraform init -input=false
+terraform validate
+terraform plan -input=false -out=tf.plan     # post this output on the PR
+# after review and merge:
+terraform apply -input=false tf.plan</code></pre>
+<p>Add <code>tflint</code> and a misconfiguration scanner (<code>trivy config</code> or <code>checkov</code>) to catch open security groups and unencrypted storage before they reach AWS.</p>
+
+<div class="article-callout warn">
+  <p><strong>Clean up:</strong> run <code>terraform destroy</code> when you finish experimenting, and set an AWS Budget alert. Forgotten NAT gateways and load balancers are the most common surprise bills.</p>
+</div>
+
+<h2>Next steps</h2>
+<ul>
+  <li>Build a multi-AZ network and web tier in <a href="projects.html#terraform-aws">Project 04</a>.</li>
+  <li>Learn the services you're provisioning: <a href="blog-aws-core-services.html">AWS Core Services</a>.</li>
+  <li>When things go wrong: <a href="troubleshooting.html#terraform">Terraform troubleshooting playbooks</a>.</li>
+</ul>

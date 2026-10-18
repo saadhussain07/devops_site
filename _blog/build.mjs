@@ -45,10 +45,13 @@ for (const p of posts) {
     toc.push({ id, text: inner.replace(/<[^>]+>/g, '') });
     return idMatch ? m : `<h2 id="${id}"${attrs}>${inner}</h2>`;
   });
-  const words = body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+  // prose at ~220 wpm, code blocks at ~100 wpm (code is read more slowly)
+  const countWords = html => html.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+  const codeWords = (body.match(/<pre[\s\S]*?<\/pre>/g) || []).reduce((n, c) => n + countWords(c), 0);
+  const proseWords = countWords(body) - codeWords;
   p.body = body;
   p.toc = toc;
-  p.minutes = Math.max(2, Math.round(words / 200));
+  p.minutes = Math.max(2, Math.round(proseWords / 220 + codeWords / 100));
   p.text = body.replace(/<pre[\s\S]*?<\/pre>/g, ' ').replace(/<[^>]+>/g, ' ')
     .replace(/&[a-z]+;/g, ' ').replace(/\s+/g, ' ').trim();
 }
