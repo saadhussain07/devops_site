@@ -871,4 +871,16 @@ window.__DH_MAIN_LOADED__ = true;
 
 })();
 
+/* ── Vercel Web Analytics (cookieless) ───────────────────────
+   Only loads on the production domain. Enable it once in the
+   Vercel dashboard: Project → Analytics → Enable.            */
+(function initAnalytics() {
+  if (location.hostname !== 'rocketdevops.vercel.app') return;
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  const s = document.createElement('script');
+  s.defer = true;
+  s.src = '/_vercel/insights/script.js';
+  document.head.appendChild(s);
+})();
+
 } // end of __DH_MAIN_LOADED__ guard
