@@ -1,12 +1,122 @@
 [
   {
+    "slug": "ai-in-devops",
+    "title": "AI in DevOps: Practical Uses, Agents and Guardrails",
+    "description": "Where LLMs and AI agents genuinely help in DevOps (IaC drafts, PR review, CI triage, AIOps incident response), and the guardrails for using them safely.",
+    "emoji": "🤖",
+    "category": "ai",
+    "categoryLabel": "AI & AIOps",
+    "tags": [
+      "AI",
+      "AIOps",
+      "MLOps",
+      "Agents"
+    ],
+    "level": "Intermediate",
+    "thumb": "thumb-purple",
+    "date": "2026-10-18",
+    "updated": "2026-10-18"
+  },
+  {
+    "slug": "sre-fundamentals",
+    "title": "SRE Fundamentals: SLOs, Error Budgets and Incident Response",
+    "description": "Define SLIs and SLOs, use error budgets to balance speed and reliability, alert on burn rate with PromQL, and run blameless postmortems.",
+    "emoji": "🧯",
+    "category": "culture",
+    "categoryLabel": "Culture",
+    "tags": [
+      "SRE",
+      "SLO",
+      "Incidents"
+    ],
+    "level": "Intermediate",
+    "thumb": "thumb-orange",
+    "date": "2026-10-18",
+    "updated": "2026-10-18"
+  },
+  {
+    "slug": "gitops-argocd",
+    "title": "GitOps with Argo CD: Git as the Source of Truth for Kubernetes",
+    "description": "GitOps principles, repo layout, Argo CD Applications and ApplicationSets, CI-to-GitOps image promotion, secrets handling and progressive delivery.",
+    "emoji": "🐙",
+    "category": "cicd",
+    "categoryLabel": "CI/CD",
+    "tags": [
+      "GitOps",
+      "Argo CD",
+      "Kubernetes"
+    ],
+    "level": "Advanced",
+    "thumb": "thumb-green",
+    "date": "2026-10-18",
+    "updated": "2026-10-18"
+  },
+  {
+    "slug": "aws-core-services",
+    "title": "AWS Core Services for DevOps Engineers",
+    "description": "The 15 AWS services DevOps engineers use daily (IAM, VPC, EC2, EKS, S3, RDS, CloudWatch and more), a standard VPC design, CLI essentials, cost and security habits.",
+    "emoji": "☁️",
+    "category": "cloud",
+    "categoryLabel": "Cloud",
+    "tags": [
+      "AWS",
+      "Cloud",
+      "IAM",
+      "VPC"
+    ],
+    "level": "Beginner",
+    "thumb": "thumb-orange",
+    "date": "2026-10-18",
+    "updated": "2026-10-18"
+  },
+  {
+    "slug": "networking-fundamentals",
+    "title": "Networking Fundamentals for DevOps Engineers",
+    "description": "IP and CIDR, TCP vs UDP, DNS, HTTP status codes, TLS, load balancers and NAT, plus a layer-by-layer checklist for debugging connectivity.",
+    "emoji": "🌐",
+    "category": "networking",
+    "categoryLabel": "Networking",
+    "tags": [
+      "Networking",
+      "DNS",
+      "TLS",
+      "Beginner"
+    ],
+    "level": "Beginner",
+    "thumb": "thumb-cyan",
+    "date": "2026-10-18",
+    "updated": "2026-10-18"
+  },
+  {
+    "slug": "linux-for-devops",
+    "title": "Linux for DevOps: The Commands and Concepts You'll Use Every Day",
+    "description": "Filesystem layout, text processing, permissions, processes, systemd, SSH, networking tools and safe Bash scripting: the Linux foundation every DevOps engineer needs.",
+    "emoji": "🐧",
+    "category": "linux",
+    "categoryLabel": "Linux",
+    "tags": [
+      "Linux",
+      "Bash",
+      "systemd",
+      "Beginner"
+    ],
+    "level": "Beginner",
+    "thumb": "thumb-green",
+    "date": "2026-10-18",
+    "updated": "2026-10-18"
+  },
+  {
     "slug": "docker-guide",
     "title": "Docker for DevOps Engineers: A Complete Beginner's Guide",
     "description": "Everything you need to know about containers, from writing your first Dockerfile to multi-stage builds and Docker Compose.",
     "emoji": "🐳",
     "category": "docker",
     "categoryLabel": "Docker",
-    "tags": ["Docker", "Containers", "Beginner"],
+    "tags": [
+      "Docker",
+      "Containers",
+      "Beginner"
+    ],
     "level": "Beginner",
     "thumb": "thumb-cyan",
     "date": "2026-01-15",
@@ -20,7 +130,11 @@
     "emoji": "🔁",
     "category": "cicd",
     "categoryLabel": "CI/CD",
-    "tags": ["CI/CD", "GitHub Actions", "Beginner"],
+    "tags": [
+      "CI/CD",
+      "GitHub Actions",
+      "Beginner"
+    ],
     "level": "Beginner",
     "thumb": "thumb-green",
     "date": "2026-02-03",
@@ -33,7 +147,11 @@
     "emoji": "⚙️",
     "category": "kubernetes",
     "categoryLabel": "Kubernetes",
-    "tags": ["Kubernetes", "Containers", "Beginner"],
+    "tags": [
+      "Kubernetes",
+      "Containers",
+      "Beginner"
+    ],
     "level": "Beginner",
     "thumb": "thumb-cyan",
     "date": "2026-02-20",
@@ -46,7 +164,11 @@
     "emoji": "🏗️",
     "category": "iac",
     "categoryLabel": "IaC",
-    "tags": ["Terraform", "AWS", "Intermediate"],
+    "tags": [
+      "Terraform",
+      "AWS",
+      "Intermediate"
+    ],
     "level": "Intermediate",
     "thumb": "thumb-purple",
     "date": "2026-03-05",
@@ -59,7 +181,11 @@
     "emoji": "📊",
     "category": "monitoring",
     "categoryLabel": "Monitoring",
-    "tags": ["Monitoring", "Prometheus", "Grafana"],
+    "tags": [
+      "Monitoring",
+      "Prometheus",
+      "Grafana"
+    ],
     "level": "Intermediate",
     "thumb": "thumb-orange",
     "date": "2026-03-18",
@@ -72,7 +198,11 @@
     "emoji": "🛡️",
     "category": "security",
     "categoryLabel": "Security",
-    "tags": ["DevSecOps", "Security", "Advanced"],
+    "tags": [
+      "DevSecOps",
+      "Security",
+      "Advanced"
+    ],
     "level": "Advanced",
     "thumb": "thumb-green",
     "date": "2026-04-02",
@@ -85,7 +215,11 @@
     "emoji": "📈",
     "category": "culture",
     "categoryLabel": "Culture",
-    "tags": ["Culture", "DORA", "SRE"],
+    "tags": [
+      "Culture",
+      "DORA",
+      "SRE"
+    ],
     "level": "All levels",
     "thumb": "thumb-cyan",
     "date": "2026-04-10",

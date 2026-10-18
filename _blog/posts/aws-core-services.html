@@ -1,0 +1,114 @@
+<p>AWS has over 200 services, but a DevOps engineer uses about fifteen of them daily. This guide maps those core services to the jobs they do, shows how they fit together in a standard architecture, and covers the security and cost habits that keep you out of trouble.</p>
+
+<div class="article-callout warn">
+  <p><strong>Before you touch anything:</strong> turn on MFA for the root user and then stop using root. Create an AWS Budget with an email alert (say, $10/month), and use an IAM Identity Center user or role for daily work.</p>
+</div>
+
+<h2>Global infrastructure</h2>
+<ul>
+  <li><strong>Region</strong> (e.g. <code>eu-west-1</code>): a geographic area. Data stays in the region unless you move it.</li>
+  <li><strong>Availability Zone</strong> (e.g. <code>eu-west-1a</code>): one or more isolated data centres within a region. Spread across at least two AZs for high availability.</li>
+  <li><strong>Edge locations:</strong> CloudFront and Route 53 points of presence close to users.</li>
+</ul>
+
+<h2>The core services map</h2>
+<table>
+  <thead><tr><th>Job</th><th>Service</th><th>One-line summary</th></tr></thead>
+  <tbody>
+    <tr><td>Identity</td><td><strong>IAM</strong>, IAM Identity Center</td><td>Who can do what, on which resources</td></tr>
+    <tr><td>Networking</td><td><strong>VPC</strong></td><td>Your private network: subnets, routes, gateways, security groups</td></tr>
+    <tr><td>Virtual machines</td><td><strong>EC2</strong> + Auto Scaling</td><td>Instances, and groups that heal and scale themselves</td></tr>
+    <tr><td>Load balancing</td><td><strong>ELB</strong> (ALB / NLB)</td><td>L7 HTTP routing or L4 TCP/UDP</td></tr>
+    <tr><td>Containers</td><td><strong>ECR</strong>, <strong>ECS</strong>, <strong>EKS</strong>, Fargate</td><td>Registry, AWS's own orchestrator, managed Kubernetes, serverless compute for both</td></tr>
+    <tr><td>Serverless</td><td><strong>Lambda</strong>, API Gateway</td><td>Run functions on events; no servers to manage</td></tr>
+    <tr><td>Object storage</td><td><strong>S3</strong></td><td>Practically unlimited files: artifacts, backups, static sites, Terraform state</td></tr>
+    <tr><td>Block storage</td><td><strong>EBS</strong></td><td>Disks for EC2 (and Kubernetes PVs)</td></tr>
+    <tr><td>Databases</td><td><strong>RDS</strong>/Aurora, DynamoDB</td><td>Managed relational databases; serverless key-value</td></tr>
+    <tr><td>DNS and CDN</td><td><strong>Route 53</strong>, <strong>CloudFront</strong></td><td>Domains and health-checked routing; a global cache</td></tr>
+    <tr><td>Observability</td><td><strong>CloudWatch</strong>, X-Ray</td><td>Metrics, logs, alarms, traces</td></tr>
+    <tr><td>Audit</td><td><strong>CloudTrail</strong></td><td>Who called which API, and when. Turn it on everywhere.</td></tr>
+    <tr><td>Secrets</td><td><strong>Secrets Manager</strong>, SSM Parameter Store, KMS</td><td>Store and rotate secrets; manage encryption keys</td></tr>
+  </tbody>
+</table>
+
+<h2>IAM: the most important service</h2>
+<p>Every AWS API call is authorised by IAM. The key concepts:</p>
+<ul>
+  <li><strong>Principals:</strong> users (avoid long-lived keys), <strong>roles</strong> (assumed for temporary credentials) and AWS services.</li>
+  <li><strong>Policies:</strong> JSON documents that <code>Allow</code> or <code>Deny</code> actions on resources. An explicit deny always wins.</li>
+  <li><strong>Least privilege:</strong> grant only the actions and resources a workload needs.</li>
+</ul>
+<pre><code>{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Allow",
+    "Action": ["s3:GetObject", "s3:PutObject"],
+    "Resource": "arn:aws:s3:::my-app-artifacts/*"
+  }]
+}</code></pre>
+<p>Workloads should never use access keys. EC2 gets an <strong>instance profile</strong>, EKS pods use <strong>EKS Pod Identity</strong> or IRSA, Lambda gets an execution role, and CI uses <strong>OIDC federation</strong> (e.g. GitHub Actions assuming a role).</p>
+
+<h2>A standard VPC design</h2>
+<pre><code>VPC 10.0.0.0/16
+├── AZ a
+│   ├── public  10.0.0.0/24   → ALB, NAT Gateway        (route 0.0.0.0/0 → Internet Gateway)
+│   └── private 10.0.10.0/24  → app instances / EKS nodes (route 0.0.0.0/0 → NAT Gateway)
+├── AZ b
+│   ├── public  10.0.1.0/24
+│   └── private 10.0.11.0/24
+└── data subnets (no internet route) → RDS, ElastiCache</code></pre>
+<ul>
+  <li>Only load balancers (and NAT) live in public subnets. Everything else is private.</li>
+  <li>Security groups can reference each other. For example, "the DB accepts 5432 only from the app's security group". That beats IP ranges.</li>
+  <li><strong>VPC endpoints</strong> for S3, ECR and others keep traffic private and cut NAT data-processing charges.</li>
+</ul>
+
+<h2>Compute: EC2, containers or Lambda?</h2>
+<table>
+  <thead><tr><th>Choose</th><th>When</th></tr></thead>
+  <tbody>
+    <tr><td>EC2 + Auto Scaling</td><td>Legacy or stateful software, special OS needs, full control</td></tr>
+    <tr><td>ECS on Fargate</td><td>Containers without managing servers or Kubernetes; the simplest container option on AWS</td></tr>
+    <tr><td>EKS</td><td>You want the Kubernetes ecosystem (Helm, Argo CD, operators) or portability</td></tr>
+    <tr><td>Lambda</td><td>Event-driven or spiky workloads, glue code, scheduled jobs; short-running tasks (max 15 minutes)</td></tr>
+  </tbody>
+</table>
+
+<h2>The AWS CLI in 2 minutes</h2>
+<pre><code>aws configure sso                       # log in via IAM Identity Center
+aws sts get-caller-identity             # who am I right now?
+aws s3 ls s3://my-bucket/ --recursive --human-readable
+aws s3 sync ./dist s3://my-site-bucket --delete
+aws ec2 describe-instances \
+  --filters "Name=tag:env,Values=prod" \
+  --query "Reservations[].Instances[].[InstanceId,State.Name,PrivateIpAddress]" \
+  --output table
+aws logs tail /aws/lambda/my-fn --follow
+aws ecr get-login-password | docker login --username AWS --password-stdin &lt;acct&gt;.dkr.ecr.&lt;region&gt;.amazonaws.com
+aws eks update-kubeconfig --name my-cluster --region eu-west-1</code></pre>
+
+<h2>Cost habits that matter</h2>
+<ul>
+  <li><strong>Tag everything</strong> (<code>env</code>, <code>team</code>, <code>service</code>) and enable cost allocation tags, so Cost Explorer can tell you who spends what.</li>
+  <li>Watch the usual surprises: <strong>NAT Gateway</strong> hourly and per-GB charges, <strong>idle load balancers</strong>, <strong>unattached EBS volumes</strong>, old snapshots, and <strong>cross-AZ data transfer</strong>.</li>
+  <li>Right-size with Compute Optimizer, prefer <strong>Graviton</strong> (ARM) instances, buy <strong>Savings Plans</strong> for steady load, and use <strong>Spot</strong> for interruptible work.</li>
+  <li>Shut dev environments down at night. Better still, make them disposable with Terraform.</li>
+</ul>
+
+<h2>Security baseline checklist</h2>
+<ul>
+  <li>Root MFA on, root keys deleted, SSO for humans</li>
+  <li>CloudTrail on in all regions, logging to a locked-down bucket</li>
+  <li>S3 Block Public Access enabled at the account level</li>
+  <li>GuardDuty and Security Hub on; AWS Config for drift and compliance</li>
+  <li>Encryption at rest everywhere (EBS, S3, RDS default encryption)</li>
+  <li>Multiple accounts (dev / prod / security) under AWS Organizations, with SCP guardrails</li>
+</ul>
+
+<h2>Certifications and next steps</h2>
+<p>A sensible path is <strong>Cloud Practitioner</strong> (optional, for fundamentals), then <strong>Solutions Architect – Associate</strong>, then <strong>DevOps Engineer – Professional</strong>. Hands-on work matters more than badges, though:</p>
+<ul>
+  <li>Build <a href="projects.html#terraform-aws">Project 04: a multi-AZ VPC and web tier with Terraform</a>.</li>
+  <li>Read <a href="blog-terraform-aws.html">Terraform on AWS</a> and <a href="blog-networking-fundamentals.html">Networking Fundamentals</a>.</li>
+  <li>Practise the <a href="interview.html#cloud">cloud interview questions</a>.</li>
+</ul>

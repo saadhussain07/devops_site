@@ -1,0 +1,115 @@
+<p>Site Reliability Engineering (SRE) is what happens when you treat operations as a software problem. It gives teams a shared, numerical answer to the question that causes most dev-vs-ops arguments: <em>how reliable is reliable enough?</em> This guide covers SLIs, SLOs, error budgets, alerting, incidents and toil, with formulas and queries you can use straight away.</p>
+
+<h2>Why 100% is the wrong target</h2>
+<p>Users can't tell 99.99% from 100%: their own Wi-Fi and phones fail far more often than that. Each extra "nine" costs a lot more engineering and slows feature work. SRE picks a target that keeps users happy and spends the rest of the reliability "budget" on shipping.</p>
+<table>
+  <thead><tr><th>Availability</th><th>Allowed downtime per 30 days</th></tr></thead>
+  <tbody>
+    <tr><td>99%</td><td>7 h 12 min</td></tr>
+    <tr><td>99.5%</td><td>3 h 36 min</td></tr>
+    <tr><td>99.9%</td><td>43 min</td></tr>
+    <tr><td>99.95%</td><td>21.6 min</td></tr>
+    <tr><td>99.99%</td><td>4.3 min</td></tr>
+  </tbody>
+</table>
+
+<h2>SLI, SLO, SLA</h2>
+<ul>
+  <li><strong>SLI (indicator):</strong> a measurement of user experience, usually <em>good events ÷ valid events</em>. Example: the proportion of HTTP requests that return non-5xx in under 300 ms.</li>
+  <li><strong>SLO (objective):</strong> the target for an SLI over a window. Example: 99.9% of requests are good, over 30 days.</li>
+  <li><strong>SLA (agreement):</strong> a contract with customers, with consequences. Always looser than your SLO, so you get warned before you breach it.</li>
+</ul>
+<p>Good SLIs measure what <strong>users</strong> feel, as close to them as possible (at the load balancer, or with synthetic probes), not CPU or memory.</p>
+
+<h2>Error budgets</h2>
+<p>The error budget is <code>1 − SLO</code>. With a 99.9% SLO and 10 million requests a month, you can "spend" 10,000 failed requests.</p>
+<ul>
+  <li><strong>Budget remaining:</strong> ship features, run experiments, take calculated risks.</li>
+  <li><strong>Budget exhausted:</strong> freeze risky launches and spend engineering time on reliability until it recovers.</li>
+</ul>
+<p>Agree this <strong>error budget policy</strong> with product owners <em>in advance</em>. Then reliability decisions are driven by data rather than by whoever argues loudest during an outage.</p>
+
+<h2>Measuring SLIs with Prometheus</h2>
+<pre><code># Availability SLI: share of requests that were NOT 5xx over 30 days
+sum(rate(http_requests_total{job="api", code!~"5.."}[30d]))
+  /
+sum(rate(http_requests_total{job="api"}[30d]))
+
+# Latency SLI: share of requests faster than 300 ms
+# (needs a histogram bucket at le="0.3")
+sum(rate(http_request_duration_seconds_bucket{job="api", le="0.3"}[30d]))
+  /
+sum(rate(http_request_duration_seconds_count{job="api"}[30d]))
+
+# Error budget remaining (1 = untouched, 0 = spent), for a 99.9% SLO
+1 - (
+  (1 - (sum(rate(http_requests_total{job="api", code!~"5.."}[30d]))
+        / sum(rate(http_requests_total{job="api"}[30d]))))
+  / (1 - 0.999)
+)</code></pre>
+<p>In practice, use recording rules, or a generator like <strong>Sloth</strong> or <strong>Pyrra</strong>, so these long-window queries stay cheap.</p>
+
+<h2>Alert on burn rate, not thresholds</h2>
+<p><strong>Burn rate</strong> is how fast you're spending the budget. A burn rate of 1 uses exactly the whole budget over the SLO window; 14.4 uses 2% of a 30-day budget in one hour. The <strong>multi-window, multi-burn-rate</strong> approach from the Google SRE Workbook pages for fast burns and opens tickets for slow ones:</p>
+<table>
+  <thead><tr><th>Severity</th><th>Burn rate</th><th>Long window</th><th>Short window</th><th>Budget consumed</th></tr></thead>
+  <tbody>
+    <tr><td>Page</td><td>14.4</td><td>1 h</td><td>5 min</td><td>2%</td></tr>
+    <tr><td>Page</td><td>6</td><td>6 h</td><td>30 min</td><td>5%</td></tr>
+    <tr><td>Ticket</td><td>1</td><td>3 days</td><td>6 h</td><td>10%</td></tr>
+  </tbody>
+</table>
+<pre><code># Fast-burn page for a 99.9% SLO (error budget = 0.001)
+(
+  sum(rate(http_requests_total{job="api",code=~"5.."}[1h]))
+    / sum(rate(http_requests_total{job="api"}[1h])) &gt; (14.4 * 0.001)
+)
+and
+(
+  sum(rate(http_requests_total{job="api",code=~"5.."}[5m]))
+    / sum(rate(http_requests_total{job="api"}[5m])) &gt; (14.4 * 0.001)
+)</code></pre>
+<p>The short window makes the alert resolve quickly once the problem stops. The long window stops brief blips from paging anyone.</p>
+
+<h2>Incident response</h2>
+<ol>
+  <li><strong>Detect:</strong> from SLO alerts, ideally before customers notice.</li>
+  <li><strong>Declare and assign roles:</strong> an <em>Incident Commander</em> coordinates, an <em>Ops lead</em> fixes, and a <em>Comms lead</em> updates stakeholders and the status page.</li>
+  <li><strong>Mitigate first:</strong> roll back, fail over, scale up, disable a feature flag. Root cause can wait.</li>
+  <li><strong>Communicate</strong> on a fixed cadence (e.g. every 30 minutes), even if nothing has changed.</li>
+  <li><strong>Resolve</strong> and confirm the SLIs have recovered.</li>
+  <li><strong>Learn:</strong> hold a blameless postmortem.</li>
+</ol>
+
+<h2>Blameless postmortems</h2>
+<p>People rarely cause incidents on their own; systems allow them. A postmortem asks <em>how the system let this happen</em>, not <em>who did it</em>. If people fear blame, they hide information and the same failure comes back.</p>
+<pre><code>## Incident: API 5xx spike, 2026-03-14
+Impact:     18% of requests failed for 42 min; ~3,100 users affected; 31% of monthly error budget used
+Detection:  Fast-burn SLO page at 14:07 (6 min after start)
+Timeline:   14:01 deploy v2.31 → 14:07 page → 14:15 rollback started → 14:43 recovered
+Root cause: Connection pool size cut from 50 to 5 in a config refactor; no load test caught it
+What went well:     Alert fired fast; rollback was one command
+What went poorly:   Rollback took 28 min because the old image had been garbage-collected
+Action items:
+  - [ ] Add a config validation test for pool sizes          (owner: @dev-a, due 03-21)
+  - [ ] Keep the last 10 release images in the registry       (owner: @ops-b, due 03-18)
+  - [ ] Add a pre-prod load test to the release pipeline      (owner: @sre-c, due 04-01)</code></pre>
+
+<h2>Toil and automation</h2>
+<p><strong>Toil</strong> is manual, repetitive, automatable work that grows with the service and has no lasting value: restarting a stuck job, rotating a certificate by hand, approving routine access requests. Google SRE teams cap toil at about 50% of their time and use the rest to engineer it away.</p>
+<p>A simple habit: keep a toil log for two weeks, rank the entries by <em>time × frequency</em>, and automate the top one.</p>
+
+<h2>Other SRE practices worth knowing</h2>
+<ul>
+  <li><strong>Capacity planning:</strong> forecast from growth trends; load-test before launches.</li>
+  <li><strong>Chaos engineering:</strong> inject failures in a controlled way (LitmusChaos, Chaos Mesh, AWS FIS) to test your assumptions.</li>
+  <li><strong>Release engineering:</strong> canaries, feature flags and fast rollback. See <a href="blog-gitops-argocd.html">GitOps with Argo CD</a>.</li>
+  <li><strong>DORA metrics:</strong> measure delivery performance alongside reliability. See <a href="blog-dora-metrics.html">DORA Metrics Explained</a>.</li>
+</ul>
+
+<h2>Next steps</h2>
+<ul>
+  <li>Implement an SLO and burn-rate alert in <a href="projects.html#observability">Project 06: Observability Stack</a>.</li>
+  <li>Read <a href="blog-prometheus-grafana.html">Prometheus &amp; Grafana in 30 Minutes</a>.</li>
+  <li>Practise the <a href="interview.html#observability">SRE interview questions</a>.</li>
+</ul>

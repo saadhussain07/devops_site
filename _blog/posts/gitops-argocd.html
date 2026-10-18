@@ -1,0 +1,155 @@
+<p>In a traditional pipeline, CI runs <code>kubectl apply</code> or <code>helm upgrade</code> against your cluster. That means CI holds cluster-admin credentials, and nothing notices when someone changes the cluster by hand. <strong>GitOps</strong> flips this around: Git holds the desired state, and an agent <em>inside</em> the cluster continuously makes reality match it. Argo CD is the most popular such agent.</p>
+
+<h2>The four GitOps principles</h2>
+<ol>
+  <li><strong>Declarative:</strong> the whole system is described as desired state (YAML, Helm, Kustomize).</li>
+  <li><strong>Versioned and immutable:</strong> that state lives in Git, with full history and review.</li>
+  <li><strong>Pulled automatically:</strong> an agent pulls changes from Git. Nobody pushes to the cluster.</li>
+  <li><strong>Continuously reconciled:</strong> the agent detects drift and corrects it.</li>
+</ol>
+<p>What you get: every change is a reviewed commit, rollback is <code>git revert</code>, the audit trail comes for free, and CI no longer needs cluster credentials.</p>
+
+<h2>Repository layout</h2>
+<p>Keep application code and deployment configuration in <strong>separate repos</strong>, or at least separate folders. That way a config change doesn't trigger an app build, and access can be controlled separately.</p>
+<pre><code>gitops/
+├── apps/                    # one Argo CD Application per app+env (app-of-apps)
+│   ├── api-dev.yaml
+│   └── api-prod.yaml
+└── services/
+    └── api/
+        ├── base/            # shared manifests
+        │   ├── deployment.yaml
+        │   ├── service.yaml
+        │   └── kustomization.yaml
+        └── overlays/
+            ├── dev/         # replicas: 1, image tag bumped by CI
+            │   └── kustomization.yaml
+            └── prod/        # replicas: 3, promoted by PR
+                └── kustomization.yaml</code></pre>
+
+<h2>Install Argo CD</h2>
+<pre><code>kubectl create namespace argocd
+kubectl apply -n argocd \
+  -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+# initial admin password
+kubectl -n argocd get secret argocd-initial-admin-secret \
+  -o jsonpath="{.data.password}" | base64 -d; echo
+
+kubectl -n argocd port-forward svc/argocd-server 8080:443
+# open https://localhost:8080 (user: admin)</code></pre>
+<p>For anything beyond a lab, install it with the official Helm chart, pin the version, and set up SSO instead of the admin user.</p>
+
+<h2>Your first Application</h2>
+<p>An <code>Application</code> tells Argo CD where to read from and where to deploy to:</p>
+<pre><code>apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: api-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/you/gitops
+    targetRevision: main
+    path: services/api/overlays/dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: api-dev
+  syncPolicy:
+    automated:
+      prune: true       # delete resources removed from Git
+      selfHeal: true    # revert manual changes in the cluster
+    syncOptions:
+      - CreateNamespace=true</code></pre>
+<p>Apply it once with <code>kubectl apply -f apps/api-dev.yaml</code>. From then on, every commit to <code>services/api/overlays/dev</code> is deployed automatically.</p>
+
+<h2>Sync status and health</h2>
+<ul>
+  <li><strong>Synced / OutOfSync:</strong> does the live state match Git?</li>
+  <li><strong>Healthy / Progressing / Degraded:</strong> are the resources actually working? (e.g. whether the Deployment has rolled out all its replicas)</li>
+</ul>
+<pre><code>argocd app list
+argocd app get api-dev
+argocd app diff api-dev        # what would change
+argocd app sync api-dev        # manual sync (for apps without auto-sync)
+argocd app history api-dev</code></pre>
+
+<h2>Connecting CI to GitOps</h2>
+<p>CI's job ends at "build, test, push the image, and update Git". Argo CD handles the deployment.</p>
+<pre><code># .github/workflows/release.yml (in the APP repo, after the image push step)
+      - name: Bump image tag in gitops repo
+        env:
+          GH_TOKEN: ${{ secrets.GITOPS_TOKEN }}   # fine-grained token, gitops repo only
+        run: |
+          git clone https://x-access-token:${GH_TOKEN}@github.com/you/gitops.git
+          cd gitops/services/api/overlays/dev
+          kustomize edit set image api=ghcr.io/you/api:${{ github.sha }}
+          git -c user.name=ci -c user.email=ci@example.com commit -am "api: deploy ${{ github.sha }} to dev"
+          git push</code></pre>
+<p>Promoting to production is then a pull request that copies the tested tag into <code>overlays/prod</code>. A human reviews and merges it. If you'd rather not have CI write to Git at all, <strong>Argo CD Image Updater</strong> can watch the registry instead.</p>
+
+<h2>Scaling up: app-of-apps and ApplicationSets</h2>
+<p>Writing one Application per service per environment gets repetitive. Two patterns help:</p>
+<ul>
+  <li><strong>App of apps:</strong> one root Application points at the <code>apps/</code> folder and creates all the others.</li>
+  <li><strong>ApplicationSet:</strong> generates Applications from a template, e.g. one per folder or one per cluster.</li>
+</ul>
+<pre><code>apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: services-dev
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - git:
+        repoURL: https://github.com/you/gitops
+        revision: main
+        directories:
+          - path: services/*/overlays/dev
+  template:
+    metadata:
+      name: '{{index .path.segments 1}}-dev'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/you/gitops
+        targetRevision: main
+        path: '{{.path.path}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{index .path.segments 1}}-dev'
+      syncPolicy:
+        automated: { prune: true, selfHeal: true }
+        syncOptions: [CreateNamespace=true]</code></pre>
+
+<h2>Secrets in GitOps</h2>
+<p>Never commit plain Kubernetes Secrets (base64 is not encryption). Choose one of:</p>
+<ul>
+  <li><strong>External Secrets Operator:</strong> Git holds a reference, and the operator fetches the value from AWS Secrets Manager, Vault, etc. (the usual choice in the cloud).</li>
+  <li><strong>Sealed Secrets:</strong> encrypt with the cluster's public key, then commit the ciphertext.</li>
+  <li><strong>SOPS</strong> with KMS/age, decrypted by a plugin at sync time.</li>
+</ul>
+
+<h2>Progressive delivery with Argo Rollouts</h2>
+<p>Argo CD deploys whatever is in Git. <strong>Argo Rollouts</strong> controls <em>how</em> it rolls out: canary steps, traffic shifting, and automated analysis against Prometheus metrics that aborts and rolls back on its own.</p>
+<pre><code>strategy:
+  canary:
+    steps:
+      - setWeight: 10
+      - pause: { duration: 5m }
+      - analysis:
+          templates: [{ templateName: success-rate }]
+      - setWeight: 50
+      - pause: { duration: 10m }</code></pre>
+
+<div class="article-callout">
+  <p><strong>Common pitfall:</strong> with <code>selfHeal</code> on, the HPA and Argo CD fight over <code>spec.replicas</code>. Remove <code>replicas</code> from the Deployment manifest when you use an HPA, or add an <code>ignoreDifferences</code> entry for that field.</p>
+</div>
+
+<h2>Next steps</h2>
+<ul>
+  <li>Build <a href="projects.html#gitops-argocd">Project 07: GitOps Delivery with Argo CD</a>.</li>
+  <li>Review <a href="blog-k8s-beginners.html">Kubernetes for Beginners</a> and <a href="blog-cicd-github-actions.html">CI/CD with GitHub Actions</a>.</li>
+</ul>

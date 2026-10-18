@@ -1,0 +1,179 @@
+<p>Almost everything in DevOps runs on Linux: CI runners, containers, Kubernetes nodes and cloud VMs. You don't need to be a kernel hacker, but you do need to be fast and confident at the command line. This guide covers the commands and concepts you'll use every week, in the order you'll need them.</p>
+
+<div class="article-callout">
+  <p><strong>Practise as you read:</strong> run an Ubuntu VM with <code>multipass launch --name lab</code>, use WSL2 on Windows, or run a throwaway container: <code>docker run -it --rm ubuntu:24.04 bash</code>.</p>
+</div>
+
+<h2>The filesystem layout</h2>
+<p>Linux has a single tree starting at <code>/</code>. The directories you'll visit most:</p>
+<table>
+  <thead><tr><th>Path</th><th>What lives there</th></tr></thead>
+  <tbody>
+    <tr><td><code>/etc</code></td><td>System and service configuration (<code>/etc/nginx</code>, <code>/etc/ssh/sshd_config</code>)</td></tr>
+    <tr><td><code>/var/log</code></td><td>Log files (and <code>journalctl</code> for systemd services)</td></tr>
+    <tr><td><code>/var/lib</code></td><td>Application state, e.g. <code>/var/lib/docker</code></td></tr>
+    <tr><td><code>/home</code>, <code>/root</code></td><td>User home directories</td></tr>
+    <tr><td><code>/usr/bin</code>, <code>/usr/local/bin</code></td><td>Installed programs</td></tr>
+    <tr><td><code>/tmp</code></td><td>Temporary files, often cleared on reboot</td></tr>
+    <tr><td><code>/proc</code>, <code>/sys</code></td><td>Virtual filesystems exposing kernel and process information</td></tr>
+  </tbody>
+</table>
+
+<h2>Navigating and finding things</h2>
+<pre><code>pwd                         # where am I?
+ls -lah                     # long list, hidden files, human sizes
+cd -                        # jump back to the previous directory
+find /var/log -name "*.log" -mtime -1      # logs modified in the last day
+find . -type f -size +100M                 # big files under here
+which nginx; type ll        # where does a command come from?
+tree -L 2                   # directory overview (apt install tree)</code></pre>
+
+<h2>Reading and searching text</h2>
+<p>Most DevOps debugging is reading logs and config. Learn these until they're muscle memory:</p>
+<pre><code>less /var/log/syslog        # page through (/ to search, G for end, q to quit)
+tail -f /var/log/nginx/access.log          # follow a log live
+tail -n 100 app.log | grep -i error
+grep -rn "listen" /etc/nginx/               # recursive, with line numbers
+grep -v '^#' sshd_config | grep -v '^$'     # strip comments and blank lines
+
+# count requests per status code in an nginx access log
+awk '{print $9}' access.log | sort | uniq -c | sort -rn
+
+# top 10 client IPs
+awk '{print $1}' access.log | sort | uniq -c | sort -rn | head
+
+# find and replace in place (keep a .bak backup)
+sed -i.bak 's/old-host/new-host/g' config.yaml</code></pre>
+
+<h2>Users, groups and permissions</h2>
+<p>Every file has an owner, a group and three permission sets: <strong>user</strong>, <strong>group</strong> and <strong>others</strong>. Each set has read (4), write (2) and execute (1).</p>
+<pre><code>ls -l deploy.sh
+# -rwxr-x--- 1 deploy ops 1.2K deploy.sh
+#  └u┘└g┘└o┘   owner  group
+
+chmod 750 deploy.sh         # rwx for owner, r-x for group, nothing for others
+chmod +x script.sh          # add execute for everyone
+chown deploy:ops deploy.sh  # change owner and group
+sudo useradd -m -s /bin/bash deploy
+sudo usermod -aG docker deploy   # add to a group (log out and in to apply)
+id deploy                    # show uid, gid and groups</code></pre>
+
+<div class="article-callout warn">
+  <p><strong>Never fix a permission error with <code>chmod 777</code>.</strong> Work out which user the process runs as (<code>ps -o user= -p &lt;pid&gt;</code>) and give <em>that</em> user the minimum access it needs.</p>
+</div>
+
+<h2>Processes and resources</h2>
+<pre><code>ps aux --sort=-%mem | head   # top memory consumers
+top                          # or htop: live view (press P for CPU, M for memory)
+pgrep -a python              # find processes by name
+kill &lt;pid&gt;                   # ask nicely (SIGTERM)
+kill -9 &lt;pid&gt;                # force (SIGKILL), last resort
+free -h                      # memory (look at "available", not "free")
+df -h                        # disk space per filesystem
+du -sh /var/* | sort -h      # what's using the space?
+uptime                       # load averages for 1, 5 and 15 minutes</code></pre>
+<p>A load average higher than your CPU count (<code>nproc</code>) means work is queuing. If the load is high but CPU usage is low, processes are usually waiting on disk or network I/O.</p>
+
+<h2>Services with systemd</h2>
+<p>Modern distributions use <strong>systemd</strong> to start and supervise services.</p>
+<pre><code>systemctl status nginx
+sudo systemctl restart nginx
+sudo systemctl enable --now nginx      # start now and on every boot
+systemctl list-units --failed
+journalctl -u nginx -f                 # follow a service's logs
+journalctl -u nginx --since "1 hour ago" -p err</code></pre>
+<p>Running your own app as a service takes one small unit file:</p>
+<pre><code># /etc/systemd/system/myapp.service
+[Unit]
+Description=My API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=myapp
+WorkingDirectory=/opt/myapp
+EnvironmentFile=/etc/myapp/env
+ExecStart=/opt/myapp/bin/server --port 8080
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+<pre><code>sudo systemctl daemon-reload
+sudo systemctl enable --now myapp</code></pre>
+
+<h2>Networking from the shell</h2>
+<pre><code>ip a                          # interfaces and IPs
+ip route                      # routing table
+ss -tlnp                      # which processes listen on which TCP ports
+curl -v https://example.com   # full request/response, including TLS
+curl -s -o /dev/null -w "%{http_code} %{time_total}s\n" https://example.com
+dig +short example.com        # DNS lookup
+nc -zv db.internal 5432       # is the port reachable?</code></pre>
+<p>For more on how these fit together, read <a href="blog-networking-fundamentals.html">Networking Fundamentals for DevOps</a>.</p>
+
+<h2>SSH like a professional</h2>
+<pre><code>ssh-keygen -t ed25519 -C "you@example.com"
+ssh-copy-id deploy@server
+ssh -i ~/.ssh/id_ed25519 deploy@server
+
+# ~/.ssh/config: then just run "ssh web1"
+Host web1
+  HostName 203.0.113.10
+  User deploy
+  IdentityFile ~/.ssh/id_ed25519
+
+# copy files
+scp app.tar.gz web1:/tmp/
+rsync -avz --delete ./dist/ web1:/var/www/app/
+
+# reach a private database through a bastion
+ssh -L 5432:db.internal:5432 web1</code></pre>
+<p>On servers, disable password logins (<code>PasswordAuthentication no</code>) and root login (<code>PermitRootLogin no</code>) in <code>/etc/ssh/sshd_config</code>.</p>
+
+<h2>Bash scripting essentials</h2>
+<p>Start every script with this header. It catches most of the bugs that make automation dangerous:</p>
+<pre><code>#!/usr/bin/env bash
+set -euo pipefail      # exit on error, on unset vars, and on failures inside pipes
+IFS=$'\n\t'
+
+log() { printf '%s %s\n' "$(date -u +%FT%TZ)" "$*" &gt;&amp;2; }
+
+usage() { echo "usage: $0 &lt;environment&gt;" &gt;&amp;2; exit 1; }
+[[ $# -eq 1 ]] || usage
+ENV=$1
+
+case "$ENV" in
+  dev|staging|prod) ;;
+  *) usage ;;
+esac
+
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT          # always clean up, even on failure
+
+for svc in api worker; do
+  log "deploying $svc to $ENV"
+  if ! curl -fsS "https://$svc.$ENV.example.com/health" &gt;/dev/null; then
+    log "health check failed for $svc"
+    exit 1
+  fi
+done</code></pre>
+<ul>
+  <li><strong>Quote your variables</strong> (<code>"$var"</code>) so spaces don't split them.</li>
+  <li>Use <code>[[ ... ]]</code> for tests, and <code>$(...)</code> for command substitution.</li>
+  <li>Run <code>shellcheck script.sh</code>. It finds real bugs in seconds.</li>
+</ul>
+
+<h2>Scheduling: cron and systemd timers</h2>
+<pre><code>crontab -e
+# m  h  dom mon dow  command
+*/5  *  *   *   *    /opt/scripts/healthcheck.sh &gt;&gt; /var/log/health.log 2&gt;&amp;1
+0    2  *   *   *    /opt/scripts/backup.sh</code></pre>
+<p>systemd timers are the modern alternative. Their logs go to the journal, they can catch up on runs missed while the machine was off, and <code>systemctl list-timers</code> shows when each one next runs.</p>
+
+<h2>What to practise next</h2>
+<ul>
+  <li>Build <a href="projects.html#linux-automation">Project 01: Linux Server Health &amp; Backup Automation</a>.</li>
+  <li>Keep the <a href="cheatsheets.html#linux">Linux cheatsheet</a> open while you work.</li>
+  <li>When something breaks, work through the <a href="troubleshooting.html#linux">Linux troubleshooting playbooks</a>.</li>
+</ul>

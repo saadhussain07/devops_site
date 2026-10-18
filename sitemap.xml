@@ -19,6 +19,12 @@
   <url><loc>https://rocketdevops.vercel.app/contact.html</loc><lastmod>2026-10-18</lastmod><priority>0.6</priority></url>
   <url><loc>https://rocketdevops.vercel.app/privacy-policy.html</loc><lastmod>2026-10-18</lastmod><priority>0.3</priority></url>
 <!-- BUILD:BLOG -->
+  <url><loc>https://rocketdevops.vercel.app/blog-ai-in-devops.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rocketdevops.vercel.app/blog-sre-fundamentals.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rocketdevops.vercel.app/blog-gitops-argocd.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rocketdevops.vercel.app/blog-aws-core-services.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rocketdevops.vercel.app/blog-networking-fundamentals.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rocketdevops.vercel.app/blog-linux-for-devops.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
   <url><loc>https://rocketdevops.vercel.app/blog-dora-metrics.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
   <url><loc>https://rocketdevops.vercel.app/blog-devsecops-pipeline.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
   <url><loc>https://rocketdevops.vercel.app/blog-prometheus-grafana.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>

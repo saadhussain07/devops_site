@@ -572,12 +572,16 @@
       <span class="blog-filter-label">Filter:</span>
 <!-- BUILD:FILTERS -->
       <button class="filter-pill active" data-filter="all">All</button>
+      <button class="filter-pill" data-filter="ai">AI &amp; AIOps</button>
       <button class="filter-pill" data-filter="culture">Culture</button>
+      <button class="filter-pill" data-filter="cicd">CI/CD</button>
+      <button class="filter-pill" data-filter="cloud">Cloud</button>
+      <button class="filter-pill" data-filter="networking">Networking</button>
+      <button class="filter-pill" data-filter="linux">Linux</button>
       <button class="filter-pill" data-filter="security">Security</button>
       <button class="filter-pill" data-filter="monitoring">Monitoring</button>
       <button class="filter-pill" data-filter="iac">IaC</button>
       <button class="filter-pill" data-filter="kubernetes">Kubernetes</button>
-      <button class="filter-pill" data-filter="cicd">CI/CD</button>
       <button class="filter-pill" data-filter="docker">Docker</button>
 <!-- /BUILD:FILTERS -->
     </div>
@@ -589,6 +593,136 @@
       <div>
         <div class="blog-grid" id="articles-grid">
 <!-- BUILD:GRID -->
+          <a class="article-card" data-cat="ai" href="blog-ai-in-devops.html">
+            <div class="article-thumb thumb-purple">
+              <div class="article-thumb-emoji">🤖</div>
+              <div class="article-thumb-glow"></div>
+            </div>
+            <div class="article-body">
+              <div class="article-tags">
+                <span class="article-tag green">AI</span>
+                <span class="article-tag">AIOps</span>
+                <span class="article-tag">MLOps</span>
+                <span class="article-tag">Agents</span>
+              </div>
+              <h3 class="article-title">AI in DevOps: Practical Uses, Agents and Guardrails</h3>
+              <div class="article-excerpt">Where LLMs and AI agents genuinely help in DevOps (IaC drafts, PR review, CI triage, AIOps incident response), and the guardrails for using them safely.</div>
+              <div class="article-footer">
+                <span class="article-date">📅 18 Oct 2026</span>
+                <span class="article-read-time">⏱ 5 min</span>
+              </div>
+              <span class="article-read-more">Read more →</span>
+            </div>
+          </a>
+
+          <a class="article-card" data-cat="culture" href="blog-sre-fundamentals.html">
+            <div class="article-thumb thumb-orange">
+              <div class="article-thumb-emoji">🧯</div>
+              <div class="article-thumb-glow"></div>
+            </div>
+            <div class="article-body">
+              <div class="article-tags">
+                <span class="article-tag green">SRE</span>
+                <span class="article-tag">SLO</span>
+                <span class="article-tag">Incidents</span>
+              </div>
+              <h3 class="article-title">SRE Fundamentals: SLOs, Error Budgets and Incident Response</h3>
+              <div class="article-excerpt">Define SLIs and SLOs, use error budgets to balance speed and reliability, alert on burn rate with PromQL, and run blameless postmortems.</div>
+              <div class="article-footer">
+                <span class="article-date">📅 18 Oct 2026</span>
+                <span class="article-read-time">⏱ 5 min</span>
+              </div>
+              <span class="article-read-more">Read more →</span>
+            </div>
+          </a>
+
+          <a class="article-card" data-cat="cicd" href="blog-gitops-argocd.html">
+            <div class="article-thumb thumb-green">
+              <div class="article-thumb-emoji">🐙</div>
+              <div class="article-thumb-glow"></div>
+            </div>
+            <div class="article-body">
+              <div class="article-tags">
+                <span class="article-tag green">GitOps</span>
+                <span class="article-tag">Argo CD</span>
+                <span class="article-tag">Kubernetes</span>
+              </div>
+              <h3 class="article-title">GitOps with Argo CD: Git as the Source of Truth for Kubernetes</h3>
+              <div class="article-excerpt">GitOps principles, repo layout, Argo CD Applications and ApplicationSets, CI-to-GitOps image promotion, secrets handling and progressive delivery.</div>
+              <div class="article-footer">
+                <span class="article-date">📅 18 Oct 2026</span>
+                <span class="article-read-time">⏱ 4 min</span>
+              </div>
+              <span class="article-read-more">Read more →</span>
+            </div>
+          </a>
+
+          <a class="article-card" data-cat="cloud" href="blog-aws-core-services.html">
+            <div class="article-thumb thumb-orange">
+              <div class="article-thumb-emoji">☁️</div>
+              <div class="article-thumb-glow"></div>
+            </div>
+            <div class="article-body">
+              <div class="article-tags">
+                <span class="article-tag green">AWS</span>
+                <span class="article-tag">Cloud</span>
+                <span class="article-tag">IAM</span>
+                <span class="article-tag">VPC</span>
+              </div>
+              <h3 class="article-title">AWS Core Services for DevOps Engineers</h3>
+              <div class="article-excerpt">The 15 AWS services DevOps engineers use daily (IAM, VPC, EC2, EKS, S3, RDS, CloudWatch and more), a standard VPC design, CLI essentials, cost and security habits.</div>
+              <div class="article-footer">
+                <span class="article-date">📅 18 Oct 2026</span>
+                <span class="article-read-time">⏱ 4 min</span>
+              </div>
+              <span class="article-read-more">Read more →</span>
+            </div>
+          </a>
+
+          <a class="article-card" data-cat="networking" href="blog-networking-fundamentals.html">
+            <div class="article-thumb thumb-cyan">
+              <div class="article-thumb-emoji">🌐</div>
+              <div class="article-thumb-glow"></div>
+            </div>
+            <div class="article-body">
+              <div class="article-tags">
+                <span class="article-tag green">Networking</span>
+                <span class="article-tag">DNS</span>
+                <span class="article-tag">TLS</span>
+                <span class="article-tag">Beginner</span>
+              </div>
+              <h3 class="article-title">Networking Fundamentals for DevOps Engineers</h3>
+              <div class="article-excerpt">IP and CIDR, TCP vs UDP, DNS, HTTP status codes, TLS, load balancers and NAT, plus a layer-by-layer checklist for debugging connectivity.</div>
+              <div class="article-footer">
+                <span class="article-date">📅 18 Oct 2026</span>
+                <span class="article-read-time">⏱ 5 min</span>
+              </div>
+              <span class="article-read-more">Read more →</span>
+            </div>
+          </a>
+
+          <a class="article-card" data-cat="linux" href="blog-linux-for-devops.html">
+            <div class="article-thumb thumb-green">
+              <div class="article-thumb-emoji">🐧</div>
+              <div class="article-thumb-glow"></div>
+            </div>
+            <div class="article-body">
+              <div class="article-tags">
+                <span class="article-tag green">Linux</span>
+                <span class="article-tag">Bash</span>
+                <span class="article-tag">systemd</span>
+                <span class="article-tag">Beginner</span>
+              </div>
+              <h3 class="article-title">Linux for DevOps: The Commands and Concepts You'll Use Every Day</h3>
+              <div class="article-excerpt">Filesystem layout, text processing, permissions, processes, systemd, SSH, networking tools and safe Bash scripting: the Linux foundation every DevOps engineer needs.</div>
+              <div class="article-footer">
+                <span class="article-date">📅 18 Oct 2026</span>
+                <span class="article-read-time">⏱ 5 min</span>
+              </div>
+              <span class="article-read-more">Read more →</span>
+            </div>
+          </a>
+
           <a class="article-card" data-cat="culture" href="blog-dora-metrics.html">
             <div class="article-thumb thumb-cyan">
               <div class="article-thumb-emoji">📈</div>
@@ -758,25 +892,25 @@
           <div class="widget-body">
             <ul class="popular-list">
 <!-- BUILD:LATEST -->
-              <li><a class="popular-item" href="blog-dora-metrics.html">
+              <li><a class="popular-item" href="blog-ai-in-devops.html">
                 <span class="popular-num">01</span>
-                <span class="popular-title">DORA Metrics Explained: Measure and Improve Your DevOps Performance</span>
+                <span class="popular-title">AI in DevOps: Practical Uses, Agents and Guardrails</span>
               </a></li>
-              <li><a class="popular-item" href="blog-devsecops-pipeline.html">
+              <li><a class="popular-item" href="blog-sre-fundamentals.html">
                 <span class="popular-num">02</span>
-                <span class="popular-title">How to Add Security Scanning to Your CI/CD Pipeline</span>
+                <span class="popular-title">SRE Fundamentals: SLOs, Error Budgets and Incident Response</span>
               </a></li>
-              <li><a class="popular-item" href="blog-prometheus-grafana.html">
+              <li><a class="popular-item" href="blog-gitops-argocd.html">
                 <span class="popular-num">03</span>
-                <span class="popular-title">Set Up Prometheus &amp; Grafana Monitoring in 30 Minutes</span>
+                <span class="popular-title">GitOps with Argo CD: Git as the Source of Truth for Kubernetes</span>
               </a></li>
-              <li><a class="popular-item" href="blog-terraform-aws.html">
+              <li><a class="popular-item" href="blog-aws-core-services.html">
                 <span class="popular-num">04</span>
-                <span class="popular-title">Terraform on AWS: Provision Your First Cloud Infrastructure</span>
+                <span class="popular-title">AWS Core Services for DevOps Engineers</span>
               </a></li>
-              <li><a class="popular-item" href="blog-k8s-beginners.html">
+              <li><a class="popular-item" href="blog-networking-fundamentals.html">
                 <span class="popular-num">05</span>
-                <span class="popular-title">Kubernetes for Beginners: Pods, Deployments &amp; Services Explained</span>
+                <span class="popular-title">Networking Fundamentals for DevOps Engineers</span>
               </a></li>
 <!-- /BUILD:LATEST -->
             </ul>
@@ -815,15 +949,15 @@
 <!-- BUILD:STATS -->
               <div class="stats-row">
                 <span class="stats-row-label">Total Articles</span>
-                <span class="stats-row-val">7</span>
+                <span class="stats-row-val">13</span>
               </div>
               <div class="stats-row">
                 <span class="stats-row-label">Topics Covered</span>
-                <span class="stats-row-val">7</span>
+                <span class="stats-row-val">11</span>
               </div>
               <div class="stats-row">
                 <span class="stats-row-label">Avg Read Time</span>
-                <span class="stats-row-val">2 min</span>
+                <span class="stats-row-val">3 min</span>
               </div>
               <div class="stats-row">
                 <span class="stats-row-label">Last Updated</span>
@@ -880,12 +1014,12 @@
         <h4>Articles</h4>
         <ul class="footer-links">
 <!-- BUILD:FOOTER -->
-          <li><a href="blog-dora-metrics.html">DORA Metrics Explained</a></li>
-          <li><a href="blog-devsecops-pipeline.html">How to Add Security Scanning to Your CI/CD Pipeline</a></li>
-          <li><a href="blog-prometheus-grafana.html">Set Up Prometheus &amp; Grafana Monitoring in 30 Minutes</a></li>
-          <li><a href="blog-terraform-aws.html">Terraform on AWS</a></li>
-          <li><a href="blog-k8s-beginners.html">Kubernetes for Beginners</a></li>
-          <li><a href="blog-cicd-github-actions.html">Build a CI/CD Pipeline with GitHub Actions from Scratch</a></li>
+          <li><a href="blog-ai-in-devops.html">AI in DevOps</a></li>
+          <li><a href="blog-sre-fundamentals.html">SRE Fundamentals</a></li>
+          <li><a href="blog-gitops-argocd.html">GitOps with Argo CD</a></li>
+          <li><a href="blog-aws-core-services.html">AWS Core Services for DevOps Engineers</a></li>
+          <li><a href="blog-networking-fundamentals.html">Networking Fundamentals for DevOps Engineers</a></li>
+          <li><a href="blog-linux-for-devops.html">Linux for DevOps</a></li>
 <!-- /BUILD:FOOTER -->
         </ul>
       </div>

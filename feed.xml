@@ -8,6 +8,54 @@
     <language>en</language>
     <lastBuildDate>Sun, 18 Oct 2026 09:00:00 GMT</lastBuildDate>
     <item>
+      <title>AI in DevOps: Practical Uses, Agents and Guardrails</title>
+      <link>https://rocketdevops.vercel.app/blog-ai-in-devops.html</link>
+      <guid isPermaLink="true">https://rocketdevops.vercel.app/blog-ai-in-devops.html</guid>
+      <pubDate>Sun, 18 Oct 2026 09:00:00 GMT</pubDate>
+      <category>AI &amp; AIOps</category>
+      <description>Where LLMs and AI agents genuinely help in DevOps (IaC drafts, PR review, CI triage, AIOps incident response), and the guardrails for using them safely.</description>
+    </item>
+    <item>
+      <title>SRE Fundamentals: SLOs, Error Budgets and Incident Response</title>
+      <link>https://rocketdevops.vercel.app/blog-sre-fundamentals.html</link>
+      <guid isPermaLink="true">https://rocketdevops.vercel.app/blog-sre-fundamentals.html</guid>
+      <pubDate>Sun, 18 Oct 2026 09:00:00 GMT</pubDate>
+      <category>Culture</category>
+      <description>Define SLIs and SLOs, use error budgets to balance speed and reliability, alert on burn rate with PromQL, and run blameless postmortems.</description>
+    </item>
+    <item>
+      <title>GitOps with Argo CD: Git as the Source of Truth for Kubernetes</title>
+      <link>https://rocketdevops.vercel.app/blog-gitops-argocd.html</link>
+      <guid isPermaLink="true">https://rocketdevops.vercel.app/blog-gitops-argocd.html</guid>
+      <pubDate>Sun, 18 Oct 2026 09:00:00 GMT</pubDate>
+      <category>CI/CD</category>
+      <description>GitOps principles, repo layout, Argo CD Applications and ApplicationSets, CI-to-GitOps image promotion, secrets handling and progressive delivery.</description>
+    </item>
+    <item>
+      <title>AWS Core Services for DevOps Engineers</title>
+      <link>https://rocketdevops.vercel.app/blog-aws-core-services.html</link>
+      <guid isPermaLink="true">https://rocketdevops.vercel.app/blog-aws-core-services.html</guid>
+      <pubDate>Sun, 18 Oct 2026 09:00:00 GMT</pubDate>
+      <category>Cloud</category>
+      <description>The 15 AWS services DevOps engineers use daily (IAM, VPC, EC2, EKS, S3, RDS, CloudWatch and more), a standard VPC design, CLI essentials, cost and security habits.</description>
+    </item>
+    <item>
+      <title>Networking Fundamentals for DevOps Engineers</title>
+      <link>https://rocketdevops.vercel.app/blog-networking-fundamentals.html</link>
+      <guid isPermaLink="true">https://rocketdevops.vercel.app/blog-networking-fundamentals.html</guid>
+      <pubDate>Sun, 18 Oct 2026 09:00:00 GMT</pubDate>
+      <category>Networking</category>
+      <description>IP and CIDR, TCP vs UDP, DNS, HTTP status codes, TLS, load balancers and NAT, plus a layer-by-layer checklist for debugging connectivity.</description>
+    </item>
+    <item>
+      <title>Linux for DevOps: The Commands and Concepts You'll Use Every Day</title>
+      <link>https://rocketdevops.vercel.app/blog-linux-for-devops.html</link>
+      <guid isPermaLink="true">https://rocketdevops.vercel.app/blog-linux-for-devops.html</guid>
+      <pubDate>Sun, 18 Oct 2026 09:00:00 GMT</pubDate>
+      <category>Linux</category>
+      <description>Filesystem layout, text processing, permissions, processes, systemd, SSH, networking tools and safe Bash scripting: the Linux foundation every DevOps engineer needs.</description>
+    </item>
+    <item>
       <title>DORA Metrics Explained: Measure and Improve Your DevOps Performance</title>
       <link>https://rocketdevops.vercel.app/blog-dora-metrics.html</link>
       <guid isPermaLink="true">https://rocketdevops.vercel.app/blog-dora-metrics.html</guid>

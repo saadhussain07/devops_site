@@ -1,0 +1,92 @@
+<p>AI coding assistants and LLM agents are now part of everyday engineering work. In DevOps they are genuinely useful for some jobs and dangerous for others. This guide covers where they help today, where they don't, and the guardrails that let you use them safely on real infrastructure.</p>
+
+<h2>Where AI helps today</h2>
+<table>
+  <thead><tr><th>Task</th><th>How AI helps</th><th>Risk level</th></tr></thead>
+  <tbody>
+    <tr><td>Writing IaC, YAML and scripts</td><td>Drafts Terraform modules, Helm values, Dockerfiles and Bash in seconds</td><td>Medium: must be reviewed and tested</td></tr>
+    <tr><td>Explaining unfamiliar code and config</td><td>"What does this Helm chart do?" and "Why is this regex failing?"</td><td>Low</td></tr>
+    <tr><td>Reading logs and errors</td><td>Summarises a 500-line stack trace and suggests likely causes</td><td>Low (if the logs contain no secrets)</td></tr>
+    <tr><td>Code review</td><td>Automated PR review catches bugs, missing tests and risky changes</td><td>Low: advisory only</td></tr>
+    <tr><td>CI failure triage</td><td>Reads failing job logs and proposes a fix or opens a PR</td><td>Medium: the fix still goes through review and CI</td></tr>
+    <tr><td>Incident investigation (AIOps)</td><td>Correlates metrics, logs, traces and recent deploys to suggest a root cause</td><td>Medium: humans decide what to do</td></tr>
+    <tr><td>Autonomous remediation</td><td>An agent restarts, scales or rolls back on its own</td><td>High: needs strict guardrails</td></tr>
+  </tbody>
+</table>
+
+<h2>Generating infrastructure code safely</h2>
+<p>An LLM can produce a convincing Terraform module that opens <code>0.0.0.0/0</code> on port 22, or uses a deprecated provider argument. Treat AI output like a pull request from a fast but junior colleague:</p>
+<ol>
+  <li><strong>Give context</strong>: provider versions, naming conventions, existing modules, and your constraints (e.g. "private subnets only, encrypted at rest, tags required").</li>
+  <li><strong>Run the same gates as human code</strong>: <code>terraform fmt</code>/<code>validate</code>, <code>tflint</code>, <code>checkov</code> or <code>trivy config</code>, <code>kubeconform</code>, <code>shellcheck</code>.</li>
+  <li><strong>Read the plan</strong>: <code>terraform plan</code> is the ground truth, whatever the prose explanation says.</li>
+  <li><strong>Test in a sandbox account or cluster</strong> before anything reaches production.</li>
+</ol>
+<pre><code># A practical review loop for generated IaC
+terraform fmt -check -recursive
+terraform validate
+tflint --recursive
+trivy config .            # misconfiguration scan (open SGs, unencrypted storage…)
+terraform plan -out=tf.plan &amp;&amp; terraform show -json tf.plan | jq '.resource_changes[] | {address, actions: .change.actions}'</code></pre>
+
+<h2>AI in the CI/CD pipeline</h2>
+<p>Common patterns teams adopt:</p>
+<ul>
+  <li><strong>AI PR review</strong> as a non-blocking check that comments on risky diffs, missing tests or secrets.</li>
+  <li><strong>Failure summaries</strong>: when a job fails, an LLM posts a short "what broke and the likely fix" comment, so nobody has to scroll through logs.</li>
+  <li><strong>Agentic fixes</strong>: a coding agent proposes a commit for a failing test or a dependency bump. It still goes through the normal pipeline and human approval.</li>
+</ul>
+<div class="article-callout warn">
+  <p><strong>Prompt injection is real:</strong> PR descriptions, issue comments, logs and even dependency READMEs can contain text crafted to steer an AI agent. Give agents that read untrusted input <em>no</em> secrets and <em>no</em> write access to protected branches or production.</p>
+</div>
+
+<h2>Agents, tools and MCP</h2>
+<p>An <strong>agent</strong> is an LLM in a loop that can call tools: run <code>kubectl get</code>, query Prometheus, read a runbook, open a ticket. The <strong>Model Context Protocol (MCP)</strong> is an open standard for exposing such tools and data sources to AI applications in a consistent way. Many platforms (Kubernetes, cloud providers, observability tools, Git hosts) now ship MCP servers.</p>
+<p>Design tool access the same way you design IAM:</p>
+<ul>
+  <li><strong>Read-only by default.</strong> Investigation tools (<code>get</code>, <code>describe</code>, <code>logs</code>, PromQL queries) cover most of the value.</li>
+  <li><strong>Narrow write tools</strong> such as "restart deployment X in namespace Y" or "scale within min/max", not a raw shell or <code>kubectl apply</code>.</li>
+  <li><strong>Human approval</strong> for anything that changes production, with the agent's reasoning and proposed command shown.</li>
+  <li><strong>Audit everything</strong>: every tool call is logged with who or what triggered it.</li>
+  <li><strong>Separate credentials</strong>: the agent's identity has its own tightly scoped role, never a human's admin token.</li>
+</ul>
+
+<h2>AIOps: AI for incident response</h2>
+<p>AIOps applies ML and LLMs to operations data. A typical multi-agent setup:</p>
+<pre><code>Alert fires (Prometheus / Alertmanager)
+   │
+   ▼
+Triage agent ── reads: alert, recent deploys, SLO burn rate
+   │
+   ├─► Metrics agent  ── PromQL: error rate, latency, saturation by pod/node
+   ├─► Logs agent     ── Loki: error patterns around the start time
+   └─► Traces agent   ── Jaeger/Tempo: slowest spans, failing dependency
+   │
+   ▼
+Root-cause hypothesis + evidence + suggested runbook action
+   │
+   ▼
+Human approves → guarded action (rollback / scale / restart) → verify SLIs recover</code></pre>
+<p>The value isn't magic root-cause detection. It's <strong>compressing the first 15 minutes of an incident</strong>, the gathering of context, into seconds, while humans keep the decisions. Read more about this architecture on the <a href="aiops.html">AIOps page</a>.</p>
+
+<h2>MLOps in one section</h2>
+<p>If your team ships ML models, the DevOps principles carry over with a few additions:</p>
+<ul>
+  <li><strong>Version data and models</strong>, not just code (DVC, MLflow model registry, artifacts in object storage).</li>
+  <li><strong>Pipelines for training</strong> (Kubeflow, Argo Workflows, managed services) as well as for deployment.</li>
+  <li><strong>Serving</strong> with autoscaling GPUs and specialised inference servers (vLLM, KServe, Triton).</li>
+  <li><strong>Monitoring</strong> for model quality and data drift, not only latency and errors.</li>
+  <li><strong>Cost control</strong>: GPUs are expensive, so track utilisation, batch requests, and right-size the model.</li>
+</ul>
+
+<h2>A sensible adoption path</h2>
+<ol>
+  <li>Use an AI assistant in your editor and terminal for drafts and explanations, and review everything.</li>
+  <li>Add non-blocking AI PR review and CI failure summaries.</li>
+  <li>Give a read-only investigation agent access to metrics, logs and runbooks.</li>
+  <li>Only then automate narrow, reversible actions, behind approval and with full audit logs.</li>
+</ol>
+
+<div class="article-callout">
+  <p><strong>Skills still matter:</strong> AI makes strong engineers faster, but you can only judge its output if you understand Linux, networking, Kubernetes and IaC yourself. Use the <a href="roadmap.html">roadmap</a> and <a href="projects.html">projects</a> to build that foundation.</p>
+</div>
