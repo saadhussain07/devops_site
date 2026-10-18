@@ -70,6 +70,18 @@ open index.html
 live-server .   # if you have live-server installed
 ```
 
+### ✍️ Writing a blog article
+
+Blog pages (`blog-*.html`), the blog index cards, `feed.xml`, the blog entries in
+`sitemap.xml` and the blog search index are generated from `_blog/`:
+
+1. Write the article body in `_blog/posts/<slug>.html` (start with `<h2>` sections, no `<h1>`).
+2. Add its title, description, date, tags etc. to `_blog/posts.json`.
+3. Run `node _blog/build.mjs` (Node 18+, no dependencies) and commit the result.
+
+Don't edit the generated `blog-*.html` files or the `BUILD:` regions by hand — they are overwritten.
+`_blog/` is excluded from deployment via `.vercelignore`.
+
 ---
 
 ## 🗺️ DevOps Topics Covered

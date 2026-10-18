@@ -1,0 +1,134 @@
+<p>Docker changed how we build, ship, and run software. Before containers, "it works on my machine" was a real, painful problem. Docker solved it by packaging your application and everything it needs — runtime, libraries, config — into a single portable unit called a <strong>container</strong>.</p>
+
+<p>This guide walks you through Docker from scratch: what it is, why it matters, and how to write your first Dockerfile and ship a real application.</p>
+
+<div class="modal-divider"></div>
+
+<h2>What is Docker?</h2>
+<p>Docker is a platform that allows you to package applications into containers. A container is a lightweight, standalone, executable package that includes everything needed to run a piece of software — code, runtime, system tools, libraries, and settings.</p>
+
+<div class="article-callout">
+  <p><strong>Key insight:</strong> Containers share the host OS kernel but run in isolated user spaces. This makes them far lighter than VMs — a container starts in milliseconds, not minutes.</p>
+</div>
+
+<h2>Core Docker Concepts</h2>
+
+<h3>Images vs Containers</h3>
+<p>An <strong>image</strong> is a read-only blueprint — like a class in programming. A <strong>container</strong> is a running instance of that image — like an object. One image can run as many containers as you need.</p>
+
+<h3>Dockerfile</h3>
+<p>A Dockerfile is a text file with instructions to build a Docker image. Here's a real example for a Node.js app:</p>
+
+<pre><code># Use official Node.js image as base
+FROM node:20-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy dependency files first (for layer caching)
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --omit=dev
+
+# Copy source code
+COPY . .
+
+# Expose port
+EXPOSE 3000
+
+# Start the application
+CMD ["node", "server.js"]</code></pre>
+
+<h3>Key Dockerfile Instructions</h3>
+<ul>
+  <li><code>FROM</code> — base image to start from</li>
+  <li><code>WORKDIR</code> — set working directory inside the container</li>
+  <li><code>COPY</code> — copy files from host to container</li>
+  <li><code>RUN</code> — execute a command during build</li>
+  <li><code>EXPOSE</code> — document which port the app uses</li>
+  <li><code>CMD</code> — command to run when container starts</li>
+  <li><code>ENV</code> — set environment variables</li>
+</ul>
+
+<h2>Essential Docker Commands</h2>
+<pre><code># Build an image from Dockerfile
+docker build -t myapp:1.0 .
+
+# Run a container
+docker run -d -p 3000:3000 --name myapp myapp:1.0
+
+# List running containers
+docker ps
+
+# View container logs
+docker logs myapp -f
+
+# Stop and remove container
+docker stop myapp && docker rm myapp
+
+# List images
+docker images
+
+# Remove unused resources
+docker system prune</code></pre>
+
+<h2>Multi-Stage Builds (Production Best Practice)</h2>
+<p>Multi-stage builds let you use a large build image (with compilers and dev tools) but produce a tiny final image with only what's needed to run:</p>
+
+<pre><code># Stage 1: Build
+FROM golang:1.23 AS builder
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 go build -o myapp .
+
+# Stage 2: Run (tiny final image)
+FROM alpine:3.20
+COPY --from=builder /app/myapp /myapp
+CMD ["/myapp"]</code></pre>
+
+<div class="article-callout">
+  <p><strong>Result:</strong> The Go build image is ~800MB. The final Alpine image is ~10MB. Multi-stage builds are essential for production.</p>
+</div>
+
+<h2>Docker Compose</h2>
+<p>For applications with multiple services (app + database + cache), use Docker Compose:</p>
+
+<pre><code># compose.yaml (the top-level "version:" key is obsolete and can be omitted)
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://user:pass@db:5432/mydb
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: pass
+      POSTGRES_USER: user
+      POSTGRES_DB: mydb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+
+volumes:
+  pgdata:</code></pre>
+
+<p>Run everything with a single command: <code>docker compose up -d</code></p>
+
+<h2>Next Steps</h2>
+<ul>
+  <li>Learn Kubernetes to orchestrate containers at scale</li>
+  <li>Set up a private Docker registry (ECR, GCR, or Docker Hub)</li>
+  <li>Add Docker to your CI/CD pipeline with GitHub Actions</li>
+  <li>Explore container security scanning with Trivy</li>
+</ul>

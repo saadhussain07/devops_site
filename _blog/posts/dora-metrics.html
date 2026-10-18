@@ -1,0 +1,35 @@
+<p>How do you know if your DevOps practices are actually improving? The DORA (DevOps Research and Assessment) team spent years analysing thousands of organisations and identified four metrics that reliably predict software delivery performance.</p>
+
+<h2>The Four DORA Metrics</h2>
+
+<h3>1. Deployment Frequency</h3>
+<p>How often your team successfully deploys to production. Elite teams deploy multiple times per day. Low performers deploy monthly or less frequently.</p>
+
+<h3>2. Lead Time for Changes</h3>
+<p>The time from a code commit to that code running in production. Elite: less than one hour. Low performers: 6 months or more.</p>
+
+<h3>3. Mean Time to Restore (MTTR)</h3>
+<p>How long it takes to recover from a production failure. Elite teams restore in less than one hour using automated rollbacks and runbooks.</p>
+
+<h3>4. Change Failure Rate</h3>
+<p>The percentage of deployments that cause a production failure requiring a fix or rollback. Elite: 0–5%. High performers maintain this through automated testing and canary deployments.</p>
+
+<h2>Elite vs Low Performer Benchmarks</h2>
+<pre><code>Metric                  Elite         Low Performer
+──────────────────────────────────────────────────
+Deployment Frequency    Multiple/day  < Once/month
+Lead Time               < 1 hour      6+ months
+MTTR                    < 1 hour      1+ week
+Change Failure Rate     0–5%          46–60%</code></pre>
+
+<h2>How to Start Measuring</h2>
+<ul>
+  <li>Track deployment timestamps in your CI/CD system</li>
+  <li>Record incident start and resolution times</li>
+  <li>Tag production incidents caused by deployments</li>
+  <li>Calculate lead time from first commit to deploy timestamp</li>
+</ul>
+
+<div class="article-callout">
+  <p><strong>Key finding:</strong> DORA research shows these metrics are leading indicators of organisational performance — teams that score Elite are twice as likely to exceed profitability and productivity goals.</p>
+</div>

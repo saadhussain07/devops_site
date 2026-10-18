@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>DevOps Hub Blog</title>
+    <link>https://rocketdevops.vercel.app/blog.html</link>
+    <atom:link href="https://rocketdevops.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>DevOps tutorials, guides and best practices.</description>
+    <language>en</language>
+    <lastBuildDate>Sun, 18 Oct 2026 09:00:00 GMT</lastBuildDate>
+    <item>
+      <title>DORA Metrics Explained: Measure and Improve Your DevOps Performance</title>
+      <link>https://rocketdevops.vercel.app/blog-dora-metrics.html</link>
+      <guid isPermaLink="true">https://rocketdevops.vercel.app/blog-dora-metrics.html</guid>
+      <pubDate>Fri, 10 Apr 2026 09:00:00 GMT</pubDate>
+      <category>Culture</category>
+      <description>The four DORA metrics, how to measure them and what elite performance actually looks like.</description>
+    </item>
+    <item>
+      <title>How to Add Security Scanning to Your CI/CD Pipeline</title>
+      <link>https://rocketdevops.vercel.app/blog-devsecops-pipeline.html</link>
+      <guid isPermaLink="true">https://rocketdevops.vercel.app/blog-devsecops-pipeline.html</guid>
+      <pubDate>Thu, 02 Apr 2026 09:00:00 GMT</pubDate>
+      <category>Security</category>
+      <description>Shift security left with SAST, dependency audits, container image scanning and secrets detection in GitHub Actions.</description>
+    </item>
+    <item>
+      <title>Set Up Prometheus &amp; Grafana Monitoring in 30 Minutes</title>
+      <link>https://rocketdevops.vercel.app/blog-prometheus-grafana.html</link>
+      <guid isPermaLink="true">https://rocketdevops.vercel.app/blog-prometheus-grafana.html</guid>
+      <pubDate>Wed, 18 Mar 2026 09:00:00 GMT</pubDate>
+      <category>Monitoring</category>
+      <description>Deploy kube-prometheus-stack on Kubernetes with Helm, open Grafana and write the PromQL queries every engineer needs.</description>
+    </item>
+    <item>
+      <title>Terraform on AWS: Provision Your First Cloud Infrastructure</title>
+      <link>https://rocketdevops.vercel.app/blog-terraform-aws.html</link>
+      <guid isPermaLink="true">https://rocketdevops.vercel.app/blog-terraform-aws.html</guid>
+      <pubDate>Thu, 05 Mar 2026 09:00:00 GMT</pubDate>
+      <category>IaC</category>
+      <description>Install Terraform, structure a project and provision a VPC, subnet and EC2 instance on AWS with the init → plan → apply workflow.</description>
+    </item>
+    <item>
+      <title>Kubernetes for Beginners: Pods, Deployments &amp; Services Explained</title>
+      <link>https://rocketdevops.vercel.app/blog-k8s-beginners.html</link>
+      <guid isPermaLink="true">https://rocketdevops.vercel.app/blog-k8s-beginners.html</guid>
+      <pubDate>Fri, 20 Feb 2026 09:00:00 GMT</pubDate>
+      <category>Kubernetes</category>
+      <description>Understand the core Kubernetes objects (Pods, Deployments and Services) with manifests and kubectl commands you can run locally.</description>
+    </item>
+    <item>
+      <title>Build a CI/CD Pipeline with GitHub Actions from Scratch</title>
+      <link>https://rocketdevops.vercel.app/blog-cicd-github-actions.html</link>
+      <guid isPermaLink="true">https://rocketdevops.vercel.app/blog-cicd-github-actions.html</guid>
+      <pubDate>Tue, 03 Feb 2026 09:00:00 GMT</pubDate>
+      <category>CI/CD</category>
+      <description>A step-by-step guide to automating build, test and Docker image publishing with GitHub Actions workflows.</description>
+    </item>
+    <item>
+      <title>Docker for DevOps Engineers: A Complete Beginner's Guide</title>
+      <link>https://rocketdevops.vercel.app/blog-docker-guide.html</link>
+      <guid isPermaLink="true">https://rocketdevops.vercel.app/blog-docker-guide.html</guid>
+      <pubDate>Thu, 15 Jan 2026 09:00:00 GMT</pubDate>
+      <category>Docker</category>
+      <description>Everything you need to know about containers, from writing your first Dockerfile to multi-stage builds and Docker Compose.</description>
+    </item>
+  </channel>
+</rss>

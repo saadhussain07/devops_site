@@ -16,4 +16,13 @@
   <url><loc>https://rocketdevops.vercel.app/search.html</loc><lastmod>2026-10-18</lastmod><priority>0.5</priority></url>
   <url><loc>https://rocketdevops.vercel.app/contact.html</loc><lastmod>2026-10-18</lastmod><priority>0.6</priority></url>
   <url><loc>https://rocketdevops.vercel.app/privacy-policy.html</loc><lastmod>2026-10-18</lastmod><priority>0.3</priority></url>
+<!-- BUILD:BLOG -->
+  <url><loc>https://rocketdevops.vercel.app/blog-dora-metrics.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rocketdevops.vercel.app/blog-devsecops-pipeline.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rocketdevops.vercel.app/blog-prometheus-grafana.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rocketdevops.vercel.app/blog-terraform-aws.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rocketdevops.vercel.app/blog-k8s-beginners.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rocketdevops.vercel.app/blog-cicd-github-actions.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rocketdevops.vercel.app/blog-docker-guide.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
+<!-- /BUILD:BLOG -->
 </urlset>

@@ -1,0 +1,88 @@
+<p>Kubernetes (K8s) is the de facto standard for running containerised applications at scale. It automates deployment, scaling, and management of containers across a cluster of machines. Here's what every beginner needs to know.</p>
+
+<h2>Core Objects</h2>
+
+<h3>Pod — The Smallest Unit</h3>
+<p>A Pod is the smallest deployable unit in Kubernetes. It wraps one or more containers that share network and storage.</p>
+<pre><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: my-app
+spec:
+  containers:
+  - name: app
+    image: nginx:alpine
+    ports:
+    - containerPort: 80</code></pre>
+
+<h3>Deployment — Managing Replicas</h3>
+<p>You almost never create Pods directly. Use a Deployment to manage multiple replicas with rolling updates and rollbacks.</p>
+<pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: app
+        image: myapp:1.0
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"</code></pre>
+
+<h3>Service — Networking</h3>
+<p>A Service exposes your Pods via a stable DNS name and IP address, load balancing across all healthy Pods.</p>
+<pre><code>apiVersion: v1
+kind: Service
+metadata:
+  name: my-app-service
+spec:
+  selector:
+    app: my-app
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: ClusterIP</code></pre>
+
+<h2>Essential kubectl Commands</h2>
+<pre><code># Apply manifest
+kubectl apply -f deployment.yaml
+
+# Get resources
+kubectl get pods
+kubectl get deployments
+kubectl get services
+
+# Describe a resource
+kubectl describe pod my-app-abc123
+
+# View logs
+kubectl logs my-app-abc123 -f
+
+# Execute into a container
+kubectl exec -it my-app-abc123 -- /bin/sh
+
+# Scale a deployment
+kubectl scale deployment my-app --replicas=5
+
+# Rolling update
+kubectl set image deployment/my-app app=myapp:2.0
+
+# Rollback
+kubectl rollout undo deployment/my-app</code></pre>
+
+<div class="article-callout">
+  <p><strong>Practice tip:</strong> Use <code>kind</code> or <code>minikube</code> to run a local Kubernetes cluster on your laptop for free. No cloud account needed.</p>
+</div>

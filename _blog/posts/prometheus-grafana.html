@@ -1,0 +1,45 @@
+<p>Prometheus scrapes metrics from your services. Grafana visualises them. Together they form the most popular open-source observability stack in the world. Here's how to get it running on Kubernetes in under 30 minutes.</p>
+
+<h2>Install with Helm</h2>
+<pre><code># Add Prometheus community chart repo
+helm repo add prometheus-community \
+  https://prometheus-community.github.io/helm-charts
+helm repo update
+
+# Install kube-prometheus-stack (includes Grafana)
+helm install monitoring \
+  prometheus-community/kube-prometheus-stack \
+  --namespace monitoring \
+  --create-namespace</code></pre>
+
+<h2>Access Grafana</h2>
+<pre><code># Port-forward Grafana
+kubectl port-forward svc/monitoring-grafana \
+  3000:80 -n monitoring
+
+# Get the generated admin password
+kubectl get secret monitoring-grafana -n monitoring \
+  -o jsonpath="{.data.admin-password}" | base64 -d; echo
+# Username: admin</code></pre>
+
+<h2>Key PromQL Queries</h2>
+<pre><code># Request rate (RED: Rate)
+rate(http_requests_total[5m])
+
+# Error rate (RED: Errors)
+sum(rate(http_requests_total{status=~"5.."}[5m]))
+  / sum(rate(http_requests_total[5m]))
+
+# P99 latency (RED: Duration)
+histogram_quantile(0.99,
+  sum by (le) (rate(http_request_duration_seconds_bucket[5m]))
+)
+
+# CPU usage
+100 - (avg by(instance)(
+  rate(node_cpu_seconds_total{mode="idle"}[5m])
+) * 100)</code></pre>
+
+<div class="article-callout">
+  <p><strong>Import dashboards:</strong> Grafana has thousands of pre-built dashboards. Try ID <code>1860</code> for Node Exporter Full — an excellent starting point for server monitoring.</p>
+</div>

@@ -1,0 +1,57 @@
+<p>Security shouldn't be an afterthought reviewed at the end of a release cycle. Shifting left means integrating security checks into every stage of your CI/CD pipeline — automatically, on every commit.</p>
+
+<h2>Four Layers of Pipeline Security</h2>
+<ul>
+  <li><strong>SAST</strong> — Static Application Security Testing (source code analysis)</li>
+  <li><strong>Dependency scanning</strong> — Check third-party libraries for known CVEs</li>
+  <li><strong>Container scanning</strong> — Scan Docker images for vulnerabilities</li>
+  <li><strong>Secrets detection</strong> — Find accidentally committed credentials</li>
+</ul>
+
+<h2>Complete Security Pipeline</h2>
+<pre><code>name: Security Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  sast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Semgrep SAST
+        run: |
+          pip install semgrep
+          semgrep scan --config p/owasp-top-ten --error
+
+  dependency-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dependency audit
+        run: npm audit --audit-level=high
+
+  container-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t myapp:test .
+      - name: Trivy container scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: myapp:test
+          severity: HIGH,CRITICAL
+          exit-code: 1
+
+  secrets-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: GitLeaks secrets scan
+        uses: gitleaks/gitleaks-action@v2</code></pre>
+
+<div class="article-callout">
+  <p><strong>Golden rule:</strong> Set <code>exit-code: 1</code> on CRITICAL findings so the pipeline fails and blocks the merge. Security gates only work if they're enforced.</p>
+</div>

@@ -1,0 +1,70 @@
+<p>GitHub Actions is one of the most powerful and beginner-friendly CI/CD tools available today. It's built directly into GitHub — no external servers, no plugins to manage. In this guide, you'll build a complete pipeline from scratch.</p>
+
+<h2>How GitHub Actions Works</h2>
+<p>Workflows are defined in YAML files inside <code>.github/workflows/</code> in your repository. They are triggered by events — pushes, pull requests, schedules, and more.</p>
+
+<h2>Your First Workflow</h2>
+<pre><code># .github/workflows/ci.yml
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build
+        run: npm run build</code></pre>
+
+<h2>Adding Docker Build & Push</h2>
+<pre><code>  docker:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: myuser/myapp:${{ github.sha }}</code></pre>
+
+<div class="article-callout">
+  <p><strong>Tip:</strong> Never hardcode credentials. Add secrets in GitHub → Settings → Secrets and variables → Actions.</p>
+</div>
+
+<h2>Key GitHub Actions Concepts</h2>
+<ul>
+  <li><strong>Workflow</strong> — the YAML file defining your automation</li>
+  <li><strong>Job</strong> — a set of steps that run on the same runner</li>
+  <li><strong>Step</strong> — a single task (run a command or use an action)</li>
+  <li><strong>Action</strong> — reusable unit from the Actions Marketplace</li>
+  <li><strong>Runner</strong> — the machine that executes your workflow</li>
+  <li><strong>Secrets</strong> — encrypted variables for credentials</li>
+</ul>
