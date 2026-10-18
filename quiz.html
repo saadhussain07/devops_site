@@ -8,7 +8,7 @@
   <meta name="author" content="DevOps Hub">
   <meta name="robots" content="index, follow">
   <meta property="og:title" content="DevOps Quiz 2026 — Test Your Knowledge">
-  <meta property="og:description" content="20 questions covering Docker, Kubernetes, CI/CD, Terraform, monitoring and DevOps culture.">
+  <meta property="og:description" content="103 DevOps quiz questions with explanations: Docker, Kubernetes, CI/CD, Terraform, Linux, networking, cloud, security and SRE.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://rocketdevops.vercel.app/quiz.html">
   <title>DevOps Quiz 2026 — DevOps Hub</title>
@@ -552,7 +552,7 @@
     <div class="quiz-intro">
       <span class="tag">// test yourself</span>
       <h1 id="quiz-title">DevOps <span class="text-green">Quiz</span></h1>
-      <p>20 questions covering the full DevOps spectrum — tools, concepts, culture and best practices. Each question has a 30-second timer. How well do you know your DevOps?</p>
+      <p>Each run draws 20 random questions from a bank of 103, covering tools, Linux, networking, cloud, security and SRE. Every answer comes with an explanation, and each question has a 30-second timer. Pick a topic to focus your practice.</p>
 
       <div class="quiz-meta-grid">
         <div class="quiz-meta-card">
@@ -598,6 +598,10 @@
         <button class="cat-btn" data-cat="monitoring"><span class="cat-dot"></span>Monitoring</button>
         <button class="cat-btn" data-cat="culture"><span class="cat-dot"></span>Culture & SRE</button>
         <button class="cat-btn" data-cat="security"><span class="cat-dot"></span>Security</button>
+        <button class="cat-btn" data-cat="linux"><span class="cat-dot"></span>Linux</button>
+        <button class="cat-btn" data-cat="networking"><span class="cat-dot"></span>Networking</button>
+        <button class="cat-btn" data-cat="git"><span class="cat-dot"></span>Git</button>
+        <button class="cat-btn" data-cat="cloud"><span class="cat-dot"></span>Cloud</button>
       </div>
 
       <button class="btn btn-primary" id="start-btn" style="font-size:1rem; padding:0.9rem 2.5rem;">
@@ -782,7 +786,7 @@
 'use strict';
 
 /* ═══════════════════════════════════════════
-   QUESTION BANK — 20 questions
+   QUESTION BANK (each run draws 20 at random)
 ════════════════════════════════════════════ */
 const ALL_QUESTIONS = [
   {
@@ -925,6 +929,587 @@ const ALL_QUESTIONS = [
     ans: 1,
     exp: 'Helm is the package manager for Kubernetes. Charts are packages of pre-configured Kubernetes resources. Helm manages releases, supports rollbacks, and templating with values.yaml — think of it as apt/brew for Kubernetes.'
   },
+  {
+    cat: "docker",
+    q: "Which instruction should you prefer so that the container's main process runs as PID 1 and receives signals correctly?",
+    opts: ["CMD in shell form: CMD node server.js", "CMD in exec form: CMD [\"node\", \"server.js\"]", "RUN node server.js", "ENTRYPOINT node server.js &amp;"],
+    ans: 1,
+    exp: "The exec (JSON array) form runs the binary directly as PID 1, so it receives SIGTERM on docker stop. Shell form wraps it in /bin/sh -c, which may not forward signals."
+  },
+  {
+    cat: "docker",
+    q: "Why copy package.json and install dependencies BEFORE copying the rest of the source code?",
+    opts: ["It is required by Docker", "To maximise layer cache reuse when only source code changes", "To make the image smaller", "To run as non-root"],
+    ans: 1,
+    exp: "Docker caches each layer. If dependency manifests haven't changed, the expensive install layer is reused and only the final COPY of source code is rebuilt."
+  },
+  {
+    cat: "docker",
+    q: "What does a .dockerignore file do?",
+    opts: ["Lists images to never pull", "Excludes files from the build context sent to the Docker daemon", "Disables caching for listed files", "Hides containers from docker ps"],
+    ans: 1,
+    exp: ".dockerignore keeps files like .git, node_modules and secrets out of the build context, which speeds up builds and stops them leaking into images."
+  },
+  {
+    cat: "docker",
+    q: "Which Linux kernel features provide container isolation and resource limits?",
+    opts: ["SELinux and AppArmor only", "Namespaces (isolation) and cgroups (limits)", "chroot and cron", "iptables and systemd"],
+    ans: 1,
+    exp: "Namespaces isolate what a process can see (PIDs, network, mounts, users); cgroups limit what it can use (CPU, memory, I/O)."
+  },
+  {
+    cat: "docker",
+    q: "A container exits immediately with code 137. What is the most likely cause?",
+    opts: ["The image was not found", "It was killed by SIGKILL, often by the OOM killer", "A syntax error in the Dockerfile", "The port was already in use"],
+    ans: 1,
+    exp: "137 = 128 + 9 (SIGKILL). The usual cause is running out of memory (OOMKilled), or a forced kill after the stop timeout."
+  },
+  {
+    cat: "docker",
+    q: "Which docker run flag limits a container to 512 MB of memory?",
+    opts: ["--mem-limit 512", "--memory=512m", "--max-ram 512MB", "--cgroup-memory=512"],
+    ans: 1,
+    exp: "--memory (or -m) sets a hard memory limit, enforced through cgroups. Exceeding it triggers the OOM killer."
+  },
+  {
+    cat: "docker",
+    q: "What is a 'distroless' base image?",
+    opts: ["An image with no filesystem", "A minimal image containing only the app's runtime dependencies, with no shell or package manager", "An image that runs on any Linux distribution", "A Windows container image"],
+    ans: 1,
+    exp: "Distroless images drop shells and package managers, which shrinks size and attack surface. Debugging needs ephemeral debug containers instead."
+  },
+  {
+    cat: "kubernetes",
+    q: "Which component stores all Kubernetes cluster state?",
+    opts: ["kube-scheduler", "kubelet", "etcd", "kube-proxy"],
+    ans: 2,
+    exp: "etcd is the consistent key-value store behind the API server. Back it up: losing etcd means losing the cluster's state."
+  },
+  {
+    cat: "kubernetes",
+    q: "A failing READINESS probe causes Kubernetes to…",
+    opts: ["Restart the container", "Remove the Pod from Service endpoints until it passes", "Delete the Pod", "Reschedule the Pod to another node"],
+    ans: 1,
+    exp: "Readiness controls traffic. Liveness controls restarts. A failing readiness probe just stops traffic going to that Pod."
+  },
+  {
+    cat: "kubernetes",
+    q: "What happens when a container exceeds its MEMORY limit?",
+    opts: ["It is throttled", "It is OOMKilled and restarted", "Kubernetes automatically raises the limit", "Nothing; limits are advisory"],
+    ans: 1,
+    exp: "Memory can't be throttled, so exceeding the limit kills the container (OOMKilled, exit 137). CPU over the limit is throttled instead."
+  },
+  {
+    cat: "kubernetes",
+    q: "Which workload type runs exactly one Pod on every (matching) node?",
+    opts: ["Deployment", "StatefulSet", "DaemonSet", "Job"],
+    ans: 2,
+    exp: "DaemonSets are used for node-level agents: log shippers, monitoring exporters, CNI and storage plugins."
+  },
+  {
+    cat: "kubernetes",
+    q: "Which Service type is the default and only reachable from inside the cluster?",
+    opts: ["NodePort", "LoadBalancer", "ClusterIP", "ExternalName"],
+    ans: 2,
+    exp: "ClusterIP gives a stable virtual IP and DNS name inside the cluster. Expose it externally with an Ingress, a Gateway or a LoadBalancer Service."
+  },
+  {
+    cat: "kubernetes",
+    q: "Which command shows the Events explaining why a Pod is Pending or failing?",
+    opts: ["kubectl logs pod", "kubectl describe pod &lt;name&gt;", "kubectl top pod", "kubectl get pod -o name"],
+    ans: 1,
+    exp: "kubectl describe shows the Pod's conditions and recent Events (scheduling failures, image pull errors, probe failures), which is usually the first place to look."
+  },
+  {
+    cat: "kubernetes",
+    q: "What is the purpose of a PodDisruptionBudget?",
+    opts: ["Limit pod CPU usage", "Limit how many pods can be voluntarily evicted at once (e.g. during node drains)", "Schedule pods on cheap nodes", "Set a cost budget per namespace"],
+    ans: 1,
+    exp: "PDBs keep a minimum number of replicas available during voluntary disruptions such as node upgrades and drains."
+  },
+  {
+    cat: "kubernetes",
+    q: "What is required for the Horizontal Pod Autoscaler to scale on CPU utilisation?",
+    opts: ["A LoadBalancer Service", "CPU requests on the containers and metrics-server installed", "A StatefulSet", "Cluster Autoscaler"],
+    ans: 1,
+    exp: "Utilisation is measured as a percentage of the CPU request, and metrics-server supplies the usage data. Without requests, the HPA can't compute utilisation."
+  },
+  {
+    cat: "kubernetes",
+    q: "Which object grants a set of permissions within a single namespace?",
+    opts: ["ClusterRole", "Role (bound with a RoleBinding)", "ServiceAccount", "NetworkPolicy"],
+    ans: 1,
+    exp: "Role and RoleBinding are namespaced. ClusterRole and ClusterRoleBinding apply cluster-wide (or a ClusterRole can be bound per namespace)."
+  },
+  {
+    cat: "kubernetes",
+    q: "By default (with no NetworkPolicies), pod-to-pod traffic in Kubernetes is…",
+    opts: ["Denied between namespaces", "Allowed between all pods", "Encrypted with mTLS", "Only allowed via Services"],
+    ans: 1,
+    exp: "Kubernetes networking is flat and allow-all by default. Apply a default-deny NetworkPolicy and then allow only the flows you need (this requires a CNI that enforces policies)."
+  },
+  {
+    cat: "kubernetes",
+    q: "What does 'kubectl rollout status deployment/api' do?",
+    opts: ["Rolls back the deployment", "Waits and reports until the rollout completes or fails", "Pauses the rollout", "Deletes old ReplicaSets"],
+    ans: 1,
+    exp: "It blocks until the new ReplicaSet is fully available (or the progress deadline is exceeded), which makes it handy in CI/CD scripts."
+  },
+  {
+    cat: "cicd",
+    q: "In GitHub Actions, how do you make job B run only after job A succeeds?",
+    opts: ["order: 2", "needs: [A]", "after: A", "depends_on: A"],
+    ans: 1,
+    exp: "needs: creates a dependency. Jobs without needs run in parallel."
+  },
+  {
+    cat: "cicd",
+    q: "What is the main security benefit of OIDC federation between CI and a cloud provider?",
+    opts: ["Faster builds", "No long-lived cloud credentials stored as CI secrets", "Free cloud usage", "Encrypted logs"],
+    ans: 1,
+    exp: "The CI job exchanges a short-lived signed token for temporary cloud credentials scoped to a role, so there are no static keys to leak or rotate."
+  },
+  {
+    cat: "cicd",
+    q: "'Build once, deploy many' means…",
+    opts: ["Rebuild the image for each environment", "Promote the same tested artifact through dev, staging and prod", "Deploy to many regions at once", "Only build on main"],
+    ans: 1,
+    exp: "Rebuilding per environment risks deploying something different from what you tested. Promote one immutable artifact (e.g. an image by digest)."
+  },
+  {
+    cat: "cicd",
+    q: "Which deployment strategy sends a small percentage of real traffic to the new version first?",
+    opts: ["Recreate", "Blue-green", "Canary", "Big bang"],
+    ans: 2,
+    exp: "Canary releases expose a small slice of users to the new version, watch the metrics, then increase traffic gradually, or roll back automatically."
+  },
+  {
+    cat: "cicd",
+    q: "Which GitHub Actions feature can require a human approval before a job runs?",
+    opts: ["Matrix", "Environments with required reviewers", "Artifacts", "Caching"],
+    ans: 1,
+    exp: "A job that targets an Environment with protection rules pauses until a required reviewer approves it."
+  },
+  {
+    cat: "cicd",
+    q: "What is GitOps?",
+    opts: ["Using Git hooks to run tests", "Declaring desired state in Git and having an in-cluster agent continuously reconcile to it", "Hosting CI on GitHub", "Storing secrets in Git"],
+    ans: 1,
+    exp: "With GitOps (e.g. Argo CD, Flux), Git is the source of truth. Agents pull changes and correct drift, and rollback is a git revert."
+  },
+  {
+    cat: "cicd",
+    q: "A flaky test should be…",
+    opts: ["Retried until green and ignored", "Deleted", "Fixed at the root cause, quarantined with an owner if needed", "Moved to production monitoring"],
+    ans: 2,
+    exp: "Flaky tests erode trust in CI. Track them, quarantine them visibly with an owner and a deadline, and fix the underlying cause (timing, shared state, network)."
+  },
+  {
+    cat: "cicd",
+    q: "Which of these is NOT one of the four DORA metrics?",
+    opts: ["Deployment frequency", "Lead time for changes", "Lines of code per day", "Change failure rate"],
+    ans: 2,
+    exp: "The four DORA metrics are deployment frequency, lead time for changes, change failure rate and time to restore service. Lines of code are not a performance measure."
+  },
+  {
+    cat: "iac",
+    q: "Which Terraform command shows changes without applying them?",
+    opts: ["terraform apply -dry", "terraform plan", "terraform show", "terraform validate"],
+    ans: 1,
+    exp: "plan computes the diff between configuration, state and real infrastructure, without making changes."
+  },
+  {
+    cat: "iac",
+    q: "Why prefer for_each over count for a set of named resources?",
+    opts: ["for_each is faster", "Removing an item with count shifts indexes and can destroy/recreate other resources", "count is deprecated", "for_each works without state"],
+    ans: 1,
+    exp: "for_each keys instances by a stable key, so adding or removing one item doesn't affect the others."
+  },
+  {
+    cat: "iac",
+    q: "What is configuration drift?",
+    opts: ["Terraform version upgrades", "Real infrastructure differs from what the code and state describe", "Slow terraform apply", "Module version pinning"],
+    ans: 1,
+    exp: "Drift usually comes from manual changes. Detect it with scheduled plans or terraform plan -refresh-only, then codify or revert."
+  },
+  {
+    cat: "iac",
+    q: "Since Terraform 1.5, what is the declarative way to bring an existing resource under management?",
+    opts: ["terraform taint", "An import block in configuration", "terraform state push", "terraform refresh"],
+    ans: 1,
+    exp: "import { to = ..., id = ... } blocks are planned and reviewed like any other change, and plan -generate-config-out can draft the resource code."
+  },
+  {
+    cat: "iac",
+    q: "Which tool is primarily for CONFIGURING existing servers (packages, files, services) over SSH?",
+    opts: ["Terraform", "Ansible", "Packer", "CloudFormation"],
+    ans: 1,
+    exp: "Ansible is agentless configuration management. Terraform focuses on provisioning and lifecycle; Packer builds machine images."
+  },
+  {
+    cat: "iac",
+    q: "What does an Ansible task being 'idempotent' mean?",
+    opts: ["It runs in parallel", "Running it again makes no further changes if the system is already in the desired state", "It never fails", "It runs only once ever"],
+    ans: 1,
+    exp: "Idempotent tasks describe desired state, so re-running a playbook is safe and converges instead of repeating actions."
+  },
+  {
+    cat: "iac",
+    q: "OpenTofu is…",
+    opts: ["A Terraform GUI", "An open-source fork of Terraform under the Linux Foundation", "A Kubernetes operator", "An AWS service"],
+    ans: 1,
+    exp: "OpenTofu was forked after Terraform moved to the BSL licence. It stays largely compatible with Terraform providers and modules."
+  },
+  {
+    cat: "iac",
+    q: "Where should a team keep Terraform state?",
+    opts: ["In the Git repo", "On each engineer's laptop", "In a remote backend with locking and encryption (e.g. S3)", "In a Docker image"],
+    ans: 2,
+    exp: "Remote state with locking prevents concurrent applies corrupting it. State can contain secrets, so encrypt it and restrict access."
+  },
+  {
+    cat: "monitoring",
+    q: "Which Prometheus metric type only ever increases (until a restart)?",
+    opts: ["Gauge", "Counter", "Histogram", "Summary"],
+    ans: 1,
+    exp: "Counters only go up, so query them with rate() or increase(). Gauges go up and down (e.g. memory in use)."
+  },
+  {
+    cat: "monitoring",
+    q: "Which PromQL function gives the per-second average increase of a counter over a window?",
+    opts: ["sum()", "rate()", "avg_over_time()", "delta()"],
+    ans: 1,
+    exp: "rate(http_requests_total[5m]) gives requests per second averaged over 5 minutes, and handles counter resets."
+  },
+  {
+    cat: "monitoring",
+    q: "What are the 'three pillars' of observability?",
+    opts: ["CPU, memory, disk", "Metrics, logs and traces", "Alerts, dashboards, runbooks", "Dev, Ops, Sec"],
+    ans: 1,
+    exp: "Metrics show trends, logs give event detail, and traces follow requests across services. OpenTelemetry standardises all three."
+  },
+  {
+    cat: "monitoring",
+    q: "The USE method focuses on which signals for each resource?",
+    opts: ["Users, Sessions, Errors", "Utilisation, Saturation, Errors", "Uptime, Speed, Efficiency", "Usage, Scaling, Events"],
+    ans: 1,
+    exp: "USE (Brendan Gregg) is for resources like CPU, disks and network. RED is for request-driven services."
+  },
+  {
+    cat: "monitoring",
+    q: "Why use percentiles (p95/p99) for latency rather than the average?",
+    opts: ["They are cheaper to compute", "Averages hide the slow tail that many users actually experience", "Prometheus cannot compute averages", "Percentiles are always lower"],
+    ans: 1,
+    exp: "A small fraction of very slow requests barely moves the average but hurts real users. Percentiles expose the tail."
+  },
+  {
+    cat: "monitoring",
+    q: "Which tool is commonly used to aggregate logs in the Grafana stack?",
+    opts: ["Tempo", "Mimir", "Loki", "Alloy only"],
+    ans: 2,
+    exp: "Loki stores logs indexed by labels (not full text) and is queried with LogQL. Tempo stores traces; Mimir stores long-term metrics."
+  },
+  {
+    cat: "monitoring",
+    q: "What is OpenTelemetry?",
+    opts: ["A paid APM product", "A vendor-neutral standard and SDKs for collecting traces, metrics and logs", "A Prometheus exporter", "A Kubernetes dashboard"],
+    ans: 1,
+    exp: "OTel lets you instrument once and send telemetry to any backend through the OpenTelemetry Collector."
+  },
+  {
+    cat: "culture",
+    q: "If your SLO is 99.9% availability over 30 days, roughly how much downtime does the error budget allow?",
+    opts: ["4.3 minutes", "43 minutes", "7.2 hours", "3.6 days"],
+    ans: 1,
+    exp: "0.1% of 30 days (43,200 minutes) ≈ 43 minutes."
+  },
+  {
+    cat: "culture",
+    q: "What should typically happen when a team exhausts its error budget?",
+    opts: ["Nothing", "Prioritise reliability work and slow risky releases until the budget recovers", "Raise the SLO", "Fire the on-call engineer"],
+    ans: 1,
+    exp: "An agreed error budget policy turns reliability into a data-driven trade-off with feature velocity."
+  },
+  {
+    cat: "culture",
+    q: "A 'blameless' postmortem focuses on…",
+    opts: ["Finding who caused the incident", "How the system and process allowed the failure, and what to change", "Avoiding documentation", "Punishing repeated mistakes"],
+    ans: 1,
+    exp: "Blamelessness encourages honest reporting, which is needed to find systemic fixes rather than scapegoats."
+  },
+  {
+    cat: "culture",
+    q: "What is 'toil' in SRE terms?",
+    opts: ["Any engineering work", "Manual, repetitive, automatable work with no enduring value that scales with service size", "On-call shifts", "Writing documentation"],
+    ans: 1,
+    exp: "Google SRE aims to cap toil (e.g. at 50%) and spend the rest of the time engineering it away."
+  },
+  {
+    cat: "culture",
+    q: "An SLA differs from an SLO because an SLA…",
+    opts: ["Is stricter than the SLO", "Is a contractual promise to customers with consequences", "Is measured internally only", "Only applies to latency"],
+    ans: 1,
+    exp: "SLAs are external contracts. SLOs are internal targets, set stricter than the SLA to give early warning."
+  },
+  {
+    cat: "culture",
+    q: "Which incident role coordinates the response rather than fixing things hands-on?",
+    opts: ["Scribe", "Incident Commander", "Subject-matter expert", "Customer"],
+    ans: 1,
+    exp: "The Incident Commander coordinates people, decisions and communication, so responders can focus on mitigation."
+  },
+  {
+    cat: "culture",
+    q: "What is 'burn rate' in SLO alerting?",
+    opts: ["Server CPU temperature", "How fast the error budget is being consumed relative to the SLO window", "Cost per hour of cloud resources", "Deploys per day"],
+    ans: 1,
+    exp: "A burn rate of 1 uses exactly the whole budget over the window. Multi-window burn-rate alerts page on fast burns and ticket slow ones."
+  },
+  {
+    cat: "security",
+    q: "What does SAST analyse?",
+    opts: ["A running application from the outside", "Source code without executing it", "Network traffic", "Cloud IAM policies only"],
+    ans: 1,
+    exp: "Static Application Security Testing (e.g. Semgrep, CodeQL) scans code for vulnerable patterns. DAST tests a running app."
+  },
+  {
+    cat: "security",
+    q: "What is an SBOM?",
+    opts: ["A security budget", "A Software Bill of Materials listing all components in an artifact", "A secrets manager", "A firewall rule set"],
+    ans: 1,
+    exp: "SBOMs (SPDX, CycloneDX) let you quickly check whether you are affected by a newly disclosed vulnerability."
+  },
+  {
+    cat: "security",
+    q: "What is the FIRST thing to do after accidentally pushing a cloud access key to a public repo?",
+    opts: ["Delete the commit", "Make the repo private", "Revoke/rotate the key immediately", "Open a ticket for next sprint"],
+    ans: 2,
+    exp: "Assume it is already compromised (bots scan GitHub in seconds). Revoke first, then clean history and investigate usage."
+  },
+  {
+    cat: "security",
+    q: "Cosign (Sigstore) is used to…",
+    opts: ["Scan images for CVEs", "Sign and verify container images and other artifacts", "Encrypt Kubernetes secrets", "Manage TLS certificates"],
+    ans: 1,
+    exp: "Signed images plus admission policies (e.g. Kyverno) ensure only images built by your pipeline run in the cluster."
+  },
+  {
+    cat: "security",
+    q: "Kubernetes Secrets are, by default, stored as…",
+    opts: ["Strongly encrypted values", "Base64-encoded values (encryption at rest must be enabled separately)", "Hashed values", "Plain text in ConfigMaps"],
+    ans: 1,
+    exp: "Base64 is encoding, not encryption. Enable etcd encryption at rest, restrict RBAC, and consider External Secrets with a real secrets manager."
+  },
+  {
+    cat: "security",
+    q: "Which principle means granting only the permissions strictly required?",
+    opts: ["Defence in depth", "Least privilege", "Zero downtime", "Shift left"],
+    ans: 1,
+    exp: "Least privilege limits the blast radius if credentials or workloads are compromised."
+  },
+  {
+    cat: "security",
+    q: "Which tool detects secrets (API keys, tokens) committed to Git history?",
+    opts: ["Trivy image", "Gitleaks", "Helm lint", "kube-bench"],
+    ans: 1,
+    exp: "Gitleaks (and GitHub secret scanning with push protection) find leaked credentials in commits."
+  },
+  {
+    cat: "linux",
+    q: "What does chmod 640 file.txt set?",
+    opts: ["Owner rw-, group r--, others ---", "Owner rwx, group r--, others ---", "Owner rw-, group rw-, others r--", "Everyone read-only"],
+    ans: 0,
+    exp: "6 = rw- (4+2), 4 = r--, 0 = ---. So the owner can read and write, the group can read, and others get nothing."
+  },
+  {
+    cat: "linux",
+    q: "Which command shows which process is listening on TCP port 8080?",
+    opts: ["ps aux | grep 8080", "sudo ss -tlnp | grep :8080", "netstat -r", "lsblk"],
+    ans: 1,
+    exp: "ss -t (TCP) -l (listening) -n (numeric) -p (process) shows the listening socket and its owning process."
+  },
+  {
+    cat: "linux",
+    q: "df shows a disk 100% full but du can't find the files. What is a likely cause?",
+    opts: ["Corrupted filesystem", "A deleted file still held open by a running process", "Too many users", "Swap is full"],
+    ans: 1,
+    exp: "Space isn't released until the file handle is closed. Use lsof +L1 to find it, then restart the process."
+  },
+  {
+    cat: "linux",
+    q: "Which command follows the logs of a systemd service named myapp?",
+    opts: ["tail -f myapp", "journalctl -u myapp -f", "systemctl logs myapp", "dmesg myapp"],
+    ans: 1,
+    exp: "journalctl -u <unit> filters the journal by unit, and -f follows new entries."
+  },
+  {
+    cat: "linux",
+    q: "What does 'set -o pipefail' change in Bash?",
+    opts: ["Pipes run in parallel", "A pipeline fails if any command in it fails, not just the last", "Pipes are disabled", "Output is written to a file"],
+    ans: 1,
+    exp: "Without pipefail, `failing_cmd | grep x` succeeds whenever grep succeeds, which hides failures in scripts."
+  },
+  {
+    cat: "linux",
+    q: "A load average of 8.0 on a 4-core machine generally means…",
+    opts: ["The system is idle", "Roughly twice as much runnable or waiting work as cores; tasks are queuing", "8% CPU usage", "8 users logged in"],
+    ans: 1,
+    exp: "Compare load to the core count (nproc). Remember that load includes tasks waiting on I/O, not just CPU."
+  },
+  {
+    cat: "linux",
+    q: "Which signal does 'kill <pid>' send by default?",
+    opts: ["SIGKILL (9)", "SIGTERM (15)", "SIGHUP (1)", "SIGINT (2)"],
+    ans: 1,
+    exp: "SIGTERM asks the process to exit gracefully. SIGKILL (-9) can't be caught and should be a last resort."
+  },
+  {
+    cat: "linux",
+    q: "Which file configures which DNS servers a typical Linux host uses?",
+    opts: ["/etc/hosts", "/etc/resolv.conf", "/etc/dns.conf", "/etc/network"],
+    ans: 1,
+    exp: "/etc/resolv.conf lists nameservers and search domains (often managed by systemd-resolved). /etc/hosts holds static name-to-IP overrides."
+  },
+  {
+    cat: "networking",
+    q: "How many IP addresses are in a /24 network?",
+    opts: ["24", "128", "256", "65,536"],
+    ans: 2,
+    exp: "2^(32−24) = 256 addresses. Cloud providers reserve a few in each subnet."
+  },
+  {
+    cat: "networking",
+    q: "'Connection refused' (as opposed to a timeout) most likely means…",
+    opts: ["A firewall dropped the packets", "The host is reachable but nothing is listening on that port", "DNS failed", "TLS failed"],
+    ans: 1,
+    exp: "A refusal is an active TCP RST from the host. Timeouts usually mean packets are silently dropped by a firewall or security group."
+  },
+  {
+    cat: "networking",
+    q: "Which DNS record type maps a name to an IPv4 address?",
+    opts: ["CNAME", "MX", "A", "TXT"],
+    ans: 2,
+    exp: "A records map to IPv4, and AAAA to IPv6. CNAME aliases one name to another."
+  },
+  {
+    cat: "networking",
+    q: "Which protocol does DNS primarily use for normal queries?",
+    opts: ["TCP 80", "UDP 53", "TCP 443", "UDP 123"],
+    ans: 1,
+    exp: "DNS uses UDP port 53 for most queries and falls back to TCP 53 for large responses and zone transfers."
+  },
+  {
+    cat: "networking",
+    q: "An L7 (application) load balancer can do which of these that an L4 one cannot?",
+    opts: ["Forward TCP connections", "Route requests by HTTP path or host header", "Balance UDP traffic", "Preserve client IPs"],
+    ans: 1,
+    exp: "L7 load balancers understand HTTP, so they can route by host and path, terminate TLS and add headers."
+  },
+  {
+    cat: "networking",
+    q: "A load balancer returns HTTP 503. A common cause is…",
+    opts: ["Bad client request", "No healthy backends available (e.g. health checks failing)", "DNS cache", "Expired client cookie"],
+    ans: 1,
+    exp: "503 Service Unavailable from a load balancer usually means every target is failing health checks or none are registered."
+  },
+  {
+    cat: "networking",
+    q: "Which device lets instances in a private subnet make outbound internet connections without being reachable from outside?",
+    opts: ["Internet Gateway", "NAT Gateway", "VPC peering", "Route 53"],
+    ans: 1,
+    exp: "A NAT gateway translates outbound connections and doesn't accept unsolicited inbound traffic."
+  },
+  {
+    cat: "networking",
+    q: "What does a TLS certificate's SAN (Subject Alternative Name) list?",
+    opts: ["Allowed client IPs", "The hostnames the certificate is valid for", "The CA's private key", "Supported cipher suites"],
+    ans: 1,
+    exp: "Clients check that the hostname they connect to appears in the SAN list. A mismatch gives 'certificate is valid for X, not Y'."
+  },
+  {
+    cat: "git",
+    q: "What does 'git rebase main' do on your feature branch?",
+    opts: ["Merges main with a merge commit", "Replays your branch's commits on top of the latest main, rewriting their hashes", "Deletes main", "Pushes to main"],
+    ans: 1,
+    exp: "Rebase gives a linear history but rewrites commits, so avoid rebasing branches other people already use."
+  },
+  {
+    cat: "git",
+    q: "Which command safely undoes a commit that has already been pushed to a shared branch?",
+    opts: ["git reset --hard HEAD~1 &amp;&amp; git push -f", "git revert &lt;commit&gt;", "git checkout &lt;commit&gt;", "git stash"],
+    ans: 1,
+    exp: "git revert creates a new commit that undoes the change without rewriting shared history."
+  },
+  {
+    cat: "git",
+    q: "What is trunk-based development?",
+    opts: ["Long-lived feature branches merged monthly", "Small, frequent merges to a single main branch, often with feature flags", "Using SVN", "Only one developer per repo"],
+    ans: 1,
+    exp: "Trunk-based development keeps integration continuous, which DORA research links to higher delivery performance."
+  },
+  {
+    cat: "git",
+    q: "'git fetch' differs from 'git pull' because fetch…",
+    opts: ["Deletes local changes", "Downloads remote changes without merging them into your branch", "Only works with GitHub", "Pushes your commits"],
+    ans: 1,
+    exp: "pull = fetch + merge (or rebase). fetch only updates remote-tracking branches like origin/main."
+  },
+  {
+    cat: "git",
+    q: "What does a branch protection rule on main typically enforce?",
+    opts: ["Faster clones", "Required reviews and passing status checks before merging", "Automatic deletion of branches", "Larger file limits"],
+    ans: 1,
+    exp: "Branch protection (or rulesets) blocks direct pushes and requires PR reviews and green CI before merging."
+  },
+  {
+    cat: "cloud",
+    q: "Why deploy across multiple Availability Zones?",
+    opts: ["Lower latency to all users worldwide", "To survive the failure of a single data centre in a region", "It is cheaper", "It is required for S3"],
+    ans: 1,
+    exp: "AZs are isolated failure domains within a region. Multi-AZ designs keep running if one AZ fails."
+  },
+  {
+    cat: "cloud",
+    q: "In AWS, which is stateful: security groups or network ACLs?",
+    opts: ["Network ACLs", "Security groups", "Both", "Neither"],
+    ans: 1,
+    exp: "Security groups are stateful: return traffic is allowed automatically. NACLs are stateless and need rules in both directions."
+  },
+  {
+    cat: "cloud",
+    q: "How should an application on EC2 get AWS credentials?",
+    opts: ["Hardcode access keys in the app", "An IAM role via the instance profile", "Store keys in the AMI", "Use the root account"],
+    ans: 1,
+    exp: "Instance profiles provide automatically rotated temporary credentials. Never embed long-lived keys."
+  },
+  {
+    cat: "cloud",
+    q: "Which AWS service records who made which API call and when?",
+    opts: ["CloudWatch Metrics", "CloudTrail", "Config", "Inspector"],
+    ans: 1,
+    exp: "CloudTrail is the audit log of API activity. Enable it in all regions and protect the log bucket."
+  },
+  {
+    cat: "cloud",
+    q: "Which purchasing option is best for interruptible batch jobs at a large discount?",
+    opts: ["On-Demand", "Spot Instances", "Dedicated Hosts", "Reserved Instances for 3 years"],
+    ans: 1,
+    exp: "Spot capacity can be reclaimed at short notice but costs far less, which makes it ideal for stateless, fault-tolerant work."
+  },
+  {
+    cat: "cloud",
+    q: "What is a VPC endpoint (gateway or interface) used for?",
+    opts: ["Public website hosting", "Private connectivity to AWS services without traversing the internet or NAT", "Peering two accounts", "DNS registration"],
+    ans: 1,
+    exp: "Endpoints keep traffic to services like S3 or ECR private and can greatly reduce NAT gateway charges."
+  },
+  {
+    cat: "cloud",
+    q: "Which managed Kubernetes service does Google Cloud offer?",
+    opts: ["EKS", "AKS", "GKE", "OKE"],
+    ans: 2,
+    exp: "GKE is Google Kubernetes Engine. EKS is AWS, AKS is Azure and OKE is Oracle."
+  }
 ];
 
 /* ═══════════════════════════════════════════
