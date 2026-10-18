@@ -272,6 +272,24 @@
       opacity: 0.75;
     }
 
+    .skill-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      padding: 0 1.25rem 0.9rem;
+    }
+    .skill-links a {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      padding: 0.2rem 0.55rem;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all var(--transition);
+    }
+    .skill-links a:hover { border-color: var(--accent-green); color: var(--accent-green); }
+
     .skill-card-footer {
       padding: 0.75rem 1.25rem;
       border-top: 1px solid var(--border);
@@ -530,7 +548,7 @@
         <div class="summary-stat-label">Skill Areas</div>
       </div>
       <div class="summary-stat">
-        <div class="summary-stat-val">80+</div>
+        <div class="summary-stat-val">95</div>
         <div class="summary-stat-label">Individual Skills</div>
       </div>
       <div class="summary-stat">
@@ -586,6 +604,7 @@
               <li class="skill-item" data-skill="linux-6"><span class="skill-checkbox"></span>SSH, SCP, and secure key management</li>
             </ul>
           </div>
+          <div class="skill-links" aria-label="Learn this"><a href="blog-linux-for-devops.html">📖 Guide</a><a href="projects.html#linux-automation">🧪 Project 01</a><a href="cheatsheets.html#linux">📋 Cheatsheet</a><a href="interview.html#linux">🎤 Interview</a></div>
           <div class="skill-card-footer">
             <div class="skill-progress-mini"><div class="skill-progress-fill" style="width:0%"></div></div>
             <span class="skill-progress-txt">0/6</span>
@@ -612,6 +631,7 @@
               <li class="skill-item" data-skill="net-5"><span class="skill-checkbox"></span>Firewalls, VPNs, security groups</li>
             </ul>
           </div>
+          <div class="skill-links" aria-label="Learn this"><a href="blog-networking-fundamentals.html">📖 Guide</a><a href="cheatsheets.html#networking">📋 Cheatsheet</a><a href="troubleshooting.html#linux">🚑 Playbooks</a><a href="interview.html#networking">🎤 Interview</a></div>
           <div class="skill-card-footer">
             <div class="skill-progress-mini"><div class="skill-progress-fill" style="width:0%"></div></div>
             <span class="skill-progress-txt">0/5</span>
@@ -639,6 +659,7 @@
               <li class="skill-item" data-skill="git-6"><span class="skill-checkbox"></span>Semantic versioning & tagging</li>
             </ul>
           </div>
+          <div class="skill-links" aria-label="Learn this"><a href="cheatsheets.html#git">📋 Cheatsheet</a><a href="interview.html#git">🎤 Interview</a></div>
           <div class="skill-card-footer">
             <div class="skill-progress-mini"><div class="skill-progress-fill" style="width:0%"></div></div>
             <span class="skill-progress-txt">0/6</span>
@@ -665,6 +686,7 @@
               <li class="skill-item" data-skill="code-5"><span class="skill-checkbox"></span>Makefiles & Taskfiles for automation</li>
             </ul>
           </div>
+          <div class="skill-links" aria-label="Learn this"><a href="cheatsheets.html#bash">📋 Bash cheatsheet</a><a href="blog-linux-for-devops.html">📖 Linux & Bash guide</a></div>
           <div class="skill-card-footer">
             <div class="skill-progress-mini"><div class="skill-progress-fill" style="width:0%"></div></div>
             <span class="skill-progress-txt">0/5</span>
@@ -709,6 +731,7 @@
               <li class="skill-item" data-skill="c-6"><span class="skill-checkbox"></span>Container security scanning (Trivy, Snyk)</li>
             </ul>
           </div>
+          <div class="skill-links" aria-label="Learn this"><a href="blog-docker-guide.html">📖 Guide</a><a href="projects.html#containerise-app">🧪 Project 02</a><a href="cheatsheets.html#docker">📋 Cheatsheet</a><a href="interview.html#docker">🎤 Interview</a></div>
           <div class="skill-card-footer">
             <div class="skill-progress-mini"><div class="skill-progress-fill" style="width:0%"></div></div>
             <span class="skill-progress-txt">0/6</span>
@@ -736,6 +759,7 @@
               <li class="skill-item" data-skill="ci-6"><span class="skill-checkbox"></span>Deployment gates & approval workflows</li>
             </ul>
           </div>
+          <div class="skill-links" aria-label="Learn this"><a href="blog-cicd-github-actions.html">📖 Guide</a><a href="projects.html#cicd-pipeline">🧪 Project 03</a><a href="cheatsheets.html#github-actions">📋 Cheatsheet</a><a href="interview.html#cicd">🎤 Interview</a></div>
           <div class="skill-card-footer">
             <div class="skill-progress-mini"><div class="skill-progress-fill" style="width:0%"></div></div>
             <span class="skill-progress-txt">0/6</span>
@@ -762,6 +786,7 @@
               <li class="skill-item" data-skill="iac-5"><span class="skill-checkbox"></span>Drift detection & remediation</li>
             </ul>
           </div>
+          <div class="skill-links" aria-label="Learn this"><a href="blog-terraform-aws.html">📖 Guide</a><a href="projects.html#terraform-aws">🧪 Project 04</a><a href="cheatsheets.html#terraform">📋 Cheatsheet</a><a href="interview.html#iac">🎤 Interview</a></div>
           <div class="skill-card-footer">
             <div class="skill-progress-mini"><div class="skill-progress-fill" style="width:0%"></div></div>
             <span class="skill-progress-txt">0/5</span>
@@ -789,6 +814,7 @@
               <li class="skill-item" data-skill="cl-6"><span class="skill-checkbox"></span>Cloud certifications (AWS SAA, GCP ACE)</li>
             </ul>
           </div>
+          <div class="skill-links" aria-label="Learn this"><a href="blog-aws-core-services.html">📖 Guide</a><a href="cheatsheets.html#aws">📋 AWS CLI</a><a href="interview.html#cloud">🎤 Interview</a></div>
           <div class="skill-card-footer">
             <div class="skill-progress-mini"><div class="skill-progress-fill" style="width:0%"></div></div>
             <span class="skill-progress-txt">0/6</span>
@@ -816,6 +842,7 @@
               <li class="skill-item" data-skill="mon-6"><span class="skill-checkbox"></span>On-call, runbooks & incident response</li>
             </ul>
           </div>
+          <div class="skill-links" aria-label="Learn this"><a href="blog-prometheus-grafana.html">📖 Guide</a><a href="projects.html#observability">🧪 Project 06</a><a href="cheatsheets.html#prometheus">📋 PromQL</a><a href="interview.html#observability">🎤 Interview</a></div>
           <div class="skill-card-footer">
             <div class="skill-progress-mini"><div class="skill-progress-fill" style="width:0%"></div></div>
             <span class="skill-progress-txt">0/6</span>
@@ -861,6 +888,7 @@
               <li class="skill-item" data-skill="k-7"><span class="skill-checkbox"></span>CKA/CKAD certification</li>
             </ul>
           </div>
+          <div class="skill-links" aria-label="Learn this"><a href="blog-k8s-beginners.html">📖 Guide</a><a href="projects.html#k8s-helm">🧪 Project 05</a><a href="cheatsheets.html#kubernetes">📋 Cheatsheet</a><a href="troubleshooting.html#kubernetes">🚑 Playbooks</a><a href="interview.html#kubernetes">🎤 Interview</a></div>
           <div class="skill-card-footer">
             <div class="skill-progress-mini"><div class="skill-progress-fill" style="width:0%"></div></div>
             <span class="skill-progress-txt">0/7</span>
@@ -887,6 +915,7 @@
               <li class="skill-item" data-skill="go-5"><span class="skill-checkbox"></span>Image automation & update policies</li>
             </ul>
           </div>
+          <div class="skill-links" aria-label="Learn this"><a href="blog-gitops-argocd.html">📖 Guide</a><a href="projects.html#gitops-argocd">🧪 Project 07</a><a href="cheatsheets.html#argocd">📋 Argo CD</a></div>
           <div class="skill-card-footer">
             <div class="skill-progress-mini"><div class="skill-progress-fill" style="width:0%"></div></div>
             <span class="skill-progress-txt">0/5</span>
@@ -914,6 +943,7 @@
               <li class="skill-item" data-skill="sec-6"><span class="skill-checkbox"></span>Zero-trust networking & mTLS</li>
             </ul>
           </div>
+          <div class="skill-links" aria-label="Learn this"><a href="blog-devsecops-pipeline.html">📖 Guide</a><a href="projects.html#platform-capstone">🧪 Capstone</a><a href="interview.html#security">🎤 Interview</a></div>
           <div class="skill-card-footer">
             <div class="skill-progress-mini"><div class="skill-progress-fill" style="width:0%"></div></div>
             <span class="skill-progress-txt">0/6</span>
@@ -940,6 +970,7 @@
               <li class="skill-item" data-skill="ms-5"><span class="skill-checkbox"></span>API gateway patterns & rate limiting</li>
             </ul>
           </div>
+          <div class="skill-links" aria-label="Learn this"><a href="tools.html">🛠 Service mesh tools</a><a href="blog-networking-fundamentals.html">📖 Networking guide</a></div>
           <div class="skill-card-footer">
             <div class="skill-progress-mini"><div class="skill-progress-fill" style="width:0%"></div></div>
             <span class="skill-progress-txt">0/5</span>
@@ -983,6 +1014,7 @@
               <li class="skill-item" data-skill="pe-5"><span class="skill-checkbox"></span>Golden path templates & paved roads</li>
             </ul>
           </div>
+          <div class="skill-links" aria-label="Learn this"><a href="projects.html#platform-capstone">🧪 Capstone</a><a href="blog-gitops-argocd.html">📖 GitOps guide</a></div>
           <div class="skill-card-footer">
             <div class="skill-progress-mini"><div class="skill-progress-fill" style="width:0%"></div></div>
             <span class="skill-progress-txt">0/5</span>
@@ -1010,6 +1042,7 @@
               <li class="skill-item" data-skill="sre-6"><span class="skill-checkbox"></span>Toil measurement & elimination</li>
             </ul>
           </div>
+          <div class="skill-links" aria-label="Learn this"><a href="blog-sre-fundamentals.html">📖 Guide</a><a href="blog-dora-metrics.html">📖 DORA metrics</a><a href="troubleshooting.html">🚑 Playbooks</a><a href="interview.html#observability">🎤 Interview</a></div>
           <div class="skill-card-footer">
             <div class="skill-progress-mini"><div class="skill-progress-fill" style="width:0%"></div></div>
             <span class="skill-progress-txt">0/6</span>
@@ -1036,6 +1069,7 @@
               <li class="skill-item" data-skill="fo-5"><span class="skill-checkbox"></span>FinOps Foundation certification</li>
             </ul>
           </div>
+          <div class="skill-links" aria-label="Learn this"><a href="blog-aws-core-services.html#cost-habits-that-matter">📖 AWS cost habits</a></div>
           <div class="skill-card-footer">
             <div class="skill-progress-mini"><div class="skill-progress-fill" style="width:0%"></div></div>
             <span class="skill-progress-txt">0/5</span>
@@ -1062,6 +1096,7 @@
               <li class="skill-item" data-skill="ai-5"><span class="skill-checkbox"></span>GitHub Copilot & AI code review in CI</li>
             </ul>
           </div>
+          <div class="skill-links" aria-label="Learn this"><a href="blog-ai-in-devops.html">📖 AI in DevOps</a><a href="aiops.html">🧠 AIOps</a></div>
           <div class="skill-card-footer">
             <div class="skill-progress-mini"><div class="skill-progress-fill" style="width:0%"></div></div>
             <span class="skill-progress-txt">0/5</span>
@@ -1078,7 +1113,7 @@
       <div class="cta-banner" style="text-align:center; justify-content:center; flex-direction:column;">
         <div style="font-size:3rem; margin-bottom:1rem;">🎉</div>
         <h2>Roadmap Complete! <span class="text-green">You're a DevOps Pro.</span></h2>
-        <p style="margin:0.75rem auto 2rem; max-width:480px;">You've worked through all 4 phases and 80+ skills. Time to contribute back to the community — write, speak, open source.</p>
+        <p style="margin:0.75rem auto 2rem; max-width:480px;">You've worked through all 4 phases and 95 skills. Time to contribute back to the community — write, speak, open source.</p>
         <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; position:relative; z-index:1;">
           <a href="contact.html" class="btn btn-primary">Get In Touch</a>
           <a href="tools.html"   class="btn btn-secondary">Explore Tools</a>
