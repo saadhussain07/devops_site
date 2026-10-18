@@ -63,11 +63,22 @@
   --terminal-bar:  #f0f0f0;
   --terminal-text: #333333;
   --terminal-out:  #666666;
+
+  /* Accent palette shared by page-level styles */
+  --accent-green:  #16a34a;
+  --accent-cyan:   #0891b2;
+  --accent-orange: #ea580c;
+  --accent-purple: #7c3aed;
 }
 
 /* ── Dark Mode Overrides ───────────────────────────────────── */
 body.dark-mode {
   color-scheme: dark;
+
+  --accent-green:  #2dff7a;
+  --accent-cyan:   #00e5ff;
+  --accent-orange: #ff5c1a;
+  --accent-purple: #8b5cf6;
 
   --bg-void:        #0a0a0a;
   --bg-base:        #141414;
