@@ -27,7 +27,7 @@
       border: 1px solid var(--border);
       color: var(--text-secondary);
       background: transparent;
-      cursor: default;
+      cursor: pointer;
       transition: all var(--transition);
     }
 
@@ -42,6 +42,33 @@
       color: var(--accent-green);
       background: rgba(45,255,122,0.08);
     }
+
+    .tool-more {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--accent-green);
+      text-decoration: none;
+    }
+    .tool-more:hover { text-decoration: underline; }
+    .tool-tag.cat-security { background: rgba(239,68,68,0.08); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
+    .tool-tag.cat-network  { background: rgba(14,165,233,0.08); color: #0ea5e9; border: 1px solid rgba(14,165,233,0.2); }
+    .tl-podman  { background: rgba(137,44,160,0.12); border-color: rgba(137,44,160,0.35); color: #b65cd0; }
+    .tl-argo    { background: rgba(239,123,77,0.12); border-color: rgba(239,123,77,0.35); color: #ef7b4d; }
+    .tl-flux    { background: rgba(50,108,229,0.12); border-color: rgba(50,108,229,0.35); color: #5b8def; }
+    .tl-pulumi  { background: rgba(140,80,220,0.12); border-color: rgba(140,80,220,0.35); color: #a77be6; }
+    .tl-otel    { background: rgba(245,168,0,0.12);  border-color: rgba(245,168,0,0.35);  color: #e0a000; }
+    .tl-trivy   { background: rgba(24,144,255,0.12); border-color: rgba(24,144,255,0.35); color: #3aa0ff; }
+    .tl-sonar   { background: rgba(77,161,230,0.12); border-color: rgba(77,161,230,0.35); color: #4da1e6; }
+    .tl-kyverno { background: rgba(255,130,40,0.12); border-color: rgba(255,130,40,0.35); color: #ff8a3d; }
+    .tl-aws     { background: rgba(255,153,0,0.12);  border-color: rgba(255,153,0,0.35);  color: #ff9900; }
+    .tl-azure   { background: rgba(0,120,212,0.12);  border-color: rgba(0,120,212,0.35);  color: #2b8be0; }
+    .tl-gcp     { background: rgba(66,133,244,0.12); border-color: rgba(66,133,244,0.35); color: #4285f4; }
+    .tl-nginx   { background: rgba(0,150,57,0.12);   border-color: rgba(0,150,57,0.35);   color: #1fb05a; }
+    .tl-istio   { background: rgba(70,107,176,0.12); border-color: rgba(70,107,176,0.35); color: #6c8fd6; }
+    .tl-cilium  { background: rgba(240,180,30,0.12); border-color: rgba(240,180,30,0.35); color: #e3a81c; }
+    .tool-logo { font-size: 0.7rem; }
 
     .tools-section-label {
       display: flex;
@@ -200,23 +227,25 @@
     <span class="tag">// toolchain</span>
     <h1>The DevOps <span class="text-green">Toolbox</span></h1>
     <p>
-      12 essential tools across containerisation, CI/CD, IaC, version control,
-      monitoring, and cloud — used by the world's top engineering teams.
+      35+ essential tools across containers, CI/CD, GitOps, IaC, version control,
+      observability, security, cloud and networking, with links to guides for each.
     </p>
   </div>
 </header>
 
-<!-- ─── Category Filter (visual only) ──────────────────────── -->
+<!-- ─── Category Filter ─────────────────────────────────────── -->
 <section style="padding:2.5rem 0; border-bottom:1px solid var(--border);">
   <div class="container">
-    <div class="tools-filter" role="list" aria-label="Tool categories">
-      <span class="filter-chip all" role="listitem">All Tools</span>
-      <span class="filter-chip" role="listitem">Container</span>
-      <span class="filter-chip" role="listitem">CI/CD</span>
-      <span class="filter-chip" role="listitem">IaC</span>
-      <span class="filter-chip" role="listitem">VCS</span>
-      <span class="filter-chip" role="listitem">Monitoring</span>
-      <span class="filter-chip" role="listitem">Cloud</span>
+    <div class="tools-filter" role="group" aria-label="Filter tools by category">
+      <button type="button" class="filter-chip all" data-filter="all">All Tools</button>
+      <button type="button" class="filter-chip" data-filter="container">Container</button>
+      <button type="button" class="filter-chip" data-filter="cicd">CI/CD &amp; GitOps</button>
+      <button type="button" class="filter-chip" data-filter="iac">IaC</button>
+      <button type="button" class="filter-chip" data-filter="vcs">VCS</button>
+      <button type="button" class="filter-chip" data-filter="monitoring">Monitoring</button>
+      <button type="button" class="filter-chip" data-filter="security">Security</button>
+      <button type="button" class="filter-chip" data-filter="cloud">Cloud</button>
+      <button type="button" class="filter-chip" data-filter="networking">Networking</button>
     </div>
   </div>
 </section>
@@ -224,6 +253,7 @@
 <!-- ─── Container & Orchestration ──────────────────────────── -->
 <section class="section" aria-labelledby="container-heading">
   <div class="container">
+    <div class="tools-group" data-cat="container">
     <div class="tools-section-label">
       <h3 id="container-heading">Container &amp; Orchestration</h3>
     </div>
@@ -323,8 +353,61 @@
         </div>
       </div>
     </div>
+    </div>
+
+    <!-- ─── More containers ─────────────────────────────────── -->
+    <div class="tools-group" data-cat="container">
+    <div class="tools-section-label" style="margin-top:3.5rem;">
+      <h3>More Container Tools</h3>
+    </div>
+
+    <div class="grid-3 stagger">
+      <div class="card tool-card">
+        <div class="tool-logo tl-podman">Pod</div>
+        <span class="tool-tag cat-container">Container</span>
+        <h3 style="margin-top:0.5rem;">Podman</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          A daemonless, rootless container engine with a Docker-compatible CLI (<span class="code-badge">alias docker=podman</span> mostly just works). It can generate Kubernetes YAML from running pods.
+        </p>
+        <ul class="tool-features">
+          <li>Rootless by default, so it is safer on shared hosts</li>
+          <li>No long-running daemon</li>
+          <li><code>podman generate kube</code> / <code>play kube</code></li>
+        </ul>
+      </div>
+      <div class="card tool-card">
+        <div class="tool-logo tl-k8s">kind</div>
+        <span class="tool-tag cat-container">Local K8s</span>
+        <h3 style="margin-top:0.5rem;">kind / minikube</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          Run real Kubernetes clusters on your laptop. <strong>kind</strong> runs nodes as Docker containers, which makes it ideal for CI. <strong>minikube</strong> adds add-ons and a dashboard for learning.
+        </p>
+        <ul class="tool-features">
+          <li>Free, with no cloud account needed</li>
+          <li>Multi-node clusters in seconds</li>
+          <li>Perfect for testing Helm charts</li>
+        </ul>
+        <a href="projects.html#k8s-helm" class="tool-more">Project 05 →</a>
+      </div>
+      <div class="card tool-card">
+        <div class="tool-logo tl-k8s">K9s</div>
+        <span class="tool-tag cat-container">CLI</span>
+        <h3 style="margin-top:0.5rem;">k9s</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          A terminal UI for Kubernetes. Browse pods, tail logs, exec into containers, port-forward and delete resources with a few keystrokes, much faster than typing kubectl.
+        </p>
+        <ul class="tool-features">
+          <li>Live view of cluster resources</li>
+          <li>Logs, shell and describe in one place</li>
+          <li>Pulse and XRay views for health</li>
+        </ul>
+        <a href="cheatsheets.html#kubernetes" class="tool-more">kubectl cheatsheet →</a>
+      </div>
+    </div>
+    </div>
 
     <!-- ─── CI/CD ───────────────────────────────────────────── -->
+    <div class="tools-group" data-cat="cicd">
     <div class="tools-section-label" style="margin-top:3.5rem;">
       <h3 id="cicd-heading">CI/CD Pipelines</h3>
     </div>
@@ -408,8 +491,60 @@
         </div>
       </div>
     </div>
+    </div>
+
+    <!-- ─── GitOps ──────────────────────────────────────────── -->
+    <div class="tools-group" data-cat="cicd">
+    <div class="tools-section-label" style="margin-top:3.5rem;">
+      <h3>GitOps &amp; Progressive Delivery</h3>
+    </div>
+
+    <div class="grid-3 stagger">
+      <div class="card tool-card">
+        <div class="tool-logo tl-argo">Argo</div>
+        <span class="tool-tag cat-cicd">GitOps</span>
+        <h3 style="margin-top:0.5rem;">Argo CD</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          A declarative GitOps controller for Kubernetes. Argo CD continuously syncs your cluster to manifests in Git, shows drift visually, and reverts manual changes.
+        </p>
+        <ul class="tool-features">
+          <li>Automated sync, prune and self-heal</li>
+          <li>ApplicationSets for many apps and clusters</li>
+          <li>SSO, RBAC and a rich web UI</li>
+        </ul>
+        <a href="blog-gitops-argocd.html" class="tool-more">GitOps guide →</a>
+      </div>
+      <div class="card tool-card">
+        <div class="tool-logo tl-flux">Flux</div>
+        <span class="tool-tag cat-cicd">GitOps</span>
+        <h3 style="margin-top:0.5rem;">Flux CD</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          A CNCF-graduated GitOps toolkit built from small controllers (source, kustomize, helm, image automation). Lightweight, CLI-first, and popular for multi-tenant platforms.
+        </p>
+        <ul class="tool-features">
+          <li>Native Helm and Kustomize controllers</li>
+          <li>Image update automation</li>
+          <li>Multi-tenancy with per-namespace sources</li>
+        </ul>
+      </div>
+      <div class="card tool-card">
+        <div class="tool-logo tl-argo">Roll</div>
+        <span class="tool-tag cat-cicd">Delivery</span>
+        <h3 style="margin-top:0.5rem;">Argo Rollouts</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          Progressive delivery for Kubernetes: canary and blue-green releases with traffic shifting, plus automated analysis against Prometheus metrics that aborts bad releases.
+        </p>
+        <ul class="tool-features">
+          <li>Canary steps with traffic weights</li>
+          <li>Automated metric analysis and rollback</li>
+          <li>Works with Ingress and service meshes</li>
+        </ul>
+      </div>
+    </div>
+    </div>
 
     <!-- ─── IaC ─────────────────────────────────────────────── -->
+    <div class="tools-group" data-cat="iac">
     <div class="tools-section-label" style="margin-top:3.5rem;">
       <h3>Infrastructure as Code</h3>
     </div>
@@ -440,8 +575,8 @@
                 <span class="tool-stat-key">Providers</span>
               </div>
               <div class="tool-stat">
-                <span class="tool-stat-val">OpenTF</span>
-                <span class="tool-stat-key">Fork: OpenTofu</span>
+                <span class="tool-stat-val">OpenTofu</span>
+                <span class="tool-stat-key">Open-source fork</span>
               </div>
             </div>
           </div>
@@ -471,8 +606,59 @@
         </div>
       </div>
     </div>
+    </div>
+
+    <!-- ─── More IaC ────────────────────────────────────────── -->
+    <div class="tools-group" data-cat="iac">
+    <div class="tools-section-label" style="margin-top:3.5rem;">
+      <h3>More IaC Tools</h3>
+    </div>
+
+    <div class="grid-3 stagger">
+      <div class="card tool-card">
+        <div class="tool-logo tl-tf">Tofu</div>
+        <span class="tool-tag cat-iac">IaC</span>
+        <h3 style="margin-top:0.5rem;">OpenTofu</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          The open-source, Linux Foundation fork of Terraform, created after Terraform's licence change. It is a drop-in replacement for most configurations and adds features like state encryption.
+        </p>
+        <ul class="tool-features">
+          <li>MPL-licensed and community-governed</li>
+          <li>Compatible with Terraform providers and modules</li>
+          <li>Built-in client-side state encryption</li>
+        </ul>
+      </div>
+      <div class="card tool-card">
+        <div class="tool-logo tl-pulumi">Pulumi</div>
+        <span class="tool-tag cat-iac">IaC</span>
+        <h3 style="margin-top:0.5rem;">Pulumi</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          Infrastructure as code in general-purpose languages: TypeScript, Python, Go, C# and Java. Use loops, functions, packages and unit tests instead of a DSL.
+        </p>
+        <ul class="tool-features">
+          <li>Real languages, IDEs and testing</li>
+          <li>Same cloud coverage as Terraform</li>
+          <li>Pulumi ESC for secrets and config</li>
+        </ul>
+      </div>
+      <div class="card tool-card">
+        <div class="tool-logo tl-tf">Packer</div>
+        <span class="tool-tag cat-iac">Images</span>
+        <h3 style="margin-top:0.5rem;">Packer</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          Builds identical machine images (AMIs, Azure images, VM templates) from a single config. Bake software into "golden images" so servers boot ready to run, instead of configuring them at boot.
+        </p>
+        <ul class="tool-features">
+          <li>Immutable infrastructure</li>
+          <li>Provision with shell or Ansible</li>
+          <li>Multi-cloud images from one template</li>
+        </ul>
+      </div>
+    </div>
+    </div>
 
     <!-- ─── VCS ─────────────────────────────────────────────── -->
+    <div class="tools-group" data-cat="vcs">
     <div class="tools-section-label" style="margin-top:3.5rem;">
       <h3>Version Control</h3>
     </div>
@@ -526,8 +712,10 @@
         </ul>
       </div>
     </div>
+    </div>
 
     <!-- ─── Monitoring ──────────────────────────────────────── -->
+    <div class="tools-group" data-cat="monitoring">
     <div class="tools-section-label" style="margin-top:3.5rem;">
       <h3>Monitoring &amp; Observability</h3>
     </div>
@@ -567,7 +755,7 @@
 
       <div class="card tool-card">
         <div class="tool-logo tl-vault" style="font-size:0.6rem;">HashiCorp Vault</div>
-        <span class="tool-tag cat-monitor">Security</span>
+        <span class="tool-tag cat-security">Security</span>
         <h3 style="margin-top:0.5rem;">HashiCorp Vault</h3>
         <p style="font-size:0.85rem; margin-top:0.4rem;">
           Centralised secrets management and data protection. Vault stores
@@ -580,6 +768,207 @@
           <li>Fine-grained policies via HCL</li>
         </ul>
       </div>
+    </div>
+    </div>
+
+    <!-- ─── More observability ──────────────────────────────── -->
+    <div class="tools-group" data-cat="monitoring">
+    <div class="tools-section-label" style="margin-top:3.5rem;">
+      <h3>More Observability Tools</h3>
+    </div>
+
+    <div class="grid-3 stagger">
+      <div class="card tool-card">
+        <div class="tool-logo tl-otel">OTel</div>
+        <span class="tool-tag cat-monitor">Standard</span>
+        <h3 style="margin-top:0.5rem;">OpenTelemetry</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          The vendor-neutral CNCF standard for traces, metrics and logs. Instrument once with OTel SDKs, then send the data anywhere (Prometheus, Tempo, Jaeger, Datadog) through the OTel Collector.
+        </p>
+        <ul class="tool-features">
+          <li>One instrumentation for all backends</li>
+          <li>Auto-instrumentation for major languages</li>
+          <li>Collector for processing and routing</li>
+        </ul>
+      </div>
+      <div class="card tool-card">
+        <div class="tool-logo tl-grafana">Loki</div>
+        <span class="tool-tag cat-monitor">Logs</span>
+        <h3 style="margin-top:0.5rem;">Grafana Loki</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          Log aggregation "like Prometheus, but for logs". It indexes only labels, not full text, which makes it cheap to run. Query it with LogQL and correlate with metrics in Grafana.
+        </p>
+        <ul class="tool-features">
+          <li>Low-cost label-based indexing</li>
+          <li>LogQL queries and log-based alerts</li>
+          <li>Ships logs via Grafana Alloy or Promtail</li>
+        </ul>
+      </div>
+      <div class="card tool-card">
+        <div class="tool-logo tl-grafana">Tempo</div>
+        <span class="tool-tag cat-monitor">Traces</span>
+        <h3 style="margin-top:0.5rem;">Jaeger / Tempo</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          Distributed tracing backends. A trace follows one request across every service it touches, showing exactly which hop is slow or failing.
+        </p>
+        <ul class="tool-features">
+          <li>Find the slow span in a request</li>
+          <li>Service dependency graphs</li>
+          <li>Jump from traces to logs and metrics</li>
+        </ul>
+        <a href="blog-prometheus-grafana.html" class="tool-more">Monitoring guide →</a>
+      </div>
+    </div>
+    </div>
+
+    <!-- ─── Security ────────────────────────────────────────── -->
+    <div class="tools-group" data-cat="security">
+    <div class="tools-section-label" style="margin-top:3.5rem;">
+      <h3>Security &amp; DevSecOps</h3>
+    </div>
+
+    <div class="grid-3 stagger">
+      <div class="card tool-card">
+        <div class="tool-logo tl-trivy">Trivy</div>
+        <span class="tool-tag cat-security">Scanner</span>
+        <h3 style="margin-top:0.5rem;">Trivy</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          An all-in-one open-source scanner: container images, filesystems, Git repos, IaC misconfigurations, Kubernetes clusters, secrets and SBOMs. Easy to drop into any CI pipeline.
+        </p>
+        <ul class="tool-features">
+          <li>Image CVE and IaC misconfiguration scans</li>
+          <li>SBOM generation (SPDX, CycloneDX)</li>
+          <li>Fail builds on chosen severities</li>
+        </ul>
+        <a href="blog-devsecops-pipeline.html" class="tool-more">DevSecOps guide →</a>
+      </div>
+      <div class="card tool-card">
+        <div class="tool-logo tl-sonar">Sonar</div>
+        <span class="tool-tag cat-security">Code quality</span>
+        <h3 style="margin-top:0.5rem;">SonarQube</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          Static analysis for code quality and security (SAST) across 30+ languages. Quality gates block merges when coverage, bugs or vulnerabilities fall outside agreed thresholds.
+        </p>
+        <ul class="tool-features">
+          <li>Bugs, code smells and vulnerabilities</li>
+          <li>Quality gates on pull requests</li>
+          <li>Coverage and duplication tracking</li>
+        </ul>
+      </div>
+      <div class="card tool-card">
+        <div class="tool-logo tl-kyverno">Kyverno</div>
+        <span class="tool-tag cat-security">Policy</span>
+        <h3 style="margin-top:0.5rem;">Kyverno / OPA</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          Policy engines for Kubernetes admission control. Block privileged pods, enforce labels and limits, and require signed images. Kyverno policies are YAML; OPA Gatekeeper uses Rego.
+        </p>
+        <ul class="tool-features">
+          <li>Validate, mutate and generate resources</li>
+          <li>Verify Cosign image signatures</li>
+          <li>Audit reports for existing workloads</li>
+        </ul>
+      </div>
+    </div>
+    </div>
+
+    <!-- ─── Cloud ───────────────────────────────────────────── -->
+    <div class="tools-group" data-cat="cloud">
+    <div class="tools-section-label" style="margin-top:3.5rem;">
+      <h3>Cloud Platforms</h3>
+    </div>
+
+    <div class="grid-3 stagger">
+      <div class="card tool-card">
+        <div class="tool-logo tl-aws">AWS</div>
+        <span class="tool-tag cat-cloud">Cloud</span>
+        <h3 style="margin-top:0.5rem;">Amazon Web Services</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          The largest cloud provider. Core DevOps services: IAM, VPC, EC2, EKS/ECS, Lambda, S3, RDS, CloudWatch, plus the richest ecosystem of Terraform modules and tutorials.
+        </p>
+        <ul class="tool-features">
+          <li>EKS for managed Kubernetes</li>
+          <li>IAM roles and OIDC for keyless CI</li>
+          <li>Broadest service catalogue</li>
+        </ul>
+        <a href="blog-aws-core-services.html" class="tool-more">AWS guide →</a>
+      </div>
+      <div class="card tool-card">
+        <div class="tool-logo tl-azure">Azure</div>
+        <span class="tool-tag cat-cloud">Cloud</span>
+        <h3 style="margin-top:0.5rem;">Microsoft Azure</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          Strong in enterprises already using Microsoft 365 and Active Directory (Entra ID). AKS, Azure DevOps Pipelines and Bicep/ARM templates are its DevOps building blocks.
+        </p>
+        <ul class="tool-features">
+          <li>AKS managed Kubernetes</li>
+          <li>Entra ID integration</li>
+          <li>Azure DevOps and GitHub (same parent company)</li>
+        </ul>
+      </div>
+      <div class="card tool-card">
+        <div class="tool-logo tl-gcp">GCP</div>
+        <span class="tool-tag cat-cloud">Cloud</span>
+        <h3 style="margin-top:0.5rem;">Google Cloud</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          The birthplace of Kubernetes and SRE. GKE is widely considered the most polished managed Kubernetes; BigQuery and Vertex AI lead in data and ML.
+        </p>
+        <ul class="tool-features">
+          <li>GKE (Standard and Autopilot)</li>
+          <li>Cloud Run for serverless containers</li>
+          <li>Strong data and ML platform</li>
+        </ul>
+      </div>
+    </div>
+    </div>
+
+    <!-- ─── Networking ──────────────────────────────────────── -->
+    <div class="tools-group" data-cat="networking">
+    <div class="tools-section-label" style="margin-top:3.5rem;">
+      <h3>Networking &amp; Service Mesh</h3>
+    </div>
+
+    <div class="grid-3 stagger">
+      <div class="card tool-card">
+        <div class="tool-logo tl-nginx">Nginx</div>
+        <span class="tool-tag cat-network">Proxy</span>
+        <h3 style="margin-top:0.5rem;">Nginx</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          High-performance web server, reverse proxy and load balancer, and the engine behind the popular ingress-nginx Kubernetes controller. You will meet its config files everywhere.
+        </p>
+        <ul class="tool-features">
+          <li>Reverse proxy and TLS termination</li>
+          <li>Load balancing and caching</li>
+          <li>ingress-nginx for Kubernetes</li>
+        </ul>
+        <a href="blog-networking-fundamentals.html" class="tool-more">Networking guide →</a>
+      </div>
+      <div class="card tool-card">
+        <div class="tool-logo tl-istio">Istio</div>
+        <span class="tool-tag cat-network">Service mesh</span>
+        <h3 style="margin-top:0.5rem;">Istio / Linkerd</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          Service meshes add mTLS encryption, retries, timeouts, traffic splitting and golden-signal metrics between services, without changing application code.
+        </p>
+        <ul class="tool-features">
+          <li>Automatic mTLS between services</li>
+          <li>Traffic shifting for canaries</li>
+          <li>Uniform service-to-service telemetry</li>
+        </ul>
+      </div>
+      <div class="card tool-card">
+        <div class="tool-logo tl-cilium">Cilium</div>
+        <span class="tool-tag cat-network">CNI</span>
+        <h3 style="margin-top:0.5rem;">Cilium</h3>
+        <p style="font-size:0.85rem; margin-top:0.4rem;">
+          An eBPF-powered Kubernetes networking (CNI) plugin offering fast networking, NetworkPolicies, observability (Hubble) and even a sidecar-free service mesh.
+        </p>
+        <ul class="tool-features">
+          <li>eBPF data plane, can replace kube-proxy</li>
+          <li>L3–L7 network policies</li>
+          <li>Hubble flow visibility</li>
+        </ul>
+      </div>
+    </div>
     </div>
   </div>
 </section>
@@ -649,6 +1038,20 @@
 </footer>
 
 <script src="main.js" defer></script>
+<script>
+'use strict';
+/* ── Category filter ─────────────────────────────────────── */
+document.querySelectorAll('.tools-filter .filter-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.tools-filter .filter-chip').forEach(c => c.classList.remove('all'));
+    chip.classList.add('all');
+    const f = chip.dataset.filter;
+    document.querySelectorAll('.tools-group').forEach(g => {
+      g.style.display = (f === 'all' || g.dataset.cat === f) ? '' : 'none';
+    });
+  });
+});
+</script>
 </body>
 </html>
 
