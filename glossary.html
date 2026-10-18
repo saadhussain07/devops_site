@@ -4,17 +4,17 @@
      <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DevOps Glossary | Complete A-Z Terminology Guide</title>
-    <meta name="description" content="Complete DevOps glossary with 100+ terms. Learn key concepts, tools, and practices from API Gateway to Zero-Downtime Deployment.">
+    <meta name="description" content="Complete DevOps glossary with 70+ terms. Learn key concepts, tools, and practices from API Gateway to Zero-Downtime Deployment.">
     <meta name="keywords" content="DevOps glossary, CI/CD, Kubernetes, Docker, DevOps terminology, cloud infrastructure">
     <meta name="author" content="DevOps Hub">
     <meta name="robots" content="index, follow">
     <meta property="og:title" content="DevOps Glossary | Complete A-Z Terminology Guide">
-    <meta property="og:description" content="100+ essential DevOps terms and definitions. Master the language of modern infrastructure.">
+    <meta property="og:description" content="70+ essential DevOps terms and definitions. Master the language of modern infrastructure.">
     <meta property="og:url" content="https://rocketdevops.vercel.app/glossary.html">
     <meta property="og:image" content="https://rocketdevops.vercel.app/favicon.svg">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="DevOps Glossary">
-    <meta name="twitter:description" content="100+ DevOps terms explained. A-Z guide to modern infrastructure terminology.">
+    <meta name="twitter:description" content="70+ DevOps terms explained. A-Z guide to modern infrastructure terminology.">
     <link rel="canonical" href="https://rocketdevops.vercel.app/glossary.html">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="style.css">
@@ -47,32 +47,33 @@
             width: 100%;
             padding: 1rem;
             font-size: 1rem;
-            border: 1px solid #2dff7a;
+            border: 1px solid var(--accent-green);
             border-radius: 0.5rem;
-            background: #0d1518;
-            color: #ffffff;
+            background: var(--bg-card);
+            color: var(--text-primary);
             font-family: inherit;
             transition: all 0.3s ease;
         }
 
         .glossary-search-input:focus {
             outline: none;
-            border-color: #00e5ff;
+            border-color: var(--accent-cyan);
             box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
         }
 
         .glossary-search-input::placeholder {
-            color: #666;
+            color: var(--text-muted);
         }
 
         .search-stats {
             text-align: center;
-            color: #aaa;
+            color: var(--text-muted);
             font-size: 0.9rem;
             font-family: 'Courier New', monospace;
         }
 
         .glossary-layout {
+            display: block;   /* style.css makes this a sidebar grid; this page has no sidebar */
             padding: 2rem 1.5rem;
             max-width: 900px;
             margin: 0 auto;
@@ -88,7 +89,7 @@
             font-family: 'Courier New', monospace;
             font-size: 1.8rem;
             font-weight: bold;
-            color: #2dff7a;
+            color: var(--accent-green);
             margin-top: 2.5rem;
             margin-bottom: 1rem;
             padding: 1rem 0;
@@ -104,31 +105,31 @@
 
         .glossary-card {
             padding: 1.5rem;
-            background: #0d1518;
-            border-left: 3px solid #2dff7a;
+            background: var(--bg-card);
+            border-left: 3px solid var(--accent-green);
             margin-bottom: 1rem;
             border-radius: 0.3rem;
             transition: all 0.3s ease;
         }
 
         .glossary-card:hover {
-            background: #111c21;
-            border-left-color: #00e5ff;
-            box-shadow: 0 4px 12px rgba(45, 255, 122, 0.15);
+            background: var(--bg-card-hover);
+            border-left-color: var(--accent-cyan);
+            box-shadow: var(--shadow-md);
             transform: translateX(4px);
         }
 
         .glossary-term {
             font-family: 'Courier New', monospace;
             font-size: 1.1rem;
-            color: #00e5ff;
+            color: var(--accent-cyan);
             margin: 0 0 0.5rem 0;
             font-weight: bold;
         }
 
         .glossary-definition {
             font-size: 0.95rem;
-            color: #ccc;
+            color: var(--text-secondary);
             line-height: 1.6;
             margin: 0;
         }
@@ -230,7 +231,7 @@
     <!-- HERO SECTION -->
     <section class="glossary-hero">
         <h1>DevOps Glossary</h1>
-        <p class="hero-subtitle">100+ Essential Terms & Concepts</p>
+        <p class="hero-subtitle">70+ Essential Terms &amp; Concepts</p>
         <p class="hero-description">Master the complete DevOps vocabulary. From API gateways to zero-downtime deployments, find definitions for every tool and practice.</p>
     </section>
 
@@ -264,7 +265,7 @@
 
 <script src="main.js"></script>
 <script>
-    // GLOSSARY TERMS DATABASE (100+ terms)
+    // GLOSSARY TERMS DATABASE (70+ terms)
     const GLOSSARY_TERMS = [
         { term: 'API Gateway', letter: 'A', definition: 'A server that acts as a single entry point to manage, route, and secure API requests to backend services.' },
         { term: 'Artifact', letter: 'A', definition: 'A file or collection of files produced by a build process (binaries, containers, packages) ready for deployment.' },

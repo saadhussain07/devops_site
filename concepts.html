@@ -235,7 +235,7 @@
     .num { color: #f78c6c; }
     .cmt { color: var(--text-muted); font-style: italic; }
     .key { color: var(--accent-cyan); }
-    .brace { color: #ffd81e; }
+    .brace { color: var(--accent-yellow); }
 
     /* Monitoring dashboard mini */
     .monitor-dash {
@@ -304,7 +304,7 @@
     }
 
     .delta-up   { color: var(--accent-green); }
-    .delta-warn { color: #ffd81e; }
+    .delta-warn { color: var(--accent-yellow); }
     .delta-down { color: var(--accent-orange); }
 
     /* Sparkline bars (CSS only) */
@@ -363,7 +363,7 @@
     .ms-service.gateway { border-color: rgba(45,255,122,0.4); color: var(--accent-green); }
     .ms-service.auth    { border-color: rgba(139,92,246,0.4); color: var(--accent-purple); }
     .ms-service.order   { border-color: rgba(0,229,255,0.4);  color: var(--accent-cyan); }
-    .ms-service.pay     { border-color: rgba(255,205,30,0.4); color: #ffd81e; }
+    .ms-service.pay     { border-color: rgba(255,205,30,0.4); color: var(--accent-yellow); }
     .ms-service.notify  { border-color: rgba(255,92,26,0.4);  color: var(--accent-orange); }
 
     .ms-connector {
@@ -707,7 +707,7 @@
           </div>
           <div class="dash-metric">
             <div class="dash-metric-label">Error Rate</div>
-            <div class="dash-metric-value" style="color:#ffd81e;">0.08%</div>
+            <div class="dash-metric-value" style="color: var(--accent-yellow);">0.08%</div>
             <div class="dash-metric-delta delta-warn">⚠ SLO: &lt; 0.1%</div>
             <div class="sparkline">
               <div class="spark-bar" style="height:20%;background:#ffd81e;"></div>

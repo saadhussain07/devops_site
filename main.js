@@ -130,17 +130,17 @@ window.__DH_MAIN_LOADED__ = true;
 
   const lines = [
     { kind: 'cmd',  text: 'git push origin main' },
-    { kind: 'out',  text: '✔ Branch main pushed',            color: '#2dff7a' },
+    { kind: 'out',  text: '✔ Branch main pushed',            cls: 'green' },
     { kind: 'gap' },
     { kind: 'cmd',  text: 'jenkins build start' },
-    { kind: 'out',  text: '[1/5] CLONE   ████████ 100%',     color: '#2dff7a' },
-    { kind: 'out',  text: '[2/5] TEST    ████████ 100%',     color: '#00e5ff' },
-    { kind: 'out',  text: '[3/5] BUILD   ████████ 100%',     color: '#00e5ff' },
-    { kind: 'out',  text: '[4/5] PUSH    ████████ 100%',     color: '#ff5c1a' },
-    { kind: 'out',  text: '[5/5] DEPLOY  ████████ 100%',     color: '#2dff7a' },
+    { kind: 'out',  text: '[1/5] CLONE   ████████ 100%',     cls: 'green' },
+    { kind: 'out',  text: '[2/5] TEST    ████████ 100%',     cls: 'cyan' },
+    { kind: 'out',  text: '[3/5] BUILD   ████████ 100%',     cls: 'cyan' },
+    { kind: 'out',  text: '[4/5] PUSH    ████████ 100%',     cls: 'orange' },
+    { kind: 'out',  text: '[5/5] DEPLOY  ████████ 100%',     cls: 'green' },
     { kind: 'gap' },
-    { kind: 'out',  text: '✔ Pipeline succeeded in 2m 14s',  color: '#2dff7a' },
-    { kind: 'out',  text: '→ Deployed to production',         color: '#00e5ff' },
+    { kind: 'out',  text: '✔ Pipeline succeeded in 2m 14s',  cls: 'green' },
+    { kind: 'out',  text: '→ Deployed to production',         cls: 'cyan' },
   ];
 
   body.innerHTML = '';
@@ -151,7 +151,7 @@ window.__DH_MAIN_LOADED__ = true;
 
   function mkLine()    { const s = document.createElement('span'); s.className = 't-line'; return s; }
   function mkPrompt()  { const s = mkLine(); const p = document.createElement('span'); p.className = 't-prompt'; p.textContent = '$ '; s.appendChild(p); return s; }
-  function mkOut(col)  { const s = mkLine(); s.classList.add('t-out'); if (col) s.style.color = col; return s; }
+  function mkOut(cls)  { const s = mkLine(); s.classList.add('t-out'); if (cls) s.classList.add('t-' + cls); return s; }
 
   function type() {
     if (li >= lines.length) {
@@ -176,7 +176,7 @@ window.__DH_MAIN_LOADED__ = true;
     }
 
     if (line.kind === 'out') {
-      const o = mkOut(line.color); o.textContent = line.text;
+      const o = mkOut(line.cls); o.textContent = line.text;
       body.appendChild(o); li++; setTimeout(type, 90);
     }
   }
@@ -631,7 +631,7 @@ window.__DH_MAIN_LOADED__ = true;
       { href: 'search.html',      icon: '🔍', label: 'Search',      desc: 'Find anything instantly' },
       { href: 'cheatsheets.html', icon: '📋', label: 'Cheatsheets', desc: '120+ copy-paste commands' },
       { href: 'resources.html',   icon: '⭐', label: 'Resources',   desc: 'Curated learning list' },
-      { href: 'glossary.html',    icon: '📖', label: 'Glossary',    desc: '100+ DevOps terms A–Z' },
+      { href: 'glossary.html',    icon: '📖', label: 'Glossary',    desc: '70+ DevOps terms A–Z' },
       { href: 'interview.html',   icon: '🎤', label: 'Interview Prep', desc: '60 Q&As with answers' },
       { href: 'troubleshooting.html', icon: '🚑', label: 'Troubleshooting', desc: 'Fix common failures' },
       { href: 'changelog.html',   icon: '🆕', label: "What's New",  desc: 'Latest additions' },

@@ -69,6 +69,7 @@
   --accent-cyan:   #0891b2;
   --accent-orange: #ea580c;
   --accent-purple: #7c3aed;
+  --accent-yellow: #b45309;
 }
 
 /* ── Dark Mode Overrides ───────────────────────────────────── */
@@ -79,6 +80,7 @@ body.dark-mode {
   --accent-cyan:   #00e5ff;
   --accent-orange: #ff5c1a;
   --accent-purple: #8b5cf6;
+  --accent-yellow: #ffd81e;
 
   --bg-void:        #0a0a0a;
   --bg-base:        #141414;
@@ -800,9 +802,12 @@ a:hover { color: var(--primary-light); }
 .t-prompt { color: var(--primary); }
 .t-cmd    { color: var(--terminal-text); }
 .t-out    { color: var(--terminal-out); padding-left: 1rem; }
-.t-green  { color: #10b981; }
-.t-cyan   { color: var(--primary-light); }
-.t-orange { color: var(--accent); }
+.t-green  { color: #047857; }   /* light terminal: dark enough to read on #fafafa */
+.t-cyan   { color: #0e7490; }
+.t-orange { color: #c2410c; }
+body.dark-mode .t-green  { color: #2dff7a; }
+body.dark-mode .t-cyan   { color: #00e5ff; }
+body.dark-mode .t-orange { color: #ff5c1a; }
 
 .t-cursor {
   display: inline-block;
