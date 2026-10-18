@@ -218,6 +218,16 @@
     .cs-sheet.ansible  .cs-sheet-icon { background: rgba(255,0,0,0.08);    border-color: rgba(255,96,96,0.3);  }
     .cs-sheet.prometheus .cs-sheet-icon{ background: rgba(230,82,44,0.1);  border-color: rgba(230,82,44,0.3);  }
 
+    .cs-sheet.aws      .cs-sheet-icon { background: rgba(255,153,0,0.1);   border-color: rgba(255,153,0,0.3);  }
+    .cs-sheet.gha      .cs-sheet-icon { background: rgba(45,255,122,0.1);  border-color: rgba(45,255,122,0.25);}
+    .cs-sheet.bash     .cs-sheet-icon { background: rgba(78,170,37,0.1);   border-color: rgba(78,170,37,0.3);  }
+    .cs-sheet.systemd  .cs-sheet-icon { background: rgba(48,212,100,0.08); border-color: rgba(48,212,100,0.25);}
+    .cs-sheet.net      .cs-sheet-icon { background: rgba(14,165,233,0.1);  border-color: rgba(14,165,233,0.3); }
+    .cs-sheet.argo     .cs-sheet-icon { background: rgba(239,123,77,0.1);  border-color: rgba(239,123,77,0.3); }
+
+    /* Multi-line snippets (YAML, scripts) keep their layout */
+    .cmd-text.multi { white-space: pre; word-break: normal; overflow-x: auto; min-width: 0; }
+
     /* Comment lines inside commands */
     .cmd-comment { color: var(--text-muted); font-style: italic; }
 
@@ -337,7 +347,7 @@
     <div class="container">
     <span class="tag">// quick reference</span>
     <h1>DevOps <span class="text-green">Cheatsheets</span></h1>
-    <p>Click any command to copy it instantly. 8 tools, 120+ commands — bookmark this page.</p>
+    <p>Click any command to copy it instantly. 14 tools, 200+ commands and snippets. Bookmark this page.</p>
   </div>
 </header>
 
@@ -373,6 +383,12 @@
           <li><a href="#helm">      <span class="toc-icon">⛵</span>Helm</a></li>
           <li><a href="#ansible">   <span class="toc-icon">🤖</span>Ansible</a></li>
           <li><a href="#prometheus"><span class="toc-icon">📊</span>Prometheus</a></li>
+          <li><a href="#aws"><span class="toc-icon">☁️</span>AWS CLI</a></li>
+          <li><a href="#github-actions"><span class="toc-icon">🔁</span>GitHub Actions</a></li>
+          <li><a href="#bash"><span class="toc-icon">💲</span>Bash Scripting</a></li>
+          <li><a href="#systemd"><span class="toc-icon">⚙️</span>systemd &amp; journalctl</a></li>
+          <li><a href="#networking"><span class="toc-icon">🌐</span>Networking &amp; Debugging</a></li>
+          <li><a href="#argocd"><span class="toc-icon">🐙</span>Argo CD</a></li>
         </ul>
       </aside>
 
@@ -616,6 +632,225 @@
           </div>
         </div>
 
+        <!-- ── AWS CLI ───────────────────────────────── -->
+        <div class="cs-sheet aws" id="aws">
+          <div class="cs-sheet-header">
+            <div class="cs-sheet-icon">☁️</div>
+            <div class="cs-sheet-title">
+              <h2>AWS CLI</h2>
+              <p>Identity, S3, EC2, EKS, ECR, logs</p>
+            </div>
+            <button class="cs-copy-all" onclick="copySheet('aws')">Copy All</button>
+          </div>
+          <div class="cs-grid">
+            <div class="cmd-card"><div class="cmd-label">Who am I?<span class="cmd-tag tip">essential</span></div><div class="cmd-body"><span class="cmd-text">aws sts get-caller-identity</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Log in with SSO</div><div class="cmd-body"><span class="cmd-text">aws sso login --profile dev</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Use a profile for one command</div><div class="cmd-body"><span class="cmd-text">aws s3 ls --profile prod</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">List buckets</div><div class="cmd-body"><span class="cmd-text">aws s3 ls</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Sync a folder to S3<span class="cmd-tag tip">essential</span></div><div class="cmd-body"><span class="cmd-text">aws s3 sync ./dist s3://my-bucket --delete</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Copy a file to S3</div><div class="cmd-body"><span class="cmd-text">aws s3 cp backup.tar.gz s3://my-bucket/backups/</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Presigned download URL (1h)</div><div class="cmd-body"><span class="cmd-text">aws s3 presign s3://my-bucket/report.pdf --expires-in 3600</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Running instances (table)</div><div class="cmd-body"><span class="cmd-text">aws ec2 describe-instances --filters Name=instance-state-name,Values=running --query &quot;Reservations[].Instances[].[InstanceId,InstanceType,PrivateIpAddress,Tags[?Key==&#x27;Name&#x27;]|[0].Value]&quot; --output table</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Start a shell on EC2 (no SSH)</div><div class="cmd-body"><span class="cmd-text">aws ssm start-session --target i-0123456789abcdef0</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Configure kubectl for EKS<span class="cmd-tag tip">essential</span></div><div class="cmd-body"><span class="cmd-text">aws eks update-kubeconfig --name my-cluster --region eu-west-1</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Log Docker in to ECR</div><div class="cmd-body"><span class="cmd-text">aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 123456789012.dkr.ecr.eu-west-1.amazonaws.com</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Tail CloudWatch logs</div><div class="cmd-body"><span class="cmd-text">aws logs tail /aws/lambda/my-fn --follow --since 15m</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Read a secret</div><div class="cmd-body"><span class="cmd-text">aws secretsmanager get-secret-value --secret-id prod/db --query SecretString --output text</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Get an SSM parameter</div><div class="cmd-body"><span class="cmd-text">aws ssm get-parameter --name /app/prod/api_url --with-decryption --query Parameter.Value --output text</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Force new ECS deployment</div><div class="cmd-body"><span class="cmd-text">aws ecs update-service --cluster prod --service api --force-new-deployment</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Month-to-date cost</div><div class="cmd-body"><span class="cmd-text">aws ce get-cost-and-usage --time-period Start=$(date +%Y-%m-01),End=$(date +%F) --granularity MONTHLY --metrics UnblendedCost</span><button class="cmd-copy-btn">copy</button></div></div>
+          </div>
+        </div>
+
+        <!-- ── GITHUB ACTIONS ────────────────────────── -->
+        <div class="cs-sheet gha" id="github-actions">
+          <div class="cs-sheet-header">
+            <div class="cs-sheet-icon">🔁</div>
+            <div class="cs-sheet-title">
+              <h2>GitHub Actions</h2>
+              <p>Workflow YAML snippets: triggers, caching, OIDC, matrix</p>
+            </div>
+            <button class="cs-copy-all" onclick="copySheet('github-actions')">Copy All</button>
+          </div>
+          <div class="cs-grid">
+            <div class="cmd-card"><div class="cmd-label">Triggers<span class="cmd-tag tip">essential</span></div><div class="cmd-body"><span class="cmd-text multi">on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Least-privilege token</div><div class="cmd-body"><span class="cmd-text multi">permissions:
+  contents: read</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Cancel outdated runs</div><div class="cmd-body"><span class="cmd-text multi">concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Checkout + Node with cache</div><div class="cmd-body"><span class="cmd-text multi">- uses: actions/checkout@v4
+- uses: actions/setup-node@v4
+  with:
+    node-version: 22
+    cache: npm</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Matrix build</div><div class="cmd-body"><span class="cmd-text multi">strategy:
+  matrix:
+    os: [ubuntu-latest, windows-latest]
+    node: [20, 22]
+runs-on: ${{ matrix.os }}</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Job dependency + condition</div><div class="cmd-body"><span class="cmd-text multi">deploy:
+  needs: test
+  if: github.ref == &#x27;refs/heads/main&#x27;</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Docker build with GHA cache</div><div class="cmd-body"><span class="cmd-text multi">- uses: docker/setup-buildx-action@v3
+- uses: docker/build-push-action@v6
+  with:
+    push: true
+    tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
+    cache-from: type=gha
+    cache-to: type=gha,mode=max</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">AWS via OIDC (no keys)<span class="cmd-tag tip">essential</span></div><div class="cmd-body"><span class="cmd-text multi">permissions:
+  id-token: write
+  contents: read
+steps:
+  - uses: aws-actions/configure-aws-credentials@v4
+    with:
+      role-to-assume: arn:aws:iam::123456789012:role/gha-deploy
+      aws-region: eu-west-1</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Environment with approval</div><div class="cmd-body"><span class="cmd-text multi">deploy:
+  environment: production
+  runs-on: ubuntu-latest</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Pass output between steps</div><div class="cmd-body"><span class="cmd-text multi">- id: ver
+  run: echo &quot;tag=$(git rev-parse --short HEAD)&quot; &gt;&gt; &quot;$GITHUB_OUTPUT&quot;
+- run: echo &quot;${{ steps.ver.outputs.tag }}&quot;</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Upload an artifact</div><div class="cmd-body"><span class="cmd-text multi">- uses: actions/upload-artifact@v4
+  with:
+    name: dist
+    path: dist/</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Run the gh CLI in a workflow</div><div class="cmd-body"><span class="cmd-text multi">- run: gh pr comment ${{ github.event.pull_request.number }} --body &quot;Build passed&quot;
+  env:
+    GH_TOKEN: ${{ github.token }}</span><button class="cmd-copy-btn">copy</button></div></div>
+          </div>
+        </div>
+
+        <!-- ── BASH SCRIPTING ────────────────────────── -->
+        <div class="cs-sheet bash" id="bash">
+          <div class="cs-sheet-header">
+            <div class="cs-sheet-icon">💲</div>
+            <div class="cs-sheet-title">
+              <h2>Bash Scripting</h2>
+              <p>Safe scripts, variables, loops, conditionals, traps</p>
+            </div>
+            <button class="cs-copy-all" onclick="copySheet('bash')">Copy All</button>
+          </div>
+          <div class="cs-grid">
+            <div class="cmd-card"><div class="cmd-label">Safe script header<span class="cmd-tag tip">essential</span></div><div class="cmd-body"><span class="cmd-text multi">#!/usr/bin/env bash
+set -euo pipefail</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Default value for a variable</div><div class="cmd-body"><span class="cmd-text">ENV=&quot;${ENV:-dev}&quot;</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Require a variable</div><div class="cmd-body"><span class="cmd-text">: &quot;${API_TOKEN:?API_TOKEN must be set}&quot;</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Check argument count</div><div class="cmd-body"><span class="cmd-text">[[ $# -ge 1 ]] || { echo &quot;usage: $0 &lt;env&gt;&quot; &gt;&amp;2; exit 1; }</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">If file exists</div><div class="cmd-body"><span class="cmd-text">if [[ -f config.yaml ]]; then echo &quot;found&quot;; fi</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Loop over files</div><div class="cmd-body"><span class="cmd-text">for f in logs/*.log; do gzip &quot;$f&quot;; done</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Read a file line by line</div><div class="cmd-body"><span class="cmd-text">while IFS= read -r line; do echo &quot;$line&quot;; done &lt; hosts.txt</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Case statement</div><div class="cmd-body"><span class="cmd-text multi">case &quot;$ENV&quot; in
+  dev|staging) echo ok ;;
+  prod) echo careful ;;
+  *) echo &quot;unknown&quot;; exit 1 ;;
+esac</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Function with local vars</div><div class="cmd-body"><span class="cmd-text multi">deploy() {
+  local svc=$1
+  echo &quot;deploying $svc&quot;
+}</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Cleanup on exit<span class="cmd-tag tip">essential</span></div><div class="cmd-body"><span class="cmd-text multi">tmp=$(mktemp -d)
+trap &#x27;rm -rf &quot;$tmp&quot;&#x27; EXIT</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Retry with backoff</div><div class="cmd-body"><span class="cmd-text">for i in 1 2 4 8; do curl -fsS &quot;$URL&quot; &amp;&amp; break || sleep &quot;$i&quot;; done</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Capture command output</div><div class="cmd-body"><span class="cmd-text">commit=$(git rev-parse --short HEAD)</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Arrays</div><div class="cmd-body"><span class="cmd-text multi">svcs=(api worker web)
+for s in &quot;${svcs[@]}&quot;; do echo &quot;$s&quot;; done</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Lint a script<span class="cmd-tag tip">essential</span></div><div class="cmd-body"><span class="cmd-text">shellcheck deploy.sh</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Debug: print each command</div><div class="cmd-body"><span class="cmd-text">bash -x deploy.sh</span><button class="cmd-copy-btn">copy</button></div></div>
+          </div>
+        </div>
+
+        <!-- ── SYSTEMD & JOURNALCTL ──────────────────── -->
+        <div class="cs-sheet systemd" id="systemd">
+          <div class="cs-sheet-header">
+            <div class="cs-sheet-icon">⚙️</div>
+            <div class="cs-sheet-title">
+              <h2>systemd &amp; journalctl</h2>
+              <p>Services, timers and logs on modern Linux</p>
+            </div>
+            <button class="cs-copy-all" onclick="copySheet('systemd')">Copy All</button>
+          </div>
+          <div class="cs-grid">
+            <div class="cmd-card"><div class="cmd-label">Service status<span class="cmd-tag tip">essential</span></div><div class="cmd-body"><span class="cmd-text">systemctl status nginx</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Start / stop / restart</div><div class="cmd-body"><span class="cmd-text">sudo systemctl restart nginx</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Reload config without restart</div><div class="cmd-body"><span class="cmd-text">sudo systemctl reload nginx</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Enable and start now</div><div class="cmd-body"><span class="cmd-text">sudo systemctl enable --now myapp</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Reload after editing unit files</div><div class="cmd-body"><span class="cmd-text">sudo systemctl daemon-reload</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">List failed units</div><div class="cmd-body"><span class="cmd-text">systemctl --failed</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Show a unit file</div><div class="cmd-body"><span class="cmd-text">systemctl cat myapp</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Override a unit safely</div><div class="cmd-body"><span class="cmd-text">sudo systemctl edit myapp</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">List timers</div><div class="cmd-body"><span class="cmd-text">systemctl list-timers</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Follow a service log<span class="cmd-tag tip">essential</span></div><div class="cmd-body"><span class="cmd-text">journalctl -u myapp -f</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Logs since 1 hour ago, errors only</div><div class="cmd-body"><span class="cmd-text">journalctl -u myapp --since &quot;1 hour ago&quot; -p err</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Logs from the previous boot</div><div class="cmd-body"><span class="cmd-text">journalctl -b -1</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Kernel messages (OOM kills)</div><div class="cmd-body"><span class="cmd-text">journalctl -k | grep -i -E &quot;oom|killed process&quot;</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Journal disk usage</div><div class="cmd-body"><span class="cmd-text">journalctl --disk-usage</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Shrink the journal<span class="cmd-tag danger">destructive</span></div><div class="cmd-body"><span class="cmd-text">sudo journalctl --vacuum-size=500M</span><button class="cmd-copy-btn">copy</button></div></div>
+          </div>
+        </div>
+
+        <!-- ── NETWORKING & DEBUGGING ────────────────── -->
+        <div class="cs-sheet net" id="networking">
+          <div class="cs-sheet-header">
+            <div class="cs-sheet-icon">🌐</div>
+            <div class="cs-sheet-title">
+              <h2>Networking &amp; Debugging</h2>
+              <p>DNS, ports, HTTP, TLS, connectivity</p>
+            </div>
+            <button class="cs-copy-all" onclick="copySheet('networking')">Copy All</button>
+          </div>
+          <div class="cs-grid">
+            <div class="cmd-card"><div class="cmd-label">IP addresses</div><div class="cmd-body"><span class="cmd-text">ip -br a</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Routing table</div><div class="cmd-body"><span class="cmd-text">ip route</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Listening ports + process<span class="cmd-tag tip">essential</span></div><div class="cmd-body"><span class="cmd-text">sudo ss -tlnp</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Established connections</div><div class="cmd-body"><span class="cmd-text">ss -tn state established</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">DNS lookup</div><div class="cmd-body"><span class="cmd-text">dig +short example.com</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">DNS via a specific resolver</div><div class="cmd-body"><span class="cmd-text">dig example.com @1.1.1.1</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Trace DNS delegation</div><div class="cmd-body"><span class="cmd-text">dig +trace example.com</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Is a port reachable?<span class="cmd-tag tip">essential</span></div><div class="cmd-body"><span class="cmd-text">nc -zv db.internal 5432</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Verbose HTTP request</div><div class="cmd-body"><span class="cmd-text">curl -v https://example.com</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Status code + timing</div><div class="cmd-body"><span class="cmd-text">curl -s -o /dev/null -w &quot;%{http_code} dns=%{time_namelookup} connect=%{time_connect} tls=%{time_appconnect} total=%{time_total}\n&quot; https://example.com</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Send a Host header to an IP</div><div class="cmd-body"><span class="cmd-text">curl -H &quot;Host: app.example.com&quot; http://10.0.1.20/</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Check a TLS certificate</div><div class="cmd-body"><span class="cmd-text">openssl s_client -connect example.com:443 -servername example.com &lt;/dev/null 2&gt;/dev/null | openssl x509 -noout -dates -subject -issuer</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Trace the network path</div><div class="cmd-body"><span class="cmd-text">mtr -rwc 20 example.com</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Capture traffic on a port</div><div class="cmd-body"><span class="cmd-text">sudo tcpdump -i any -nn port 443</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Debug pod for in-cluster tests</div><div class="cmd-body"><span class="cmd-text">kubectl run netshoot -it --rm --image=nicolaka/netshoot -- bash</span><button class="cmd-copy-btn">copy</button></div></div>
+          </div>
+        </div>
+
+        <!-- ── ARGO CD ───────────────────────────────── -->
+        <div class="cs-sheet argo" id="argocd">
+          <div class="cs-sheet-header">
+            <div class="cs-sheet-icon">🐙</div>
+            <div class="cs-sheet-title">
+              <h2>Argo CD</h2>
+              <p>GitOps app management from the CLI</p>
+            </div>
+            <button class="cs-copy-all" onclick="copySheet('argocd')">Copy All</button>
+          </div>
+          <div class="cs-grid">
+            <div class="cmd-card"><div class="cmd-label">Get initial admin password</div><div class="cmd-body"><span class="cmd-text">kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath=&quot;{.data.password}&quot; | base64 -d; echo</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Open the UI locally</div><div class="cmd-body"><span class="cmd-text">kubectl -n argocd port-forward svc/argocd-server 8080:443</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Log in</div><div class="cmd-body"><span class="cmd-text">argocd login localhost:8080 --username admin --insecure</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">List apps<span class="cmd-tag tip">essential</span></div><div class="cmd-body"><span class="cmd-text">argocd app list</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">App details + health</div><div class="cmd-body"><span class="cmd-text">argocd app get my-app</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Diff live vs Git<span class="cmd-tag tip">essential</span></div><div class="cmd-body"><span class="cmd-text">argocd app diff my-app</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Sync an app</div><div class="cmd-body"><span class="cmd-text">argocd app sync my-app</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Sync and wait for healthy</div><div class="cmd-body"><span class="cmd-text">argocd app sync my-app &amp;&amp; argocd app wait my-app --health --timeout 300</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Deployment history</div><div class="cmd-body"><span class="cmd-text">argocd app history my-app</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Roll back to a revision</div><div class="cmd-body"><span class="cmd-text">argocd app rollback my-app 3</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Hard refresh from Git</div><div class="cmd-body"><span class="cmd-text">argocd app get my-app --hard-refresh</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Create an app from the CLI</div><div class="cmd-body"><span class="cmd-text">argocd app create my-app --repo https://github.com/you/gitops --path envs/dev --dest-server https://kubernetes.default.svc --dest-namespace my-app --sync-policy automated --self-heal --auto-prune</span><button class="cmd-copy-btn">copy</button></div></div>
+            <div class="cmd-card"><div class="cmd-label">Delete an app (and its resources)<span class="cmd-tag danger">destructive</span></div><div class="cmd-body"><span class="cmd-text">argocd app delete my-app --cascade</span><button class="cmd-copy-btn">copy</button></div></div>
+          </div>
+        </div>
+
       </main>
     </div>
   </div>
@@ -657,6 +892,9 @@
         <ul class="footer-links">
           <li><a href="#ansible">Ansible</a></li>
           <li><a href="#prometheus">Prometheus</a></li>
+          <li><a href="#aws">AWS CLI</a></li>
+          <li><a href="#github-actions">GitHub Actions</a></li>
+          <li><a href="#bash">Bash</a></li>
           <li><a href="search.html">Search</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>

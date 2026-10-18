@@ -756,6 +756,26 @@ const INDEX = [
     title:'Troubleshooting Playbooks — Kubernetes Docker Terraform CI Linux',
     body:'CrashLoopBackOff ImagePullBackOff ErrImagePull Pending pod OOMKilled exit code 137 Service no endpoints 503 CreateContainerConfigError Node NotReady PVC Pending container exits immediately no space left on device port already allocated permission denied volume Terraform state lock already exists import drift works locally fails in CI flaky tests GHCR 403 denied push high CPU disk full connection refused timed out DNS NXDOMAIN SERVFAIL TLS x509 certificate expired unknown authority.' },
 
+  /* ── CHEATSHEETS (new sheets) ────────────────────────────── */
+  { page:'cheatsheets', badge:'badge-tools', url:'cheatsheets.html#aws', cat:'tools',
+    title:'AWS CLI Cheatsheet',
+    body:'aws sts get-caller-identity sso login s3 sync cp presign ec2 describe-instances ssm start-session eks update-kubeconfig ecr get-login-password logs tail secretsmanager get-secret-value ssm get-parameter ecs force-new-deployment cost explorer.' },
+  { page:'cheatsheets', badge:'badge-tools', url:'cheatsheets.html#github-actions', cat:'tools',
+    title:'GitHub Actions Cheatsheet — Workflow YAML Snippets',
+    body:'on push pull_request workflow_dispatch permissions concurrency cancel-in-progress setup-node cache matrix needs if docker build-push-action cache gha OIDC configure-aws-credentials environment approval GITHUB_OUTPUT upload-artifact gh cli.' },
+  { page:'cheatsheets', badge:'badge-tools', url:'cheatsheets.html#bash', cat:'tools',
+    title:'Bash Scripting Cheatsheet',
+    body:'set -euo pipefail default variable require variable arguments if file exists for loop while read case function local trap cleanup retry backoff command substitution arrays shellcheck bash -x.' },
+  { page:'cheatsheets', badge:'badge-tools', url:'cheatsheets.html#systemd', cat:'tools',
+    title:'systemd & journalctl Cheatsheet',
+    body:'systemctl status restart reload enable now daemon-reload failed cat edit list-timers journalctl -u -f since priority err previous boot kernel OOM disk usage vacuum.' },
+  { page:'cheatsheets', badge:'badge-tools', url:'cheatsheets.html#networking', cat:'tools',
+    title:'Networking & Debugging Cheatsheet',
+    body:'ip a route ss -tlnp dig trace nc -zv curl -v timing Host header openssl s_client certificate mtr tcpdump netshoot debug pod.' },
+  { page:'cheatsheets', badge:'badge-tools', url:'cheatsheets.html#argocd', cat:'tools',
+    title:'Argo CD CLI Cheatsheet',
+    body:'argocd login app list get diff sync wait history rollback hard-refresh create delete cascade initial admin secret port-forward GitOps.' },
+
   /* ── QUIZ ──────────────────────────────────────────────── */
   { page:'quiz', badge:'badge-quiz', url:'quiz.html', cat:'quiz',
     title:'DevOps Quiz 2026 — Test Your Knowledge',
