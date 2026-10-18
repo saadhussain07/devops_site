@@ -477,6 +477,7 @@
       <button class="sf-chip" data-cat="concepts">Concepts</button>
       <button class="sf-chip" data-cat="workflow">Workflow</button>
       <button class="sf-chip" data-cat="roadmap">Roadmap</button>
+      <button class="sf-chip" data-cat="projects">Projects</button>
       <button class="sf-chip" data-cat="blog">Blog</button>
       <button class="sf-chip" data-cat="quiz">Quiz</button>
     </div>
@@ -723,6 +724,23 @@ const INDEX = [
   { page:'roadmap', badge:'badge-roadmap', url:'roadmap.html', cat:'roadmap',
     title:'Phase 4 Expert — Platform Engineering SRE FinOps AIOps MLOps',
     body:'Platform Engineering IDP Backstage Crossplane self service golden path templates developer experience DX metrics. SRE Site Reliability Engineering error budgets chaos engineering LitmusChaos capacity planning blameless post mortems toil elimination. FinOps cloud cost Kubecost reserved instances spot. AIOps MLOps ML pipeline model registry vLLM GitHub Copilot.' },
+
+  /* ── PROJECTS ──────────────────────────────────────────── */
+  { page:'projects', badge:'badge-roadmap', url:'projects.html', cat:'projects',
+    title:'DevOps Projects & Hands-On Labs — Beginner to Advanced',
+    body:'Eight portfolio projects build in order. Linux Bash automation cron systemd backups. Docker Compose 3 tier app. GitHub Actions CI/CD pipeline Trivy GHCR. Terraform AWS VPC ALB auto scaling. Kubernetes Helm Ingress HPA kind. Prometheus Grafana Loki SLO alerts. GitOps Argo CD. Capstone EKS platform Kyverno Cosign External Secrets. Resume bullets portfolio.' },
+  { page:'projects', badge:'badge-roadmap', url:'projects.html#cicd-pipeline', cat:'projects',
+    title:'Project: CI/CD Pipeline with GitHub Actions',
+    body:'Pull request lint unit tests docker build trivy scan push ghcr image tagged commit sha branch protection status badge SBOM reusable workflow matrix.' },
+  { page:'projects', badge:'badge-roadmap', url:'projects.html#terraform-aws', cat:'projects',
+    title:'Project: Terraform an AWS Network & Web Tier',
+    body:'Terraform modules VPC public private subnets NAT gateway ALB auto scaling group launch template S3 remote state use_lockfile tflint plan on PR OIDC.' },
+  { page:'projects', badge:'badge-roadmap', url:'projects.html#k8s-helm', cat:'projects',
+    title:'Project: Deploy to Kubernetes with Helm',
+    body:'kind cluster ingress nginx metrics server Deployment StatefulSet PVC Secret readiness liveness probes requests limits Helm chart values HPA load test rollback NetworkPolicy.' },
+  { page:'projects', badge:'badge-roadmap', url:'projects.html#gitops-argocd', cat:'projects',
+    title:'Project: GitOps Delivery with Argo CD',
+    body:'Argo CD Application app of apps ApplicationSet automated sync prune selfHeal drift gitops repo image tag bump promotion pull request Argo Rollouts canary.' },
 
   /* ── QUIZ ──────────────────────────────────────────────── */
   { page:'quiz', badge:'badge-quiz', url:'quiz.html', cat:'quiz',

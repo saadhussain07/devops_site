@@ -616,6 +616,7 @@ window.__DH_MAIN_LOADED__ = true;
       { href: 'concepts.html', icon: '◈', label: 'Concepts', desc: 'CI/CD, IaC, Monitoring' },
       { href: 'workflow.html', icon: '↺', label: 'Workflow', desc: '7-stage lifecycle' },
       { href: 'roadmap.html',  icon: '◉', label: 'Roadmap',  desc: 'Skill tracker' },
+      { href: 'projects.html', icon: '▣', label: 'Projects', desc: '8 hands-on labs' },
       { href: 'quiz.html',     icon: '◆', label: 'Quiz',     desc: 'Test your knowledge' },
       { href: 'blog.html',     icon: '✎', label: 'Blog',     desc: 'Tutorials & guides' },
     ]},

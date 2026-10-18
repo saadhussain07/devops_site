@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Hands-on DevOps projects from beginner to advanced — Docker, CI/CD, Kubernetes, Terraform on AWS, GitOps and monitoring. Step-by-step guides with starter code and portfolio tips.">
+  <meta name="keywords" content="DevOps projects, DevOps portfolio, DevOps labs, Kubernetes project, Terraform AWS project, CI/CD project, GitOps project">
+  <meta name="author" content="DevOps Hub">
+  <meta name="robots" content="index, follow">
+  <title>DevOps Projects &amp; Hands-On Labs · DevOps Hub</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── Projects page ───────────────────────────────────── */
+    .pj-intro {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .pj-intro-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.1rem 1.25rem;
+    }
+    .pj-intro-card strong {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-green);
+      margin-bottom: 0.35rem;
+    }
+    .pj-intro-card p { font-size: 0.88rem; margin: 0; }
+
+    .pj-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .pj-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .pj-chip {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .pj-chip:hover { border-color: var(--accent-green); color: var(--accent-green); }
+    .pj-chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+    .pj-progress {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .pj-progress-bar {
+      width: 140px;
+      height: 6px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .pj-progress-fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      transition: width var(--transition-slow);
+    }
+
+    .pj-list { display: flex; flex-direction: column; gap: 1.25rem; }
+
+    .pj-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      scroll-margin-top: 80px;
+      transition: border-color var(--transition);
+    }
+    .pj-card:hover { border-color: var(--border-strong); }
+    .pj-card.done { border-color: var(--accent-green); }
+
+    .pj-head {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 1rem;
+      align-items: start;
+      padding: 1.4rem 1.5rem 1.1rem;
+    }
+    .pj-num {
+      width: 44px; height: 44px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--accent-green);
+    }
+    .pj-head h2 { font-size: 1.2rem; margin-bottom: 0.35rem; }
+    .pj-head p  { font-size: 0.9rem; margin: 0; }
+    .pj-meta { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
+    .pj-pill {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.05em;
+      padding: 0.15rem 0.55rem;
+      border-radius: 3px;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .pj-pill.lvl-beginner     { color: var(--accent-green);  border-color: var(--accent-green); }
+    .pj-pill.lvl-intermediate { color: var(--accent-cyan);   border-color: var(--accent-cyan); }
+    .pj-pill.lvl-advanced     { color: var(--accent-orange); border-color: var(--accent-orange); }
+
+    .pj-done {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .pj-done input { accent-color: var(--primary); width: 16px; height: 16px; cursor: pointer; }
+
+    .pj-body { border-top: 1px solid var(--border); }
+    .pj-body > details { border-bottom: 1px solid var(--border); }
+    .pj-body > details:last-child { border-bottom: none; }
+    .pj-body summary {
+      cursor: pointer;
+      padding: 0.85rem 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .pj-body summary::-webkit-details-marker { display: none; }
+    .pj-body summary::after { content: '+'; font-size: 1rem; color: var(--text-muted); }
+    .pj-body details[open] summary::after { content: '−'; }
+    .pj-body summary:hover { color: var(--accent-green); }
+    .pj-section { padding: 0 1.5rem 1.25rem; font-size: 0.92rem; }
+    .pj-section ol, .pj-section ul { padding-left: 1.3rem; display: flex; flex-direction: column; gap: 0.45rem; }
+    .pj-section li { color: var(--text-secondary); line-height: 1.6; }
+    .pj-section li strong { color: var(--text-primary); }
+    .pj-section code {
+      font-family: var(--font-mono);
+      font-size: 0.82em;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.05rem 0.35rem;
+      color: var(--accent-green);
+    }
+    .pj-section pre {
+      background: var(--terminal-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      overflow-x: auto;
+      margin: 0.75rem 0 0;
+      position: relative;
+    }
+    .pj-section pre code {
+      background: none; border: none; padding: 0;
+      color: var(--terminal-text);
+      font-size: 0.8rem;
+      line-height: 1.6;
+      white-space: pre;
+    }
+    .pj-copy {
+      position: absolute;
+      top: 0.5rem; right: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .pj-copy:hover { color: var(--accent-green); border-color: var(--accent-green); }
+    .pj-arch {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      background: var(--bg-surface);
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.9rem;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .pj-resume {
+      border-left: 3px solid var(--accent-green);
+      background: var(--bg-surface);
+      padding: 0.75rem 1rem;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      font-style: italic;
+      color: var(--text-primary);
+    }
+
+    .pj-tips {
+      margin-top: 3rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    @media (max-width: 640px) {
+      .pj-head { grid-template-columns: 1fr; }
+      .pj-num { display: none; }
+      .pj-head, .pj-body summary, .pj-section { padding-left: 1rem; padding-right: 1rem; }
+    }
+  </style>
+  <link rel="canonical" href="https://rocketdevops.vercel.app/projects.html">
+  <meta property="og:title" content="DevOps Projects &amp; Hands-On Labs · DevOps Hub">
+  <meta property="og:description" content="Hands-on DevOps projects from beginner to advanced — Docker, CI/CD, Kubernetes, Terraform on AWS, GitOps and monitoring. Step-by-step guides with starter code and portfolio tips.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://rocketdevops.vercel.app/projects.html">
+  <meta property="og:site_name" content="DevOps Hub">
+  <meta property="og:image" content="https://rocketdevops.vercel.app/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+<!-- ═══ NAVBAR ═══ -->
+<nav id="dh-nav" aria-label="Main navigation">
+  <div id="dh-progress"></div>
+  <div id="dh-inner">
+    <a href="index.html" id="dh-logo">
+      <span id="dh-prompt">&gt;</span> DevOpsHub
+    </a>
+    <ul id="dh-links"></ul>
+    <div id="dh-controls">
+      <button id="dh-theme-btn" aria-label="Toggle theme">🌙</button>
+      <button id="dh-burger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div id="dh-drawer">
+  <ul></ul>
+</div>
+<!-- ═══ END NAVBAR ═══ -->
+
+<header class="page-header">
+  <div class="container">
+    <span class="tag">// learn by building</span>
+    <h1>DevOps <span class="text-green">Projects &amp; Labs</span></h1>
+    <p>Eight portfolio-ready projects, from your first Dockerfile to a GitOps platform on Kubernetes. Build them in order. Each one reuses the previous.</p>
+  </div>
+</header>
+
+<section class="section" style="padding-top:2rem;">
+  <div class="container">
+
+    <div class="pj-intro">
+      <div class="pj-intro-card">
+        <strong>01 · Build in public</strong>
+        <p>Create one GitHub repo per project. Commit early and often, since recruiters read history too.</p>
+      </div>
+      <div class="pj-intro-card">
+        <strong>02 · Write the README</strong>
+        <p>Explain the problem, draw the architecture, list how to run it, and note what you would improve.</p>
+      </div>
+      <div class="pj-intro-card">
+        <strong>03 · Keep costs at zero</strong>
+        <p>Use <code style="font-family:var(--font-mono)">kind</code> or <code style="font-family:var(--font-mono)">minikube</code> locally, the AWS Free Tier, and always run <code style="font-family:var(--font-mono)">terraform destroy</code> when done.</p>
+      </div>
+      <div class="pj-intro-card">
+        <strong>04 · Track progress</strong>
+        <p>Tick "Completed" on each project. Your progress is saved in this browser.</p>
+      </div>
+    </div>
+
+    <div class="pj-toolbar">
+      <div class="pj-filters" role="group" aria-label="Filter by level">
+        <button class="pj-chip active" data-level="all">All</button>
+        <button class="pj-chip" data-level="beginner">Beginner</button>
+        <button class="pj-chip" data-level="intermediate">Intermediate</button>
+        <button class="pj-chip" data-level="advanced">Advanced</button>
+      </div>
+      <div class="pj-progress">
+        <span id="pj-count">0 / 8 completed</span>
+        <div class="pj-progress-bar"><div class="pj-progress-fill" id="pj-fill"></div></div>
+      </div>
+    </div>
+
+    <div class="pj-list">
+
+      <!-- ── 1 ─────────────────────────────────────────── -->
+      <article class="pj-card" id="linux-automation" data-level="beginner">
+        <div class="pj-head">
+          <div class="pj-num">01</div>
+          <div>
+            <h2>Linux Server Health &amp; Backup Automation</h2>
+            <p>Write Bash scripts that check disk, memory and service health, rotate logs and back up a directory on a schedule.</p>
+            <div class="pj-meta">
+              <span class="pj-pill lvl-beginner">Beginner</span>
+              <span class="pj-pill">~1 weekend</span>
+              <span class="pj-pill">Bash</span><span class="pj-pill">cron</span><span class="pj-pill">systemd</span><span class="pj-pill">SSH</span>
+            </div>
+          </div>
+          <label class="pj-done"><input type="checkbox" data-project="linux-automation"> Completed</label>
+        </div>
+        <div class="pj-body">
+          <details>
+            <summary>What you'll learn</summary>
+            <div class="pj-section"><ul>
+              <li>Writing safe Bash: <code>set -euo pipefail</code>, functions, exit codes and arguments</li>
+              <li>Reading system state with <code>df</code>, <code>free</code>, <code>systemctl</code> and <code>journalctl</code></li>
+              <li>Scheduling with cron <em>and</em> systemd timers, and understanding the difference</li>
+              <li>Key-based SSH and copying backups to a second machine with <code>rsync</code></li>
+            </ul></div>
+          </details>
+          <details>
+            <summary>Steps</summary>
+            <div class="pj-section"><ol>
+              <li><strong>Get a Linux box.</strong> Use a local VM (Multipass, VirtualBox or WSL2) or a free-tier cloud instance.</li>
+              <li><strong>Write <code>healthcheck.sh</code>.</strong> Warn when disk usage is above 80% or free memory is below 10%, and when a named service (e.g. <code>nginx</code>) is not active. Exit non-zero on any failure.</li>
+              <li><strong>Write <code>backup.sh</code>.</strong> Tar and gzip a directory with a timestamp, keep the last 7 archives and delete older ones.</li>
+              <li><strong>Schedule both.</strong> Run the health check every 5 minutes with cron, and the backup nightly with a systemd timer.</li>
+              <li><strong>Ship backups off-box.</strong> Set up SSH keys and <code>rsync</code> the archive to a second VM or an S3 bucket.</li>
+              <li><strong>Lint.</strong> Run <code>shellcheck</code> on every script and fix all warnings.</li>
+            </ol>
+            <pre><code>#!/usr/bin/env bash
+set -euo pipefail
+
+THRESHOLD=${THRESHOLD:-80}
+status=0
+
+while read -r use mount; do
+  pct=${use%\%}
+  if (( pct &gt; THRESHOLD )); then
+    echo "WARN: $mount is ${pct}% full"
+    status=1
+  fi
+done &lt; &lt;(df -h --output=pcent,target -x tmpfs -x devtmpfs | tail -n +2)
+
+for svc in "$@"; do
+  systemctl is-active --quiet "$svc" || { echo "FAIL: $svc is not running"; status=1; }
+done
+
+exit "$status"</code></pre></div>
+          </details>
+          <details>
+            <summary>Done when</summary>
+            <div class="pj-section"><ul>
+              <li><code>shellcheck *.sh</code> reports nothing</li>
+              <li>Stopping the service makes the health check exit with code 1</li>
+              <li><code>systemctl list-timers</code> shows your backup timer, and only 7 archives exist after a week</li>
+            </ul></div>
+          </details>
+          <details>
+            <summary>Stretch goals &amp; résumé bullet</summary>
+            <div class="pj-section">
+              <ul>
+                <li>Send failures to a Slack or Discord webhook with <code>curl</code></li>
+                <li>Package the scripts as an Ansible role so you can deploy them to any server</li>
+              </ul>
+              <p style="margin-top:0.9rem;" class="pj-resume">"Automated server health monitoring and 7-day rotating backups with Bash, cron and systemd timers, with off-host replication over SSH."</p>
+            </div>
+          </details>
+        </div>
+      </article>
+
+      <!-- ── 2 ─────────────────────────────────────────── -->
+      <article class="pj-card" id="containerise-app" data-level="beginner">
+        <div class="pj-head">
+          <div class="pj-num">02</div>
+          <div>
+            <h2>Containerise a 3-Tier App with Docker Compose</h2>
+            <p>Package a web frontend, an API and a PostgreSQL database into containers and run the whole stack with one command.</p>
+            <div class="pj-meta">
+              <span class="pj-pill lvl-beginner">Beginner</span>
+              <span class="pj-pill">~1 weekend</span>
+              <span class="pj-pill">Docker</span><span class="pj-pill">Compose</span><span class="pj-pill">PostgreSQL</span><span class="pj-pill">Nginx</span>
+            </div>
+          </div>
+          <label class="pj-done"><input type="checkbox" data-project="containerise-app"> Completed</label>
+        </div>
+        <div class="pj-body">
+          <details>
+            <summary>Architecture</summary>
+            <div class="pj-section">
+              <div class="pj-arch">browser → nginx (frontend, :80) → api (:8000) → postgres (:5432, named volume)</div>
+              <p>Use any small API you like (Flask, FastAPI, Express or Go). A to-do list with create, list and delete endpoints is enough.</p>
+            </div>
+          </details>
+          <details>
+            <summary>Steps</summary>
+            <div class="pj-section"><ol>
+              <li><strong>Write a multi-stage Dockerfile</strong> for the API, so the final image has no compilers or dev dependencies.</li>
+              <li><strong>Run as non-root</strong> and add a <code>HEALTHCHECK</code>.</li>
+              <li><strong>Serve the frontend</strong> from an <code>nginx:alpine</code> image that proxies <code>/api</code> to the API container.</li>
+              <li><strong>Write <code>compose.yaml</code></strong> with a named volume for Postgres, a <code>.env</code> file for secrets and <code>depends_on</code> with <code>condition: service_healthy</code>.</li>
+              <li><strong>Measure.</strong> Compare image sizes before and after multi-stage builds and record the numbers in your README.</li>
+            </ol>
+            <pre><code>services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 5
+  api:
+    build: ./api
+    environment:
+      DATABASE_URL: postgres://postgres:${DB_PASSWORD}@db:5432/postgres
+    depends_on:
+      db: { condition: service_healthy }
+  web:
+    build: ./web
+    ports: ["8080:80"]
+    depends_on: [api]
+volumes:
+  pgdata:</code></pre></div>
+          </details>
+          <details>
+            <summary>Done when</summary>
+            <div class="pj-section"><ul>
+              <li><code>docker compose up -d</code> on a fresh clone gives a working app at <code>localhost:8080</code></li>
+              <li>Data survives <code>docker compose down &amp;&amp; docker compose up -d</code></li>
+              <li>The API image is under 150 MB and <code>docker compose exec api whoami</code> is not <code>root</code></li>
+            </ul></div>
+          </details>
+          <details>
+            <summary>Stretch goals &amp; résumé bullet</summary>
+            <div class="pj-section">
+              <ul>
+                <li>Scan your images with <code>trivy image</code> and fix HIGH/CRITICAL findings</li>
+                <li>Add a <code>compose.override.yaml</code> for hot reload during development</li>
+              </ul>
+              <p style="margin-top:0.9rem;" class="pj-resume">"Containerised a 3-tier application with multi-stage Docker builds, cutting image size by X% and enabling one-command local environments with Docker Compose."</p>
+            </div>
+          </details>
+        </div>
+      </article>
+
+      <!-- ── 3 ─────────────────────────────────────────── -->
+      <article class="pj-card" id="cicd-pipeline" data-level="beginner">
+        <div class="pj-head">
+          <div class="pj-num">03</div>
+          <div>
+            <h2>CI/CD Pipeline with GitHub Actions</h2>
+            <p>Every pull request runs lint, tests and a security scan. Every merge to main builds and pushes a versioned image to a registry.</p>
+            <div class="pj-meta">
+              <span class="pj-pill lvl-beginner">Beginner</span>
+              <span class="pj-pill">~1 week</span>
+              <span class="pj-pill">GitHub Actions</span><span class="pj-pill">GHCR</span><span class="pj-pill">Trivy</span>
+            </div>
+          </div>
+          <label class="pj-done"><input type="checkbox" data-project="cicd-pipeline"> Completed</label>
+        </div>
+        <div class="pj-body">
+          <details>
+            <summary>Architecture</summary>
+            <div class="pj-section">
+              <div class="pj-arch">PR → lint → unit tests → docker build → trivy scan ✔ → merge → build → push ghcr.io/you/app:sha &amp; :latest</div>
+              <p>Reuse the API from Project 02.</p>
+            </div>
+          </details>
+          <details>
+            <summary>Steps</summary>
+            <div class="pj-section"><ol>
+              <li><strong>Add tests</strong> to the API, even just 3–5, so the pipeline has something to run.</li>
+              <li><strong>Create <code>.github/workflows/ci.yml</code></strong> that runs on <code>pull_request</code> and on <code>push</code> to <code>main</code>.</li>
+              <li><strong>Cache dependencies</strong> with the setup action's built-in cache.</li>
+              <li><strong>Scan the image</strong> with Trivy and fail the job on CRITICAL vulnerabilities.</li>
+              <li><strong>Push to GHCR</strong> using the built-in <code>GITHUB_TOKEN</code>, so no personal tokens are needed. Tag images with the commit SHA. Image names must be lowercase, so use a lowercase repo name or set the image name yourself.</li>
+              <li><strong>Protect <code>main</code>:</strong> require the CI check to pass before merging.</li>
+            </ol>
+            <pre><code>name: ci
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - run: pip install -r api/requirements.txt &amp;&amp; pytest api
+      - run: docker build -t ghcr.io/${{ github.repository }}:${{ github.sha }} api
+      - uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: ghcr.io/${{ github.repository }}:${{ github.sha }}
+          severity: CRITICAL
+          exit-code: "1"
+      - if: github.ref == 'refs/heads/main'
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker push ghcr.io/${{ github.repository }}:${{ github.sha }}</code></pre></div>
+          </details>
+          <details>
+            <summary>Done when</summary>
+            <div class="pj-section"><ul>
+              <li>A PR with a failing test cannot be merged</li>
+              <li>Merging to main produces a new image in your repo's <em>Packages</em> tab, tagged with the commit SHA</li>
+              <li>The README shows a passing CI status badge</li>
+            </ul></div>
+          </details>
+          <details>
+            <summary>Stretch goals &amp; résumé bullet</summary>
+            <div class="pj-section">
+              <ul>
+                <li>Add a matrix build across two language versions</li>
+                <li>Move the build logic into a reusable workflow and call it from a second repo</li>
+                <li>Generate an SBOM with Syft and attach it as a build artifact</li>
+              </ul>
+              <p style="margin-top:0.9rem;" class="pj-resume">"Built a GitHub Actions pipeline with automated tests, container vulnerability scanning and SHA-tagged image publishing, gating every merge to main."</p>
+            </div>
+          </details>
+        </div>
+      </article>
+
+      <!-- ── 4 ─────────────────────────────────────────── -->
+      <article class="pj-card" id="terraform-aws" data-level="intermediate">
+        <div class="pj-head">
+          <div class="pj-num">04</div>
+          <div>
+            <h2>Terraform an AWS Network &amp; Web Tier</h2>
+            <p>Provision a VPC, public and private subnets, a load balancer and an auto-scaling group using reusable modules and remote state.</p>
+            <div class="pj-meta">
+              <span class="pj-pill lvl-intermediate">Intermediate</span>
+              <span class="pj-pill">~1–2 weeks</span>
+              <span class="pj-pill">Terraform</span><span class="pj-pill">AWS</span><span class="pj-pill">S3 state</span><span class="pj-pill">IAM</span>
+            </div>
+          </div>
+          <label class="pj-done"><input type="checkbox" data-project="terraform-aws"> Completed</label>
+        </div>
+        <div class="pj-body">
+          <details>
+            <summary>Architecture</summary>
+            <div class="pj-section">
+              <div class="pj-arch">VPC 10.0.0.0/16 → 2 public subnets (ALB) + 2 private subnets (ASG of EC2 running your container) → NAT → internet</div>
+              <p>⚠ An ALB and a NAT gateway are <strong>not</strong> free. Expect a few dollars per day, so destroy everything when you finish each session. For a free variant, skip the NAT and put the instances in public subnets with tight security groups.</p>
+            </div>
+          </details>
+          <details>
+            <summary>Steps</summary>
+            <div class="pj-section"><ol>
+              <li><strong>Bootstrap state.</strong> Create an S3 bucket (versioning on) for remote state, and enable S3 native locking with <code>use_lockfile = true</code> (Terraform 1.10+).</li>
+              <li><strong>Write a <code>network</code> module:</strong> VPC, subnets across 2 AZs, route tables, IGW and NAT.</li>
+              <li><strong>Write a <code>web</code> module:</strong> launch template whose user-data runs your Docker image, an ASG (min 2) and an ALB with a health-checked target group.</li>
+              <li><strong>Use environments.</strong> Create <code>envs/dev</code> and <code>envs/prod</code> folders that call the same modules with different variables.</li>
+              <li><strong>Add guardrails:</strong> <code>terraform fmt -check</code>, <code>terraform validate</code> and <code>tflint</code> in CI, with <code>terraform plan</code> output posted to PRs.</li>
+            </ol>
+            <pre><code>terraform {
+  required_version = "&gt;= 1.10"
+  backend "s3" {
+    bucket       = "yourname-tfstate"
+    key          = "dev/web/terraform.tfstate"
+    region       = "us-east-1"
+    use_lockfile = true
+  }
+}
+
+module "network" {
+  source   = "../../modules/network"
+  cidr     = "10.0.0.0/16"
+  az_count = 2
+}
+
+module "web" {
+  source          = "../../modules/web"
+  vpc_id          = module.network.vpc_id
+  public_subnets  = module.network.public_subnet_ids
+  private_subnets = module.network.private_subnet_ids
+  image           = "ghcr.io/you/app:latest"
+  min_size        = 2
+}</code></pre></div>
+          </details>
+          <details>
+            <summary>Done when</summary>
+            <div class="pj-section"><ul>
+              <li>The ALB DNS name serves your app, and terminating an instance gets it replaced automatically</li>
+              <li>A second <code>terraform plan</code> reports <em>No changes</em></li>
+              <li><code>terraform destroy</code> removes everything cleanly</li>
+            </ul></div>
+          </details>
+          <details>
+            <summary>Stretch goals &amp; résumé bullet</summary>
+            <div class="pj-section">
+              <ul>
+                <li>Use GitHub OIDC to assume an AWS role from CI, with no long-lived access keys</li>
+                <li>Add HTTPS with ACM and a Route 53 record</li>
+                <li>Add <code>checkov</code> or <code>trivy config</code> to scan the Terraform code</li>
+              </ul>
+              <p style="margin-top:0.9rem;" class="pj-resume">"Designed reusable Terraform modules for a multi-AZ AWS VPC and auto-scaling web tier behind an ALB, with S3 remote state and plan-on-PR CI."</p>
+            </div>
+          </details>
+        </div>
+      </article>
+
+      <!-- ── 5 ─────────────────────────────────────────── -->
+      <article class="pj-card" id="k8s-helm" data-level="intermediate">
+        <div class="pj-head">
+          <div class="pj-num">05</div>
+          <div>
+            <h2>Deploy to Kubernetes with Helm</h2>
+            <p>Run the 3-tier app on a local Kubernetes cluster with a Helm chart, Ingress, probes, resource limits and autoscaling.</p>
+            <div class="pj-meta">
+              <span class="pj-pill lvl-intermediate">Intermediate</span>
+              <span class="pj-pill">~1–2 weeks</span>
+              <span class="pj-pill">Kubernetes</span><span class="pj-pill">kind</span><span class="pj-pill">Helm</span><span class="pj-pill">Ingress</span><span class="pj-pill">HPA</span>
+            </div>
+          </div>
+          <label class="pj-done"><input type="checkbox" data-project="k8s-helm"> Completed</label>
+        </div>
+        <div class="pj-body">
+          <details>
+            <summary>Steps</summary>
+            <div class="pj-section"><ol>
+              <li><strong>Create a cluster</strong> with <code>kind</code> (3 nodes) and install the ingress-nginx controller and metrics-server.</li>
+              <li><strong>Write raw manifests first:</strong> a Deployment and Service for the API and web, a StatefulSet and PVC for Postgres, and a Secret for the DB password.</li>
+              <li><strong>Add probes</strong> (readiness and liveness) and <strong>resource requests and limits</strong> to every container.</li>
+              <li><strong>Convert to a Helm chart</strong> with <code>helm create</code>, then move image tags, replicas and hostnames into <code>values.yaml</code>.</li>
+              <li><strong>Add an HPA</strong> on the API (CPU 70%), load-test with <code>hey</code> or <code>k6</code>, and watch it scale.</li>
+              <li><strong>Practise rollouts:</strong> deploy a broken image, watch the readiness probe stop it, then run <code>helm rollback</code>.</li>
+            </ol>
+            <pre><code>kind create cluster --name lab --config kind.yaml
+helm upgrade --install ingress-nginx ingress-nginx \
+  --repo https://kubernetes.github.io/ingress-nginx -n ingress-nginx --create-namespace
+helm upgrade --install app ./chart -n app --create-namespace \
+  --set api.image.tag=$(git rev-parse --short HEAD)
+kubectl -n app get pods,svc,ingress,hpa
+kubectl -n app rollout status deploy/app-api</code></pre></div>
+          </details>
+          <details>
+            <summary>Done when</summary>
+            <div class="pj-section"><ul>
+              <li><code>helm install</code> on a fresh cluster brings up a working app reachable through the Ingress</li>
+              <li>Deleting the Postgres pod loses no data</li>
+              <li>The HPA scales the API above 1 replica under load and back down afterwards</li>
+              <li><code>helm lint</code> passes</li>
+            </ul></div>
+          </details>
+          <details>
+            <summary>Stretch goals &amp; résumé bullet</summary>
+            <div class="pj-section">
+              <ul>
+                <li>Add NetworkPolicies so only the API can reach Postgres</li>
+                <li>Replace the plain Secret with External Secrets or Sealed Secrets</li>
+                <li>Run the same chart on a managed cluster (EKS, GKE or AKS) using Project 04's Terraform skills</li>
+              </ul>
+              <p style="margin-top:0.9rem;" class="pj-resume">"Packaged a multi-service application as a Helm chart with health probes, resource limits, Ingress and Horizontal Pod Autoscaling, validated under load."</p>
+            </div>
+          </details>
+        </div>
+      </article>
+
+      <!-- ── 6 ─────────────────────────────────────────── -->
+      <article class="pj-card" id="observability" data-level="intermediate">
+        <div class="pj-head">
+          <div class="pj-num">06</div>
+          <div>
+            <h2>Observability Stack: Metrics, Logs &amp; Alerts</h2>
+            <p>Instrument your app, then collect metrics with Prometheus, logs with Loki, build Grafana dashboards and alert on SLOs.</p>
+            <div class="pj-meta">
+              <span class="pj-pill lvl-intermediate">Intermediate</span>
+              <span class="pj-pill">~1 week</span>
+              <span class="pj-pill">Prometheus</span><span class="pj-pill">Grafana</span><span class="pj-pill">Loki</span><span class="pj-pill">Alertmanager</span>
+            </div>
+          </div>
+          <label class="pj-done"><input type="checkbox" data-project="observability"> Completed</label>
+        </div>
+        <div class="pj-body">
+          <details>
+            <summary>Steps</summary>
+            <div class="pj-section"><ol>
+              <li><strong>Install <code>kube-prometheus-stack</code></strong> with Helm on your Project 05 cluster.</li>
+              <li><strong>Instrument the API</strong> with a Prometheus client library: request count, errors and a latency histogram (the RED method).</li>
+              <li><strong>Add a ServiceMonitor</strong> so Prometheus scrapes it automatically.</li>
+              <li><strong>Install Loki and Grafana Alloy</strong> to ship pod logs, then correlate a latency spike with the matching log lines in Grafana.</li>
+              <li><strong>Build a dashboard</strong> showing request rate, error %, p50/p95/p99 latency and pod CPU/memory. Export it as JSON into your repo.</li>
+              <li><strong>Define an SLO</strong> (e.g. 99.5% of requests succeed) and add a multi-window burn-rate alert as a PrometheusRule.</li>
+            </ol>
+            <pre><code># error ratio over 5 minutes
+sum(rate(http_requests_total{job="api",code=~"5.."}[5m]))
+  /
+sum(rate(http_requests_total{job="api"}[5m]))
+
+# p95 latency
+histogram_quantile(0.95,
+  sum by (le) (rate(http_request_duration_seconds_bucket{job="api"}[5m])))</code></pre></div>
+          </details>
+          <details>
+            <summary>Done when</summary>
+            <div class="pj-section"><ul>
+              <li>Your dashboard loads from the JSON in your repo</li>
+              <li>Injecting errors (e.g. an endpoint that returns 500) fires the alert within minutes</li>
+              <li>You can jump from a dashboard panel to the matching logs in one click</li>
+            </ul></div>
+          </details>
+          <details>
+            <summary>Stretch goals &amp; résumé bullet</summary>
+            <div class="pj-section">
+              <ul>
+                <li>Add distributed tracing with OpenTelemetry and Tempo or Jaeger</li>
+                <li>Route alerts to Slack and write a one-page runbook linked from the alert</li>
+              </ul>
+              <p style="margin-top:0.9rem;" class="pj-resume">"Implemented RED-method metrics, centralised logging and SLO burn-rate alerting for a Kubernetes service using Prometheus, Loki and Grafana."</p>
+            </div>
+          </details>
+        </div>
+      </article>
+
+      <!-- ── 7 ─────────────────────────────────────────── -->
+      <article class="pj-card" id="gitops-argocd" data-level="advanced">
+        <div class="pj-head">
+          <div class="pj-num">07</div>
+          <div>
+            <h2>GitOps Delivery with Argo CD</h2>
+            <p>Make Git the single source of truth. CI builds images, updates a config repo, and Argo CD syncs every environment automatically.</p>
+            <div class="pj-meta">
+              <span class="pj-pill lvl-advanced">Advanced</span>
+              <span class="pj-pill">~2 weeks</span>
+              <span class="pj-pill">Argo CD</span><span class="pj-pill">Kustomize/Helm</span><span class="pj-pill">GitHub Actions</span>
+            </div>
+          </div>
+          <label class="pj-done"><input type="checkbox" data-project="gitops-argocd"> Completed</label>
+        </div>
+        <div class="pj-body">
+          <details>
+            <summary>Architecture</summary>
+            <div class="pj-section">
+              <div class="pj-arch">app repo → CI builds ghcr.io/app:sha → PR bumps tag in gitops repo → merge → Argo CD syncs dev → promote PR → prod</div>
+            </div>
+          </details>
+          <details>
+            <summary>Steps</summary>
+            <div class="pj-section"><ol>
+              <li><strong>Split repos:</strong> app code in one repo, and environment config (<code>envs/dev</code>, <code>envs/prod</code>) in a <em>gitops</em> repo.</li>
+              <li><strong>Install Argo CD</strong> and create one <code>Application</code> per environment. Use the app-of-apps pattern or an ApplicationSet.</li>
+              <li><strong>Enable automated sync</strong> with <code>prune</code> and <code>selfHeal</code> for dev, and manual sync for prod.</li>
+              <li><strong>Extend Project 03's CI</strong> to open a PR against the gitops repo that bumps the image tag.</li>
+              <li><strong>Test drift:</strong> <code>kubectl scale</code> a deployment by hand and watch Argo CD revert it.</li>
+              <li><strong>Roll back</strong> by reverting the Git commit, not with kubectl.</li>
+            </ol>
+            <pre><code>apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/you/gitops
+    targetRevision: main
+    path: envs/dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: app-dev
+  syncPolicy:
+    automated: { prune: true, selfHeal: true }
+    syncOptions: [CreateNamespace=true]</code></pre></div>
+          </details>
+          <details>
+            <summary>Done when</summary>
+            <div class="pj-section"><ul>
+              <li>A code merge reaches dev with no manual <code>kubectl</code> or <code>helm</code> commands</li>
+              <li>Manual changes in the cluster are reverted automatically</li>
+              <li>Promoting to prod is a reviewed pull request</li>
+            </ul></div>
+          </details>
+          <details>
+            <summary>Stretch goals &amp; résumé bullet</summary>
+            <div class="pj-section">
+              <ul>
+                <li>Add canary releases with Argo Rollouts and automated analysis against your Project 06 Prometheus metrics</li>
+                <li>Send Argo CD notifications to Slack</li>
+              </ul>
+              <p style="margin-top:0.9rem;" class="pj-resume">"Implemented GitOps continuous delivery with Argo CD across dev and prod, with automated drift correction and Git-based promotion and rollback."</p>
+            </div>
+          </details>
+        </div>
+      </article>
+
+      <!-- ── 8 ─────────────────────────────────────────── -->
+      <article class="pj-card" id="platform-capstone" data-level="advanced">
+        <div class="pj-head">
+          <div class="pj-num">08</div>
+          <div>
+            <h2>Capstone: Secure Production Platform on EKS</h2>
+            <p>Combine everything: Terraform-built EKS, GitOps delivery, observability, secrets management, policy enforcement and a written incident drill.</p>
+            <div class="pj-meta">
+              <span class="pj-pill lvl-advanced">Advanced</span>
+              <span class="pj-pill">~3–4 weeks</span>
+              <span class="pj-pill">EKS</span><span class="pj-pill">Terraform</span><span class="pj-pill">Argo CD</span><span class="pj-pill">Kyverno</span><span class="pj-pill">External Secrets</span>
+            </div>
+          </div>
+          <label class="pj-done"><input type="checkbox" data-project="platform-capstone"> Completed</label>
+        </div>
+        <div class="pj-body">
+          <details>
+            <summary>Scope</summary>
+            <div class="pj-section"><ol>
+              <li><strong>Infrastructure:</strong> Terraform the VPC and EKS cluster (managed node group or Karpenter), with an ECR repo and OIDC roles for CI.</li>
+              <li><strong>Bootstrap:</strong> Terraform installs Argo CD only. Argo CD then installs everything else (ingress, cert-manager, monitoring, External Secrets, Kyverno) from Git.</li>
+              <li><strong>Security:</strong> pull secrets from AWS Secrets Manager via External Secrets. Kyverno policies block <code>:latest</code> tags, privileged pods and images from unknown registries.</li>
+              <li><strong>Delivery:</strong> CI from Project 03, plus image signing with Cosign and signature verification in the cluster.</li>
+              <li><strong>Reliability:</strong> SLO dashboards and alerts from Project 06, a PodDisruptionBudget, and topology spread across AZs.</li>
+              <li><strong>Game day:</strong> kill a node, break a deployment and fill a disk. Write a blameless postmortem for one incident.</li>
+            </ol></div>
+          </details>
+          <details>
+            <summary>Done when</summary>
+            <div class="pj-section"><ul>
+              <li><code>terraform apply</code> followed by an Argo CD sync recreates the whole platform from nothing</li>
+              <li>An unsigned image or a privileged pod is rejected at admission</li>
+              <li>The repo contains an architecture diagram, a cost estimate, runbooks and one postmortem</li>
+            </ul></div>
+          </details>
+          <details>
+            <summary>Cost warning &amp; résumé bullet</summary>
+            <div class="pj-section">
+              <p>⚠ The EKS control plane costs about $0.10/hour, plus nodes and NAT. Build and test in short sessions, then destroy. Set an AWS Budget alert before you start.</p>
+              <p style="margin-top:0.9rem;" class="pj-resume">"Built a production-style Kubernetes platform on AWS EKS with Terraform and Argo CD, enforcing supply-chain security (Cosign, Kyverno) and SLO-based alerting, validated through chaos game days."</p>
+            </div>
+          </details>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="pj-tips">
+      <div class="card">
+        <h3 style="font-size:1rem;margin-bottom:0.5rem;">Stuck on a step?</h3>
+        <p style="font-size:0.9rem;margin:0;">Look up commands on the <a href="cheatsheets.html">Cheatsheets</a> page, check terms in the <a href="glossary.html">Glossary</a>, or read the matching <a href="blog.html">Blog</a> tutorial.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:1rem;margin-bottom:0.5rem;">Where these fit</h3>
+        <p style="font-size:0.9rem;margin:0;">Projects 01–03 match <a href="roadmap.html">Roadmap</a> Phases 1–2, Projects 04–06 match Phase 2–3, and Projects 07–08 match Phases 3–4.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:1rem;margin-bottom:0.5rem;">Built one? Share it</h3>
+        <p style="font-size:0.9rem;margin:0;">Send your repo link through the <a href="contact.html">Contact</a> page. Good projects may be featured here.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">DevOpsHub</div>
+        <p>Hands-on projects that turn DevOps theory into a portfolio.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <ul class="footer-links">
+          <li><a href="roadmap.html">Roadmap</a></li>
+          <li><a href="concepts.html">Concepts</a></li>
+          <li><a href="tools.html">Tools</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Practice</h4>
+        <ul class="footer-links">
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="quiz.html">Quiz</a></li>
+          <li><a href="cheatsheets.html">Cheatsheets</a></li>
+          <li><a href="glossary.html">Glossary</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>More</h4>
+        <ul class="footer-links">
+          <li><a href="resources.html">Resources</a></li>
+          <li><a href="search.html">Search</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="privacy-policy.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 DevOpsHub. Powered by HTML5, CSS3 &amp; Vanilla JS.</p>
+      <div class="footer-status"><span class="status-dot"></span>All systems operational</div>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js" defer></script>
+<script>
+'use strict';
+
+/* ── Progress (saved per browser) ────────────────────────── */
+const STORE_KEY = 'dh-projects-done';
+const boxes = document.querySelectorAll('.pj-done input');
+
+function loadDone() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; } catch { return []; }
+}
+function saveDone(list) {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(list)); } catch { /* storage unavailable */ }
+}
+function renderProgress() {
+  const done = [...boxes].filter(b => b.checked).length;
+  document.getElementById('pj-count').textContent = `${done} / ${boxes.length} completed`;
+  document.getElementById('pj-fill').style.width = `${(done / boxes.length) * 100}%`;
+  boxes.forEach(b => b.closest('.pj-card').classList.toggle('done', b.checked));
+}
+
+const saved = loadDone();
+boxes.forEach(b => {
+  b.checked = saved.includes(b.dataset.project);
+  b.addEventListener('change', () => {
+    saveDone([...boxes].filter(x => x.checked).map(x => x.dataset.project));
+    renderProgress();
+  });
+});
+renderProgress();
+
+/* ── Level filter ────────────────────────────────────────── */
+document.querySelectorAll('.pj-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.pj-chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    const lvl = chip.dataset.level;
+    document.querySelectorAll('.pj-card').forEach(card => {
+      card.style.display = (lvl === 'all' || card.dataset.level === lvl) ? '' : 'none';
+    });
+  });
+});
+
+/* ── Open the linked project when arriving via #hash ─────── */
+if (location.hash) {
+  const target = document.querySelector(location.hash);
+  if (target && target.classList.contains('pj-card')) {
+    target.querySelectorAll('details').forEach(d => d.open = true);
+  }
+}
+
+/* ── Copy buttons on code blocks ─────────────────────────── */
+document.querySelectorAll('.pj-section pre').forEach(pre => {
+  const btn = document.createElement('button');
+  btn.className = 'pj-copy';
+  btn.type = 'button';
+  btn.textContent = 'copy';
+  btn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(pre.querySelector('code').textContent);
+      btn.textContent = '✓ copied';
+    } catch { btn.textContent = '✗'; }
+    setTimeout(() => btn.textContent = 'copy', 1600);
+  });
+  pre.appendChild(btn);
+});
+</script>
+</body>
+</html>
