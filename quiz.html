@@ -8,7 +8,7 @@
   <meta name="author" content="DevOps Hub">
   <meta name="robots" content="index, follow">
   <meta property="og:title" content="DevOps Quiz 2026 — Test Your Knowledge">
-  <meta property="og:description" content="103 DevOps quiz questions with explanations: Docker, Kubernetes, CI/CD, Terraform, Linux, networking, cloud, security and SRE.">
+  <meta property="og:description" content="111 DevOps quiz questions with explanations: Docker, Kubernetes, CI/CD, Terraform, Linux, networking, cloud, security and SRE.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://rocketdevops.vercel.app/quiz.html">
   <title>DevOps Quiz 2026 — DevOps Hub</title>
@@ -576,7 +576,7 @@
     <div class="quiz-intro">
       <span class="tag">// test yourself</span>
       <h1 id="quiz-title">DevOps <span class="text-green">Quiz</span></h1>
-      <p>Each run draws 20 random questions from a bank of 103, covering tools, Linux, networking, cloud, security and SRE. Every answer comes with an explanation, and each question has a 30-second timer. Pick a topic to focus your practice.</p>
+      <p>Each run draws 20 random questions from a bank of 111, covering tools, Linux, networking, cloud, security, SRE and AIOps. Every answer comes with an explanation, and each question has a 30-second timer. Pick a topic to focus your practice.</p>
 
       <div class="quiz-meta-grid">
         <div class="quiz-meta-card">
@@ -626,6 +626,7 @@
         <button class="cat-btn" data-cat="networking"><span class="cat-dot"></span>Networking</button>
         <button class="cat-btn" data-cat="git"><span class="cat-dot"></span>Git</button>
         <button class="cat-btn" data-cat="cloud"><span class="cat-dot"></span>Cloud</button>
+        <button class="cat-btn" data-cat="aiops"><span class="cat-dot"></span>AIOps</button>
       </div>
 
       <button class="btn btn-primary" id="start-btn" style="font-size:1rem; padding:0.9rem 2.5rem;">
@@ -1545,6 +1546,62 @@ const ALL_QUESTIONS = [
     opts: ["EKS", "AKS", "GKE", "OKE"],
     ans: 2,
     exp: "GKE is Google Kubernetes Engine. EKS is AWS, AKS is Azure and OKE is Oracle."
+  },
+  {
+    cat: "aiops",
+    q: "What does a z-score of 4 on a request-rate metric tell you?",
+    opts: ["Traffic is 4% above normal", "Traffic is 4 standard deviations away from its recent average, which is very unusual", "There were 4 errors", "The service has 4 replicas"],
+    ans: 1,
+    exp: "A z-score measures distance from the mean in standard deviations. |z| > 3 is rare in normal behaviour, so 4 is a strong anomaly signal."
+  },
+  {
+    cat: "aiops",
+    q: "Which PromQL function forecasts when a disk will run out of space?",
+    opts: ["rate()", "predict_linear()", "histogram_quantile()", "absent()"],
+    ans: 1,
+    exp: "predict_linear(node_filesystem_avail_bytes[6h], 4*3600) < 0 extrapolates the recent trend to warn hours before the disk is full."
+  },
+  {
+    cat: "aiops",
+    q: "Why compare current traffic with 'offset 1w' instead of a 24-hour average?",
+    opts: ["It uses less memory", "It accounts for weekly and daily patterns, so normal peaks aren't flagged as anomalies", "Prometheus can't average 24 hours", "It is required by Alertmanager"],
+    ans: 1,
+    exp: "Traffic at 9am Monday differs from 3am Sunday. Comparing with the same time last week removes predictable seasonality."
+  },
+  {
+    cat: "aiops",
+    q: "Which Alertmanager feature suppresses symptom alerts while the root-cause alert is firing?",
+    opts: ["group_wait", "inhibit_rules", "repeat_interval", "silences only"],
+    ans: 1,
+    exp: "inhibit_rules mute target alerts (e.g. pod warnings) when a matching source alert (e.g. NodeDown) is firing with equal labels."
+  },
+  {
+    cat: "aiops",
+    q: "What is the safest first step when adding an LLM agent to incident response?",
+    opts: ["Give it cluster-admin so it can fix anything", "Let it read telemetry and write triage reports, but take no actions", "Let it delete failing pods automatically", "Replace the on-call rotation"],
+    ans: 1,
+    exp: "Start read-only and measure diagnosis accuracy. Add one reversible action, behind approval, only once it's reliably right."
+  },
+  {
+    cat: "aiops",
+    q: "Why must an AIOps agent treat log lines and alert text as untrusted input?",
+    opts: ["Logs are often in other languages", "They can contain prompt-injection text that tries to steer the agent", "Logs are always encrypted", "LLMs can't read logs"],
+    ans: 1,
+    exp: "Anyone who can write to a log can try to manipulate the model. Enforce permissions and limits in code, not in the prompt."
+  },
+  {
+    cat: "aiops",
+    q: "Which action is the best candidate for auto-remediation?",
+    opts: ["Deleting a database volume", "Rolling back a deployment that just broke, with automatic verification", "Changing IAM policies", "Rewriting application code in production"],
+    ans: 1,
+    exp: "Good candidates are well understood, reversible, low-risk and automatically verifiable, like a rollback or a scale-out within limits."
+  },
+  {
+    cat: "aiops",
+    q: "An anomaly alert fires for a service that went from 0.1 to 0.5 requests per second. What is the best fix?",
+    opts: ["Lower the z-score threshold", "Add a minimum-volume condition so tiny absolute changes don't alert", "Delete the alert", "Page the whole team"],
+    ans: 1,
+    exp: "Relative jumps on tiny volumes are noise. Combine the anomaly condition with a minimum traffic level, a for: duration and warning severity."
   }
 ];
 

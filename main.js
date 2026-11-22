@@ -622,9 +622,10 @@ window.__DH_MAIN_LOADED__ = true;
     ]},
 
     { type: 'group', label: 'AIOps', icon: '🤖', items: [
-      { href: 'aiops.html',               icon: '🧠', label: 'AIOps Overview',         desc: 'AI-powered operations' },
-      { href: 'aiops.html#research',      icon: '📄', label: 'Research Paper',         desc: 'IEEE TNSM 2026' },
+      { href: 'aiops.html',               icon: '🧠', label: 'AIOps Guide',            desc: 'AI-powered operations' },
+      { href: 'aiops.html#maturity',      icon: '📶', label: 'Maturity Model',         desc: '5 levels, where to start' },
       { href: 'aiops.html#architecture',  icon: '⚡', label: 'Multi-Agent Architecture', desc: 'LLM agent pipeline' },
+      { href: 'aiops.html#lab',           icon: '🧪', label: 'Build an AIOps Lab',     desc: 'Hands-on, step by step' },
     ]},
 
     { type: 'group', label: 'Resources', icon: '📚', items: [
@@ -632,7 +633,7 @@ window.__DH_MAIN_LOADED__ = true;
       { href: 'cheatsheets.html', icon: '📋', label: 'Cheatsheets', desc: '120+ copy-paste commands' },
       { href: 'resources.html',   icon: '⭐', label: 'Resources',   desc: 'Curated learning list' },
       { href: 'glossary.html',    icon: '📖', label: 'Glossary',    desc: '70+ DevOps terms A–Z' },
-      { href: 'interview.html',   icon: '🎤', label: 'Interview Prep', desc: '60 Q&As with answers' },
+      { href: 'interview.html',   icon: '🎤', label: 'Interview Prep', desc: '66 Q&As with answers' },
       { href: 'troubleshooting.html', icon: '🚑', label: 'Troubleshooting', desc: 'Fix common failures' },
       { href: 'changelog.html',   icon: '🆕', label: "What's New",  desc: 'Latest additions' },
     ]},

@@ -6,7 +6,23 @@
     <atom:link href="https://rocketdevops.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
     <description>DevOps tutorials, guides and best practices.</description>
     <language>en</language>
-    <lastBuildDate>Sun, 18 Oct 2026 09:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 22 Nov 2026 09:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Build a Read-Only LLM Triage Agent for Kubernetes</title>
+      <link>https://rocketdevops.vercel.app/blog-llm-triage-agent.html</link>
+      <guid isPermaLink="true">https://rocketdevops.vercel.app/blog-llm-triage-agent.html</guid>
+      <pubDate>Sun, 22 Nov 2026 09:00:00 GMT</pubDate>
+      <category>AI &amp; AIOps</category>
+      <description>A tested, ~100-line Python agent that investigates Alertmanager alerts with read-only tools (PromQL, events, pod logs) and posts an evidence-based triage report to Slack.</description>
+    </item>
+    <item>
+      <title>Anomaly Detection with PromQL: Beyond Static Thresholds</title>
+      <link>https://rocketdevops.vercel.app/blog-anomaly-detection-promql.html</link>
+      <guid isPermaLink="true">https://rocketdevops.vercel.app/blog-anomaly-detection-promql.html</guid>
+      <pubDate>Sun, 22 Nov 2026 09:00:00 GMT</pubDate>
+      <category>AI &amp; AIOps</category>
+      <description>Dynamic baselines with z-scores, weekly seasonality, forecasting with predict_linear, and anomaly alert rules that don't cry wolf, using only Prometheus.</description>
+    </item>
     <item>
       <title>AI in DevOps: Practical Uses, Agents and Guardrails</title>
       <link>https://rocketdevops.vercel.app/blog-ai-in-devops.html</link>

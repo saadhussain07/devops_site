@@ -1,0 +1,254 @@
+<p>When an alert fires at 3am, the first fifteen minutes usually go on gathering context: which pods are failing, what the logs say, what changed. An LLM agent can do that gathering in seconds and hand the on-call engineer a summary with evidence. This tutorial builds one in about 100 lines of Python, with one firm rule: <strong>the agent can look, but it can't touch.</strong></p>
+
+<div class="article-callout">
+  <p><strong>What you'll build:</strong> Alertmanager sends a firing alert, and the agent queries Prometheus, Kubernetes events and pod logs. It then posts a triage report to Slack (summary, evidence, likely cause, suggested commands, confidence) and never changes the cluster.</p>
+</div>
+
+<h2>Why read-only first?</h2>
+<p>Letting an AI run <code>kubectl delete</code> in production is a big step, and you shouldn't take it until you know how often its diagnosis is right. A read-only agent is safe to run from day one, and it still saves most of the time: in a typical incident, deciding what to do is quick once someone has collected the evidence. Measure the agent's accuracy for a few weeks, then consider one guarded action (see the <a href="aiops.html#guardrails">guardrails checklist</a>).</p>
+
+<h2>Architecture</h2>
+<pre><code>Prometheus ──► Alertmanager ──webhook──► triage agent ──► Slack
+                                             │
+                     read-only tools ◄───────┘
+                     • query_prometheus(promql)
+                     • get_k8s_events(namespace)
+                     • get_pod_logs(namespace, pod, previous)</code></pre>
+<p>The LLM decides which tools to call and in what order. Your code decides what each tool is <em>allowed</em> to do. That split is the core of a safe agent: the model chooses, your code enforces.</p>
+
+<h2>Prerequisites</h2>
+<ul>
+  <li>A Kubernetes cluster with <code>kube-prometheus-stack</code>; the <a href="aiops.html#lab">AIOps lab</a> and <a href="projects.html#observability">Project 06</a> set this up locally with kind</li>
+  <li>Python 3.10+ and <code>pip install anthropic requests</code></li>
+  <li>An Anthropic API key in <code>ANTHROPIC_API_KEY</code></li>
+  <li><code>kubectl</code> configured with a <strong>read-only</strong> service account (next step)</li>
+</ul>
+
+<h2>Step 1: A read-only identity</h2>
+<p>Give the agent its own service account that can read pods, logs, events and deployments, and nothing else. Leave Secrets out, because logs and manifests already reveal plenty.</p>
+<pre><code>apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: aiops-agent
+  namespace: aiops
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: aiops-readonly
+rules:
+  - apiGroups: [&quot;&quot;]
+    resources: [&quot;pods&quot;, &quot;pods/log&quot;, &quot;events&quot;, &quot;services&quot;, &quot;nodes&quot;]
+    verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;]
+  - apiGroups: [&quot;apps&quot;]
+    resources: [&quot;deployments&quot;, &quot;replicasets&quot;]
+    verbs: [&quot;get&quot;, &quot;list&quot;, &quot;watch&quot;]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: aiops-readonly
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: aiops-readonly
+subjects:
+  - kind: ServiceAccount
+    name: aiops-agent
+    namespace: aiops</code></pre>
+<p>Check that it really can't write: <code>kubectl auth can-i delete pods --as=system:serviceaccount:aiops:aiops-agent</code> should print <code>no</code>.</p>
+
+<h2>Step 2: The agent</h2>
+<p>The code uses the Anthropic Python SDK's <strong>tool runner</strong>. You write each tool as a normal Python function with a docstring, and the SDK turns it into a tool definition. It then runs the loop: the model asks for a tool, the SDK calls your function, sends back the result, and repeats until the model writes its final answer.</p>
+<pre><code>&quot;&quot;&quot;Read-only Kubernetes incident triage agent.
+
+The model can only *look* (PromQL queries, events, logs). It never changes
+the cluster: it writes a triage report and suggests commands for a human.
+&quot;&quot;&quot;
+import json
+import os
+import re
+import subprocess
+
+import anthropic
+import requests
+from anthropic import beta_tool
+
+PROM_URL = os.environ.get(&quot;PROM_URL&quot;, &quot;http://localhost:9090&quot;)
+ALLOWED_NAMESPACES = {&quot;app&quot;, &quot;payments&quot;}        # the agent may only look here
+POD_NAME = re.compile(r&quot;^[a-z0-9]([-a-z0-9.]*[a-z0-9])?$&quot;)
+MAX_OUTPUT = 8000                                # keep tool results small
+
+
+def _kubectl(*args: str) -&gt; str:
+    # List form (no shell), so arguments can&#x27;t be used for injection.
+    out = subprocess.run([&quot;kubectl&quot;, *args], capture_output=True, text=True, timeout=20)
+    return (out.stdout or out.stderr)[-MAX_OUTPUT:]
+
+
+@beta_tool
+def query_prometheus(promql: str) -&gt; str:
+    &quot;&quot;&quot;Run an instant PromQL query and return up to 20 series as JSON.
+
+    Args:
+        promql: A PromQL expression, e.g. sum(rate(http_requests_total{code=~&quot;5..&quot;}[5m])) by (service)
+    &quot;&quot;&quot;
+    r = requests.get(f&quot;{PROM_URL}/api/v1/query&quot;, params={&quot;query&quot;: promql}, timeout=10)
+    if r.status_code != 200:
+        return f&quot;error: Prometheus returned {r.status_code}: {r.text[:500]}&quot;
+    return json.dumps(r.json()[&quot;data&quot;][&quot;result&quot;][:20])
+
+
+@beta_tool
+def get_k8s_events(namespace: str) -&gt; str:
+    &quot;&quot;&quot;List recent Kubernetes events in a namespace, newest last.
+
+    Args:
+        namespace: Kubernetes namespace to inspect.
+    &quot;&quot;&quot;
+    if namespace not in ALLOWED_NAMESPACES:
+        return f&quot;error: namespace &#x27;{namespace}&#x27; is not allowed&quot;
+    return _kubectl(&quot;get&quot;, &quot;events&quot;, &quot;-n&quot;, namespace, &quot;--sort-by=.lastTimestamp&quot;)
+
+
+@beta_tool
+def get_pod_logs(namespace: str, pod: str, previous: bool = False) -&gt; str:
+    &quot;&quot;&quot;Return the last 200 log lines of a pod.
+
+    Args:
+        namespace: Kubernetes namespace of the pod.
+        pod: Pod name.
+        previous: True to read the logs of the previous (crashed) container.
+    &quot;&quot;&quot;
+    if namespace not in ALLOWED_NAMESPACES:
+        return f&quot;error: namespace &#x27;{namespace}&#x27; is not allowed&quot;
+    if not POD_NAME.match(pod):
+        return &quot;error: invalid pod name&quot;
+    args = [&quot;logs&quot;, pod, &quot;-n&quot;, namespace, &quot;--tail=200&quot;]
+    if previous:
+        args.append(&quot;--previous&quot;)
+    return _kubectl(*args)
+
+
+SYSTEM = &quot;&quot;&quot;You are an SRE triage assistant for a Kubernetes platform.
+You can only read data: PromQL queries, Kubernetes events and pod logs.
+Investigate the alert, then reply with exactly these sections:
+Summary, Evidence (the queries/logs you relied on), Likely cause,
+Suggested next steps (commands for a human to run), Confidence (low/medium/high).
+If the evidence is inconclusive, say so instead of guessing.&quot;&quot;&quot;
+
+client = anthropic.Anthropic()  # reads ANTHROPIC_API_KEY
+
+
+def triage(alert: dict) -&gt; str:
+    runner = client.beta.messages.tool_runner(
+        model=&quot;claude-opus-5-5&quot;,
+        max_tokens=16000,
+        output_config={&quot;effort&quot;: &quot;medium&quot;},
+        # If the model declines, retry automatically on a fallback model.
+        betas=[&quot;server-side-fallback-2026-07-01&quot;],
+        fallbacks=&quot;default&quot;,
+        max_iterations=10,
+        system=SYSTEM,
+        tools=[query_prometheus, get_k8s_events, get_pod_logs],
+        messages=[{
+            &quot;role&quot;: &quot;user&quot;,
+            &quot;content&quot;: &quot;Investigate this alert:\n&quot; + json.dumps(alert, indent=2),
+        }],
+    )
+    final = runner.until_done()
+    if final.stop_reason == &quot;refusal&quot;:
+        return &quot;The model declined this request; triage it manually.&quot;
+    return &quot;&quot;.join(block.text for block in final.content if block.type == &quot;text&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+    example_alert = {
+        &quot;alertname&quot;: &quot;KubePodCrashLooping&quot;,
+        &quot;namespace&quot;: &quot;payments&quot;,
+        &quot;pod&quot;: &quot;payments-api-7d9f8b6c5-x2kqz&quot;,
+        &quot;severity&quot;: &quot;page&quot;,
+    }
+    print(triage(example_alert))</code></pre>
+
+<h3>How the guardrails work</h3>
+<ul>
+  <li><strong>Namespace allowlist:</strong> the model can ask about any namespace, but the tools only answer for the ones you list.</li>
+  <li><strong>Input validation:</strong> pod names must match the Kubernetes naming pattern, so a value like <code>--all-containers</code> can't slip in as a flag.</li>
+  <li><strong>No shell:</strong> <code>subprocess.run</code> gets a list of arguments, so nothing is interpreted by a shell.</li>
+  <li><strong>Small outputs:</strong> results are trimmed (20 series, 200 log lines, 8,000 characters), which keeps the model focused and the cost predictable.</li>
+  <li><strong>Iteration cap:</strong> <code>max_iterations=10</code> stops a confused agent from looping forever.</li>
+  <li><strong>Refusal fallback:</strong> <code>fallbacks="default"</code> retries on another model if the first one declines, and the code checks <code>stop_reason</code> before using the answer.</li>
+</ul>
+
+<div class="article-callout warn">
+  <p><strong>Treat logs as untrusted input.</strong> A log line can contain text written to manipulate an AI ("ignore previous instructions…"). That's why the tools enforce limits in code rather than trusting the model to stay inside them. Even a fully tricked agent can only read.</p>
+</div>
+
+<h2>Step 3: Connect it to Alertmanager</h2>
+<p>A small web server receives Alertmanager's webhook. It replies right away, runs the investigation in the background, and posts the report to Slack.</p>
+<pre><code>&quot;&quot;&quot;Receive Alertmanager webhooks, triage firing alerts, post reports to Slack.&quot;&quot;&quot;
+import json
+import os
+from concurrent.futures import ThreadPoolExecutor
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
+import requests
+
+from triage_agent import triage
+
+SLACK_WEBHOOK_URL = os.environ[&quot;SLACK_WEBHOOK_URL&quot;]
+pool = ThreadPoolExecutor(max_workers=2)   # at most 2 investigations at once
+
+
+def investigate(alert: dict) -&gt; None:
+    report = triage(alert)
+    title = alert.get(&quot;alertname&quot;, &quot;alert&quot;)
+    requests.post(SLACK_WEBHOOK_URL, json={&quot;text&quot;: f&quot;*AI triage: {title}*\n{report}&quot;}, timeout=10)
+
+
+class AlertHandler(BaseHTTPRequestHandler):
+    def do_POST(self):
+        payload = json.loads(self.rfile.read(int(self.headers[&quot;Content-Length&quot;])))
+        for alert in payload.get(&quot;alerts&quot;, []):
+            if alert.get(&quot;status&quot;) == &quot;firing&quot;:
+                pool.submit(investigate, {**alert.get(&quot;labels&quot;, {}), **alert.get(&quot;annotations&quot;, {})})
+        # Answer straight away; the investigation runs in the background.
+        self.send_response(202)
+        self.end_headers()
+
+
+if __name__ == &quot;__main__&quot;:
+    HTTPServer((&quot;0.0.0.0&quot;, 8080), AlertHandler).serve_forever()</code></pre>
+<p>Then add a route in your Alertmanager config, so paging alerts go to the agent as well as to your normal receiver:</p>
+<pre><code>route:
+  receiver: default
+  routes:
+    - matchers: [severity=&quot;page&quot;]
+      receiver: aiops-agent
+      continue: true          # keep normal notifications too
+receivers:
+  - name: aiops-agent
+    webhook_configs:
+      - url: http://aiops-agent.aiops.svc:8080/alert</code></pre>
+
+<h2>Step 4: Test it with real faults</h2>
+<p>Break your lab cluster on purpose and read each report:</p>
+<pre><code>kubectl -n payments set image deploy/api api=ghcr.io/you/api:does-not-exist   # ImagePullBackOff
+kubectl -n payments set resources deploy/api --limits=memory=16Mi             # OOMKilled
+kubectl -n payments scale deploy/db --replicas=0                              # dependency down</code></pre>
+<p>For each one, score the report: was the likely cause right? Did it cite real evidence? Did it say "inconclusive" when it should have? Keep the scores in a spreadsheet. That number tells you whether the agent is ready for more responsibility.</p>
+
+<h2>Cost and privacy</h2>
+<ul>
+  <li><strong>Cost:</strong> each investigation is a handful of API calls with small tool results. Only route <code>severity="page"</code> alerts to the agent, and cap concurrency (the webhook runs at most two at once).</li>
+  <li><strong>Data:</strong> logs and metrics are sent to the model provider. Don't send logs that contain personal data or secrets, and check what your company's policy allows before using production data.</li>
+</ul>
+
+<h2>Where to go next</h2>
+<ul>
+  <li>Add a <code>get_recent_rollouts</code> tool. Most incidents follow a change, so this is often the most useful single signal.</li>
+  <li>Add a Loki query tool for logs across many pods.</li>
+  <li>After a few weeks of accurate reports, add <em>one</em> action (such as <code>kubectl rollout undo</code>) behind a Slack approval button.</li>
+  <li>Read the full <a href="aiops.html">AIOps guide</a> and the <a href="blog-ai-in-devops.html">AI in DevOps</a> article.</li>
+</ul>

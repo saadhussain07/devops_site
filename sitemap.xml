@@ -7,19 +7,21 @@
   <url><loc>https://rocketdevops.vercel.app/workflow.html</loc><lastmod>2026-10-18</lastmod><priority>0.7</priority></url>
   <url><loc>https://rocketdevops.vercel.app/roadmap.html</loc><lastmod>2026-10-18</lastmod><priority>0.9</priority></url>
   <url><loc>https://rocketdevops.vercel.app/projects.html</loc><lastmod>2026-10-18</lastmod><priority>0.9</priority></url>
-  <url><loc>https://rocketdevops.vercel.app/interview.html</loc><lastmod>2026-10-18</lastmod><priority>0.9</priority></url>
+  <url><loc>https://rocketdevops.vercel.app/interview.html</loc><lastmod>2026-11-22</lastmod><priority>0.9</priority></url>
   <url><loc>https://rocketdevops.vercel.app/troubleshooting.html</loc><lastmod>2026-10-18</lastmod><priority>0.9</priority></url>
-  <url><loc>https://rocketdevops.vercel.app/quiz.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rocketdevops.vercel.app/quiz.html</loc><lastmod>2026-11-22</lastmod><priority>0.8</priority></url>
   <url><loc>https://rocketdevops.vercel.app/blog.html</loc><lastmod>2026-10-18</lastmod><priority>0.9</priority></url>
   <url><loc>https://rocketdevops.vercel.app/cheatsheets.html</loc><lastmod>2026-10-18</lastmod><priority>0.9</priority></url>
   <url><loc>https://rocketdevops.vercel.app/glossary.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
   <url><loc>https://rocketdevops.vercel.app/resources.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
-  <url><loc>https://rocketdevops.vercel.app/aiops.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
-  <url><loc>https://rocketdevops.vercel.app/changelog.html</loc><lastmod>2026-10-18</lastmod><priority>0.5</priority></url>
+  <url><loc>https://rocketdevops.vercel.app/aiops.html</loc><lastmod>2026-11-22</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rocketdevops.vercel.app/changelog.html</loc><lastmod>2026-11-22</lastmod><priority>0.5</priority></url>
   <url><loc>https://rocketdevops.vercel.app/search.html</loc><lastmod>2026-10-18</lastmod><priority>0.5</priority></url>
-  <url><loc>https://rocketdevops.vercel.app/contact.html</loc><lastmod>2026-10-18</lastmod><priority>0.6</priority></url>
+  <url><loc>https://rocketdevops.vercel.app/contact.html</loc><lastmod>2026-11-22</lastmod><priority>0.6</priority></url>
   <url><loc>https://rocketdevops.vercel.app/privacy-policy.html</loc><lastmod>2026-10-18</lastmod><priority>0.3</priority></url>
 <!-- BUILD:BLOG -->
+  <url><loc>https://rocketdevops.vercel.app/blog-llm-triage-agent.html</loc><lastmod>2026-11-22</lastmod><priority>0.8</priority></url>
+  <url><loc>https://rocketdevops.vercel.app/blog-anomaly-detection-promql.html</loc><lastmod>2026-11-22</lastmod><priority>0.8</priority></url>
   <url><loc>https://rocketdevops.vercel.app/blog-ai-in-devops.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
   <url><loc>https://rocketdevops.vercel.app/blog-sre-fundamentals.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>
   <url><loc>https://rocketdevops.vercel.app/blog-gitops-argocd.html</loc><lastmod>2026-10-18</lastmod><priority>0.8</priority></url>

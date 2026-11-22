@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="60 DevOps interview questions with model answers: Linux, networking, Git, Docker, Kubernetes, CI/CD, Terraform, AWS, monitoring/SRE, DevSecOps and scenario questions.">
+  <meta name="description" content="66 DevOps interview questions with model answers: Linux, networking, Git, Docker, Kubernetes, CI/CD, Terraform, AWS, monitoring/SRE, DevSecOps, AIOps and scenario questions.">
   <meta name="keywords" content="DevOps interview questions, Kubernetes interview questions, Docker interview questions, Terraform interview questions, SRE interview, AWS interview questions">
   <meta name="author" content="DevOps Hub">
   <meta name="robots" content="index, follow">
@@ -132,7 +132,7 @@
   </style>
   <link rel="canonical" href="https://rocketdevops.vercel.app/interview.html">
   <meta property="og:title" content="DevOps Interview Questions &amp; Answers (2026) · DevOps Hub">
-  <meta property="og:description" content="60 DevOps interview questions with model answers: Linux, networking, Git, Docker, Kubernetes, CI/CD, Terraform, AWS, monitoring/SRE, DevSecOps and scenario questions.">
+  <meta property="og:description" content="66 DevOps interview questions with model answers: Linux, networking, Git, Docker, Kubernetes, CI/CD, Terraform, AWS, monitoring/SRE, DevSecOps, AIOps and scenario questions.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://rocketdevops.vercel.app/interview.html">
   <meta property="og:site_name" content="DevOps Hub">
@@ -168,7 +168,7 @@
   <div class="container">
     <span class="tag">// get hired</span>
     <h1>DevOps <span class="text-green">Interview Prep</span></h1>
-    <p>60 real interview questions with concise model answers, from Linux basics to Kubernetes internals and incident scenarios.</p>
+    <p>66 real interview questions with concise model answers, from Linux basics to Kubernetes internals, AIOps and incident scenarios.</p>
   </div>
 </header>
 
@@ -187,7 +187,7 @@
         <button class="btn btn-ghost" id="qa-expand" style="font-size:0.75rem;padding:0.45rem 0.9rem;">⊞ Expand all</button>
       </div>
     </div>
-    <div class="qa-chips" role="group" aria-label="Filter by topic"><button class="qa-chip active" data-filter-cat="all">All topics</button><button class="qa-chip" data-filter-cat="linux">🐧 Linux &amp; Shell</button><button class="qa-chip" data-filter-cat="networking">🌐 Networking</button><button class="qa-chip" data-filter-cat="git">🌿 Git</button><button class="qa-chip" data-filter-cat="docker">🐳 Docker &amp; Containers</button><button class="qa-chip" data-filter-cat="kubernetes">☸️ Kubernetes</button><button class="qa-chip" data-filter-cat="cicd">🔁 CI/CD</button><button class="qa-chip" data-filter-cat="iac">🏗️ Terraform &amp; IaC</button><button class="qa-chip" data-filter-cat="cloud">☁️ Cloud &amp; AWS</button><button class="qa-chip" data-filter-cat="observability">📊 Monitoring &amp; SRE</button><button class="qa-chip" data-filter-cat="security">🛡️ DevSecOps</button><button class="qa-chip" data-filter-cat="scenario">🧠 Scenarios &amp; Behavioural</button></div>
+    <div class="qa-chips" role="group" aria-label="Filter by topic"><button class="qa-chip active" data-filter-cat="all">All topics</button><button class="qa-chip" data-filter-cat="linux">🐧 Linux &amp; Shell</button><button class="qa-chip" data-filter-cat="networking">🌐 Networking</button><button class="qa-chip" data-filter-cat="git">🌿 Git</button><button class="qa-chip" data-filter-cat="docker">🐳 Docker &amp; Containers</button><button class="qa-chip" data-filter-cat="kubernetes">☸️ Kubernetes</button><button class="qa-chip" data-filter-cat="cicd">🔁 CI/CD</button><button class="qa-chip" data-filter-cat="iac">🏗️ Terraform &amp; IaC</button><button class="qa-chip" data-filter-cat="cloud">☁️ Cloud &amp; AWS</button><button class="qa-chip" data-filter-cat="observability">📊 Monitoring &amp; SRE</button><button class="qa-chip" data-filter-cat="security">🛡️ DevSecOps</button><button class="qa-chip" data-filter-cat="aiops">🤖 AIOps</button><button class="qa-chip" data-filter-cat="scenario">🧠 Scenarios &amp; Behavioural</button></div>
     <div class="qa-chips" role="group" aria-label="Filter by level" style="margin-top:-1.25rem;"><button class="qa-chip active" data-filter-lvl="all">All levels</button><button class="qa-chip" data-filter-lvl="B">Beginner</button><button class="qa-chip" data-filter-lvl="I">Intermediate</button><button class="qa-chip" data-filter-lvl="A">Advanced</button></div>
 
     <section class="qa-group" id="linux">
@@ -440,6 +440,34 @@
         <div class="qa-answer"><p>It means protecting everything that goes into your software: dependencies, build systems and artifacts. Key practices: pinned dependencies, isolated reproducible builds, <strong>signed artifacts</strong> (Sigstore/Cosign), provenance attestations (SLSA) and admission policies that verify signatures. An <strong>SBOM</strong> (SPDX or CycloneDX) lists every component in an artifact, so you can instantly answer "are we affected by this CVE?"</p></div>
       </details>
     </section>
+    <section class="qa-group" id="aiops">
+      <h2><span>🤖</span> AIOps &amp; AI in Ops <span class="qa-count">(6)</span></h2>
+      <details class="qa-item" id="what-is-aiops-and-how-is-it-different-from-traditional-monit" data-cat="aiops" data-lvl="B">
+        <summary><span class="qa-lvl B">Beginner</span><span>What is AIOps, and how is it different from traditional monitoring?</span></summary>
+        <div class="qa-answer"><p>Traditional monitoring alerts when a metric crosses a threshold a human chose. <strong>AIOps</strong> applies statistics, ML and LLMs to operations data to <strong>detect</strong> anomalies thresholds miss, <strong>correlate</strong> many alerts into one incident, <strong>diagnose</strong> a likely root cause and, carefully, <strong>remediate</strong>. It builds on good observability rather than replacing it: an AI can't reason about telemetry you don't collect.</p></div>
+      </details>
+      <details class="qa-item" id="how-would-you-detect-anomalies-in-a-metric-with-strong-daily" data-cat="aiops" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>How would you detect anomalies in a metric with strong daily and weekly patterns?</span></summary>
+        <div class="qa-answer"><p>A single static threshold or a plain 24-hour average will flag every daily peak. Options, from simplest:</p><ul><li><strong>Seasonal comparison:</strong> compare with the same time last week, e.g. <code>rate(x[5m]) / rate(x[5m] offset 1w)</code>, ideally averaged over several weeks.</li><li><strong>Z-score per time window</strong> against a baseline built from matching hours.</li><li><strong>Seasonal models</strong> (Holt-Winters, Prophet) when you need forecasts.</li></ul><p>Then add guards: minimum traffic volume, a <code>for:</code> duration, and warning severity rather than paging.</p></div>
+      </details>
+      <details class="qa-item" id="what-is-alert-correlation-and-how-do-you-reduce-alert-noise" data-cat="aiops" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>What is alert correlation, and how do you reduce alert noise?</span></summary>
+        <div class="qa-answer"><p>One root cause (a failing database or node) triggers many symptom alerts. Correlation groups them into one incident:</p><ul><li>Alertmanager <code>group_by</code> on labels like service and namespace, plus <code>group_wait</code></li><li><code>inhibit_rules</code> to suppress symptoms while the cause is firing (e.g. node down silences pod alerts on that node)</li><li>Topology or dependency maps to link alerts across services</li><li>Alerting on SLO burn rate instead of every resource metric</li></ul></div>
+      </details>
+      <details class="qa-item" id="how-would-you-design-an-llm-agent-that-helps-with-incident-r" data-cat="aiops" data-lvl="A">
+        <summary><span class="qa-lvl A">Advanced</span><span>How would you design an LLM agent that helps with incident response, and keep it safe?</span></summary>
+        <div class="qa-answer"><ol><li><strong>Start read-only:</strong> tools for PromQL queries, Kubernetes events, logs and recent deploys, under its own service account with no write verbs and no Secrets.</li><li><strong>Enforce limits in code, not in the prompt:</strong> namespace allowlists, argument validation, output size limits and an iteration cap.</li><li><strong>Structured output:</strong> summary, evidence, likely cause, suggested commands and confidence, so humans can check its reasoning.</li><li><strong>Measure accuracy</strong> against real incidents before adding any action.</li><li><strong>Add actions slowly:</strong> one reversible action at a time, behind human approval, with audit logs, rate limits, a kill switch and post-action verification.</li></ol><p>Treat logs and alert text as untrusted input, because they can contain prompt-injection attempts.</p></div>
+      </details>
+      <details class="qa-item" id="what-are-the-risks-of-auto-remediation-and-when-is-it-approp" data-cat="aiops" data-lvl="A">
+        <summary><span class="qa-lvl A">Advanced</span><span>What are the risks of auto-remediation, and when is it appropriate?</span></summary>
+        <div class="qa-answer"><p>Risks: acting on a wrong diagnosis, hiding a real bug (restarting a leaking pod forever), cascading changes across services, and loops where the fix triggers the alert again. Auto-remediation fits when the fault is <strong>well understood</strong>, the action is <strong>reversible and low-risk</strong> (restart, rollback, scale out within limits), its success can be <strong>verified automatically</strong>, and every action is logged and reviewed. Anything novel or risky stays with a human.</p></div>
+      </details>
+      <details class="qa-item" id="how-would-you-know-whether-an-aiops-tool-is-actually-helping" data-cat="aiops" data-lvl="I">
+        <summary><span class="qa-lvl I">Intermediate</span><span>How would you know whether an AIOps tool is actually helping?</span></summary>
+        <div class="qa-answer"><p>Measure it like any other change:</p><ul><li><strong>MTTD and MTTR</strong> before and after</li><li><strong>Alert volume and noise</strong>: pages per week, and the share that needed action</li><li><strong>Diagnosis accuracy</strong>: how often the suggested root cause matched the postmortem</li><li><strong>False positive and false negative rates</strong> for anomaly detection</li><li><strong>On-call feedback</strong>: did responders trust it and use it?</li></ul></div>
+      </details>
+    </section>
+
     <section class="qa-group" id="scenario">
       <h2><span>🧠</span> Scenarios &amp; Behavioural <span class="qa-count">(5)</span></h2>
       <details class="qa-item" id="production-latency-doubled-after-a-deploy-what-do-you-do" data-cat="scenario" data-lvl="I">

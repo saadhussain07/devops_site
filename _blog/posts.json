@@ -1,5 +1,40 @@
 [
   {
+    "slug": "llm-triage-agent",
+    "title": "Build a Read-Only LLM Triage Agent for Kubernetes",
+    "description": "A tested, ~100-line Python agent that investigates Alertmanager alerts with read-only tools (PromQL, events, pod logs) and posts an evidence-based triage report to Slack.",
+    "emoji": "🕵️",
+    "category": "ai",
+    "categoryLabel": "AI & AIOps",
+    "tags": [
+      "AIOps",
+      "LLM Agents",
+      "Kubernetes",
+      "Python"
+    ],
+    "level": "Advanced",
+    "thumb": "thumb-purple",
+    "date": "2026-11-22",
+    "updated": "2026-11-22"
+  },
+  {
+    "slug": "anomaly-detection-promql",
+    "title": "Anomaly Detection with PromQL: Beyond Static Thresholds",
+    "description": "Dynamic baselines with z-scores, weekly seasonality, forecasting with predict_linear, and anomaly alert rules that don't cry wolf, using only Prometheus.",
+    "emoji": "📉",
+    "category": "ai",
+    "categoryLabel": "AI & AIOps",
+    "tags": [
+      "AIOps",
+      "Prometheus",
+      "Anomaly Detection"
+    ],
+    "level": "Intermediate",
+    "thumb": "thumb-cyan",
+    "date": "2026-11-22",
+    "updated": "2026-11-22"
+  },
+  {
     "slug": "ai-in-devops",
     "title": "AI in DevOps: Practical Uses, Agents and Guardrails",
     "description": "Where LLMs and AI agents genuinely help in DevOps (IaC drafts, PR review, CI triage, AIOps incident response), and the guardrails for using them safely.",
