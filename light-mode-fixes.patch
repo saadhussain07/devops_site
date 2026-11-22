@@ -1,0 +1,504 @@
+From 45de49a3b4f299cd60ee63903d8e8a31bbe0e0db Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sun, 18 Oct 2026 06:46:43 +0000
+Subject: [PATCH] Fix light mode: readable hero terminal, glossary and privacy
+ policy
+
+- Hero terminal animation used fixed neon colours (1.3:1 contrast on the
+  light terminal); it now uses theme-aware classes (~5:1 in light mode,
+  unchanged neon in dark mode)
+- Glossary and privacy policy hard-coded dark-theme colours (dark cards,
+  pale grey text); switched to theme variables
+- Glossary terms were squeezed into a 180px column by the shared sidebar
+  grid; the page has no sidebar, so lay it out as a single column
+- Add --accent-yellow (amber in light, yellow in dark) for warning text on
+  concepts, workflow, quiz, AIOps and search
+- Glossary count corrected from '100+' to '70+' (it has 72 terms)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_016Le4ebuVBvTqc4a3Q8F1Aj
+---
+ aiops.html          |  4 ++--
+ cheatsheets.html    |  2 +-
+ concepts.html       |  8 ++++----
+ glossary.html       | 39 ++++++++++++++++++++-------------------
+ main.js             | 22 +++++++++++-----------
+ privacy-policy.html | 24 ++++++++++++------------
+ quiz.html           |  6 +++---
+ search.html         |  2 +-
+ style.css           | 11 ++++++++---
+ workflow.html       |  6 +++---
+ 10 files changed, 65 insertions(+), 59 deletions(-)
+
+diff --git a/aiops.html b/aiops.html
+index 01e8d33..4bc3bff 100644
+--- a/aiops.html
++++ b/aiops.html
+@@ -762,7 +762,7 @@
+     .demo-prompt   { color: var(--accent-green); }
+     .demo-time     { color: var(--text-muted); font-size: 0.68rem; }
+     .demo-alert    { color: var(--accent-orange); animation: blink-alert 1.5s ease-in-out 3; }
+-    .demo-detect   { color: #ffd81e; }
++    .demo-detect   { color: var(--accent-yellow); }
+     .demo-rca      { color: var(--accent-cyan); }
+     .demo-heal     { color: var(--accent-green); }
+     .demo-success  { color: var(--accent-green); font-weight: 700; }
+@@ -1571,7 +1571,7 @@
+   <div class="container">
+     <div class="footer-grid">
+       <div class="footer-brand">
+-        <div style="font-family:monospace;color:#2dff7a;font-weight:700;font-size:1.05rem;margin-bottom:0.5rem;">&gt; DevOpsHub</div>
++        <div style="font-family:monospace;color:var(--accent-green);font-weight:700;font-size:1.05rem;margin-bottom:0.5rem;">&gt; DevOpsHub</div>
+         <p>Cutting-edge DevOps and AIOps resources — from fundamentals to frontier research in autonomous cloud-native operations.</p>
+       </div>
+       <div class="footer-col">
+diff --git a/cheatsheets.html b/cheatsheets.html
+index 550669b..5283bd8 100644
+--- a/cheatsheets.html
++++ b/cheatsheets.html
+@@ -860,7 +860,7 @@ for s in &quot;${svcs[@]}&quot;; do echo &quot;$s&quot;; done</span><button clas
+   <div class="container">
+     <div class="footer-grid">
+       <div class="footer-brand">
+-        <div style="font-family:monospace;color:#2dff7a;font-weight:700;font-size:1rem;">DevOpsHub</div>
++        <div style="font-family:monospace;color:var(--accent-green);font-weight:700;font-size:1rem;">DevOpsHub</div>
+         <p>Quick reference cheatsheets for DevOps engineers — bookmark, share, and use daily.</p>
+       </div>
+       <div class="footer-col">
+diff --git a/concepts.html b/concepts.html
+index c8e42ab..5e36067 100644
+--- a/concepts.html
++++ b/concepts.html
+@@ -235,7 +235,7 @@
+     .num { color: #f78c6c; }
+     .cmt { color: var(--text-muted); font-style: italic; }
+     .key { color: var(--accent-cyan); }
+-    .brace { color: #ffd81e; }
++    .brace { color: var(--accent-yellow); }
+ 
+     /* Monitoring dashboard mini */
+     .monitor-dash {
+@@ -304,7 +304,7 @@
+     }
+ 
+     .delta-up   { color: var(--accent-green); }
+-    .delta-warn { color: #ffd81e; }
++    .delta-warn { color: var(--accent-yellow); }
+     .delta-down { color: var(--accent-orange); }
+ 
+     /* Sparkline bars (CSS only) */
+@@ -363,7 +363,7 @@
+     .ms-service.gateway { border-color: rgba(45,255,122,0.4); color: var(--accent-green); }
+     .ms-service.auth    { border-color: rgba(139,92,246,0.4); color: var(--accent-purple); }
+     .ms-service.order   { border-color: rgba(0,229,255,0.4);  color: var(--accent-cyan); }
+-    .ms-service.pay     { border-color: rgba(255,205,30,0.4); color: #ffd81e; }
++    .ms-service.pay     { border-color: rgba(255,205,30,0.4); color: var(--accent-yellow); }
+     .ms-service.notify  { border-color: rgba(255,92,26,0.4);  color: var(--accent-orange); }
+ 
+     .ms-connector {
+@@ -707,7 +707,7 @@
+           </div>
+           <div class="dash-metric">
+             <div class="dash-metric-label">Error Rate</div>
+-            <div class="dash-metric-value" style="color:#ffd81e;">0.08%</div>
++            <div class="dash-metric-value" style="color: var(--accent-yellow);">0.08%</div>
+             <div class="dash-metric-delta delta-warn">⚠ SLO: &lt; 0.1%</div>
+             <div class="sparkline">
+               <div class="spark-bar" style="height:20%;background:#ffd81e;"></div>
+diff --git a/glossary.html b/glossary.html
+index 70fe0c9..929d608 100644
+--- a/glossary.html
++++ b/glossary.html
+@@ -4,17 +4,17 @@
+      <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>DevOps Glossary | Complete A-Z Terminology Guide</title>
+-    <meta name="description" content="Complete DevOps glossary with 100+ terms. Learn key concepts, tools, and practices from API Gateway to Zero-Downtime Deployment.">
++    <meta name="description" content="Complete DevOps glossary with 70+ terms. Learn key concepts, tools, and practices from API Gateway to Zero-Downtime Deployment.">
+     <meta name="keywords" content="DevOps glossary, CI/CD, Kubernetes, Docker, DevOps terminology, cloud infrastructure">
+     <meta name="author" content="DevOps Hub">
+     <meta name="robots" content="index, follow">
+     <meta property="og:title" content="DevOps Glossary | Complete A-Z Terminology Guide">
+-    <meta property="og:description" content="100+ essential DevOps terms and definitions. Master the language of modern infrastructure.">
++    <meta property="og:description" content="70+ essential DevOps terms and definitions. Master the language of modern infrastructure.">
+     <meta property="og:url" content="https://rocketdevops.vercel.app/glossary.html">
+     <meta property="og:image" content="https://rocketdevops.vercel.app/favicon.svg">
+     <meta name="twitter:card" content="summary_large_image">
+     <meta name="twitter:title" content="DevOps Glossary">
+-    <meta name="twitter:description" content="100+ DevOps terms explained. A-Z guide to modern infrastructure terminology.">
++    <meta name="twitter:description" content="70+ DevOps terms explained. A-Z guide to modern infrastructure terminology.">
+     <link rel="canonical" href="https://rocketdevops.vercel.app/glossary.html">
+     <link rel="icon" type="image/svg+xml" href="favicon.svg">
+     <link rel="stylesheet" href="style.css">
+@@ -47,32 +47,33 @@
+             width: 100%;
+             padding: 1rem;
+             font-size: 1rem;
+-            border: 1px solid #2dff7a;
++            border: 1px solid var(--accent-green);
+             border-radius: 0.5rem;
+-            background: #0d1518;
+-            color: #ffffff;
++            background: var(--bg-card);
++            color: var(--text-primary);
+             font-family: inherit;
+             transition: all 0.3s ease;
+         }
+ 
+         .glossary-search-input:focus {
+             outline: none;
+-            border-color: #00e5ff;
++            border-color: var(--accent-cyan);
+             box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+         }
+ 
+         .glossary-search-input::placeholder {
+-            color: #666;
++            color: var(--text-muted);
+         }
+ 
+         .search-stats {
+             text-align: center;
+-            color: #aaa;
++            color: var(--text-muted);
+             font-size: 0.9rem;
+             font-family: 'Courier New', monospace;
+         }
+ 
+         .glossary-layout {
++            display: block;   /* style.css makes this a sidebar grid; this page has no sidebar */
+             padding: 2rem 1.5rem;
+             max-width: 900px;
+             margin: 0 auto;
+@@ -88,7 +89,7 @@
+             font-family: 'Courier New', monospace;
+             font-size: 1.8rem;
+             font-weight: bold;
+-            color: #2dff7a;
++            color: var(--accent-green);
+             margin-top: 2.5rem;
+             margin-bottom: 1rem;
+             padding: 1rem 0;
+@@ -104,31 +105,31 @@
+ 
+         .glossary-card {
+             padding: 1.5rem;
+-            background: #0d1518;
+-            border-left: 3px solid #2dff7a;
++            background: var(--bg-card);
++            border-left: 3px solid var(--accent-green);
+             margin-bottom: 1rem;
+             border-radius: 0.3rem;
+             transition: all 0.3s ease;
+         }
+ 
+         .glossary-card:hover {
+-            background: #111c21;
+-            border-left-color: #00e5ff;
+-            box-shadow: 0 4px 12px rgba(45, 255, 122, 0.15);
++            background: var(--bg-card-hover);
++            border-left-color: var(--accent-cyan);
++            box-shadow: var(--shadow-md);
+             transform: translateX(4px);
+         }
+ 
+         .glossary-term {
+             font-family: 'Courier New', monospace;
+             font-size: 1.1rem;
+-            color: #00e5ff;
++            color: var(--accent-cyan);
+             margin: 0 0 0.5rem 0;
+             font-weight: bold;
+         }
+ 
+         .glossary-definition {
+             font-size: 0.95rem;
+-            color: #ccc;
++            color: var(--text-secondary);
+             line-height: 1.6;
+             margin: 0;
+         }
+@@ -230,7 +231,7 @@
+     <!-- HERO SECTION -->
+     <section class="glossary-hero">
+         <h1>DevOps Glossary</h1>
+-        <p class="hero-subtitle">100+ Essential Terms & Concepts</p>
++        <p class="hero-subtitle">70+ Essential Terms &amp; Concepts</p>
+         <p class="hero-description">Master the complete DevOps vocabulary. From API gateways to zero-downtime deployments, find definitions for every tool and practice.</p>
+     </section>
+ 
+@@ -264,7 +265,7 @@
+ 
+ <script src="main.js"></script>
+ <script>
+-    // GLOSSARY TERMS DATABASE (100+ terms)
++    // GLOSSARY TERMS DATABASE (70+ terms)
+     const GLOSSARY_TERMS = [
+         { term: 'API Gateway', letter: 'A', definition: 'A server that acts as a single entry point to manage, route, and secure API requests to backend services.' },
+         { term: 'Artifact', letter: 'A', definition: 'A file or collection of files produced by a build process (binaries, containers, packages) ready for deployment.' },
+diff --git a/main.js b/main.js
+index 758fdda..13818ee 100644
+--- a/main.js
++++ b/main.js
+@@ -130,17 +130,17 @@ window.__DH_MAIN_LOADED__ = true;
+ 
+   const lines = [
+     { kind: 'cmd',  text: 'git push origin main' },
+-    { kind: 'out',  text: '✔ Branch main pushed',            color: '#2dff7a' },
++    { kind: 'out',  text: '✔ Branch main pushed',            cls: 'green' },
+     { kind: 'gap' },
+     { kind: 'cmd',  text: 'jenkins build start' },
+-    { kind: 'out',  text: '[1/5] CLONE   ████████ 100%',     color: '#2dff7a' },
+-    { kind: 'out',  text: '[2/5] TEST    ████████ 100%',     color: '#00e5ff' },
+-    { kind: 'out',  text: '[3/5] BUILD   ████████ 100%',     color: '#00e5ff' },
+-    { kind: 'out',  text: '[4/5] PUSH    ████████ 100%',     color: '#ff5c1a' },
+-    { kind: 'out',  text: '[5/5] DEPLOY  ████████ 100%',     color: '#2dff7a' },
++    { kind: 'out',  text: '[1/5] CLONE   ████████ 100%',     cls: 'green' },
++    { kind: 'out',  text: '[2/5] TEST    ████████ 100%',     cls: 'cyan' },
++    { kind: 'out',  text: '[3/5] BUILD   ████████ 100%',     cls: 'cyan' },
++    { kind: 'out',  text: '[4/5] PUSH    ████████ 100%',     cls: 'orange' },
++    { kind: 'out',  text: '[5/5] DEPLOY  ████████ 100%',     cls: 'green' },
+     { kind: 'gap' },
+-    { kind: 'out',  text: '✔ Pipeline succeeded in 2m 14s',  color: '#2dff7a' },
+-    { kind: 'out',  text: '→ Deployed to production',         color: '#00e5ff' },
++    { kind: 'out',  text: '✔ Pipeline succeeded in 2m 14s',  cls: 'green' },
++    { kind: 'out',  text: '→ Deployed to production',         cls: 'cyan' },
+   ];
+ 
+   body.innerHTML = '';
+@@ -151,7 +151,7 @@ window.__DH_MAIN_LOADED__ = true;
+ 
+   function mkLine()    { const s = document.createElement('span'); s.className = 't-line'; return s; }
+   function mkPrompt()  { const s = mkLine(); const p = document.createElement('span'); p.className = 't-prompt'; p.textContent = '$ '; s.appendChild(p); return s; }
+-  function mkOut(col)  { const s = mkLine(); s.classList.add('t-out'); if (col) s.style.color = col; return s; }
++  function mkOut(cls)  { const s = mkLine(); s.classList.add('t-out'); if (cls) s.classList.add('t-' + cls); return s; }
+ 
+   function type() {
+     if (li >= lines.length) {
+@@ -176,7 +176,7 @@ window.__DH_MAIN_LOADED__ = true;
+     }
+ 
+     if (line.kind === 'out') {
+-      const o = mkOut(line.color); o.textContent = line.text;
++      const o = mkOut(line.cls); o.textContent = line.text;
+       body.appendChild(o); li++; setTimeout(type, 90);
+     }
+   }
+@@ -631,7 +631,7 @@ window.__DH_MAIN_LOADED__ = true;
+       { href: 'search.html',      icon: '🔍', label: 'Search',      desc: 'Find anything instantly' },
+       { href: 'cheatsheets.html', icon: '📋', label: 'Cheatsheets', desc: '120+ copy-paste commands' },
+       { href: 'resources.html',   icon: '⭐', label: 'Resources',   desc: 'Curated learning list' },
+-      { href: 'glossary.html',    icon: '📖', label: 'Glossary',    desc: '100+ DevOps terms A–Z' },
++      { href: 'glossary.html',    icon: '📖', label: 'Glossary',    desc: '70+ DevOps terms A–Z' },
+       { href: 'interview.html',   icon: '🎤', label: 'Interview Prep', desc: '60 Q&As with answers' },
+       { href: 'troubleshooting.html', icon: '🚑', label: 'Troubleshooting', desc: 'Fix common failures' },
+       { href: 'changelog.html',   icon: '🆕', label: "What's New",  desc: 'Latest additions' },
+diff --git a/privacy-policy.html b/privacy-policy.html
+index 1e2834d..272f5cb 100644
+--- a/privacy-policy.html
++++ b/privacy-policy.html
+@@ -43,7 +43,7 @@
+         .policy-section h2 {
+             font-family: 'Courier New', monospace;
+             font-size: 1.4rem;
+-            color: #2dff7a;
++            color: var(--accent-green);
+             margin-bottom: 1rem;
+             padding-bottom: 0.5rem;
+             border-bottom: 2px solid rgba(45, 255, 122, 0.3);
+@@ -51,13 +51,13 @@
+ 
+         .policy-section h3 {
+             font-size: 1.1rem;
+-            color: #00e5ff;
++            color: var(--accent-cyan);
+             margin-top: 1.5rem;
+             margin-bottom: 0.5rem;
+         }
+ 
+         .policy-section p {
+-            color: #ccc;
++            color: var(--text-secondary);
+             line-height: 1.8;
+             margin-bottom: 1rem;
+         }
+@@ -65,7 +65,7 @@
+         .policy-section ul {
+             margin-left: 1.5rem;
+             margin-bottom: 1rem;
+-            color: #ccc;
++            color: var(--text-secondary);
+             line-height: 1.8;
+         }
+ 
+@@ -74,19 +74,19 @@
+         }
+ 
+         .policy-section a {
+-            color: #00e5ff;
++            color: var(--accent-cyan);
+             text-decoration: none;
+             transition: color 0.3s ease;
+         }
+ 
+         .policy-section a:hover {
+-            color: #2dff7a;
++            color: var(--accent-green);
+         }
+ 
+         .last-updated {
+-            background: #111c21;
++            background: var(--bg-card-hover);
+             padding: 1rem;
+-            border-left: 3px solid #2dff7a;
++            border-left: 3px solid var(--accent-green);
+             margin-bottom: 2rem;
+             border-radius: 0.3rem;
+         }
+@@ -98,7 +98,7 @@
+         }
+ 
+         .toc {
+-            background: #0d1518;
++            background: var(--bg-card);
+             padding: 1.5rem;
+             border-radius: 0.5rem;
+             margin-bottom: 2rem;
+@@ -106,7 +106,7 @@
+         }
+ 
+         .toc h3 {
+-            color: #2dff7a;
++            color: var(--accent-green);
+             margin-top: 0;
+         }
+ 
+@@ -120,12 +120,12 @@
+         }
+ 
+         .toc a {
+-            color: #00e5ff;
++            color: var(--accent-cyan);
+             text-decoration: none;
+         }
+ 
+         .toc a:hover {
+-            color: #2dff7a;
++            color: var(--accent-green);
+         }
+ 
+         @media (max-width: 768px) {
+diff --git a/quiz.html b/quiz.html
+index a9bceb9..3a7bd36 100644
+--- a/quiz.html
++++ b/quiz.html
+@@ -132,7 +132,7 @@
+     .hud-val.green  { color: var(--accent-green); }
+     .hud-val.red    { color: var(--accent-orange); }
+     .hud-val.cyan   { color: var(--accent-cyan); }
+-    .hud-val.warn   { color: #ffd81e; }
++    .hud-val.warn   { color: var(--accent-yellow); }
+ 
+     .hud-label {
+       font-family: var(--font-mono);
+@@ -441,7 +441,7 @@
+ 
+     .grade-s { border-color: rgba(45,255,122,0.5);  color: var(--accent-green);  background: rgba(45,255,122,0.1); }
+     .grade-a { border-color: rgba(0,229,255,0.5);   color: var(--accent-cyan);   background: rgba(0,229,255,0.1); }
+-    .grade-b { border-color: rgba(255,216,30,0.5);  color: #ffd81e;              background: rgba(255,216,30,0.08); }
++    .grade-b { border-color: rgba(255,216,30,0.5);  color: var(--accent-yellow);              background: rgba(255,216,30,0.08); }
+     .grade-c { border-color: rgba(255,92,26,0.5);   color: var(--accent-orange); background: rgba(255,92,26,0.1); }
+     .grade-f { border-color: rgba(255,92,26,0.7);   color: var(--accent-orange); background: rgba(255,92,26,0.12); }
+ 
+@@ -1736,7 +1736,7 @@ function updateTimerUI() {
+   ring.style.strokeDashoffset = offset;
+   ring.style.stroke = timeLeft <= 8 ? '#ff5c1a' : timeLeft <= 15 ? '#ffd81e' : '#2dff7a';
+   txt.textContent   = timeLeft;
+-  txt.style.color   = timeLeft <= 8 ? '#ff5c1a' : timeLeft <= 15 ? '#ffd81e' : 'var(--text-primary)';
++  txt.style.color   = timeLeft <= 8 ? '#ff5c1a' : timeLeft <= 15 ? 'var(--accent-yellow)' : 'var(--text-primary)';
+ }
+ 
+ function timeExpired() {
+diff --git a/search.html b/search.html
+index f4c1205..170ca37 100644
+--- a/search.html
++++ b/search.html
+@@ -271,7 +271,7 @@
+     .badge-about     { color: var(--accent-cyan);   border-color: rgba(0,229,255,0.35);   background: rgba(0,229,255,0.08); }
+     .badge-tools     { color: var(--accent-orange); border-color: rgba(255,92,26,0.35);   background: rgba(255,92,26,0.08); }
+     .badge-concepts  { color: var(--accent-purple); border-color: rgba(139,92,246,0.35);  background: rgba(139,92,246,0.08); }
+-    .badge-workflow  { color: #ffd81e;              border-color: rgba(255,216,30,0.35);  background: rgba(255,216,30,0.07); }
++    .badge-workflow  { color: var(--accent-yellow);              border-color: rgba(255,216,30,0.35);  background: rgba(255,216,30,0.07); }
+     .badge-roadmap   { color: var(--accent-green);  border-color: rgba(45,255,122,0.35);  background: rgba(45,255,122,0.08); }
+     .badge-quiz      { color: var(--accent-cyan);   border-color: rgba(0,229,255,0.35);   background: rgba(0,229,255,0.08); }
+     .badge-blog      { color: var(--accent-orange); border-color: rgba(255,92,26,0.35);   background: rgba(255,92,26,0.08); }
+diff --git a/style.css b/style.css
+index 8648dff..41695cd 100644
+--- a/style.css
++++ b/style.css
+@@ -69,6 +69,7 @@
+   --accent-cyan:   #0891b2;
+   --accent-orange: #ea580c;
+   --accent-purple: #7c3aed;
++  --accent-yellow: #b45309;
+ }
+ 
+ /* ── Dark Mode Overrides ───────────────────────────────────── */
+@@ -79,6 +80,7 @@ body.dark-mode {
+   --accent-cyan:   #00e5ff;
+   --accent-orange: #ff5c1a;
+   --accent-purple: #8b5cf6;
++  --accent-yellow: #ffd81e;
+ 
+   --bg-void:        #0a0a0a;
+   --bg-base:        #141414;
+@@ -800,9 +802,12 @@ a:hover { color: var(--primary-light); }
+ .t-prompt { color: var(--primary); }
+ .t-cmd    { color: var(--terminal-text); }
+ .t-out    { color: var(--terminal-out); padding-left: 1rem; }
+-.t-green  { color: #10b981; }
+-.t-cyan   { color: var(--primary-light); }
+-.t-orange { color: var(--accent); }
++.t-green  { color: #047857; }   /* light terminal: dark enough to read on #fafafa */
++.t-cyan   { color: #0e7490; }
++.t-orange { color: #c2410c; }
++body.dark-mode .t-green  { color: #2dff7a; }
++body.dark-mode .t-cyan   { color: #00e5ff; }
++body.dark-mode .t-orange { color: #ff5c1a; }
+ 
+ .t-cursor {
+   display: inline-block;
+diff --git a/workflow.html b/workflow.html
+index 1733a0c..d45afc8 100644
+--- a/workflow.html
++++ b/workflow.html
+@@ -547,7 +547,7 @@
+         </div>
+         <div class="lc-right">
+           <div class="lc-content" style="--step-color:#ffd81e;">
+-            <span class="tag" style="margin-bottom:0.5rem;background:rgba(255,216,30,0.08);border-color:rgba(255,216,30,0.25);color:#ffd81e;">Stage 04 · Test</span>
++            <span class="tag" style="margin-bottom:0.5rem;background:rgba(255,216,30,0.08);border-color:rgba(255,216,30,0.25);color: var(--accent-yellow);">Stage 04 · Test</span>
+             <h3>Test &amp; Validate</h3>
+             <p>Automated integration, end-to-end, performance, and security tests run against the packaged artefact in a staging environment. Failures block promotion to release.</p>
+             <div class="lc-tool-chips">
+@@ -695,7 +695,7 @@
+         <div style="display:flex;gap:0.5rem;margin-top:1rem;font-family:var(--font-mono);font-size:0.65rem;">
+           <span style="color:var(--accent-green);">Risk: Very Low</span>
+           <span style="color:var(--text-muted);">·</span>
+-          <span style="color:#ffd81e;">Cost: 2× infra</span>
++          <span style="color: var(--accent-yellow);">Cost: 2× infra</span>
+         </div>
+       </div>
+ 
+@@ -729,7 +729,7 @@
+         <div style="display:flex;gap:0.5rem;margin-top:1rem;font-family:var(--font-mono);font-size:0.65rem;">
+           <span style="color:var(--accent-green);">Flexibility: Max</span>
+           <span style="color:var(--text-muted);">·</span>
+-          <span style="color:#ffd81e;">LaunchDarkly, Flagsmith</span>
++          <span style="color: var(--accent-yellow);">LaunchDarkly, Flagsmith</span>
+         </div>
+       </div>
+     </div>
+-- 
+2.43.0
+

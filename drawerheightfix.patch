@@ -1,0 +1,62 @@
+From 51f60d94ac47a540c6976d75b7c15608affe2807 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sat, 20 Jun 2026 03:18:37 +0000
+Subject: [PATCH] Fix mobile drawer covering full screen: cap to 60vh and allow
+ body scroll
+
+---
+ main.js   |  3 +--
+ style.css | 16 ++++++++++++++++
+ 2 files changed, 17 insertions(+), 2 deletions(-)
+
+diff --git a/main.js b/main.js
+index 2cc7657..093dc9e 100644
+--- a/main.js
++++ b/main.js
+@@ -470,7 +470,7 @@
+     burger.classList.add('dh-open');
+     drawer.classList.add('dh-open');
+     burger.setAttribute('aria-expanded', 'true');
+-    document.body.style.overflow = 'hidden';
++    /* keep body scrollable so content is visible behind the partial drawer */
+   }
+ 
+   function closeMobile() {
+@@ -478,7 +478,6 @@
+     burger.classList.remove('dh-open');
+     drawer.classList.remove('dh-open');
+     burger.setAttribute('aria-expanded', 'false');
+-    document.body.style.overflow = '';
+   }
+ 
+   if (burger) {
+diff --git a/style.css b/style.css
+index bbffaa2..bf7f52c 100644
+--- a/style.css
++++ b/style.css
+@@ -1594,6 +1594,22 @@ body.dark-mode .tl-vault { color: #ffd814; border-color: rgba(255,216,20,0.35);
+   #dh-burger.dh-open ~ #dh-links { display: flex; }
+   #dh-inner { position: relative; flex-wrap: nowrap; }
+ 
++  /* Drawer: cap height to 60% of screen so page content is always visible below */
++  #dh-drawer {
++    max-height: 0;
++    overflow: hidden;
++    transition: max-height 0.38s cubic-bezier(0.4,0,0.2,1);
++  }
++  #dh-drawer.dh-open {
++    max-height: 60vh;
++    overflow-y: auto;
++    scrollbar-width: thin;
++    scrollbar-color: rgba(15,118,110,.4) transparent;
++  }
++  #dh-drawer.dh-open::-webkit-scrollbar { width: 4px; }
++  #dh-drawer.dh-open::-webkit-scrollbar-track { background: transparent; }
++  #dh-drawer.dh-open::-webkit-scrollbar-thumb { background: rgba(15,118,110,.4); border-radius: 2px; }
++
+   .hero { padding: 3rem 0; min-height: auto; }
+   .hero-stats { grid-template-columns: 1fr 1fr; gap: 1rem; }
+ 
+-- 
+2.43.0
+
